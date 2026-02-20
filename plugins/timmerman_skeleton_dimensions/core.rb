@@ -1,3 +1,4 @@
+# encoding: utf-8
 # core.rb - Skeleton Dimensions algorithm
 #
 # Single source of truth for the dimensioning logic. Used in two ways:
@@ -209,8 +210,9 @@ module Timmerman
 
         beam_axis = classify_beam(child, world_t, h_extent, v_extent, view_h, view_v, view_dir)
 
+        label = beam_axis == :diagonal ? "/ DIAGONAL" : beam_axis.upcase
         debug("child #{idx}: h=#{(h_extent*25.4).round(1)}mm v=#{(v_extent*25.4).round(1)}mm " \
-              "-> #{beam_axis.upcase}")
+              "-> #{label}")
 
         if beam_axis == :vertical
           top_only   = vs.min > mid_v
@@ -307,7 +309,8 @@ module Timmerman
 
         align_dim(
           entities.add_dimension_linear(nudge.call(start_pt), nudge.call(end_pt), offset),
-          sublayer
+          sublayer,
+          prefix: beam_axis == :diagonal ? "◩ " : nil
         )
         count += 1
       end
@@ -426,10 +429,11 @@ module Timmerman
       out
     end
 
-    def align_dim(dim, layer = nil)
+    def align_dim(dim, layer = nil, prefix: nil)
       dim.has_aligned_text = true
       dim.aligned_text_position = Sketchup::DimensionLinear::ALIGNED_TEXT_ABOVE
       dim.layer = layer if layer
+      dim.text = "#{prefix}<>" if prefix
     end
 
     # Scale a Vector3d by a scalar (Vector3d * Float is cross product in SketchUp).
