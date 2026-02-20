@@ -1,0 +1,34 @@
+---
+description: Always use the SketchUp bridge to run/iterate on SketchUp code (never ask user to paste in Ruby Console)
+alwaysApply: true
+---
+
+# SketchUp Bridge – Agent-Driven Iteration
+
+**When running or iterating on SketchUp Ruby code, always use the bridge.** Do not ask the user to paste code into the SketchUp Ruby Console.
+
+When you need to **run code inside SketchUp** and see results (e.g. test `Dimensions.run`, `Dimensions.clear`, or any SketchUp Ruby):
+
+1. **Ensure the listener is running in SketchUp**  
+   User must have run once in SketchUp Ruby Console:  
+   `load '/Users/jasper/Timmerman/sketchup-code/sketchup_bridge/listener.rb'`
+
+2. **Write the code to run**  
+   Edit `sketchup_bridge/command.rb`. Put the exact Ruby you want SketchUp to execute. Example for current selection:
+   ```ruby
+   project_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+   load File.join(project_root, 'Dimensions.rb')
+   Dimensions.clear
+   Dimensions.run
+   "OK"
+   ```
+   For a named instance (e.g. `test001`), use the existing helper in the default `command.rb` (select_instance_by_name).
+
+3. **Run and wait for result**  
+   Execute: `ruby sketchup_bridge/run_and_wait.rb`  
+   This waits until SketchUp has run `command.rb` (listener polls every 2s), then prints `result.txt`.
+
+4. **Use the output**  
+   stdout/stderr from the command are in the printed result. Parse it to decide the next edit and repeat.
+
+Do not ask the user to paste code into the Ruby Console for iteration; use the bridge (edit `command.rb` → run `run_and_wait.rb` → read output).

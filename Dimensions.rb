@@ -39,7 +39,7 @@ module Dimensions
     sel   = model.selection
     inst  = selected_component_instance(sel)
     unless inst
-      UI.messagebox(selection_error_message(sel))
+      debug(selection_error_message(sel))
       return
     end
 
@@ -58,7 +58,6 @@ module Dimensions
 
     model.active_view.invalidate
     debug("Done. Added #{count} dimension(s).")
-    UI.messagebox("Added #{count} dimension(s) from top-left (cumulative).")
   end
 
   def clear
@@ -66,7 +65,7 @@ module Dimensions
     sel   = model.selection
     inst  = selected_component_instance(sel)
     unless inst
-      UI.messagebox(selection_error_message(sel))
+      debug(selection_error_message(sel))
       return
     end
 
@@ -82,7 +81,6 @@ module Dimensions
 
     model.active_view.invalidate
     debug("Cleared #{dims.size} dimension(s).")
-    UI.messagebox("Cleared #{dims.size} dimension(s).")
   end
 
   # --- Algorithm ------------------------------------------------------------
