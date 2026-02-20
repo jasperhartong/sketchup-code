@@ -29,6 +29,11 @@ module Dimensions
   # Minimum distance to bother adding a dimension.
   MIN_DIMENSION_GAP = 1.mm
 
+  # A beam must be at least this large in its longest projected axis to be
+  # dimensioned. Filters out fasteners, connectors, and other tiny hardware
+  # that live nested inside the same Groups as structural beams.
+  MIN_BEAM_SPAN = 10.mm
+
   def debug(msg)
     return unless DEBUG
     puts "[Dimensions] #{msg}"
@@ -85,13 +90,14 @@ module Dimensions
 
   # --- Algorithm ------------------------------------------------------------
   #
-  # 1. Get the 8 corners of the top component bbox → find the "top-left" origin
-  #    (min horizontal, max vertical in the current view).
-  # 2. Iterate direct child components/groups — each is a beam.
-  # 3. For each beam, compute its bounding box in world space (8 corners).
-  # 4. Project each bbox onto view_h / view_v → far_x = max right, far_y = min bottom.
-  # 5. Sort those far-side positions, deduplicate identical ones.
-  # 6. For each unique far-side position add one dimension from origin.
+  # 1. Recursively collect all ComponentInstances at any nesting depth (Groups are
+  #    transparent containers; each ComponentInstance is a beam). Accumulate
+  #    the full world-space transformation at each level.
+  # 2. Project each beam's bbox corners onto view_h / view_v.
+  # 3. Find "top-left" origin = min-h, max-v across all beam corners.
+  # 4. For vertical beams: push left- and right-edge x into far_x for cumulative dims.
+  # 5. Sort + deduplicate far_x; emit one horizontal cumulative dim per unique x.
+  # 6. Emit per-beam own-length dim alongside each beam (deduped by length+axis).
   #
   def add_skeleton_dimensions(model, inst, view_dir, view_h, view_v)
     parent_t = inst.transformation
@@ -99,14 +105,26 @@ module Dimensions
     # Projection: 3D point → scalar along a view axis (Point3d has no .dot)
     proj = ->(pt, axis) { pt.x * axis.x + pt.y * axis.y + pt.z * axis.z }
 
-    # Collect direct children (beams) up front so we can derive the origin from them
-    children = inst.definition.entities.select { |e| e.respond_to?(:definition) }
-    debug("direct child components/groups: #{children.size}")
-    return 0 if children.empty?
+    # Recursively collect all ComponentInstances at any depth, with their
+    # accumulated world-space transformation. Groups are treated as transparent
+    # containers and are not dimensioned themselves.
+    beams = collect_beams_recursive(inst.definition.entities, parent_t)
+    debug("beams found (all depths): #{beams.size}")
+    return 0 if beams.empty?
 
-    # All corners of all children in world space — this is the actual beam geometry
-    all_beam_corners = children.flat_map { |child|
-      (0..7).map { |i| child.bounds.corner(i).transform(parent_t) }
+    # All corners of structural beams in world space — used to derive the origin.
+    # Filter out tiny hardware using the same MIN_BEAM_SPAN threshold so fasteners
+    # don't distort the origin or the cumulative dim placement.
+    structural_beams = beams.select { |child, world_t|
+      corners = (0..7).map { |i| child.bounds.corner(i).transform(world_t) }
+      hs = corners.map { |c| proj.call(c, view_h) }
+      vs = corners.map { |c| proj.call(c, view_v) }
+      [(hs.max - hs.min), (vs.max - vs.min)].max >= MIN_BEAM_SPAN
+    }
+    debug("structural beams (>= #{(MIN_BEAM_SPAN / 1.mm).round}mm span): #{structural_beams.size} of #{beams.size}")
+
+    all_beam_corners = structural_beams.flat_map { |child, world_t|
+      (0..7).map { |i| child.bounds.corner(i).transform(world_t) }
     }
 
     # Nudge anchor points toward the camera by the full component depth along view_dir,
@@ -134,25 +152,38 @@ module Dimensions
     far_x        = []   # [view_x, Point3d] — for cumulative horizontal positioning dims
     beam_lengths  = []  # [[start_pt, end_pt, offset_vec]] — per-beam own-length dims
 
-    children.each_with_index do |child, idx|
-      child_corners = (0..7).map { |i| child.bounds.corner(i).transform(parent_t) }
+    structural_beams.each_with_index do |(child, world_t), idx|
+      child_corners = (0..7).map { |i| child.bounds.corner(i).transform(world_t) }
 
       hs = child_corners.map { |c| proj.call(c, view_h) }
       vs = child_corners.map { |c| proj.call(c, view_v) }
 
       h_extent = hs.max - hs.min
       v_extent = vs.max - vs.min
+
+      # Skip fasteners, connectors, and other tiny hardware
+      if [h_extent, v_extent].max < MIN_BEAM_SPAN
+        debug("child #{idx}: h=#{h_extent.round(2)} v=#{v_extent.round(2)} → SKIPPED (too small)")
+        next
+      end
+
       is_vertical = v_extent > h_extent   # taller than wide = perpendicular beam
 
       debug("child #{idx}: h=#{h_extent.round(2)} v=#{v_extent.round(2)} " \
             "→ #{is_vertical ? 'VERTICAL' : 'HORIZONTAL'}")
 
-      # --- Cumulative horizontal positioning: right side of vertical beams only ---
+      # --- Cumulative horizontal positioning: left and right sides of vertical beams ---
       if is_vertical
+        # Right side (for dimension from origin to right edge)
         far_h_pt = child_corners.min_by { |c|
           [(proj.call(c, view_h) - hs.max).abs, proj.call(c, view_v)]
         }
         far_x << [hs.max, far_h_pt]
+        # Left side (for dimension from origin to bottom-left corner / left edge)
+        left_pt = child_corners.min_by { |c|
+          [(proj.call(c, view_h) - hs.min).abs, proj.call(c, view_v)]
+        }
+        far_x << [hs.min, left_pt]
       end
 
       # --- Per-beam own-length dimension alongside the beam (offset outside bbox) ---
@@ -239,6 +270,33 @@ module Dimensions
   # Scale a Vector3d by a scalar (Vector3d * Float is cross product in SketchUp).
   def scale_vec(vec, scalar)
     Geom::Vector3d.new(vec.x * scalar, vec.y * scalar, vec.z * scalar)
+  end
+
+  # Recursively collect all ComponentInstances at any nesting depth under the
+  # given entities collection. Groups are transparent containers — we step inside
+  # them and accumulate the transformation, but do not add the Group itself as a
+  # beam. ComponentInstances are leaf beams regardless of their nesting level.
+  #
+  # Returns an Array of [ComponentInstance, parent_transform] pairs where
+  # parent_transform is the world-space transform of the entity's PARENT
+  # coordinate system. Callers apply it to entity.bounds.corner(i) (which is
+  # already in parent space) to obtain world-space corners.
+  def collect_beams_recursive(entities, accumulated_t)
+    result = []
+    entities.each do |e|
+      next unless e.respond_to?(:definition)
+      # Transform from e's definition space → world (needed when recursing inside e)
+      into_child_t = accumulated_t * e.transformation
+      if e.is_a?(Sketchup::Group)
+        # Groups are containers: recurse into their definition using into_child_t
+        result.concat(collect_beams_recursive(e.definition.entities, into_child_t))
+      else
+        # ComponentInstance: e.bounds is already in parent space (accumulated_t's space).
+        # Store accumulated_t so callers can do: e.bounds.corner(i).transform(accumulated_t)
+        result << [e, accumulated_t]
+      end
+    end
+    result
   end
 
   def selected_component_instance(selection)
