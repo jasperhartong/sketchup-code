@@ -114,9 +114,6 @@ module Dimensions
   def add_skeleton_dimensions(model, inst, view_dir, view_h, view_v, sublayer = nil)
     parent_t = inst.transformation
 
-    # Projection: 3D point → scalar along a view axis (Point3d has no .dot)
-    proj = ->(pt, axis) { pt.x * axis.x + pt.y * axis.y + pt.z * axis.z }
-
     # Recursively collect all ComponentInstances at any depth, with their
     # accumulated world-space transformation. Groups are treated as transparent
     # containers and are not dimensioned themselves.
@@ -129,8 +126,8 @@ module Dimensions
     # don't distort the origin or the cumulative dim placement.
     structural_beams = beams.select { |child, world_t|
       corners = (0..7).map { |i| child.bounds.corner(i).transform(world_t) }
-      hs = corners.map { |c| proj.call(c, view_h) }
-      vs = corners.map { |c| proj.call(c, view_v) }
+      hs = corners.map { |c| dot(c, view_h) }
+      vs = corners.map { |c| dot(c, view_v) }
       [(hs.max - hs.min), (vs.max - vs.min)].max >= MIN_BEAM_SPAN
     }
     debug("structural beams (>= #{(MIN_BEAM_SPAN / 1.mm).round}mm span): #{structural_beams.size} of #{beams.size}")
@@ -141,20 +138,20 @@ module Dimensions
 
     # Nudge anchor points toward the camera by the full component depth along view_dir,
     # so dimensions always render in front of the geometry regardless of component thickness.
-    depth_projs = all_beam_corners.map { |c| proj.call(c, view_dir) }
+    depth_projs = all_beam_corners.map { |c| dot(c, view_dir) }
     cam_depth   = depth_projs.max - depth_projs.min
     cam_nudge   = scale_vec(view_dir.reverse, cam_depth)
     nudge       = ->(pt) { Geom::Point3d.new(pt.x + cam_nudge.x, pt.y + cam_nudge.y, pt.z + cam_nudge.z) }
     debug("cam_depth=#{cam_depth.round(2)}, nudge=#{cam_nudge.to_s.strip}")
 
     # Origin = top-left of the beams' own extents (not the parent component bbox)
-    origin_pt = all_beam_corners.min_by { |c| [proj.call(c, view_h), -proj.call(c, view_v)] }
-    origin_x  = proj.call(origin_pt, view_h)
-    origin_y  = proj.call(origin_pt, view_v)
+    origin_pt = all_beam_corners.min_by { |c| [dot(c, view_h), -dot(c, view_v)] }
+    origin_x  = dot(origin_pt, view_h)
+    origin_y  = dot(origin_pt, view_v)
 
     # Overall beam extents — used to place cumulative dim lines above/below the geometry
-    beam_min_v = all_beam_corners.map { |c| proj.call(c, view_v) }.min
-    beam_max_v = all_beam_corners.map { |c| proj.call(c, view_v) }.max
+    beam_min_v = all_beam_corners.map { |c| dot(c, view_v) }.min
+    beam_max_v = all_beam_corners.map { |c| dot(c, view_v) }.max
 
     # Vertical midpoint used to classify beams as "top-only" vs full-span/bottom.
     # A vertical beam whose bottom edge stays above mid_v is considered top-only and
@@ -168,13 +165,13 @@ module Dimensions
     # cumulative x positions are drawn above the structure to reduce bottom clutter.
     far_x_top    = []   # [view_x, Point3d] — top-only vertical beams
     far_x_bottom = []   # [view_x, Point3d] — full-span / bottom vertical beams
-    beam_lengths  = []  # [[start_pt, end_pt, offset_vec]] — per-beam own-length dims
+    beam_lengths  = []  # [{start_pt, end_pt, offset, is_vertical}] — per-beam own-length dims
 
     structural_beams.each_with_index do |(child, world_t), idx|
       child_corners = (0..7).map { |i| child.bounds.corner(i).transform(world_t) }
 
-      hs = child_corners.map { |c| proj.call(c, view_h) }
-      vs = child_corners.map { |c| proj.call(c, view_v) }
+      hs = child_corners.map { |c| dot(c, view_h) }
+      vs = child_corners.map { |c| dot(c, view_v) }
 
       h_extent = hs.max - hs.min
       v_extent = vs.max - vs.min
@@ -199,35 +196,16 @@ module Dimensions
 
         # Right (far) side — pick the corner at the NEAR edge of the structure:
         # bottom-right for below-dims, top-right for above-dims.
-        # That way each dim's extension line stops at the beam's own edge.
-        if top_only
-          far_h_pt = child_corners.min_by { |c|
-            [(proj.call(c, view_h) - hs.max).abs, -proj.call(c, view_v)]
-          }
-        else
-          far_h_pt = child_corners.min_by { |c|
-            [(proj.call(c, view_h) - hs.max).abs, proj.call(c, view_v)]
-          }
-        end
+        # v_sign < 0 selects the topmost corner (top-only), > 0 the bottommost (below).
+        v_sign   = top_only ? -1 : 1
+        far_h_pt = child_corners.min_by { |c| [(dot(c, view_h) - hs.max).abs, v_sign * dot(c, view_v)] }
         target_far << [hs.max, far_h_pt]
       end
 
       # --- Per-beam own-length dimension alongside the beam (offset outside bbox) ---
-      if is_vertical
-        # Dimension runs top→bottom along the left edge of the beam
-        start_pt = child_corners.min_by { |c| [(proj.call(c, view_v) - vs.max).abs,  proj.call(c, view_h)] }
-        end_pt   = child_corners.min_by { |c| [(proj.call(c, view_v) - vs.min).abs,  proj.call(c, view_h)] }
-        # Offset = half beam width + padding so dimension line sits clearly outside the beam
-        half_width = (h_extent * 0.5)
-        offset   = scale_vec(view_h.reverse, half_width + BEAM_LENGTH_OFFSET)
-      else
-        # Dimension runs left→right along the top edge of the beam
-        start_pt = child_corners.min_by { |c| [(proj.call(c, view_h) - hs.min).abs, -proj.call(c, view_v)] }
-        end_pt   = child_corners.min_by { |c| [(proj.call(c, view_h) - hs.max).abs, -proj.call(c, view_v)] }
-        half_depth = (v_extent * 0.5)
-        offset   = scale_vec(view_v, half_depth + BEAM_LENGTH_OFFSET)
-      end
-
+      start_pt, end_pt, offset = beam_length_anchors(
+        child_corners, hs, vs, h_extent, v_extent, is_vertical, view_h, view_v
+      )
       if start_pt.distance(end_pt) >= MIN_DIMENSION_GAP
         beam_lengths << { start_pt: start_pt, end_pt: end_pt, offset: offset, is_vertical: is_vertical }
       end
@@ -257,7 +235,7 @@ module Dimensions
     # horizontal distance and the extension lines run only OUTER_PADDING below/above
     # that specific beam's own edge.
     make_base_pt = ->(corner_pt) {
-      v_diff = proj.call(corner_pt, view_v) - origin_y
+      v_diff = dot(corner_pt, view_v) - origin_y
       Geom::Point3d.new(
         origin_pt.x + view_v.x * v_diff,
         origin_pt.y + view_v.y * v_diff,
@@ -266,52 +244,42 @@ module Dimensions
     }
 
     # 1a. Cumulative horizontal dims BELOW the component (full-span / bottom beams)
-    # The offset is measured from the anchor (beam's own bottom edge) and must reach
-    # the same staggered absolute level for every dim. The extra gap from this beam's
-    # bottom down to beam_min_v is added so all dim lines align at a common baseline.
-    dim_i = 0
-    unique_x_bottom.each do |x, far_h_pt|
-      next if (x - origin_x).abs < MIN_DIMENSION_GAP
-      base_pt    = make_base_pt.call(far_h_pt)   # at this beam's bottom-v
-      far_pt     = make_h_anchor.call(base_pt, x)
-      gap_to_baseline = proj.call(far_h_pt, view_v) - beam_min_v  # ≥ 0: beam bottom is above overall baseline
-      d   = gap_to_baseline + OUTER_PADDING + dim_i * STAGGER_STEP
-      off = scale_vec(view_v.reverse, d)
-      align_dim(entities.add_dimension_linear(nudge.call(base_pt), nudge.call(far_pt), off), sublayer)
-      count += 1
-      dim_i += 1
-    end
-    debug("cumulative horizontal dims BELOW: #{dim_i}")
+    # gap_fn: how far this beam's bottom edge is above the overall bottom baseline (≥ 0),
+    # so every dim line aligns at the same absolute staggered level.
+    below_count = emit_cumulative_dims(
+      entities, unique_x_bottom, origin_x,
+      ->(pt) { dot(pt, view_v) - beam_min_v },
+      view_v.reverse,
+      make_base_pt: make_base_pt, make_h_anchor: make_h_anchor, nudge: nudge, sublayer: sublayer
+    )
+    count += below_count
+    debug("cumulative horizontal dims BELOW: #{below_count}")
 
     # 1b. Cumulative horizontal dims ABOVE the component (top-only beams)
-    dim_j = 0
-    unique_x_top.each do |x, far_h_pt|
-      next if (x - origin_x).abs < MIN_DIMENSION_GAP
-      base_pt    = make_base_pt.call(far_h_pt)   # at this beam's top-v
-      far_pt     = make_h_anchor.call(base_pt, x)
-      gap_to_baseline = beam_max_v - proj.call(far_h_pt, view_v)  # ≥ 0: beam top is below overall baseline
-      d   = gap_to_baseline + OUTER_PADDING + dim_j * STAGGER_STEP
-      off = scale_vec(view_v, d)
-      align_dim(entities.add_dimension_linear(nudge.call(base_pt), nudge.call(far_pt), off), sublayer)
-      count += 1
-      dim_j += 1
-    end
-    debug("cumulative horizontal dims ABOVE: #{dim_j}")
+    # gap_fn: how far this beam's top edge is below the overall top baseline (≥ 0).
+    above_count = emit_cumulative_dims(
+      entities, unique_x_top, origin_x,
+      ->(pt) { beam_max_v - dot(pt, view_v) },
+      view_v,
+      make_base_pt: make_base_pt, make_h_anchor: make_h_anchor, nudge: nudge, sublayer: sublayer
+    )
+    count += above_count
+    debug("cumulative horizontal dims ABOVE: #{above_count}")
 
     # 2. Per-beam own-length dimension running alongside the beam (skip repeats on same axis)
     # Don't repeat beam length dimensions that have the same length AND start on the same axis.
     added_length_axis = {}  # (length_bucket, axis_bucket) -> true
     per_beam_count = 0
     beam_lengths.each do |entry|
-      start_pt   = entry[:start_pt]
-      end_pt     = entry[:end_pt]
-      offset     = entry[:offset]
+      start_pt    = entry[:start_pt]
+      end_pt      = entry[:end_pt]
+      offset      = entry[:offset]
       is_vertical = entry[:is_vertical]
-      length     = start_pt.distance(end_pt)
+      length      = start_pt.distance(end_pt)
       # Axis = reference line the dimension starts from: same view_v = same horizontal line (vertical beams), same view_h = same vertical line (horizontal beams)
-      axis_val   = is_vertical ? proj.call(start_pt, view_v) : proj.call(start_pt, view_h)
+      axis_val      = is_vertical ? dot(start_pt, view_v) : dot(start_pt, view_h)
       length_bucket = (length / DEDUP_EPSILON).round * DEDUP_EPSILON
-      axis_bucket  = (axis_val / DEDUP_EPSILON).round * DEDUP_EPSILON
+      axis_bucket   = (axis_val / DEDUP_EPSILON).round * DEDUP_EPSILON
       key = [length_bucket, axis_bucket]
       next if added_length_axis[key]
       added_length_axis[key] = true
@@ -324,12 +292,12 @@ module Dimensions
     # 3. Single outer diagonal — from the top-left to the bottom-right corner of
     #    the entire structure. Find the actual beam corner that is nearest (in view
     #    space) to each virtual bounding-box extreme: (min_h, max_v) and (max_h, min_v).
-    beam_max_h = all_beam_corners.map { |c| proj.call(c, view_h) }.max
+    beam_max_h = all_beam_corners.map { |c| dot(c, view_h) }.max
     tl = all_beam_corners.min_by { |c|
-      (proj.call(c, view_h) - origin_x)**2 + (proj.call(c, view_v) - beam_max_v)**2
+      (dot(c, view_h) - origin_x)**2 + (dot(c, view_v) - beam_max_v)**2
     }
     br = all_beam_corners.min_by { |c|
-      (proj.call(c, view_h) - beam_max_h)**2 + (proj.call(c, view_v) - beam_min_v)**2
+      (dot(c, view_h) - beam_max_h)**2 + (dot(c, view_v) - beam_min_v)**2
     }
 
     h_ext    = beam_max_h - origin_x
@@ -373,6 +341,11 @@ module Dimensions
   # Scale a Vector3d by a scalar (Vector3d * Float is cross product in SketchUp).
   def scale_vec(vec, scalar)
     Geom::Vector3d.new(vec.x * scalar, vec.y * scalar, vec.z * scalar)
+  end
+
+  # Dot product of a Point3d with a Vector3d axis (Point3d has no built-in .dot).
+  def dot(pt, axis)
+    pt.x * axis.x + pt.y * axis.y + pt.z * axis.z
   end
 
   # Recursively collect all ComponentInstances at any nesting depth under the
@@ -456,6 +429,46 @@ module Dimensions
       "Too many components selected (#{candidates.length}).\n\nSelect exactly one component, then run again."
     end
   end
+
+  # --- Private helpers ------------------------------------------------------
+
+  # Emit one cumulative horizontal dimension per entry in unique_x_pairs.
+  # gap_fn:      lambda(corner_pt) → non-negative gap from this beam's edge to the
+  #              overall baseline, ensuring all dim lines align at a common staggered level.
+  # stagger_dir: Vector3d direction to push successive dim lines further out.
+  def emit_cumulative_dims(entities, unique_x_pairs, origin_x, gap_fn, stagger_dir,
+                            make_base_pt:, make_h_anchor:, nudge:, sublayer: nil)
+    dim_i = 0
+    count = 0
+    unique_x_pairs.each do |x, far_h_pt|
+      next if (x - origin_x).abs < MIN_DIMENSION_GAP
+      base_pt = make_base_pt.call(far_h_pt)
+      far_pt  = make_h_anchor.call(base_pt, x)
+      d       = gap_fn.call(far_h_pt) + OUTER_PADDING + dim_i * STAGGER_STEP
+      off     = scale_vec(stagger_dir, d)
+      align_dim(entities.add_dimension_linear(nudge.call(base_pt), nudge.call(far_pt), off), sublayer)
+      count += 1
+      dim_i  += 1
+    end
+    count
+  end
+
+  # Returns [start_pt, end_pt, offset_vec] for the per-beam own-length dimension.
+  # Vertical beams: dim runs top→bottom along the left edge.
+  # Horizontal beams: dim runs left→right along the top edge.
+  def beam_length_anchors(child_corners, hs, vs, h_extent, v_extent, is_vertical, view_h, view_v)
+    if is_vertical
+      start_pt = child_corners.min_by { |c| [(dot(c, view_v) - vs.max).abs,  dot(c, view_h)] }
+      end_pt   = child_corners.min_by { |c| [(dot(c, view_v) - vs.min).abs,  dot(c, view_h)] }
+      offset   = scale_vec(view_h.reverse, h_extent * 0.5 + BEAM_LENGTH_OFFSET)
+    else
+      start_pt = child_corners.min_by { |c| [(dot(c, view_h) - hs.min).abs, -dot(c, view_v)] }
+      end_pt   = child_corners.min_by { |c| [(dot(c, view_h) - hs.max).abs, -dot(c, view_v)] }
+      offset   = scale_vec(view_v, v_extent * 0.5 + BEAM_LENGTH_OFFSET)
+    end
+    [start_pt, end_pt, offset]
+  end
+
 end
 
 # To run: set view, select one component, then: Dimensions.run
