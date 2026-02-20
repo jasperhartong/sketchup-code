@@ -225,7 +225,7 @@ module Timmerman
         end
 
         start_pt, end_pt, offset = beam_length_anchors(
-          child_corners, hs, vs, h_extent, v_extent, beam_axis, view_h, view_v
+          child, world_t, child_corners, hs, vs, h_extent, v_extent, beam_axis, view_h, view_v
         )
         if start_pt.distance(end_pt) >= MIN_DIMENSION_GAP
           beam_lengths << {
@@ -309,8 +309,7 @@ module Timmerman
 
         align_dim(
           entities.add_dimension_linear(nudge.call(start_pt), nudge.call(end_pt), offset),
-          sublayer,
-          prefix: beam_axis == :diagonal ? "◩ " : nil
+          sublayer
         )
         count += 1
       end
@@ -338,7 +337,8 @@ module Timmerman
         )
         align_dim(
           entities.add_dimension_linear(nudge.call(tl), nudge.call(br), scale_vec(perp_tr, DIAG_OFFSET)),
-          sublayer
+          sublayer,
+          prefix: "◩ "
         )
         count += 1
 
@@ -361,7 +361,8 @@ module Timmerman
           )
           align_dim(
             entities.add_dimension_linear(nudge.call(bl), nudge.call(tr), scale_vec(perp_tl, DIAG_OFFSET)),
-            sublayer
+            sublayer,
+            prefix: "◩ "
           )
           count += 1
         end
@@ -557,18 +558,18 @@ module Timmerman
     #
     # :vertical   - projects corners onto view_v; measures the true height.
     # :horizontal - projects corners onto view_h; measures the true width.
-    # :diagonal   - uses 2D PCA to find the beam's principal axis in view space,
-    #               then projects corners onto it; measures the actual beam length
-    #               regardless of angle (not just a horizontal or vertical projection).
+    # :diagonal   - uses the component's local definition bounds to find the
+    #               longest axis, then computes the face centroids at each end
+    #               and transforms them to world space. This gives the true
+    #               center-to-center beam length (not an inflated bbox diagonal
+    #               or a deflated PCA projection).
     #
     # All three orientations share the same CCW-perpendicular offset formula so the
     # dimension line always sits at exactly 90° to the measured segment.
-    def beam_length_anchors(child_corners, hs, vs, _h_extent, _v_extent,
+    def beam_length_anchors(child, world_t, child_corners, hs, vs, _h_extent, _v_extent,
                             beam_axis, view_h, view_v)
       case beam_axis
       when :vertical
-        # Group corners by v-position, pick from the same h-edge (leftmost)
-        # so the dimension line is purely vertical and sits next to the beam.
         top_grp  = child_corners.select { |c| (dot(c, view_v) - vs.max).abs <= DEDUP_EPSILON }
         top_grp  = child_corners if top_grp.empty?
         bot_grp  = child_corners.select { |c| (dot(c, view_v) - vs.min).abs <= DEDUP_EPSILON }
@@ -577,21 +578,14 @@ module Timmerman
         end_pt   = bot_grp.min_by { |c| dot(c, view_h) }
         return [start_pt, end_pt, scale_vec(view_h.reverse, BEAM_LENGTH_OFFSET)]
       when :horizontal
-        # Group corners by h-position, pick from the same v-edge (topmost)
-        # so the dimension line is purely horizontal and sits above the beam.
         left_grp  = child_corners.select { |c| (dot(c, view_h) - hs.min).abs <= DEDUP_EPSILON }
         left_grp  = child_corners if left_grp.empty?
         right_grp = child_corners.select { |c| (dot(c, view_h) - hs.max).abs <= DEDUP_EPSILON }
         right_grp = child_corners if right_grp.empty?
         start_pt = left_grp.max_by  { |c| dot(c, view_v) }
         end_pt   = right_grp.max_by { |c| dot(c, view_v) }
-      else # :diagonal - project onto PCA principal axis to measure actual length
-        uh, uv   = beam_principal_direction_2d(hs, vs)
-        projs    = hs.zip(vs).map { |h, v| uh * h + uv * v }
-        min_i    = projs.each_with_index.min_by { |p, _| p }[1]
-        max_i    = projs.each_with_index.max_by { |p, _| p }[1]
-        start_pt = child_corners[min_i]
-        end_pt   = child_corners[max_i]
+      else # :diagonal - face centroids along the beam's longest local axis
+        start_pt, end_pt = diagonal_beam_endpoints(child, world_t)
       end
 
       # CCW 90° of (dh, dv) in view space.
@@ -610,6 +604,32 @@ module Timmerman
         view_v
       end
       [start_pt, end_pt, scale_vec(perp, BEAM_LENGTH_OFFSET)]
+    end
+
+    # Compute the true center-to-center endpoints of a diagonal beam using its
+    # local definition bounds. The longest local axis gives the beam direction;
+    # face centroids at each end of that axis, transformed to world space, yield
+    # the correct measurement points.
+    def diagonal_beam_endpoints(child, world_t)
+      full_t = world_t * child.transformation
+      db     = child.definition.bounds
+      extents = [db.max.x - db.min.x, db.max.y - db.min.y, db.max.z - db.min.z]
+      axis_i  = extents.each_with_index.max_by { |v, _| v }[1]
+
+      mid = Geom::Point3d.new(
+        (db.min.x + db.max.x) / 2.0,
+        (db.min.y + db.max.y) / 2.0,
+        (db.min.z + db.max.z) / 2.0
+      )
+
+      coords_a = [mid.x, mid.y, mid.z]
+      coords_b = [mid.x, mid.y, mid.z]
+      coords_a[axis_i] = [db.min.x, db.min.y, db.min.z][axis_i]
+      coords_b[axis_i] = [db.max.x, db.max.y, db.max.z][axis_i]
+
+      ep1 = Geom::Point3d.new(*coords_a).transform(full_t)
+      ep2 = Geom::Point3d.new(*coords_b).transform(full_t)
+      [ep1, ep2]
     end
 
     def debug(msg)
