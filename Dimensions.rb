@@ -23,6 +23,11 @@ module Dimensions
   # We add half the beam's thickness in that direction so the dimension line stays clear of the beam.
   BEAM_LENGTH_OFFSET = 80.mm
 
+  # Minimum size in BOTH view axes for a top-level Group to receive a diagonal dimension.
+  # Groups that are thin in one axis (beams, plates) are excluded.
+  # Perpendicular offset applied to the outer diagonal dimension line so it sits clear of the geometry.
+  DIAG_OFFSET = 100.mm
+
   # Positions within this distance are considered identical (deduplication only).
   DEDUP_EPSILON = 0.1.mm
 
@@ -308,6 +313,30 @@ module Dimensions
       per_beam_count += 1
     end
     debug("per-beam length dims added: #{per_beam_count} (from #{beam_lengths.size} beams, after same-length same-axis dedup)")
+
+    # 3. Single outer diagonal — from the top-left to the bottom-right corner of
+    #    the entire structure (the two extremal beam corners in view space).
+    tl = all_beam_corners.min_by { |c| proj.call(c, view_h) - proj.call(c, view_v) }
+    br = all_beam_corners.max_by { |c| proj.call(c, view_h) - proj.call(c, view_v) }
+
+    h_ext    = proj.call(br, view_h) - proj.call(tl, view_h)
+    v_ext    = proj.call(tl, view_v) - proj.call(br, view_v)   # tl is higher, so tl_v > br_v
+    diag_len = Math.sqrt(h_ext**2 + v_ext**2)
+
+    if diag_len >= MIN_DIMENSION_GAP
+      # Offset perpendicular to the TL→BR diagonal, pointing upper-right in view space.
+      # Diagonal direction (view_h, view_v): (+h_ext, -v_ext).
+      # 90°-CCW perpendicular: (+v_ext, +h_ext) normalised.
+      perp = Geom::Vector3d.new(
+        view_h.x * (v_ext / diag_len) + view_v.x * (h_ext / diag_len),
+        view_h.y * (v_ext / diag_len) + view_v.y * (h_ext / diag_len),
+        view_h.z * (v_ext / diag_len) + view_v.z * (h_ext / diag_len)
+      )
+      offset = scale_vec(perp, DIAG_OFFSET)
+      align_dim(entities.add_dimension_linear(nudge.call(tl), nudge.call(br), offset))
+      count += 1
+      debug("outer diagonal: #{(h_ext * 25.4).round}x#{(v_ext * 25.4).round}mm → #{(diag_len * 25.4).round(1)}mm")
+    end
 
     count
   end
