@@ -226,14 +226,25 @@ module Dimensions
     entities = model.entities
     count    = 0
 
+    # Synthesize a second anchor point that is exactly h_diff steps along view_h from
+    # origin_pt — same view_v and view_dir, so SketchUp measures a pure horizontal distance.
+    make_h_anchor = ->(h_target) {
+      h_diff = h_target - origin_x
+      Geom::Point3d.new(
+        origin_pt.x + view_h.x * h_diff,
+        origin_pt.y + view_h.y * h_diff,
+        origin_pt.z + view_h.z * h_diff
+      )
+    }
+
     # 1a. Cumulative horizontal dims BELOW the component (full-span / bottom beams)
     dim_i = 0
-    unique_x_bottom.each do |x, pt|
+    unique_x_bottom.each do |x, _pt|
       next if (x - origin_x).abs < MIN_DIMENSION_GAP
-      next if origin_pt.distance(pt) < MIN_DIMENSION_GAP
+      far_pt = make_h_anchor.call(x)
       d   = base_offset_bottom + dim_i * STAGGER_STEP
       off = scale_vec(view_v.reverse, d)
-      align_dim(entities.add_dimension_linear(nudge.call(origin_pt), nudge.call(pt), off))
+      align_dim(entities.add_dimension_linear(nudge.call(origin_pt), nudge.call(far_pt), off))
       count += 1
       dim_i += 1
     end
@@ -241,12 +252,12 @@ module Dimensions
 
     # 1b. Cumulative horizontal dims ABOVE the component (top-only beams)
     dim_j = 0
-    unique_x_top.each do |x, pt|
+    unique_x_top.each do |x, _pt|
       next if (x - origin_x).abs < MIN_DIMENSION_GAP
-      next if origin_pt.distance(pt) < MIN_DIMENSION_GAP
+      far_pt = make_h_anchor.call(x)
       d   = base_offset_top + dim_j * STAGGER_STEP
       off = scale_vec(view_v, d)
-      align_dim(entities.add_dimension_linear(nudge.call(origin_pt), nudge.call(pt), off))
+      align_dim(entities.add_dimension_linear(nudge.call(origin_pt), nudge.call(far_pt), off))
       count += 1
       dim_j += 1
     end

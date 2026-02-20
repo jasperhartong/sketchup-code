@@ -53,14 +53,27 @@ Fix the algorithm in the production `.rb` file (e.g. `Dimensions.rb`):
 - Never reference specific component names, IDs, or positions in production logic.
 - Add constants for thresholds (e.g. `MIN_BEAM_SPAN`) and document their intent with comments.
 
-### 3. Validate with a targeted one-off script
+### 3. Validate with a targeted one-off script — ALWAYS, do not skip
 After the fix, write another temporary `command.rb` that:
 - Re-runs the production code (`Dimensions.clear` + `Dimensions.run`).
-- Then programmatically checks the postcondition: query model entities, confirm the expected dimension exists, print PASS/FAIL with a reason.
+- Then **programmatically reads back the result from SketchUp** (e.g. query `model.entities.grep(Sketchup::DimensionLinear)` and print each dimension's `.text`, anchor points, and 3D distance) to confirm the values are correct.
+- Compare computed expected values against what SketchUp actually stored; print PASS/FAIL with a reason.
+- **Never declare success based on the run log alone** — always verify the actual rendered output through the bridge before telling the user it is fixed.
 - Leave the final `command.rb` as the normal run command (`Dimensions.clear` + `Dimensions.run`) once validation passes.
+
+**`DimensionLinear` audit pattern** (verified working):
+```ruby
+model.entities.grep(Sketchup::DimensionLinear).each_with_index do |d, i|
+  p1 = d.start[1]   # start returns [nil_or_entity, Point3d]
+  p2 = d.send(:end)[1]
+  puts "dim #{i}: text='#{d.text}'  3d_dist=#{(p1.distance(p2)*25.4).round(1)}mm"
+end
+```
 
 ### Pitfalls learned
 - **`e.bounds` is already in parent space** — do not re-apply `e.transformation` when converting to world coords; store `accumulated_t` (not `accumulated_t * e.transformation`) for leaf entities.
 - **Groups are transparent containers** — recurse into them; treat only `ComponentInstance` leaves as beams.
 - **SketchUp internal units are inches** — `.round(2)` in debug output shows inches, not mm; convert with `* 25.4` for readability and use `.mm` constants for comparisons.
-- **Both edges of vertical beams** — push both `hs.min` and `hs.max` into `far_x` so the left (bottom-left) edge gets a cumulative dimension, not just the right.
+- **Only the right edge of vertical beams** — push only `hs.max` into `far_x`; adding `hs.min` (left edge) doubles the cumulative dims unnecessarily.
+- **Cumulative dim anchors must be coplanar** — construct the second anchor as `origin_pt + h_diff * view_h` (not a raw bbox corner) so SketchUp measures a pure in-plane horizontal distance. Using real 3D corners from different beams introduces a depth component that inflates the shown value.
+- **Verify dimension values via the bridge** — `d.start` returns `[entity_or_nil, Point3d]`; use index `[1]` for the Point3d. `d.end` is a Ruby keyword; call it as `d.send(:end)`.
