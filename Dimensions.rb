@@ -28,6 +28,12 @@ module Dimensions
   # Perpendicular offset applied to the outer diagonal dimension line so it sits clear of the geometry.
   DIAG_OFFSET = 100.mm
 
+  # Tag folder that groups all dimension sublayers in the SketchUp tag panel.
+  DIM_FOLDER = "maten"
+
+  # Prefix applied to every dimension sublayer name (folder name + space).
+  DIM_LAYER_PREFIX = "maten "
+
   # Positions within this distance are considered identical (deduplication only).
   DEDUP_EPSILON = 0.1.mm
 
@@ -61,7 +67,8 @@ module Dimensions
 
     model.start_operation("Add Skeleton Dimensions", true)
     begin
-      count = add_skeleton_dimensions(model, inst, view_dir, view_h, view_v)
+      sublayer = find_or_create_maten_sublayer(model, inst)
+      count = add_skeleton_dimensions(model, inst, view_dir, view_h, view_v, sublayer)
     ensure
       model.commit_operation
     end
@@ -104,7 +111,7 @@ module Dimensions
   # 5. Sort + deduplicate far_x; emit one horizontal cumulative dim per unique x.
   # 6. Emit per-beam own-length dim alongside each beam (deduped by length+axis).
   #
-  def add_skeleton_dimensions(model, inst, view_dir, view_h, view_v)
+  def add_skeleton_dimensions(model, inst, view_dir, view_h, view_v, sublayer = nil)
     parent_t = inst.transformation
 
     # Projection: 3D point → scalar along a view axis (Point3d has no .dot)
@@ -270,7 +277,7 @@ module Dimensions
       gap_to_baseline = proj.call(far_h_pt, view_v) - beam_min_v  # ≥ 0: beam bottom is above overall baseline
       d   = gap_to_baseline + OUTER_PADDING + dim_i * STAGGER_STEP
       off = scale_vec(view_v.reverse, d)
-      align_dim(entities.add_dimension_linear(nudge.call(base_pt), nudge.call(far_pt), off))
+      align_dim(entities.add_dimension_linear(nudge.call(base_pt), nudge.call(far_pt), off), sublayer)
       count += 1
       dim_i += 1
     end
@@ -285,7 +292,7 @@ module Dimensions
       gap_to_baseline = beam_max_v - proj.call(far_h_pt, view_v)  # ≥ 0: beam top is below overall baseline
       d   = gap_to_baseline + OUTER_PADDING + dim_j * STAGGER_STEP
       off = scale_vec(view_v, d)
-      align_dim(entities.add_dimension_linear(nudge.call(base_pt), nudge.call(far_pt), off))
+      align_dim(entities.add_dimension_linear(nudge.call(base_pt), nudge.call(far_pt), off), sublayer)
       count += 1
       dim_j += 1
     end
@@ -308,7 +315,7 @@ module Dimensions
       key = [length_bucket, axis_bucket]
       next if added_length_axis[key]
       added_length_axis[key] = true
-      align_dim(entities.add_dimension_linear(nudge.call(start_pt), nudge.call(end_pt), offset))
+      align_dim(entities.add_dimension_linear(nudge.call(start_pt), nudge.call(end_pt), offset), sublayer)
       count += 1
       per_beam_count += 1
     end
@@ -339,7 +346,7 @@ module Dimensions
         view_h.z * (v_ext / diag_len) + view_v.z * (h_ext / diag_len)
       )
       offset = scale_vec(perp, DIAG_OFFSET)
-      align_dim(entities.add_dimension_linear(nudge.call(tl), nudge.call(br), offset))
+      align_dim(entities.add_dimension_linear(nudge.call(tl), nudge.call(br), offset), sublayer)
       count += 1
       debug("outer diagonal: #{(h_ext * 25.4).round}x#{(v_ext * 25.4).round}mm → #{(diag_len * 25.4).round(1)}mm")
     end
@@ -356,10 +363,11 @@ module Dimensions
     out
   end
 
-  # Apply text-alignment settings so the label is parallel to the dimension line.
-  def align_dim(dim)
+  # Apply text-alignment settings and assign an optional layer to the dimension.
+  def align_dim(dim, layer = nil)
     dim.has_aligned_text = true
     dim.aligned_text_position = Sketchup::DimensionLinear::ALIGNED_TEXT_ABOVE
+    dim.layer = layer if layer
   end
 
   # Scale a Vector3d by a scalar (Vector3d * Float is cross product in SketchUp).
@@ -392,6 +400,44 @@ module Dimensions
       end
     end
     result
+  end
+
+  # Returns the name to use for the "maten" sublayer, based on the selected instance.
+  # Priority: tag on the instance → instance name → definition name → persistent_id.
+  def sublayer_name_for(inst)
+    tag = inst.layer
+    if tag && tag.name != "Layer0" && tag.name != "Untagged"
+      return "#{DIM_LAYER_PREFIX}#{tag.name}"
+    end
+    iname = inst.name.to_s.strip
+    return "#{DIM_LAYER_PREFIX}#{iname}" unless iname.empty?
+    dname = inst.definition.name.to_s.strip
+    return "#{DIM_LAYER_PREFIX}#{dname}" unless dname.empty?
+    "#{DIM_LAYER_PREFIX}#{inst.persistent_id}"
+  end
+
+  # Finds or creates the DIM_FOLDER tag folder (SketchUp 2021+) and the named sublayer
+  # inside it.  On older SketchUp (no folder support) the sublayer is created at root.
+  def find_or_create_maten_sublayer(model, inst)
+    sub_name = sublayer_name_for(inst)
+
+    parent_folder = nil
+    if model.layers.respond_to?(:add_folder)
+      model.layers.folders.each { |f| parent_folder = f if f.name == DIM_FOLDER }
+      parent_folder ||= model.layers.add_folder(DIM_FOLDER)
+    end
+
+    sub_layer = nil
+    model.layers.each { |l| sub_layer = l if l.name == sub_name }
+    unless sub_layer
+      sub_layer = model.layers.add(sub_name)
+      if parent_folder && sub_layer.respond_to?(:folder=)
+        sub_layer.folder = parent_folder
+      end
+    end
+
+    debug("Dimension sublayer: '#{sub_name}' (folder: '#{parent_folder ? parent_folder.name : 'none'}')")
+    sub_layer
   end
 
   def selected_component_instance(selection)
