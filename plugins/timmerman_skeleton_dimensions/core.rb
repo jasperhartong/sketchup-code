@@ -297,14 +297,32 @@ module Timmerman
       diag_len = Math.sqrt(h_ext**2 + v_ext**2)
 
       if diag_len >= MIN_DIMENSION_GAP
-        perp = Geom::Vector3d.new(
+        # TL → BR diagonal (top-left to bottom-right); perpendicular points up-right
+        perp_tr = Geom::Vector3d.new(
           view_h.x * (v_ext / diag_len) + view_v.x * (h_ext / diag_len),
           view_h.y * (v_ext / diag_len) + view_v.y * (h_ext / diag_len),
           view_h.z * (v_ext / diag_len) + view_v.z * (h_ext / diag_len)
         )
-        offset = scale_vec(perp, DIAG_OFFSET)
         align_dim(
-          entities.add_dimension_linear(nudge.call(tl), nudge.call(br), offset),
+          entities.add_dimension_linear(nudge.call(tl), nudge.call(br), scale_vec(perp_tr, DIAG_OFFSET)),
+          sublayer
+        )
+        count += 1
+
+        # BL → TR diagonal (bottom-left to top-right); perpendicular points up-left
+        bl = all_beam_corners.min_by { |c|
+          (dot(c, view_h) - origin_x)**2 + (dot(c, view_v) - beam_min_v)**2
+        }
+        tr = all_beam_corners.min_by { |c|
+          (dot(c, view_h) - beam_max_h)**2 + (dot(c, view_v) - beam_max_v)**2
+        }
+        perp_tl = Geom::Vector3d.new(
+          -view_h.x * (v_ext / diag_len) + view_v.x * (h_ext / diag_len),
+          -view_h.y * (v_ext / diag_len) + view_v.y * (h_ext / diag_len),
+          -view_h.z * (v_ext / diag_len) + view_v.z * (h_ext / diag_len)
+        )
+        align_dim(
+          entities.add_dimension_linear(nudge.call(bl), nudge.call(tr), scale_vec(perp_tl, DIAG_OFFSET)),
           sublayer
         )
         count += 1
