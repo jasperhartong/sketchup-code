@@ -241,6 +241,8 @@ module Timmerman
       entities = model.entities
       count    = 0
 
+      # Cumulative dim anchors are coplanar by construction (same depth as origin_pt)
+      # so the dimension measures the in-plane horizontal distance, not 3D.
       make_h_anchor = ->(base_pt, h_target) {
         h_diff = h_target - origin_x
         Geom::Point3d.new(
