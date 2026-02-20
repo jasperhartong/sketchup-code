@@ -22,51 +22,20 @@ module Timmerman
 
     # Reload guard — remove constants before redefining so re-loading this file
     # always picks up the latest values.
-    %i[PREFS_KEY PREFS_DIR_KEY PREFS_PORT_KEY POLL_INTERVAL
-       DEFAULT_BRIDGE_DIR DEFAULT_RDEBUG_PORT].each do |c|
+    %i[PREFS_KEY PREFS_DIR_KEY POLL_INTERVAL
+       DEFAULT_BRIDGE_DIR RDEBUG_LAUNCH_CMD].each do |c|
       remove_const(c) if const_defined?(c, false)
     end
 
-    PREFS_KEY        = 'TimmermanSketchupBridge'.freeze
-    PREFS_DIR_KEY    = 'bridge_dir'.freeze
-    PREFS_PORT_KEY   = 'rdebug_port'.freeze
-    POLL_INTERVAL    = 2  # seconds
-    DEFAULT_RDEBUG_PORT = 6123
+    PREFS_KEY      = 'TimmermanSketchupBridge'.freeze
+    PREFS_DIR_KEY  = 'bridge_dir'.freeze
+    POLL_INTERVAL  = 2  # seconds
 
     # Default bridge directory — used until the user points it at a project.
     DEFAULT_BRIDGE_DIR = File.join(File.expand_path('~'), 'sketchup_bridge').freeze
 
-    # ---------------------------------------------------------------------------
-    # Debug-port detection
-    # ---------------------------------------------------------------------------
-
-    def debug_port
-      saved = Sketchup.read_default(PREFS_KEY, PREFS_PORT_KEY, '').to_s.strip
-      saved.empty? ? DEFAULT_RDEBUG_PORT : saved.to_i
-    end
-
-    def debug_port=(port)
-      Sketchup.write_default(PREFS_KEY, PREFS_PORT_KEY, port.to_i)
-    end
-
-    def rdebug_launch_cmd
-      "open -a /Applications/SketchUp\\ 2026/SketchUp.app --args -rdebug \"ide port=#{debug_port}\""
-    end
-
-    def debug_port_open?
-      require 'socket'
-      TCPSocket.new('127.0.0.1', debug_port).close
-      true
-    rescue Errno::ECONNREFUSED, Errno::EADDRNOTAVAIL, SocketError
-      false
-    end
-
-    def warn_if_no_debug_port
-      return if debug_port_open?
-      puts "[SketchUp Bridge] WARNING: Ruby debug port #{debug_port} is not open."
-      puts "[SketchUp Bridge] To enable IDE debugging, restart SketchUp with:"
-      puts "  #{rdebug_launch_cmd}"
-    end
+    RDEBUG_LAUNCH_CMD =
+      'open -a /Applications/SketchUp\ 2026/SketchUp.app --args -rdebug "ide port=6123"'.freeze
 
     # ---------------------------------------------------------------------------
     # Configuration
@@ -99,6 +68,12 @@ module Timmerman
       !@bridge_timer.nil?
     end
 
+    def register_quit_observer
+      return if @app_observer
+      @app_observer = BridgeAppObserver.new
+      Sketchup.add_observer(@app_observer)
+    end
+
     def start
       if running?
         puts "[SketchUp Bridge] Already running (bridge dir: #{bridge_dir})"
@@ -114,9 +89,6 @@ module Timmerman
 
       @bridge_last_mtime = 0
 
-      @app_observer ||= BridgeAppObserver.new
-      Sketchup.add_observer(@app_observer)
-
       @bridge_timer = UI.start_timer(POLL_INTERVAL, true) {
         next unless File.exist?(command_file)
 
@@ -128,7 +100,8 @@ module Timmerman
       }
 
       puts "[SketchUp Bridge] Listening. Bridge dir: #{dir}"
-      warn_if_no_debug_port
+      puts "[SketchUp Bridge] For IDE debugging, start SketchUp with:"
+      puts "  #{RDEBUG_LAUNCH_CMD}"
     end
 
     def stop
@@ -138,8 +111,6 @@ module Timmerman
       end
       UI.stop_timer(@bridge_timer)
       @bridge_timer = nil
-      Sketchup.remove_observer(@app_observer) if @app_observer
-      @app_observer = nil
       puts "[SketchUp Bridge] Stopped."
     end
 
@@ -160,10 +131,8 @@ module Timmerman
       rescue => e
         err.puts("#{e.class}: #{e.message}")
         e.backtrace.first(20).each { |l| err.puts("  #{l}") }
-        unless debug_port_open?
-          err.puts("\nTip: restart SketchUp with the debug port to step through errors in the IDE:")
-          err.puts("  #{rdebug_launch_cmd}")
-        end
+        err.puts("\nTip: for IDE debugging, restart SketchUp with:")
+        err.puts("  #{RDEBUG_LAUNCH_CMD}")
       ensure
         $stdout, $stderr = old_out, old_err
       end
@@ -171,6 +140,10 @@ module Timmerman
       File.write(result_file,   "=== stdout ===\n#{out.string}\n=== stderr ===\n#{err.string}")
       File.write(last_run_file, mtime.to_s)
     end
+
+    # Register once when the plugin loads — safe to call on every `load` because
+    # register_quit_observer guards against double-registration with @app_observer.
+    register_quit_observer
 
   end
 end
