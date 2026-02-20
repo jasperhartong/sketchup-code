@@ -32,3 +32,35 @@ When you need to **run code inside SketchUp** and see results (e.g. test `Dimens
    stdout/stderr from the command are in the printed result. Parse it to decide the next edit and repeat.
 
 Do not ask the user to paste code into the Ruby Console for iteration; use the bridge (edit `command.rb` → run `run_and_wait.rb` → read output).
+
+---
+
+## Iteration Methodology
+
+Follow this pattern for every non-trivial change:
+
+### 1. Discover with a one-off diagnostic script
+Before touching production code, write a temporary `command.rb` that inspects the live SketchUp state:
+- Print every child's name, classification, bounding-box projections, and why it would or would not receive a dimension.
+- Print intermediate computed values (origin, extents, dedup keys, filter results).
+- Use explicit `puts` with clear labels so the output is self-documenting.
+
+This surfaces root causes (wrong transform, missed nesting, bad classification) before any code is changed.
+
+### 2. Write generic code — no hardcoding
+Fix the algorithm in the production `.rb` file (e.g. `Dimensions.rb`):
+- The fix must work for **all** inputs, not just the specific beam that triggered the bug.
+- Never reference specific component names, IDs, or positions in production logic.
+- Add constants for thresholds (e.g. `MIN_BEAM_SPAN`) and document their intent with comments.
+
+### 3. Validate with a targeted one-off script
+After the fix, write another temporary `command.rb` that:
+- Re-runs the production code (`Dimensions.clear` + `Dimensions.run`).
+- Then programmatically checks the postcondition: query model entities, confirm the expected dimension exists, print PASS/FAIL with a reason.
+- Leave the final `command.rb` as the normal run command (`Dimensions.clear` + `Dimensions.run`) once validation passes.
+
+### Pitfalls learned
+- **`e.bounds` is already in parent space** — do not re-apply `e.transformation` when converting to world coords; store `accumulated_t` (not `accumulated_t * e.transformation`) for leaf entities.
+- **Groups are transparent containers** — recurse into them; treat only `ComponentInstance` leaves as beams.
+- **SketchUp internal units are inches** — `.round(2)` in debug output shows inches, not mm; convert with `* 25.4` for readability and use `.mm` constants for comparisons.
+- **Both edges of vertical beams** — push both `hs.min` and `hs.max` into `far_x` so the left (bottom-left) edge gets a cumulative dimension, not just the right.
