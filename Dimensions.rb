@@ -315,12 +315,18 @@ module Dimensions
     debug("per-beam length dims added: #{per_beam_count} (from #{beam_lengths.size} beams, after same-length same-axis dedup)")
 
     # 3. Single outer diagonal — from the top-left to the bottom-right corner of
-    #    the entire structure (the two extremal beam corners in view space).
-    tl = all_beam_corners.min_by { |c| proj.call(c, view_h) - proj.call(c, view_v) }
-    br = all_beam_corners.max_by { |c| proj.call(c, view_h) - proj.call(c, view_v) }
+    #    the entire structure. Find the actual beam corner that is nearest (in view
+    #    space) to each virtual bounding-box extreme: (min_h, max_v) and (max_h, min_v).
+    beam_max_h = all_beam_corners.map { |c| proj.call(c, view_h) }.max
+    tl = all_beam_corners.min_by { |c|
+      (proj.call(c, view_h) - origin_x)**2 + (proj.call(c, view_v) - beam_max_v)**2
+    }
+    br = all_beam_corners.min_by { |c|
+      (proj.call(c, view_h) - beam_max_h)**2 + (proj.call(c, view_v) - beam_min_v)**2
+    }
 
-    h_ext    = proj.call(br, view_h) - proj.call(tl, view_h)
-    v_ext    = proj.call(tl, view_v) - proj.call(br, view_v)   # tl is higher, so tl_v > br_v
+    h_ext    = beam_max_h - origin_x
+    v_ext    = beam_max_v - beam_min_v
     diag_len = Math.sqrt(h_ext**2 + v_ext**2)
 
     if diag_len >= MIN_DIMENSION_GAP
