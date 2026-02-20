@@ -173,7 +173,9 @@ module Dimensions
         offset   = scale_vec(view_v, half_depth + BEAM_LENGTH_OFFSET)
       end
 
-      beam_lengths << [start_pt, end_pt, offset] if start_pt.distance(end_pt) >= MIN_DIMENSION_GAP
+      if start_pt.distance(end_pt) >= MIN_DIMENSION_GAP
+        beam_lengths << { start_pt: start_pt, end_pt: end_pt, offset: offset, is_vertical: is_vertical }
+      end
     end
 
     unique_x = dedup_sorted(far_x.sort_by { |v, _| v })
@@ -195,12 +197,28 @@ module Dimensions
     end
     debug("cumulative horizontal dims added: #{count}")
 
-    # 2. Per-beam own-length dimension running alongside the beam itself
-    beam_lengths.each do |start_pt, end_pt, offset|
+    # 2. Per-beam own-length dimension running alongside the beam (skip repeats on same axis)
+    # Don't repeat beam length dimensions that have the same length AND start on the same axis.
+    added_length_axis = {}  # (length_bucket, axis_bucket) -> true
+    per_beam_count = 0
+    beam_lengths.each do |entry|
+      start_pt   = entry[:start_pt]
+      end_pt     = entry[:end_pt]
+      offset     = entry[:offset]
+      is_vertical = entry[:is_vertical]
+      length     = start_pt.distance(end_pt)
+      # Axis = reference line the dimension starts from: same view_v = same horizontal line (vertical beams), same view_h = same vertical line (horizontal beams)
+      axis_val   = is_vertical ? proj.call(start_pt, view_v) : proj.call(start_pt, view_h)
+      length_bucket = (length / DEDUP_EPSILON).round * DEDUP_EPSILON
+      axis_bucket  = (axis_val / DEDUP_EPSILON).round * DEDUP_EPSILON
+      key = [length_bucket, axis_bucket]
+      next if added_length_axis[key]
+      added_length_axis[key] = true
       align_dim(entities.add_dimension_linear(nudge.call(start_pt), nudge.call(end_pt), offset))
       count += 1
+      per_beam_count += 1
     end
-    debug("per-beam length dims added: #{beam_lengths.size}")
+    debug("per-beam length dims added: #{per_beam_count} (from #{beam_lengths.size} beams, after same-length same-axis dedup)")
 
     count
   end
