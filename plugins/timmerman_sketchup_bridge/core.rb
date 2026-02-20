@@ -47,6 +47,16 @@ module Timmerman
     end
 
     # ---------------------------------------------------------------------------
+    # AppObserver — stops the timer cleanly when SketchUp quits
+    # ---------------------------------------------------------------------------
+
+    class BridgeAppObserver < Sketchup::AppObserver
+      def onQuit
+        Timmerman::SketchupBridge.stop if Timmerman::SketchupBridge.running?
+      end
+    end
+
+    # ---------------------------------------------------------------------------
     # Listener lifecycle
     # ---------------------------------------------------------------------------
 
@@ -69,6 +79,9 @@ module Timmerman
 
       @bridge_last_mtime = 0
 
+      @app_observer ||= BridgeAppObserver.new
+      Sketchup.add_observer(@app_observer)
+
       @bridge_timer = UI.start_timer(POLL_INTERVAL, true) {
         next unless File.exist?(command_file)
 
@@ -89,6 +102,8 @@ module Timmerman
       end
       UI.stop_timer(@bridge_timer)
       @bridge_timer = nil
+      Sketchup.remove_observer(@app_observer) if @app_observer
+      @app_observer = nil
       puts "[SketchUp Bridge] Stopped."
     end
 
