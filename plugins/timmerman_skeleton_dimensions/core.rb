@@ -315,12 +315,20 @@ module Timmerman
       end
 
       beam_max_h = all_beam_corners.map { |c| dot(c, view_h) }.max
-      tl = all_beam_corners.min_by { |c|
-        (dot(c, view_h) - origin_x)**2 + (dot(c, view_v) - beam_max_v)**2
-      }
-      br = all_beam_corners.min_by { |c|
-        (dot(c, view_h) - beam_max_h)**2 + (dot(c, view_v) - beam_min_v)**2
-      }
+      # Overall diagonals use coplanar anchors so the dimension shows the true
+      # view-plane diagonal, not the 3D distance between corners at different depths.
+      front_depth = all_beam_corners.map { |c| dot(c, view_dir) }.min
+      depth_off   = front_depth - dot(origin_pt, view_dir)
+      tl = Geom::Point3d.new(
+        origin_pt.x + view_v.x * (beam_max_v - origin_y) + view_dir.x * depth_off,
+        origin_pt.y + view_v.y * (beam_max_v - origin_y) + view_dir.y * depth_off,
+        origin_pt.z + view_v.z * (beam_max_v - origin_y) + view_dir.z * depth_off
+      )
+      br = Geom::Point3d.new(
+        origin_pt.x + view_h.x * (beam_max_h - origin_x) + view_v.x * (beam_min_v - origin_y) + view_dir.x * depth_off,
+        origin_pt.y + view_h.y * (beam_max_h - origin_x) + view_v.y * (beam_min_v - origin_y) + view_dir.y * depth_off,
+        origin_pt.z + view_h.z * (beam_max_h - origin_x) + view_v.z * (beam_min_v - origin_y) + view_dir.z * depth_off
+      )
 
       tl_br_len = tl.distance(br)
       if tl_br_len >= MIN_DIMENSION_GAP
@@ -342,17 +350,21 @@ module Timmerman
         )
         count += 1
 
-        # BL to TR overall diagonal. Perpendicular from the actual segment direction.
-        bl = all_beam_corners.min_by { |c|
-          (dot(c, view_h) - origin_x)**2 + (dot(c, view_v) - beam_min_v)**2
-        }
-        tr = all_beam_corners.min_by { |c|
-          (dot(c, view_h) - beam_max_h)**2 + (dot(c, view_v) - beam_max_v)**2
-        }
-        bt_dh = dot(tr, view_h) - dot(bl, view_h)
-        bt_dv = dot(tr, view_v) - dot(bl, view_v)
-        bt_2d = Math.sqrt(bt_dh**2 + bt_dv**2)
+        # BL to TR overall diagonal. Same plane as TL-BR.
+        bl = Geom::Point3d.new(
+          origin_pt.x + view_v.x * (beam_min_v - origin_y) + view_dir.x * depth_off,
+          origin_pt.y + view_v.y * (beam_min_v - origin_y) + view_dir.y * depth_off,
+          origin_pt.z + view_v.z * (beam_min_v - origin_y) + view_dir.z * depth_off
+        )
+        tr = Geom::Point3d.new(
+          origin_pt.x + view_h.x * (beam_max_h - origin_x) + view_v.x * (beam_max_v - origin_y) + view_dir.x * depth_off,
+          origin_pt.y + view_h.y * (beam_max_h - origin_x) + view_v.y * (beam_max_v - origin_y) + view_dir.y * depth_off,
+          origin_pt.z + view_h.z * (beam_max_h - origin_x) + view_v.z * (beam_max_v - origin_y) + view_dir.z * depth_off
+        )
+        bt_2d = bl.distance(tr)
         if bt_2d >= MIN_DIMENSION_GAP
+          bt_dh = dot(tr, view_h) - dot(bl, view_h)
+          bt_dv = dot(tr, view_v) - dot(bl, view_v)
           # CCW 90 deg of (bt_dh, bt_dv) points "above" the up-right line (up-left)
           perp_tl = Geom::Vector3d.new(
             (-view_h.x * bt_dv + view_v.x * bt_dh) / bt_2d,
