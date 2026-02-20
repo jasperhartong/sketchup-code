@@ -19,8 +19,9 @@ module Dimensions
   # How much further out each successive cumulative dim line is placed (stagger).
   STAGGER_STEP = 150.mm
 
-  # How far alongside each beam its own length dimension is placed.
-  BEAM_LENGTH_OFFSET = 50.mm
+  # How far alongside each beam its own length dimension is placed (outside the beam).
+  # We add half the beam's thickness in that direction so the dimension line stays clear of the beam.
+  BEAM_LENGTH_OFFSET = 80.mm
 
   # Positions within this distance are considered identical (deduplication only).
   DEDUP_EPSILON = 0.1.mm
@@ -156,17 +157,20 @@ module Dimensions
         far_x << [hs.max, far_h_pt]
       end
 
-      # --- Per-beam own-length dimension alongside the beam ---
+      # --- Per-beam own-length dimension alongside the beam (offset outside bbox) ---
       if is_vertical
         # Dimension runs top→bottom along the left edge of the beam
         start_pt = child_corners.min_by { |c| [(proj.call(c, view_v) - vs.max).abs,  proj.call(c, view_h)] }
         end_pt   = child_corners.min_by { |c| [(proj.call(c, view_v) - vs.min).abs,  proj.call(c, view_h)] }
-        offset   = scale_vec(view_h.reverse, BEAM_LENGTH_OFFSET)   # just to the left of the beam
+        # Offset = half beam width + padding so dimension line sits clearly outside the beam
+        half_width = (h_extent * 0.5)
+        offset   = scale_vec(view_h.reverse, half_width + BEAM_LENGTH_OFFSET)
       else
         # Dimension runs left→right along the top edge of the beam
         start_pt = child_corners.min_by { |c| [(proj.call(c, view_h) - hs.min).abs, -proj.call(c, view_v)] }
         end_pt   = child_corners.min_by { |c| [(proj.call(c, view_h) - hs.max).abs, -proj.call(c, view_v)] }
-        offset   = scale_vec(view_v, BEAM_LENGTH_OFFSET)            # just above the beam
+        half_depth = (v_extent * 0.5)
+        offset   = scale_vec(view_v, half_depth + BEAM_LENGTH_OFFSET)
       end
 
       beam_lengths << [start_pt, end_pt, offset] if start_pt.distance(end_pt) >= MIN_DIMENSION_GAP
