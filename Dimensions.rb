@@ -149,13 +149,8 @@ module Dimensions
     # its cumulative positioning dims are drawn above the structure instead of below.
     mid_v = (beam_max_v + beam_min_v) / 2.0
 
-    # Base offsets for cumulative dims: below the bottom / above the top of all beams
-    base_offset_bottom = (origin_y - beam_min_v) + OUTER_PADDING
-    base_offset_top    = (beam_max_v - origin_y)  + OUTER_PADDING
-
     debug("origin: #{origin_pt.to_s.strip}, h=#{origin_x.round(3)}, v=#{origin_y.round(3)}")
     debug("beam bottom_v=#{beam_min_v.round(3)}, beam_max_v=#{beam_max_v.round(3)}, mid_v=#{mid_v.round(3)}")
-    debug("base_offset_bottom=#{base_offset_bottom.round(3)}, base_offset_top=#{base_offset_top.round(3)}")
 
     # Vertical beams whose bottom edge stays above mid_v are "top-only"; their
     # cumulative x positions are drawn above the structure to reduce bottom clutter.
@@ -190,10 +185,18 @@ module Dimensions
         target_far = top_only ? far_x_top : far_x_bottom
         debug("  → cumulative bucket: #{top_only ? 'TOP' : 'BOTTOM'} (vs.min=#{vs.min.round(2)}, mid_v=#{mid_v.round(2)})")
 
-        # Right (far) side only — dimension from origin to the right edge of this vertical beam
-        far_h_pt = child_corners.min_by { |c|
-          [(proj.call(c, view_h) - hs.max).abs, proj.call(c, view_v)]
-        }
+        # Right (far) side — pick the corner at the NEAR edge of the structure:
+        # bottom-right for below-dims, top-right for above-dims.
+        # That way each dim's extension line stops at the beam's own edge.
+        if top_only
+          far_h_pt = child_corners.min_by { |c|
+            [(proj.call(c, view_h) - hs.max).abs, -proj.call(c, view_v)]
+          }
+        else
+          far_h_pt = child_corners.min_by { |c|
+            [(proj.call(c, view_h) - hs.max).abs, proj.call(c, view_v)]
+          }
+        end
         target_far << [hs.max, far_h_pt]
       end
 
@@ -226,25 +229,43 @@ module Dimensions
     entities = model.entities
     count    = 0
 
-    # Synthesize a second anchor point that is exactly h_diff steps along view_h from
-    # origin_pt — same view_v and view_dir, so SketchUp measures a pure horizontal distance.
-    make_h_anchor = ->(h_target) {
+    # Synthesize the far anchor point by stepping along view_h from a given base point,
+    # keeping view_v and view_dir constant so SketchUp measures a pure horizontal distance.
+    make_h_anchor = ->(base_pt, h_target) {
       h_diff = h_target - origin_x
       Geom::Point3d.new(
-        origin_pt.x + view_h.x * h_diff,
-        origin_pt.y + view_h.y * h_diff,
-        origin_pt.z + view_h.z * h_diff
+        base_pt.x + view_h.x * h_diff,
+        base_pt.y + view_h.y * h_diff,
+        base_pt.z + view_h.z * h_diff
+      )
+    }
+
+    # Helper: build a base point at origin_x but at the v-level of a stored corner.
+    # Both start and far anchors share the same v, so SketchUp measures a pure
+    # horizontal distance and the extension lines run only OUTER_PADDING below/above
+    # that specific beam's own edge.
+    make_base_pt = ->(corner_pt) {
+      v_diff = proj.call(corner_pt, view_v) - origin_y
+      Geom::Point3d.new(
+        origin_pt.x + view_v.x * v_diff,
+        origin_pt.y + view_v.y * v_diff,
+        origin_pt.z + view_v.z * v_diff
       )
     }
 
     # 1a. Cumulative horizontal dims BELOW the component (full-span / bottom beams)
+    # The offset is measured from the anchor (beam's own bottom edge) and must reach
+    # the same staggered absolute level for every dim. The extra gap from this beam's
+    # bottom down to beam_min_v is added so all dim lines align at a common baseline.
     dim_i = 0
-    unique_x_bottom.each do |x, _pt|
+    unique_x_bottom.each do |x, far_h_pt|
       next if (x - origin_x).abs < MIN_DIMENSION_GAP
-      far_pt = make_h_anchor.call(x)
-      d   = base_offset_bottom + dim_i * STAGGER_STEP
+      base_pt    = make_base_pt.call(far_h_pt)   # at this beam's bottom-v
+      far_pt     = make_h_anchor.call(base_pt, x)
+      gap_to_baseline = proj.call(far_h_pt, view_v) - beam_min_v  # ≥ 0: beam bottom is above overall baseline
+      d   = gap_to_baseline + OUTER_PADDING + dim_i * STAGGER_STEP
       off = scale_vec(view_v.reverse, d)
-      align_dim(entities.add_dimension_linear(nudge.call(origin_pt), nudge.call(far_pt), off))
+      align_dim(entities.add_dimension_linear(nudge.call(base_pt), nudge.call(far_pt), off))
       count += 1
       dim_i += 1
     end
@@ -252,12 +273,14 @@ module Dimensions
 
     # 1b. Cumulative horizontal dims ABOVE the component (top-only beams)
     dim_j = 0
-    unique_x_top.each do |x, _pt|
+    unique_x_top.each do |x, far_h_pt|
       next if (x - origin_x).abs < MIN_DIMENSION_GAP
-      far_pt = make_h_anchor.call(x)
-      d   = base_offset_top + dim_j * STAGGER_STEP
+      base_pt    = make_base_pt.call(far_h_pt)   # at this beam's top-v
+      far_pt     = make_h_anchor.call(base_pt, x)
+      gap_to_baseline = beam_max_v - proj.call(far_h_pt, view_v)  # ≥ 0: beam top is below overall baseline
+      d   = gap_to_baseline + OUTER_PADDING + dim_j * STAGGER_STEP
       off = scale_vec(view_v, d)
-      align_dim(entities.add_dimension_linear(nudge.call(origin_pt), nudge.call(far_pt), off))
+      align_dim(entities.add_dimension_linear(nudge.call(base_pt), nudge.call(far_pt), off))
       count += 1
       dim_j += 1
     end
