@@ -190,16 +190,11 @@ module Dimensions
         target_far = top_only ? far_x_top : far_x_bottom
         debug("  → cumulative bucket: #{top_only ? 'TOP' : 'BOTTOM'} (vs.min=#{vs.min.round(2)}, mid_v=#{mid_v.round(2)})")
 
-        # Right side (for dimension from origin to right edge)
+        # Right (far) side only — dimension from origin to the right edge of this vertical beam
         far_h_pt = child_corners.min_by { |c|
           [(proj.call(c, view_h) - hs.max).abs, proj.call(c, view_v)]
         }
         target_far << [hs.max, far_h_pt]
-        # Left side (for dimension from origin to left edge)
-        left_pt = child_corners.min_by { |c|
-          [(proj.call(c, view_h) - hs.min).abs, proj.call(c, view_v)]
-        }
-        target_far << [hs.min, left_pt]
       end
 
       # --- Per-beam own-length dimension alongside the beam (offset outside bbox) ---
