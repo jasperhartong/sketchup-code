@@ -37,15 +37,6 @@ module Timmerman
       menu.add_item(cmd_run)
       menu.add_item(cmd_clear)
 
-      # ------------------------------------------------------------------
-      # Toolbar: Skeleton Dimensions
-      # ------------------------------------------------------------------
-
-      toolbar = UI::Toolbar.new('Skeleton Dimensions')
-      toolbar.add_item(cmd_run)
-      toolbar.add_item(cmd_clear)
-      toolbar.restore
-
       file_loaded(__FILE__)
     end
 
