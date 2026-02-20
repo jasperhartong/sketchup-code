@@ -140,16 +140,27 @@ module Dimensions
     origin_x  = proj.call(origin_pt, view_h)
     origin_y  = proj.call(origin_pt, view_v)
 
-    # Overall beam extents — used to place cumulative dim lines below the geometry
+    # Overall beam extents — used to place cumulative dim lines above/below the geometry
     beam_min_v = all_beam_corners.map { |c| proj.call(c, view_v) }.min
+    beam_max_v = all_beam_corners.map { |c| proj.call(c, view_v) }.max
 
-    # Base offset for horizontal cumulative dims: below the bottom of all beams
-    base_offset_h = (origin_y - beam_min_v) + OUTER_PADDING
+    # Vertical midpoint used to classify beams as "top-only" vs full-span/bottom.
+    # A vertical beam whose bottom edge stays above mid_v is considered top-only and
+    # its cumulative positioning dims are drawn above the structure instead of below.
+    mid_v = (beam_max_v + beam_min_v) / 2.0
+
+    # Base offsets for cumulative dims: below the bottom / above the top of all beams
+    base_offset_bottom = (origin_y - beam_min_v) + OUTER_PADDING
+    base_offset_top    = (beam_max_v - origin_y)  + OUTER_PADDING
 
     debug("origin: #{origin_pt.to_s.strip}, h=#{origin_x.round(3)}, v=#{origin_y.round(3)}")
-    debug("beam bottom_v=#{beam_min_v.round(3)}, base_offset_h=#{base_offset_h.round(3)}")
+    debug("beam bottom_v=#{beam_min_v.round(3)}, beam_max_v=#{beam_max_v.round(3)}, mid_v=#{mid_v.round(3)}")
+    debug("base_offset_bottom=#{base_offset_bottom.round(3)}, base_offset_top=#{base_offset_top.round(3)}")
 
-    far_x        = []   # [view_x, Point3d] — for cumulative horizontal positioning dims
+    # Vertical beams whose bottom edge stays above mid_v are "top-only"; their
+    # cumulative x positions are drawn above the structure to reduce bottom clutter.
+    far_x_top    = []   # [view_x, Point3d] — top-only vertical beams
+    far_x_bottom = []   # [view_x, Point3d] — full-span / bottom vertical beams
     beam_lengths  = []  # [[start_pt, end_pt, offset_vec]] — per-beam own-length dims
 
     structural_beams.each_with_index do |(child, world_t), idx|
@@ -174,16 +185,21 @@ module Dimensions
 
       # --- Cumulative horizontal positioning: left and right sides of vertical beams ---
       if is_vertical
+        # A beam whose bottom edge stays above the vertical midpoint is "top-only".
+        top_only   = vs.min > mid_v
+        target_far = top_only ? far_x_top : far_x_bottom
+        debug("  → cumulative bucket: #{top_only ? 'TOP' : 'BOTTOM'} (vs.min=#{vs.min.round(2)}, mid_v=#{mid_v.round(2)})")
+
         # Right side (for dimension from origin to right edge)
         far_h_pt = child_corners.min_by { |c|
           [(proj.call(c, view_h) - hs.max).abs, proj.call(c, view_v)]
         }
-        far_x << [hs.max, far_h_pt]
-        # Left side (for dimension from origin to bottom-left corner / left edge)
+        target_far << [hs.max, far_h_pt]
+        # Left side (for dimension from origin to left edge)
         left_pt = child_corners.min_by { |c|
           [(proj.call(c, view_h) - hs.min).abs, proj.call(c, view_v)]
         }
-        far_x << [hs.min, left_pt]
+        target_far << [hs.min, left_pt]
       end
 
       # --- Per-beam own-length dimension alongside the beam (offset outside bbox) ---
@@ -207,24 +223,39 @@ module Dimensions
       end
     end
 
-    unique_x = dedup_sorted(far_x.sort_by { |v, _| v })
-    debug("unique far-x positions: #{unique_x.map { |v, _| v.round(2) }}")
+    unique_x_bottom = dedup_sorted(far_x_bottom.sort_by { |v, _| v })
+    unique_x_top    = dedup_sorted(far_x_top.sort_by    { |v, _| v })
+    debug("unique far-x BOTTOM: #{unique_x_bottom.map { |v, _| v.round(2) }}")
+    debug("unique far-x TOP:    #{unique_x_top.map    { |v, _| v.round(2) }}")
 
     entities = model.entities
     count    = 0
-    dim_i    = 0
 
-    # 1. Cumulative horizontal dims below the component (position of each vertical beam)
-    unique_x.each do |x, pt|
+    # 1a. Cumulative horizontal dims BELOW the component (full-span / bottom beams)
+    dim_i = 0
+    unique_x_bottom.each do |x, pt|
       next if (x - origin_x).abs < MIN_DIMENSION_GAP
       next if origin_pt.distance(pt) < MIN_DIMENSION_GAP
-      d   = base_offset_h + dim_i * STAGGER_STEP
+      d   = base_offset_bottom + dim_i * STAGGER_STEP
       off = scale_vec(view_v.reverse, d)
       align_dim(entities.add_dimension_linear(nudge.call(origin_pt), nudge.call(pt), off))
       count += 1
       dim_i += 1
     end
-    debug("cumulative horizontal dims added: #{count}")
+    debug("cumulative horizontal dims BELOW: #{dim_i}")
+
+    # 1b. Cumulative horizontal dims ABOVE the component (top-only beams)
+    dim_j = 0
+    unique_x_top.each do |x, pt|
+      next if (x - origin_x).abs < MIN_DIMENSION_GAP
+      next if origin_pt.distance(pt) < MIN_DIMENSION_GAP
+      d   = base_offset_top + dim_j * STAGGER_STEP
+      off = scale_vec(view_v, d)
+      align_dim(entities.add_dimension_linear(nudge.call(origin_pt), nudge.call(pt), off))
+      count += 1
+      dim_j += 1
+    end
+    debug("cumulative horizontal dims ABOVE: #{dim_j}")
 
     # 2. Per-beam own-length dimension running alongside the beam (skip repeats on same axis)
     # Don't repeat beam length dimensions that have the same length AND start on the same axis.
