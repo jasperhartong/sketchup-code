@@ -20,7 +20,7 @@ module Dimensions
   STAGGER_STEP = 150.mm
 
   # How far alongside each beam its own length dimension is placed.
-  BEAM_LENGTH_OFFSET = 20.mm
+  BEAM_LENGTH_OFFSET = 50.mm
 
   # Positions within this distance are considered identical (deduplication only).
   DEDUP_EPSILON = 0.1.mm
@@ -110,6 +110,14 @@ module Dimensions
       (0..7).map { |i| child.bounds.corner(i).transform(parent_t) }
     }
 
+    # Nudge anchor points toward the camera by the full component depth along view_dir,
+    # so dimensions always render in front of the geometry regardless of component thickness.
+    depth_projs = all_beam_corners.map { |c| proj.call(c, view_dir) }
+    cam_depth   = depth_projs.max - depth_projs.min
+    cam_nudge   = scale_vec(view_dir.reverse, cam_depth)
+    nudge       = ->(pt) { Geom::Point3d.new(pt.x + cam_nudge.x, pt.y + cam_nudge.y, pt.z + cam_nudge.z) }
+    debug("cam_depth=#{cam_depth.round(2)}, nudge=#{cam_nudge.to_s.strip}")
+
     # Origin = top-left of the beams' own extents (not the parent component bbox)
     origin_pt = all_beam_corners.min_by { |c| [proj.call(c, view_h), -proj.call(c, view_v)] }
     origin_x  = proj.call(origin_pt, view_h)
@@ -177,7 +185,7 @@ module Dimensions
       next if origin_pt.distance(pt) < MIN_DIMENSION_GAP
       d   = base_offset_h + dim_i * STAGGER_STEP
       off = scale_vec(view_v.reverse, d)
-      align_dim(entities.add_dimension_linear(origin_pt, pt, off))
+      align_dim(entities.add_dimension_linear(nudge.call(origin_pt), nudge.call(pt), off))
       count += 1
       dim_i += 1
     end
@@ -185,7 +193,7 @@ module Dimensions
 
     # 2. Per-beam own-length dimension running alongside the beam itself
     beam_lengths.each do |start_pt, end_pt, offset|
-      align_dim(entities.add_dimension_linear(start_pt, end_pt, offset))
+      align_dim(entities.add_dimension_linear(nudge.call(start_pt), nudge.call(end_pt), offset))
       count += 1
     end
     debug("per-beam length dims added: #{beam_lengths.size}")
