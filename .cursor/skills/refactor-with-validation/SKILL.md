@@ -1,6 +1,6 @@
 ---
 name: refactor-with-validation
-description: Safely refactor or DRY up SketchUp Ruby code (Dimensions.rb or similar) using the bridge. Captures a baseline of the current SketchUp output before refactoring, validates the refactored code produces identical output, then cleans up. Use when the user asks to refactor, DRY up, clean up, or restructure Ruby code that runs in SketchUp.
+description: Safely refactor or DRY up SketchUp Ruby code (core.rb or similar) using the bridge. Captures a baseline of the current SketchUp output before refactoring, validates the refactored code produces identical output, then cleans up. Use when the user asks to refactor, DRY up, clean up, or restructure Ruby code that runs in SketchUp.
 ---
 
 # Refactor with Validation
@@ -47,10 +47,9 @@ Per dimension this captures:
 ## Step 1: Capture baseline
 
 ```ruby
-project_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
-load File.join(project_root, 'Dimensions.rb')
-Dimensions.clear
-Dimensions.run
+load File.expand_path('../plugins/timmerman_skeleton_dimensions/core.rb', __dir__)
+Timmerman::SkeletonDimensions.clear
+Timmerman::SkeletonDimensions.run
 
 model = Sketchup.active_model
 # ... paste audit helper here ...
@@ -64,19 +63,18 @@ Run: `ruby sketchup_bridge/run_and_wait.rb`
 
 ## Step 2: Refactor
 
-Edit the production file (e.g. `Dimensions.rb`). Rules:
+Edit the production file (`plugins/timmerman_skeleton_dimensions/core.rb`). Rules:
 - No hardcoded names, IDs, or positions
 - Extract repeated code into private helper methods
 - Use meaningful constants for magic numbers
-- Keep public API identical (`Dimensions.run`, `Dimensions.clear`)
+- Keep public API identical (`Timmerman::SkeletonDimensions.run`, `.clear`)
 
 ## Step 3: Validate
 
 ```ruby
-project_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
-load File.join(project_root, 'Dimensions.rb')
-Dimensions.clear
-Dimensions.run
+load File.expand_path('../plugins/timmerman_skeleton_dimensions/core.rb', __dir__)
+Timmerman::SkeletonDimensions.clear
+Timmerman::SkeletonDimensions.run
 
 model = Sketchup.active_model
 # ... paste audit helper here ...
@@ -117,14 +115,14 @@ Run: `ruby sketchup_bridge/run_and_wait.rb`
 Once validation passes, reset `sketchup_bridge/command.rb` to the standard run command:
 
 ```ruby
-project_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
-load File.join(project_root, 'Dimensions.rb')
-Dimensions.clear
-Dimensions.run
+load File.expand_path('../plugins/timmerman_skeleton_dimensions/core.rb', __dir__)
+Timmerman::SkeletonDimensions.debug_mode = true
+Timmerman::SkeletonDimensions.clear
+Timmerman::SkeletonDimensions.run
 "OK"
 ```
 
 ## Notes
 
 - Baseline is stored at `/tmp/dim_baseline.txt`. If Step 3 is never reached (crash, etc.), delete it manually.
-- If `Dimensions.run` is non-deterministic (random ordering), sort `lines` before writing/comparing.
+- If `Timmerman::SkeletonDimensions.run` is non-deterministic (random ordering), sort `lines` before writing/comparing.

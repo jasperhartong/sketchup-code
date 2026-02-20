@@ -1,5 +1,7 @@
-project_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
-load File.join(project_root, 'Dimensions.rb')
-Dimensions.clear
-Dimensions.run
+core = File.expand_path('../plugins/timmerman_skeleton_dimensions/core.rb', __dir__)
+load core
+
+Timmerman::SkeletonDimensions.debug_mode = true
+Timmerman::SkeletonDimensions.clear
+Timmerman::SkeletonDimensions.run
 "OK"

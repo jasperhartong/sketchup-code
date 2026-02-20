@@ -7,22 +7,24 @@ alwaysApply: true
 
 **When running or iterating on SketchUp Ruby code, always use the bridge.** Do not ask the user to paste code into the SketchUp Ruby Console.
 
-When you need to **run code inside SketchUp** and see results (e.g. test `Dimensions.run`, `Dimensions.clear`, or any SketchUp Ruby):
+When you need to **run code inside SketchUp** and see results (e.g. test `Timmerman::SkeletonDimensions.run`, `.clear`, or any SketchUp Ruby):
 
 1. **Ensure the listener is running in SketchUp**  
-   User must have run once in SketchUp Ruby Console:  
+   **Option A (plugin — preferred):** Install `dist/timmerman_sketchup_bridge-1.0.0.rbz`, set the bridge directory to this project's `sketchup_bridge/` folder via *Extensions → SketchUp Bridge → Set Bridge Directory…*, then click *Start Listener*. The listener persists across sessions.  
+   **Option B (manual):** Paste once in the Ruby Console:  
    `load '/Users/jasper/Timmerman/sketchup-code/sketchup_bridge/listener.rb'`
 
 2. **Write the code to run**  
-   Edit `sketchup_bridge/command.rb`. Put the exact Ruby you want SketchUp to execute. Example for current selection:
+   Edit `sketchup_bridge/command.rb`. The default loads `core.rb` directly and calls run/clear:
    ```ruby
-   project_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
-   load File.join(project_root, 'Dimensions.rb')
-   Dimensions.clear
-   Dimensions.run
+   core = File.expand_path('../plugins/timmerman_skeleton_dimensions/core.rb', __dir__)
+   load core
+   Timmerman::SkeletonDimensions.debug_mode = true
+   Timmerman::SkeletonDimensions.clear
+   Timmerman::SkeletonDimensions.run
    "OK"
    ```
-   For a named instance (e.g. `test001`), use the existing helper in the default `command.rb` (select_instance_by_name).
+   The algorithm lives in `plugins/timmerman_skeleton_dimensions/core.rb` — edit that file, then re-run the bridge to test it.
 
 3. **Run and wait for result**  
    Execute: `ruby sketchup_bridge/run_and_wait.rb`  
@@ -48,7 +50,7 @@ Before touching production code, write a temporary `command.rb` that inspects th
 This surfaces root causes (wrong transform, missed nesting, bad classification) before any code is changed.
 
 ### 2. Write generic code — no hardcoding
-Fix the algorithm in the production `.rb` file (e.g. `Dimensions.rb`):
+Fix the algorithm in `plugins/timmerman_skeleton_dimensions/core.rb`:
 - The fix must work for **all** inputs, not just the specific beam that triggered the bug.
 - Never reference specific component names, IDs, or positions in production logic.
 - Add constants for thresholds (e.g. `MIN_BEAM_SPAN`) and document their intent with comments.
@@ -59,7 +61,7 @@ After the fix, write another temporary `command.rb` that:
 - Then **programmatically reads back the result from SketchUp** (e.g. query `model.entities.grep(Sketchup::DimensionLinear)` and print each dimension's `.text`, anchor points, and 3D distance) to confirm the values are correct.
 - Compare computed expected values against what SketchUp actually stored; print PASS/FAIL with a reason.
 - **Never declare success based on the run log alone** — always verify the actual rendered output through the bridge before telling the user it is fixed.
-- Leave the final `command.rb` as the normal run command (`Dimensions.clear` + `Dimensions.run`) once validation passes.
+- Leave the final `command.rb` as the normal run command (`Timmerman::SkeletonDimensions.clear` + `.run`) once validation passes.
 
 **`DimensionLinear` audit pattern** (verified working):
 ```ruby
