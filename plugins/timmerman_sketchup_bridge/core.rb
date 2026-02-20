@@ -22,16 +22,51 @@ module Timmerman
 
     # Reload guard — remove constants before redefining so re-loading this file
     # always picks up the latest values.
-    %i[PREFS_KEY PREFS_DIR_KEY POLL_INTERVAL DEFAULT_BRIDGE_DIR].each do |c|
+    %i[PREFS_KEY PREFS_DIR_KEY PREFS_PORT_KEY POLL_INTERVAL
+       DEFAULT_BRIDGE_DIR DEFAULT_RDEBUG_PORT].each do |c|
       remove_const(c) if const_defined?(c, false)
     end
 
-    PREFS_KEY     = 'TimmermanSketchupBridge'.freeze
-    PREFS_DIR_KEY = 'bridge_dir'.freeze
-    POLL_INTERVAL = 2  # seconds
+    PREFS_KEY        = 'TimmermanSketchupBridge'.freeze
+    PREFS_DIR_KEY    = 'bridge_dir'.freeze
+    PREFS_PORT_KEY   = 'rdebug_port'.freeze
+    POLL_INTERVAL    = 2  # seconds
+    DEFAULT_RDEBUG_PORT = 6123
 
     # Default bridge directory — used until the user points it at a project.
     DEFAULT_BRIDGE_DIR = File.join(File.expand_path('~'), 'sketchup_bridge').freeze
+
+    # ---------------------------------------------------------------------------
+    # Debug-port detection
+    # ---------------------------------------------------------------------------
+
+    def debug_port
+      saved = Sketchup.read_default(PREFS_KEY, PREFS_PORT_KEY, '').to_s.strip
+      saved.empty? ? DEFAULT_RDEBUG_PORT : saved.to_i
+    end
+
+    def debug_port=(port)
+      Sketchup.write_default(PREFS_KEY, PREFS_PORT_KEY, port.to_i)
+    end
+
+    def rdebug_launch_cmd
+      "open -a /Applications/SketchUp\\ 2026/SketchUp.app --args -rdebug \"ide port=#{debug_port}\""
+    end
+
+    def debug_port_open?
+      require 'socket'
+      TCPSocket.new('127.0.0.1', debug_port).close
+      true
+    rescue Errno::ECONNREFUSED, Errno::EADDRNOTAVAIL, SocketError
+      false
+    end
+
+    def warn_if_no_debug_port
+      return if debug_port_open?
+      puts "[SketchUp Bridge] WARNING: Ruby debug port #{debug_port} is not open."
+      puts "[SketchUp Bridge] To enable IDE debugging, restart SketchUp with:"
+      puts "  #{rdebug_launch_cmd}"
+    end
 
     # ---------------------------------------------------------------------------
     # Configuration
@@ -93,6 +128,7 @@ module Timmerman
       }
 
       puts "[SketchUp Bridge] Listening. Bridge dir: #{dir}"
+      warn_if_no_debug_port
     end
 
     def stop
@@ -124,6 +160,10 @@ module Timmerman
       rescue => e
         err.puts("#{e.class}: #{e.message}")
         e.backtrace.first(20).each { |l| err.puts("  #{l}") }
+        unless debug_port_open?
+          err.puts("\nTip: restart SketchUp with the debug port to step through errors in the IDE:")
+          err.puts("  #{rdebug_launch_cmd}")
+        end
       ensure
         $stdout, $stderr = old_out, old_err
       end

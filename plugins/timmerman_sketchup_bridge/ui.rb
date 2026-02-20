@@ -47,12 +47,25 @@ module Timmerman
       cmd_dir.tooltip         = 'Choose the folder containing command.rb / result.txt'
       cmd_dir.status_bar_text = 'Point the bridge at your project\'s sketchup_bridge/ folder.'
 
-      cmd_status = UI::Command.new('Show Status') {
-        dir    = Timmerman::SketchupBridge.bridge_dir
-        state  = Timmerman::SketchupBridge.running? ? 'RUNNING' : 'STOPPED'
-        UI.messagebox("SketchUp Bridge status: #{state}\nBridge dir: #{dir}")
+      cmd_port = UI::Command.new('Set Debug Port…') {
+        current = Timmerman::SketchupBridge.debug_port.to_s
+        result  = UI.inputbox(['Debug port:'], [current], 'Set Ruby Debug Port')
+        next unless result
+        port = result[0].to_i
+        next if port <= 0
+        Timmerman::SketchupBridge.debug_port = port
+        puts "[SketchUp Bridge] Debug port → #{port}"
       }
-      cmd_status.tooltip = 'Show bridge status and current directory'
+      cmd_port.tooltip = 'Set the port used to detect the Ruby debug IDE connection'
+
+      cmd_status = UI::Command.new('Show Status') {
+        dir   = Timmerman::SketchupBridge.bridge_dir
+        port  = Timmerman::SketchupBridge.debug_port
+        state = Timmerman::SketchupBridge.running? ? 'RUNNING' : 'STOPPED'
+        debug = Timmerman::SketchupBridge.debug_port_open? ? "open (port #{port})" : "closed (port #{port})"
+        UI.messagebox("SketchUp Bridge status: #{state}\nBridge dir: #{dir}\nDebug port: #{debug}")
+      }
+      cmd_status.tooltip = 'Show bridge status, directory, and debug port'
 
       # ------------------------------------------------------------------
       # Menu: Extensions > SketchUp Bridge
@@ -63,6 +76,7 @@ module Timmerman
       menu.add_item(cmd_stop)
       menu.add_separator
       menu.add_item(cmd_dir)
+      menu.add_item(cmd_port)
       menu.add_item(cmd_status)
 
       file_loaded(__FILE__)
