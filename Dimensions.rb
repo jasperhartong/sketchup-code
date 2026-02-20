@@ -60,6 +60,30 @@ module Dimensions
     UI.messagebox("Added #{count} dimension(s) from top-left (cumulative).")
   end
 
+  def clear
+    model = Sketchup.active_model
+    sel   = model.selection
+    inst  = selected_component_instance(sel)
+    unless inst
+      UI.messagebox(selection_error_message(sel))
+      return
+    end
+
+    dims = model.entities.grep(Sketchup::DimensionLinear)
+    return if dims.empty?
+
+    model.start_operation("Clear Skeleton Dimensions", true)
+    begin
+      model.entities.erase_entities(dims)
+    ensure
+      model.commit_operation
+    end
+
+    model.active_view.invalidate
+    debug("Cleared #{dims.size} dimension(s).")
+    UI.messagebox("Cleared #{dims.size} dimension(s).")
+  end
+
   # --- Algorithm ------------------------------------------------------------
   #
   # 1. Get the 8 corners of the top component bbox → find the "top-left" origin
