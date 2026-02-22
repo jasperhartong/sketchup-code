@@ -1,0 +1,42 @@
+---
+description: SketchUp Ruby API docs index — use for API lookups and correct class/method URLs
+alwaysApply: true
+globs: ["**/*.rb", "**/docs/**"]
+---
+
+# SketchUp Ruby API — Docs in Agent Context
+
+**Use this rule and the project index file for any SketchUp Ruby API lookup.**
+
+## Index file (single source of truth)
+
+The full class/module index with links is in:
+
+**`docs/sketchup-ruby-api-index.md`**
+
+When you need a class, method, or guide: open that file. It contains the official [SketchUp Ruby API](https://ruby.sketchup.com/) index (file listing + namespace A–Z with URLs).
+
+## Quick reference (always available)
+
+- **Docs root:** https://ruby.sketchup.com/
+- **Alphabetic index:** https://ruby.sketchup.com/_index.html
+- **Generating geometry:** https://ruby.sketchup.com/file.generating_geometry.html
+- **Sketchup::Entities:** https://ruby.sketchup.com/Sketchup/Entities.html  
+- **Entities#add_dimension_linear:** https://ruby.sketchup.com/Sketchup/Entities.html#add_dimension_linear-instance_method
+- **Sketchup::DimensionLinear:** https://ruby.sketchup.com/Sketchup/DimensionLinear.html
+- **Sketchup::Model:** https://ruby.sketchup.com/Sketchup/Model.html
+- **Geom module:** https://ruby.sketchup.com/Geom.html (Point3d, Vector3d, BoundingBox, Transformation)
+- **Sketchup::ComponentInstance:** https://ruby.sketchup.com/Sketchup/ComponentInstance.html
+- **Sketchup::Group:** https://ruby.sketchup.com/Sketchup/Group.html
+
+For any other class or method, use **`docs/sketchup-ruby-api-index.md`** or the official alphabetic index above.
+
+## Keeping the quick reference up to date
+
+When you **use or learn a new important SketchUp Ruby API method** (non-obvious, easy to get wrong, or likely to be needed again):
+
+1. **Add it to the Quick reference** in this file (`.cursor/rules/sketchup-ruby-api-docs.mdc`).
+2. Use one line per entry: `- **Class#method_or_class:** URL` with the official docs link (e.g. `#method_name-instance_method` for instance methods).
+3. Prefer methods we had to look up, debug, or that have subtle behavior (e.g. `d.start` / `d.send(:end)` for DimensionLinear, units in inches, etc.).
+
+Do this during the same session so the quick reference stays useful for future agent context.
