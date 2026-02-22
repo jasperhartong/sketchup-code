@@ -27,7 +27,7 @@ module Timmerman
     %i[
       OUTER_PADDING STAGGER_STEP BEAM_LENGTH_OFFSET DIAG_OFFSET
       DIM_FOLDER DIM_LAYER_PREFIX DEDUP_EPSILON MIN_DIMENSION_GAP MIN_BEAM_SPAN
-      AXIS_ALIGN_TOL
+      AXIS_ALIGN_TOL MAX_DIMENSIONS_PER_RUN
     ].each { |c| remove_const(c) if const_defined?(c, false) }
 
     # Debug output is a module instance variable (not a constant) so it can be
@@ -77,6 +77,10 @@ module Timmerman
     # without a fuzzy aspect-ratio threshold.
     AXIS_ALIGN_TOL = 0.001
 
+    # Safety cap: stop adding dimensions after this many to avoid overloading
+    # the view (SketchUp 2026 can hang on heavy redraws). Set to nil for no cap.
+    MAX_DIMENSIONS_PER_RUN = 400
+
     # ---------------------------------------------------------------------------
     # Public commands
     # ---------------------------------------------------------------------------
@@ -108,6 +112,9 @@ module Timmerman
       model.commit_operation
 
       model.active_view.invalidate
+      # Do not call CMD_SELECTION_ZOOM_EXT here: on SketchUp 2026 it can hang the
+      # main thread (CALayer display → SU internals → kernel) when many dimensions
+      # are added at once. User can zoom to selection manually if desired.
       debug("Done. Added #{count} dimension(s).")
     end
 
@@ -183,7 +190,13 @@ module Timmerman
         Geom::Point3d.new(pt.x + cam_nudge.x, pt.y + cam_nudge.y, pt.z + cam_nudge.z)
       }
 
-      origin_pt = all_beam_corners.min_by { |c| [dot(c, view_h), -dot(c, view_v)] }
+      # Origin at the bottom-left corner in this projection, using a corner that belongs
+      # to a single beam (each beam's own bottom-left corner, then the overall min).
+      bottom_left_per_beam = structural_beams.map { |child, world_t|
+        corners = (0..7).map { |i| child.bounds.corner(i).transform(world_t) }
+        corners.min_by { |c| [dot(c, view_h), dot(c, view_v)] }
+      }
+      origin_pt = bottom_left_per_beam.min_by { |c| [dot(c, view_h), dot(c, view_v)] }
       origin_x  = dot(origin_pt, view_h)
       origin_y  = dot(origin_pt, view_v)
 
@@ -240,6 +253,7 @@ module Timmerman
 
       entities = model.entities
       count    = 0
+      max_dimensions_cap = MAX_DIMENSIONS_PER_RUN
 
       # Cumulative dim anchors are coplanar by construction (same depth as origin_pt)
       # so the dimension measures the in-plane horizontal distance, not 3D.
@@ -266,18 +280,26 @@ module Timmerman
         ->(pt) { dot(pt, view_v) - beam_min_v },
         view_v.reverse,
         make_base_pt: make_base_pt, make_h_anchor: make_h_anchor,
-        nudge: nudge, sublayer: sublayer
+        nudge: nudge, sublayer: sublayer, max_count: max_dimensions_cap
       )
       count += below_count
+      if max_dimensions_cap && count >= max_dimensions_cap
+        debug("Stopped at #{MAX_DIMENSIONS_PER_RUN} dimensions (cap) to avoid view overload.")
+        return count
+      end
 
       above_count = emit_cumulative_dims(
         entities, unique_x_top, origin_x,
         ->(pt) { beam_max_v - dot(pt, view_v) },
         view_v,
         make_base_pt: make_base_pt, make_h_anchor: make_h_anchor,
-        nudge: nudge, sublayer: sublayer
+        nudge: nudge, sublayer: sublayer, max_count: max_dimensions_cap
       )
       count += above_count
+      if max_dimensions_cap && count >= max_dimensions_cap
+        debug("Stopped at #{MAX_DIMENSIONS_PER_RUN} dimensions (cap) to avoid view overload.")
+        return count
+      end
 
       # Emit per-beam length dimensions.
       # :vertical/:horizontal: dedup by (type, length, position on dominant axis).
@@ -308,6 +330,7 @@ module Timmerman
 
         next if added_length_axis[key]
         added_length_axis[key] = true
+        break if max_dimensions_cap && count >= max_dimensions_cap
 
         align_dim(
           entities.add_dimension_linear(nudge.call(start_pt), nudge.call(end_pt), offset),
@@ -333,7 +356,7 @@ module Timmerman
       )
 
       tl_br_len = tl.distance(br)
-      if tl_br_len >= MIN_DIMENSION_GAP
+      if tl_br_len >= MIN_DIMENSION_GAP && (!max_dimensions_cap || count < max_dimensions_cap)
         # TL to BR overall diagonal. Perpendicular computed from the actual segment
         # direction (not bounding-box extents) so the offset is exactly 90 deg to the line.
         tb_dh = dot(br, view_h) - dot(tl, view_h)
@@ -364,7 +387,7 @@ module Timmerman
           origin_pt.z + view_h.z * (beam_max_h - origin_x) + view_v.z * (beam_max_v - origin_y) + view_dir.z * depth_off
         )
         bt_2d = bl.distance(tr)
-        if bt_2d >= MIN_DIMENSION_GAP
+        if bt_2d >= MIN_DIMENSION_GAP && (!max_dimensions_cap || count < max_dimensions_cap)
           bt_dh = dot(tr, view_h) - dot(bl, view_h)
           bt_dv = dot(tr, view_v) - dot(bl, view_v)
           # CCW 90 deg of (bt_dh, bt_dv) points "above" the up-right line (up-left)
@@ -522,6 +545,7 @@ module Timmerman
           sub_layer.folder = parent_folder
         end
       end
+      sub_layer.visible = true
 
       debug("Dimension sublayer: '#{sub_name}' " \
             "(folder: '#{parent_folder ? parent_folder.name : 'none'}')")
@@ -548,10 +572,11 @@ module Timmerman
     end
 
     def emit_cumulative_dims(entities, unique_x_pairs, origin_x, gap_fn, stagger_dir,
-                             make_base_pt:, make_h_anchor:, nudge:, sublayer: nil)
+                             make_base_pt:, make_h_anchor:, nudge:, sublayer: nil, max_count: nil)
       dim_i = 0
       count = 0
       unique_x_pairs.each do |x, far_h_pt|
+        break if max_count && count >= max_count
         next if (x - origin_x).abs < MIN_DIMENSION_GAP
         base_pt = make_base_pt.call(far_h_pt)
         far_pt  = make_h_anchor.call(base_pt, x)
