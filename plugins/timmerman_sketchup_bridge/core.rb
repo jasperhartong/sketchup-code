@@ -34,6 +34,7 @@ module Timmerman
     # Default bridge directory — used until the user points it at a project.
     DEFAULT_BRIDGE_DIR = File.join(File.expand_path('~'), 'sketchup_bridge').freeze
 
+    # Adjust app name/path if your SketchUp version differs (e.g. SketchUp 2025).
     RDEBUG_LAUNCH_CMD =
       'open -a /Applications/SketchUp\ 2026/SketchUp.app --args -rdebug "ide port=6123"'.freeze
 
@@ -83,9 +84,8 @@ module Timmerman
       dir = bridge_dir
       FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
 
-      command_file  = File.join(dir, 'command.rb')
-      result_file   = File.join(dir, 'result.txt')
-      last_run_file = File.join(dir, '.last_run')
+      command_file = File.join(dir, 'command.rb')
+      result_file  = File.join(dir, 'result.txt')
 
       @bridge_last_mtime = 0
 
@@ -96,7 +96,7 @@ module Timmerman
         next if mtime <= @bridge_last_mtime
 
         @bridge_last_mtime = mtime
-        run_command(File.read(command_file), command_file, result_file, last_run_file, mtime)
+        run_command(File.read(command_file), command_file, result_file)
       }
 
       puts "[SketchUp Bridge] Listening. Bridge dir: #{dir}"
@@ -118,7 +118,7 @@ module Timmerman
     # Command execution
     # ---------------------------------------------------------------------------
 
-    def run_command(code, command_file, result_file, last_run_file, mtime)
+    def run_command(code, command_file, result_file)
       out = StringIO.new
       err = StringIO.new
       old_out, old_err = $stdout, $stderr
@@ -128,17 +128,20 @@ module Timmerman
       begin
         result = eval(code, TOPLEVEL_BINDING, command_file)
         out.puts("\n=> #{result.inspect}") unless result.nil?
-      rescue => e
+      rescue StandardError => e
         err.puts("#{e.class}: #{e.message}")
         e.backtrace.first(20).each { |l| err.puts("  #{l}") }
         err.puts("\nTip: for IDE debugging, restart SketchUp with:")
         err.puts("  #{RDEBUG_LAUNCH_CMD}")
+      rescue Exception => e
+        # Fatal (e.g. NoMemoryError, SignalException) — still write result so agent sees something
+        err.puts("Fatal: #{e.class}: #{e.message}")
+        e.backtrace&.first(20)&.each { |l| err.puts("  #{l}") }
       ensure
         $stdout, $stderr = old_out, old_err
       end
 
-      File.write(result_file,   "=== stdout ===\n#{out.string}\n=== stderr ===\n#{err.string}")
-      File.write(last_run_file, mtime.to_s)
+      File.write(result_file, "=== stdout ===\n#{out.string}\n=== stderr ===\n#{err.string}")
     end
 
     # Register once when the plugin loads — safe to call on every `load` because

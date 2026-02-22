@@ -37,7 +37,6 @@ You should see: `[SketchUp Bridge] Listening. Command file: ...`
 | File | Purpose |
 |---|---|
 | `command.rb` | Code the agent writes and SketchUp executes. Loads `core.rb` and calls run/clear. Edit freely during iteration. |
-| `run_and_wait.rb` | Agent-side runner: waits for SketchUp to process `command.rb`, then prints `result.txt`. |
-| `listener.rb` | Fallback manual listener (Option B above). |
-| `result.txt` | Last execution output — git-ignored. |
-| `.last_run` | Timestamp sentinel used by the listener — git-ignored. |
+| `run_and_wait.rb` | Agent-side runner: touches `command.rb`, waits for SketchUp to run it (up to 15 s), then prints `result.txt` (UTF-8). Exits 0 on success, 1 if bridge not connected. |
+| `listener.rb` | Fallback manual listener (Option B). Must live in `sketchup_bridge/`; path to plugin is relative to this file. |
+| `result.txt` | Last run stdout/stderr (UTF-8) — git-ignored. |
