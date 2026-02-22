@@ -440,6 +440,12 @@ module Timmerman
     end
 
     def add_dimensions_created_label(entities, corner_pt, view_h, view_v, sublayer)
+      # Remove any existing "Dimensions: v..." label in this container so we only have one.
+      label_texts = entities.grep(Sketchup::Text).select { |t|
+        t.layer == sublayer && t.text.to_s.start_with?(DIMENSIONS_LABEL_PREFIX)
+      }
+      entities.erase_entities(label_texts) unless label_texts.empty?
+
       date_time_str = Time.now.strftime('%Y-%m-%d %H:%M')
       version_str = dimensions_label_version
       text_str = "Dimensions: v#{version_str}\n#{date_time_str}"
