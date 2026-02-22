@@ -13,6 +13,9 @@
 #   Timmerman::SkeletonDimensions.run               - add dimensions to the selected component
 #   Timmerman::SkeletonDimensions.clear             - remove all linear dims from the model
 #   Timmerman::SkeletonDimensions.debug_mode = bool - toggle console output (default: false)
+#
+# Structure: core.rb defines constants and orchestration (run, clear, add_skeleton_dimensions).
+# Helpers, cumulative dimensions, and label logic live in helpers.rb, dimension_cumulative.rb, label.rb.
 
 require 'sketchup.rb'
 
@@ -20,73 +23,32 @@ module Timmerman
   module SkeletonDimensions
     extend self
 
-    # Reload guard - remove algorithm constants before redefining them so that
-    # `load`-ing this file a second time (during bridge iteration) always picks
-    # up the latest values. The loader constants (PLUGIN_ID, PLUGIN_ROOT,
-    # EXTENSION) live in the loader file and are intentionally left untouched.
     %i[
       OUTER_PADDING STAGGER_STEP BEAM_LENGTH_OFFSET DIAG_OFFSET_PADDING
       DIM_FOLDER DIM_LAYER_PREFIX DEDUP_EPSILON MIN_DIMENSION_GAP MIN_BEAM_SPAN
       AXIS_ALIGN_TOL MAX_DIMENSIONS_PER_RUN VERSION DIMENSIONS_LABEL_PREFIX
     ].each { |c| remove_const(c) if const_defined?(c, false) }
 
-    # Debug output is a module instance variable (not a constant) so it can be
-    # toggled from command.rb without triggering a constant-redefinition warning.
     @debug = false
     def debug_mode=(val)
       @debug = val
     end
 
     # ---------------------------------------------------------------------------
-    # Layout constants (all in SketchUp internal units; .mm converts mm to inches)
+    # Layout constants (SketchUp internal units; .mm converts mm to inches)
     # ---------------------------------------------------------------------------
-
-    # Gap between the beam geometry edge and the first cumulative dim line.
     OUTER_PADDING = 200.mm
-
-    # How much further out each successive cumulative dim line is placed (stagger).
     STAGGER_STEP = 150.mm
-
-    # How far alongside a beam its own length dimension is placed (outside the beam).
-    # Half the beam thickness in that direction is added on top so the line stays clear.
     BEAM_LENGTH_OFFSET = 80.mm
-
-    # Extra padding beyond the corner so the diagonal dimension line sits clearly outside
-    # the frame. The main offset is computed from the diagonal so the line clears the corner.
     DIAG_OFFSET_PADDING = 200.mm
-
-    # Tag folder that groups all dimension sub-layers in the SketchUp tag panel.
     DIM_FOLDER = 'maten'.freeze
-
-    # Prefix applied to every dimension sub-layer name.
     DIM_LAYER_PREFIX = 'maten '.freeze
-
-    # Positions within this distance are treated as identical during deduplication.
     DEDUP_EPSILON = 0.1.mm
-
-    # Minimum distance to bother adding a dimension at all.
     MIN_DIMENSION_GAP = 1.mm
-
-    # A beam must be at least this large in its longest projected axis to be
-    # dimensioned - filters out fasteners, connectors, and other small hardware.
     MIN_BEAM_SPAN = 10.mm
-
-    # Maximum allowed misalignment between a component's local axis and a view
-    # axis for the component to be considered axis-aligned. cos(angle) must
-    # exceed 1 - AXIS_ALIGN_TOL, which corresponds to ~2.6° at 0.001.
-    # This is used to classify beams as :vertical, :horizontal, or :diagonal
-    # without a fuzzy aspect-ratio threshold.
     AXIS_ALIGN_TOL = 0.001
-
-    # Safety cap: stop adding dimensions after this many to avoid overloading
-    # the view (SketchUp 2026 can hang on heavy redraws). Set to nil for no cap.
     MAX_DIMENSIONS_PER_RUN = 400
-
-    # Version shown in the "dimensions created on ..." label. When loaded as
-    # the plugin, EXTENSION.version (in the loader) is used instead.
     VERSION = '-development'.freeze
-
-    # Prefix for the version label text; used to find and remove it on clear.
     DIMENSIONS_LABEL_PREFIX = 'Dimensions: '.freeze
 
     # ---------------------------------------------------------------------------
@@ -121,9 +83,6 @@ module Timmerman
 
       model.active_layer = sublayer
       model.active_view.invalidate
-      # Do not call CMD_SELECTION_ZOOM_EXT here: on SketchUp 2026 it can hang the
-      # main thread (CALayer display → SU internals → kernel) when many dimensions
-      # are added at once. User can zoom to selection manually if desired.
       debug("Done. Added #{count} dimension(s).")
       show_dimensions_created_notification
     end
@@ -164,17 +123,7 @@ module Timmerman
     end
 
     # ---------------------------------------------------------------------------
-    # Core algorithm
-    #
-    # 1. Recursively collect all ComponentInstances at any nesting depth (Groups
-    #    are transparent containers). Accumulate the full world-space transform.
-    # 2. Project each beam's bbox corners onto view_h / view_v.
-    # 3. Classify each beam as :vertical, :horizontal, or :diagonal.
-    # 4. For :vertical beams: push the right-edge x into far_x for cumulative dims.
-    # 5. Sort + deduplicate far_x; emit one horizontal cumulative dim per unique x.
-    # 6. Emit per-beam own-length dim alongside each beam.
-    #    :vertical/:horizontal beams are deduped by (axis, length, position).
-    #    :diagonal beams are never deduped - each one always gets its own dimension.
+    # Core algorithm (orchestration only; helpers in helpers.rb, etc.)
     # ---------------------------------------------------------------------------
 
     def add_skeleton_dimensions(model, inst, view_dir, view_h, view_v, sublayer = nil)
@@ -196,8 +145,6 @@ module Timmerman
         (0..7).map { |i| child.bounds.corner(i).transform(world_t) }
       }
 
-      # Nudge anchor points toward the camera by the full component depth so
-      # dimensions always render in front of the geometry.
       depth_projs = all_beam_corners.map { |c| dot(c, view_dir) }
       cam_depth   = depth_projs.max - depth_projs.min
       cam_nudge   = scale_vec(view_dir.reverse, cam_depth)
@@ -205,8 +152,6 @@ module Timmerman
         Geom::Point3d.new(pt.x + cam_nudge.x, pt.y + cam_nudge.y, pt.z + cam_nudge.z)
       }
 
-      # Origin at the bottom-left corner in this projection, using a corner that belongs
-      # to a single beam (each beam's own bottom-left corner, then the overall min).
       bottom_left_per_beam = structural_beams.map { |child, world_t|
         corners = (0..7).map { |i| child.bounds.corner(i).transform(world_t) }
         corners.min_by { |c| [dot(c, view_h), dot(c, view_v)] }
@@ -266,14 +211,10 @@ module Timmerman
       unique_x_bottom = dedup_sorted(far_x_bottom.sort_by { |v, _| v })
       unique_x_top    = dedup_sorted(far_x_top.sort_by    { |v, _| v })
 
-      # Add dimensions to the same entities that contain the selected instance (root or
-      # inside a group) so they are visible in the current view context.
       entities = entities_containing_instance(inst)
       count    = 0
       max_dimensions_cap = MAX_DIMENSIONS_PER_RUN
 
-      # Cumulative dim anchors are coplanar by construction (same depth as origin_pt)
-      # so the dimension measures the in-plane horizontal distance, not 3D.
       make_h_anchor = ->(base_pt, h_target) {
         h_diff = h_target - origin_x
         Geom::Point3d.new(
@@ -318,10 +259,6 @@ module Timmerman
         return count
       end
 
-      # Emit per-beam length dimensions.
-      # :vertical/:horizontal: dedup by (type, length, position on dominant axis).
-      # :diagonal: dedup by (start-pos, end-pos) so each unique beam gets one dim but
-      #            exact position duplicates (e.g. instanced components) are suppressed.
       added_length_axis = {}
       beam_lengths.each do |entry|
         start_pt  = entry[:start_pt]
@@ -337,7 +274,7 @@ module Timmerman
         when :horizontal
           [:h, (length / DEDUP_EPSILON).round,
                (dot(start_pt, view_h) / DEDUP_EPSILON).round]
-        else # :diagonal - normalize endpoint order so A->B and B->A share one key
+        else
           sh = (dot(start_pt, view_h) / DEDUP_EPSILON).round
           sv = (dot(start_pt, view_v) / DEDUP_EPSILON).round
           eh = (dot(end_pt,   view_h) / DEDUP_EPSILON).round
@@ -357,8 +294,6 @@ module Timmerman
       end
 
       beam_max_h = all_beam_corners.map { |c| dot(c, view_h) }.max
-      # Overall diagonals use coplanar anchors so the dimension shows the true
-      # view-plane diagonal, not the 3D distance between corners at different depths.
       front_depth = all_beam_corners.map { |c| dot(c, view_dir) }.min
       depth_off   = front_depth - dot(origin_pt, view_dir)
       tl = Geom::Point3d.new(
@@ -372,7 +307,6 @@ module Timmerman
         origin_pt.z + view_h.z * (beam_max_h - origin_x) + view_v.z * (beam_min_v - origin_y) + view_dir.z * depth_off
       )
 
-      # Bbox center in the same plane as corners; used to place diagonal dims outside the frame.
       center_pt = Geom::Point3d.new(
         origin_pt.x + view_h.x * (beam_max_h - origin_x) * 0.5 + view_v.x * ((beam_min_v + beam_max_v) * 0.5 - origin_y) + view_dir.x * depth_off,
         origin_pt.y + view_h.y * (beam_max_h - origin_x) * 0.5 + view_v.y * ((beam_min_v + beam_max_v) * 0.5 - origin_y) + view_dir.y * depth_off,
@@ -406,7 +340,6 @@ module Timmerman
         )
         count += 1
 
-        # BL to TR overall diagonal; use same corners (bottom_left_pt, top_right_pt).
         bt_2d = bottom_left_pt.distance(top_right_pt)
         if bt_2d >= MIN_DIMENSION_GAP && (!max_dimensions_cap || count < max_dimensions_cap)
           perp_bt, diag_off_bt = diagonal_offset_outside(
@@ -425,338 +358,11 @@ module Timmerman
 
       count
     end
-
-    def dimensions_label_version
-      defined?(EXTENSION) && EXTENSION.respond_to?(:version) ? EXTENSION.version : VERSION
-    end
-
-    # Shows a short-lived desktop notification (no interaction required). Only when
-    # running as the registered plugin (EXTENSION defined); skipped when run via bridge.
-    def show_dimensions_created_notification
-      return unless defined?(EXTENSION) && EXTENSION
-      msg = "Dimensions created successfully.\nThey may only show up after you leave the group you're currently nested in."
-      notification = UI::Notification.new(EXTENSION, msg)
-      notification.show
-    end
-
-    def add_dimensions_created_label(entities, corner_pt, view_h, view_v, sublayer)
-      # Remove any existing "Dimensions: v..." label in this container so we only have one.
-      label_texts = entities.grep(Sketchup::Text).select { |t|
-        t.layer == sublayer && t.text.to_s.start_with?(DIMENSIONS_LABEL_PREFIX)
-      }
-      entities.erase_entities(label_texts) unless label_texts.empty?
-
-      date_time_str = Time.now.strftime('%Y-%m-%d %H:%M')
-      version_str = dimensions_label_version
-      text_str = "Dimensions: v#{version_str}\n#{date_time_str}"
-      # Vector: label at bottom-right, text extends down-right (view_h - view_v), normalized.
-      dir = Geom::Vector3d.new(view_h.x - view_v.x, view_h.y - view_v.y, view_h.z - view_v.z)
-      len = Math.sqrt(dir.x**2 + dir.y**2 + dir.z**2)
-      dir = Geom::Vector3d.new(dir.x / len, dir.y / len, dir.z / len) if len > 1.0e-9
-      text_ent = entities.add_text(text_str, corner_pt, dir)
-      text_ent.layer = sublayer
-    end
-
-    # ---------------------------------------------------------------------------
-    # Helpers
-    # ---------------------------------------------------------------------------
-
-    # Classify a beam into one of three categories by inspecting its actual
-    # local axes in view space — no fuzzy aspect-ratio threshold needed.
-    #
-    # A beam is axis-aligned (:vertical or :horizontal) if every one of its
-    # three local axes is parallel (within AXIS_ALIGN_TOL) to view_h, view_v,
-    # or view_dir. A rafter or brace will have at least one local axis that is
-    # diagonal in the view plane, so it falls through to :diagonal.
-    #
-    # Note: world_t is the *parent* accumulated transform; e.transformation is
-    # the entity's own transform. The full world-space transform is their product.
-    def classify_beam(e, world_t, h_extent, v_extent, view_h, view_v, view_dir)
-      full_t  = world_t * e.transformation
-      aligned = [full_t.xaxis, full_t.yaxis, full_t.zaxis].all? { |ax|
-        n = ax.normalize
-        [view_h, view_v, view_dir].any? { |ref| n.dot(ref).abs > 1.0 - AXIS_ALIGN_TOL }
-      }
-      return :diagonal unless aligned
-      h_extent >= v_extent ? :horizontal : :vertical
-    end
-
-    # Compute the principal direction of a beam projected onto the view plane.
-    #
-    # Runs 2D PCA on the 8 projected bbox corners (already projected as hs/vs arrays)
-    # and returns [uh, uv]: a unit vector in view space pointing along the longest
-    # axis of the projected shape. For a 38x38x2400mm rafter at any angle this gives
-    # the direction of the 2400mm axis, not the 38mm cross-section.
-    def beam_principal_direction_2d(hs, vs)
-      n   = hs.size.to_f
-      mh  = hs.sum / n
-      mv  = vs.sum / n
-      chh = hs.sum { |h| (h - mh)**2 } / n
-      cvv = vs.sum { |v| (v - mv)**2 } / n
-      chv = hs.zip(vs).sum { |h, v| (h - mh) * (v - mv) } / n
-      tr  = chh + cvv
-      di  = Math.sqrt([(tr * 0.5)**2 - (chh * cvv - chv**2), 0.0].max)
-      l1  = tr * 0.5 + di
-      if chv.abs > 1.0e-12
-        uh, uv = l1 - cvv, chv
-      elsif chh >= cvv
-        uh, uv = 1.0, 0.0
-      else
-        uh, uv = 0.0, 1.0
-      end
-      len = Math.sqrt(uh**2 + uv**2)
-      len < 1.0e-12 ? [1.0, 0.0] : [uh / len, uv / len]
-    end
-
-    def dedup_sorted(sorted_pairs)
-      out = []
-      sorted_pairs.each do |v, pt|
-        out << [v, pt] if out.empty? || (v - out.last[0]).abs > DEDUP_EPSILON
-      end
-      out
-    end
-
-    def align_dim(dim, layer = nil, prefix: nil)
-      dim.has_aligned_text = true
-      dim.aligned_text_position = Sketchup::DimensionLinear::ALIGNED_TEXT_ABOVE
-      dim.layer = layer if layer
-      dim.text = "#{prefix}<>" if prefix
-    end
-
-    # Scale a Vector3d by a scalar (Vector3d * Float is cross product in SketchUp).
-    def scale_vec(vec, scalar)
-      Geom::Vector3d.new(vec.x * scalar, vec.y * scalar, vec.z * scalar)
-    end
-
-    # Dot product of a Point3d with a Vector3d axis.
-    def dot(pt, axis)
-      pt.x * axis.x + pt.y * axis.y + pt.z * axis.z
-    end
-
-    # Compute perpendicular and signed offset so an overall diagonal dimension line
-    # sits outside the frame: offset = perpendicular distance to the chosen corner + padding.
-    # Returns [perp_unit, offset_scalar] for the diagonal from start_pt to end_pt.
-    # tiebreaker_pt chooses offset side when center lies on the diagonal (out_sign == 0).
-    def diagonal_offset_outside(start_pt, end_pt, center_pt, tiebreaker_pt, corner_a, corner_b, view_h, view_v)
-      dh = dot(end_pt, view_h) - dot(start_pt, view_h)
-      dv = dot(end_pt, view_v) - dot(start_pt, view_v)
-      len_2d = Math.sqrt(dh**2 + dv**2)
-      perp = Geom::Vector3d.new(
-        (-view_h.x * dv + view_v.x * dh) / len_2d,
-        (-view_h.y * dv + view_v.y * dh) / len_2d,
-        (-view_h.z * dv + view_v.z * dh) / len_2d
-      )
-      mid = Geom::Point3d.new((start_pt.x + end_pt.x) * 0.5, (start_pt.y + end_pt.y) * 0.5, (start_pt.z + end_pt.z) * 0.5)
-      out_sign = (center_pt.x - mid.x) * perp.x + (center_pt.y - mid.y) * perp.y + (center_pt.z - mid.z) * perp.z
-      sign = if out_sign > 0 then -1
-      elsif out_sign < 0 then 1
-      else (tiebreaker_pt.x - mid.x) * perp.x + (tiebreaker_pt.y - mid.y) * perp.y + (tiebreaker_pt.z - mid.z) * perp.z > 0 ? 1 : -1
-      end
-      dist_a = (corner_a.x - mid.x) * perp.x + (corner_a.y - mid.y) * perp.y + (corner_a.z - mid.z) * perp.z
-      dist_b = (corner_b.x - mid.x) * perp.x + (corner_b.y - mid.y) * perp.y + (corner_b.z - mid.z) * perp.z
-      corner_dist = sign > 0 ? [dist_a, dist_b].max : -[dist_a, dist_b].min
-      [perp, sign * (corner_dist + DIAG_OFFSET_PADDING)]
-    end
-
-    # Recursively collect all leaf entities (beams) at any nesting depth.
-    #
-    # An entity is a *container* if its definition contains nested Groups or
-    # ComponentInstances - we recurse into it without adding it as a beam.
-    # An entity is a *leaf* if its definition contains only raw geometry -
-    # we add it as a beam regardless of whether it is a Group or ComponentInstance.
-    # This handles both layouts:
-    #   * Flat: ComponentInstances with raw geometry (typical SketchUp components)
-    #   * Nested: Groups/Components wrapping sub-components as containers
-    #   * Mixed: Groups containing raw geometry alongside ComponentInstances
-    #
-    # Returns Array of [entity, parent_transform] pairs. Callers apply
-    # parent_transform to entity.bounds.corner(i) (already in parent space) to
-    # obtain world-space corners.
-    def collect_beams_recursive(entities, accumulated_t)
-      result = []
-      entities.each do |e|
-        next unless e.respond_to?(:definition)
-        into_child_t  = accumulated_t * e.transformation
-        sub_ents      = e.definition.entities
-        has_children  = sub_ents.any? { |s|
-          s.is_a?(Sketchup::ComponentInstance) || s.is_a?(Sketchup::Group)
-        }
-        if has_children
-          result.concat(collect_beams_recursive(sub_ents, into_child_t))
-        else
-          result << [e, accumulated_t]
-        end
-      end
-      result
-    end
-
-    def sublayer_name_for(inst)
-      tag = inst.layer
-      if tag && tag.name != 'Layer0' && tag.name != 'Untagged'
-        return "#{DIM_LAYER_PREFIX}#{tag.name}"
-      end
-      iname = inst.name.to_s.strip
-      return "#{DIM_LAYER_PREFIX}#{iname}" unless iname.empty?
-      dname = inst.definition.name.to_s.strip
-      return "#{DIM_LAYER_PREFIX}#{dname}" unless dname.empty?
-      "#{DIM_LAYER_PREFIX}#{inst.persistent_id}"
-    end
-
-    def find_or_create_maten_sublayer(model, inst)
-      sub_name = sublayer_name_for(inst)
-
-      parent_folder = nil
-      if model.layers.respond_to?(:add_folder)
-        model.layers.folders.each { |f| parent_folder = f if f.name == DIM_FOLDER }
-        parent_folder ||= model.layers.add_folder(DIM_FOLDER)
-      end
-
-      sub_layer = nil
-      model.layers.each { |l| sub_layer = l if l.name == sub_name }
-      unless sub_layer
-        sub_layer = model.layers.add(sub_name)
-        if parent_folder && sub_layer.respond_to?(:folder=)
-          sub_layer.folder = parent_folder
-        end
-      end
-      sub_layer.visible = true
-
-      debug("Dimension sublayer: '#{sub_name}' (folder: '#{parent_folder ? parent_folder.name : 'none'}')")
-      sub_layer
-    end
-
-    def selected_component_instance(selection)
-      candidates = selection.grep(Sketchup::ComponentInstance)
-      return nil unless candidates.length == 1
-      candidates.first
-    end
-
-    # Returns the Entities collection that contains the instance (root or group).
-    # When the instance is at model root, parent can be the Model; use model.entities.
-    def entities_containing_instance(inst)
-      parent = inst.parent
-      return inst.model.entities if parent.is_a?(Sketchup::Model)
-      return parent if parent.respond_to?(:grep) && parent.respond_to?(:erase_entities)
-      inst.model.entities
-    end
-
-    def selection_error_message(selection)
-      candidates = selection.grep(Sketchup::ComponentInstance)
-      if selection.empty?
-        "Nothing selected.\n\nSelect exactly one component instance, then run again."
-      elsif candidates.empty?
-        "Selection is not a component.\n\nSelect exactly one component instance " \
-          "(not a group or raw geometry), then run again."
-      else
-        "Too many components selected (#{candidates.length}).\n\n" \
-          "Select exactly one component, then run again."
-      end
-    end
-
-    def emit_cumulative_dims(entities, unique_x_pairs, origin_x, gap_fn, stagger_dir,
-                             make_base_pt:, make_h_anchor:, nudge:, sublayer: nil, max_count: nil)
-      dim_i = 0
-      count = 0
-      unique_x_pairs.each do |x, far_h_pt|
-        break if max_count && count >= max_count
-        next if (x - origin_x).abs < MIN_DIMENSION_GAP
-        base_pt = make_base_pt.call(far_h_pt)
-        far_pt  = make_h_anchor.call(base_pt, x)
-        d       = gap_fn.call(far_h_pt) + OUTER_PADDING + dim_i * STAGGER_STEP
-        off     = scale_vec(stagger_dir, d)
-        align_dim(
-          entities.add_dimension_linear(nudge.call(base_pt), nudge.call(far_pt), off),
-          sublayer
-        )
-        count += 1
-        dim_i  += 1
-      end
-      count
-    end
-
-    # Select start/end anchor corners and compute the perpendicular offset vector
-    # for a single beam's own-length dimension.
-    #
-    # :vertical   - projects corners onto view_v; measures the true height.
-    # :horizontal - projects corners onto view_h; measures the true width.
-    # :diagonal   - uses the component's local definition bounds to find the
-    #               longest axis, then computes the face centroids at each end
-    #               and transforms them to world space. This gives the true
-    #               center-to-center beam length (not an inflated bbox diagonal
-    #               or a deflated PCA projection).
-    #
-    # All three orientations share the same CCW-perpendicular offset formula so the
-    # dimension line always sits at exactly 90° to the measured segment.
-    def beam_length_anchors(child, world_t, child_corners, hs, vs, _h_extent, _v_extent,
-                            beam_axis, view_h, view_v)
-      case beam_axis
-      when :vertical
-        top_grp  = child_corners.select { |c| (dot(c, view_v) - vs.max).abs <= DEDUP_EPSILON }
-        top_grp  = child_corners if top_grp.empty?
-        bot_grp  = child_corners.select { |c| (dot(c, view_v) - vs.min).abs <= DEDUP_EPSILON }
-        bot_grp  = child_corners if bot_grp.empty?
-        start_pt = top_grp.min_by { |c| dot(c, view_h) }
-        end_pt   = bot_grp.min_by { |c| dot(c, view_h) }
-        return [start_pt, end_pt, scale_vec(view_h.reverse, BEAM_LENGTH_OFFSET)]
-      when :horizontal
-        left_grp  = child_corners.select { |c| (dot(c, view_h) - hs.min).abs <= DEDUP_EPSILON }
-        left_grp  = child_corners if left_grp.empty?
-        right_grp = child_corners.select { |c| (dot(c, view_h) - hs.max).abs <= DEDUP_EPSILON }
-        right_grp = child_corners if right_grp.empty?
-        start_pt = left_grp.max_by  { |c| dot(c, view_v) }
-        end_pt   = right_grp.max_by { |c| dot(c, view_v) }
-      else # :diagonal - face centroids along the beam's longest local axis
-        start_pt, end_pt = diagonal_beam_endpoints(child, world_t)
-      end
-
-      # CCW 90° of (dh, dv) in view space.
-      # For :horizontal (dh>0, dv≈0) this evaluates to +view_v (dim above).
-      # For :diagonal it follows the beam angle exactly.
-      dh      = dot(end_pt, view_h) - dot(start_pt, view_h)
-      dv      = dot(end_pt, view_v) - dot(start_pt, view_v)
-      beam_2d = Math.sqrt(dh**2 + dv**2)
-      perp = if beam_2d > 0.001.mm
-        Geom::Vector3d.new(
-          (-view_h.x * dv + view_v.x * dh) / beam_2d,
-          (-view_h.y * dv + view_v.y * dh) / beam_2d,
-          (-view_h.z * dv + view_v.z * dh) / beam_2d
-        )
-      else
-        view_v
-      end
-      [start_pt, end_pt, scale_vec(perp, BEAM_LENGTH_OFFSET)]
-    end
-
-    # Compute the true center-to-center endpoints of a diagonal beam using its
-    # local definition bounds. The longest local axis gives the beam direction;
-    # face centroids at each end of that axis, transformed to world space, yield
-    # the correct measurement points.
-    def diagonal_beam_endpoints(child, world_t)
-      full_t = world_t * child.transformation
-      db     = child.definition.bounds
-      extents = [db.max.x - db.min.x, db.max.y - db.min.y, db.max.z - db.min.z]
-      axis_i  = extents.each_with_index.max_by { |v, _| v }[1]
-
-      mid = Geom::Point3d.new(
-        (db.min.x + db.max.x) / 2.0,
-        (db.min.y + db.max.y) / 2.0,
-        (db.min.z + db.max.z) / 2.0
-      )
-
-      coords_a = [mid.x, mid.y, mid.z]
-      coords_b = [mid.x, mid.y, mid.z]
-      coords_a[axis_i] = [db.min.x, db.min.y, db.min.z][axis_i]
-      coords_b[axis_i] = [db.max.x, db.max.y, db.max.z][axis_i]
-
-      ep1 = Geom::Point3d.new(*coords_a).transform(full_t)
-      ep2 = Geom::Point3d.new(*coords_b).transform(full_t)
-      [ep1, ep2]
-    end
-
-    def debug(msg)
-      return unless @debug
-      puts "[SkeletonDimensions] #{msg}"
-    end
-
   end
 end
+
+# Load sub-components (they add methods to Timmerman::SkeletonDimensions)
+dir = File.dirname(__FILE__)
+load File.join(dir, 'helpers.rb')
+load File.join(dir, 'dimension_cumulative.rb')
+load File.join(dir, 'label.rb')

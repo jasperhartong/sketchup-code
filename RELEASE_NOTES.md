@@ -1,6 +1,9 @@
-# Skeleton Dimensions — Release notes (1.0.0 → 1.3.3)
+# Skeleton Dimensions — Release notes (1.0.0 → 1.3.4)
 
 ## 1.3.x
+
+### 1.3.4
+- **Internal** — Algorithm split into `helpers.rb`, `dimension_cumulative.rb`, and `label.rb` for maintainability; behavior unchanged.
 
 ### 1.3.3
 - **bugfix: 🧹 Labels** — Re-run no longer stacks labels: the previous “Dimensions: v…” label is removed before adding the new one.
