@@ -24,11 +24,13 @@ description: Package a SketchUp Ruby plugin into a .rbz file. Use when the user 
    # or: bash package.sh   (builds all)
    ```
 
-5. **Confirm** — verify the new `.rbz` appears in `dist/` and report the filename to the user.
+5. **Update release notes** — For Skeleton Dimensions, add an entry for the new version to `RELEASE_NOTES.md`. **Focus on user-facing features only** (what users see or get from the plugin), not internal refactors, dev tooling, or API docs. Same format: version heading, bullet list of highlights with emoji (e.g. **🧹 Labels** — …). **Use a "bugfix: " prefix** for bullets that describe a bug fix (e.g. **bugfix: 🧹 Labels** — …). Place the new version at the top of its minor section (e.g. new 1.3.4 under “1.3.x”); create a new “1.x.x” section if it’s a new minor/major. Keep the doc covering 1.0.0 → latest.
+
+6. **Confirm** — verify the new `.rbz` appears in `dist/` and report the filename to the user.
 
 ## Learnings (don't rediscover each time)
 
-- **`dist/` is git-ignored.** The `.rbz` file is never committed. When the user asks to "package and commit", commit only the version-bumped loader and the plugin source files (e.g. `plugins/timmerman_skeleton_dimensions.rb`, `plugins/timmerman_skeleton_dimensions/core.rb`). Do not try to add or commit anything under `dist/`, and don't report that the .rbz wasn't committed as if it were an oversight.
+- **`dist/` is git-ignored.** The `.rbz` file is never committed. When the user asks to "package and commit", commit the version-bumped loader, plugin source files, and updated `RELEASE_NOTES.md` (see step 5). Do not add or commit anything under `dist/`; don't report that the .rbz wasn't committed as if it were an oversight.
 
 - **Packager command:** `bash package.sh skeleton` builds only Skeleton Dimensions; `bash package.sh bridge` builds only the bridge; `bash package.sh` builds all. The script reads the version from the loader and writes `dist/<plugin_id>-<version>.rbz`.
 
