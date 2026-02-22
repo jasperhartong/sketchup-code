@@ -28,6 +28,7 @@ When you need a class, method, or guide: open that file. It contains the officia
 - **Geom module:** https://ruby.sketchup.com/Geom.html (Point3d, Vector3d, BoundingBox, Transformation)
 - **Sketchup::ComponentInstance:** https://ruby.sketchup.com/Sketchup/ComponentInstance.html
 - **Sketchup::Group:** https://ruby.sketchup.com/Sketchup/Group.html
+- **UI::Notification:** https://ruby.sketchup.com/UI/Notification.html (non-blocking toast; constructor: extension, message, icon_name, icon_tooltip; use `.show`; auto-dismisses if no on_accept/on_dismiss)
 
 For any other class or method, use **`docs/sketchup-ruby-api-index.md`** or the official alphabetic index above.
 

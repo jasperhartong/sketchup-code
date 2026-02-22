@@ -125,6 +125,7 @@ module Timmerman
       # main thread (CALayer display → SU internals → kernel) when many dimensions
       # are added at once. User can zoom to selection manually if desired.
       debug("Done. Added #{count} dimension(s).")
+      show_dimensions_created_notification
     end
 
     def clear
@@ -427,6 +428,15 @@ module Timmerman
 
     def dimensions_label_version
       defined?(EXTENSION) && EXTENSION.respond_to?(:version) ? EXTENSION.version : VERSION
+    end
+
+    # Shows a short-lived desktop notification (no interaction required). Only when
+    # running as the registered plugin (EXTENSION defined); skipped when run via bridge.
+    def show_dimensions_created_notification
+      return unless defined?(EXTENSION) && EXTENSION
+      msg = "Dimensions created successfully.\nThey may only show up after you leave the group you're currently nested in."
+      notification = UI::Notification.new(EXTENSION, msg)
+      notification.show
     end
 
     def add_dimensions_created_label(entities, corner_pt, view_h, view_v, sublayer)
