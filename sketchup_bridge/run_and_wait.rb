@@ -1,7 +1,10 @@
 #!/usr/bin/env ruby
+require 'fileutils'
 # Run from Cursor/agent: after writing sketchup_bridge/command.rb, run:
 #   ruby sketchup_bridge/run_and_wait.rb
 # Waits for SketchUp to execute command.rb, then prints result.txt.
+# If the bridge is not connected (listener not running in SketchUp), this script
+# fails and reports that clearly so the user knows to start the listener.
 
 bridge_dir = File.expand_path(File.dirname(__FILE__))
 result_file = File.join(bridge_dir, 'result.txt')
@@ -12,8 +15,10 @@ unless File.exist?(command_file)
   exit 1
 end
 
-# Give SketchUp time to notice the change (listener polls every 2s)
-# Wait until result.txt is at least as new as command.rb
+# Touch command.rb so the listener will run it (it runs when command.rb is newer than last run).
+# Then we only accept result.txt written after this moment — so we never use stale output
+# when the listener isn't running.
+FileUtils.touch(command_file)
 cmd_mtime = File.mtime(command_file)
 max_wait = 15
 elapsed = 0
@@ -29,6 +34,18 @@ end
 if File.exist?(result_file) && File.mtime(result_file) >= cmd_mtime
   puts File.read(result_file)
 else
-  puts "TIMEOUT: SketchUp did not run command.rb in #{max_wait}s. Is the listener loaded? (load 'sketchup_bridge/listener.rb' in Ruby Console)"
+  puts ""
+  puts "=== BRIDGE NOT CONNECTED ==="
+  puts "SketchUp did not run the command within #{max_wait} seconds."
+  puts ""
+  puts "The bridge only works when the listener is running inside SketchUp."
+  puts "  • Start SketchUp, then start the bridge listener:"
+  puts "    Extensions → SketchUp Bridge → Start Listener"
+  puts "    (or load the listener from the Ruby Console)."
+  puts "  • Set the bridge directory to this project's sketchup_bridge/ folder if prompted."
+  puts ""
+  puts "Then run this script again."
+  puts "=== BRIDGE NOT CONNECTED ==="
+  puts ""
   exit 1
 end

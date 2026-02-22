@@ -17,7 +17,7 @@ module Timmerman
       File.join(PLUGIN_ROOT, 'main')
     )
 
-    EXTENSION.version     = '1.2.1'
+    EXTENSION.version     = '1.3.0'
     EXTENSION.creator     = 'Timmerman'
     EXTENSION.copyright   = '© 2026 Timmerman'
     EXTENSION.description =

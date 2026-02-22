@@ -27,7 +27,7 @@ module Timmerman
     %i[
       OUTER_PADDING STAGGER_STEP BEAM_LENGTH_OFFSET DIAG_OFFSET
       DIM_FOLDER DIM_LAYER_PREFIX DEDUP_EPSILON MIN_DIMENSION_GAP MIN_BEAM_SPAN
-      AXIS_ALIGN_TOL MAX_DIMENSIONS_PER_RUN
+      AXIS_ALIGN_TOL MAX_DIMENSIONS_PER_RUN VERSION DIMENSIONS_LABEL_PREFIX
     ].each { |c| remove_const(c) if const_defined?(c, false) }
 
     # Debug output is a module instance variable (not a constant) so it can be
@@ -81,6 +81,13 @@ module Timmerman
     # the view (SketchUp 2026 can hang on heavy redraws). Set to nil for no cap.
     MAX_DIMENSIONS_PER_RUN = 400
 
+    # Version shown in the "dimensions created on ..." label. When loaded as
+    # the plugin, EXTENSION.version (in the loader) is used instead.
+    VERSION = '-development'.freeze
+
+    # Prefix for the version label text; used to find and remove it on clear.
+    DIMENSIONS_LABEL_PREFIX = 'Dimensions: '.freeze
+
     # ---------------------------------------------------------------------------
     # Public commands
     # ---------------------------------------------------------------------------
@@ -111,6 +118,7 @@ module Timmerman
       end
       model.commit_operation
 
+      model.active_layer = sublayer
       model.active_view.invalidate
       # Do not call CMD_SELECTION_ZOOM_EXT here: on SketchUp 2026 it can hang the
       # main thread (CALayer display → SU internals → kernel) when many dimensions
@@ -128,15 +136,20 @@ module Timmerman
       end
 
       sublayer = find_or_create_maten_sublayer(model, inst)
-      dims     = model.entities.grep(Sketchup::DimensionLinear).select { |d| d.layer == sublayer }
-      if dims.empty?
-        debug('No linear dimensions found to clear.')
+      target_entities = entities_containing_instance(inst)
+      dims     = target_entities.grep(Sketchup::DimensionLinear).select { |d| d.layer == sublayer }
+      label_texts = target_entities.grep(Sketchup::Text).select { |t|
+        t.layer == sublayer && t.text.to_s.start_with?(DIMENSIONS_LABEL_PREFIX)
+      }
+      if dims.empty? && label_texts.empty?
+        debug('No linear dimensions or label found to clear.')
         return
       end
 
       model.start_operation('Clear Skeleton Dimensions', true)
       begin
-        model.entities.erase_entities(dims)
+        target_entities.erase_entities(dims) unless dims.empty?
+        target_entities.erase_entities(label_texts) unless label_texts.empty?
       rescue => e
         model.abort_operation
         UI.messagebox("Clear Dimensions failed:\n#{e.message}")
@@ -145,7 +158,7 @@ module Timmerman
       model.commit_operation
 
       model.active_view.invalidate
-      debug("Cleared #{dims.size} dimension(s).")
+      debug("Cleared #{dims.size} dimension(s)#{label_texts.empty? ? '' : " and #{label_texts.size} label(s)"}.")
     end
 
     # ---------------------------------------------------------------------------
@@ -251,7 +264,9 @@ module Timmerman
       unique_x_bottom = dedup_sorted(far_x_bottom.sort_by { |v, _| v })
       unique_x_top    = dedup_sorted(far_x_top.sort_by    { |v, _| v })
 
-      entities = model.entities
+      # Add dimensions to the same entities that contain the selected instance (root or
+      # inside a group) so they are visible in the current view context.
+      entities = entities_containing_instance(inst)
       count    = 0
       max_dimensions_cap = MAX_DIMENSIONS_PER_RUN
 
@@ -355,27 +370,47 @@ module Timmerman
         origin_pt.z + view_h.z * (beam_max_h - origin_x) + view_v.z * (beam_min_v - origin_y) + view_dir.z * depth_off
       )
 
+      # Bbox center in the same plane as corners; used to place diagonal dims outside the frame.
+      center_pt = Geom::Point3d.new(
+        origin_pt.x + view_h.x * (beam_max_h - origin_x) * 0.5 + view_v.x * ((beam_min_v + beam_max_v) * 0.5 - origin_y) + view_dir.x * depth_off,
+        origin_pt.y + view_h.y * (beam_max_h - origin_x) * 0.5 + view_v.y * ((beam_min_v + beam_max_v) * 0.5 - origin_y) + view_dir.y * depth_off,
+        origin_pt.z + view_h.z * (beam_max_h - origin_x) * 0.5 + view_v.z * ((beam_min_v + beam_max_v) * 0.5 - origin_y) + view_dir.z * depth_off
+      )
+      top_right_pt = Geom::Point3d.new(
+        origin_pt.x + view_h.x * (beam_max_h - origin_x) + view_v.x * (beam_max_v - origin_y) + view_dir.x * depth_off,
+        origin_pt.y + view_h.y * (beam_max_h - origin_x) + view_v.y * (beam_max_v - origin_y) + view_dir.y * depth_off,
+        origin_pt.z + view_h.z * (beam_max_h - origin_x) + view_v.z * (beam_max_v - origin_y) + view_dir.z * depth_off
+      )
+      bottom_right_pt = Geom::Point3d.new(
+        origin_pt.x + view_h.x * (beam_max_h - origin_x) + view_v.x * (beam_min_v - origin_y) + view_dir.x * depth_off,
+        origin_pt.y + view_h.y * (beam_max_h - origin_x) + view_v.y * (beam_min_v - origin_y) + view_dir.y * depth_off,
+        origin_pt.z + view_h.z * (beam_max_h - origin_x) + view_v.z * (beam_min_v - origin_y) + view_dir.z * depth_off
+      )
+
       tl_br_len = tl.distance(br)
       if tl_br_len >= MIN_DIMENSION_GAP && (!max_dimensions_cap || count < max_dimensions_cap)
         # TL to BR overall diagonal. Perpendicular computed from the actual segment
         # direction (not bounding-box extents) so the offset is exactly 90 deg to the line.
+        # Offset is applied on the side *away* from the bbox center so the dimension sits outside the frame.
         tb_dh = dot(br, view_h) - dot(tl, view_h)
         tb_dv = dot(br, view_v) - dot(tl, view_v)
         tb_2d = Math.sqrt(tb_dh**2 + tb_dv**2)
-        # CCW 90 deg of (tb_dh, tb_dv) points "above" the down-right line (up-right)
         perp_tr = Geom::Vector3d.new(
           (-view_h.x * tb_dv + view_v.x * tb_dh) / tb_2d,
           (-view_h.y * tb_dv + view_v.y * tb_dh) / tb_2d,
           (-view_h.z * tb_dv + view_v.z * tb_dh) / tb_2d
         )
+        mid_tl_br = Geom::Point3d.new((tl.x + br.x) * 0.5, (tl.y + br.y) * 0.5, (tl.z + br.z) * 0.5)
+        out_sign_tb = (center_pt.x - mid_tl_br.x) * perp_tr.x + (center_pt.y - mid_tl_br.y) * perp_tr.y + (center_pt.z - mid_tl_br.z) * perp_tr.z
+        diag_off_tb = out_sign_tb > 0 ? -DIAG_OFFSET : DIAG_OFFSET
         align_dim(
-          entities.add_dimension_linear(nudge.call(tl), nudge.call(br), scale_vec(perp_tr, DIAG_OFFSET)),
+          entities.add_dimension_linear(nudge.call(tl), nudge.call(br), scale_vec(perp_tr, diag_off_tb)),
           sublayer,
           prefix: "◩ "
         )
         count += 1
 
-        # BL to TR overall diagonal. Same plane as TL-BR.
+        # BL to TR overall diagonal. Same plane as TL-BR; offset to outside (away from center).
         bl = Geom::Point3d.new(
           origin_pt.x + view_v.x * (beam_min_v - origin_y) + view_dir.x * depth_off,
           origin_pt.y + view_v.y * (beam_min_v - origin_y) + view_dir.y * depth_off,
@@ -390,14 +425,16 @@ module Timmerman
         if bt_2d >= MIN_DIMENSION_GAP && (!max_dimensions_cap || count < max_dimensions_cap)
           bt_dh = dot(tr, view_h) - dot(bl, view_h)
           bt_dv = dot(tr, view_v) - dot(bl, view_v)
-          # CCW 90 deg of (bt_dh, bt_dv) points "above" the up-right line (up-left)
           perp_tl = Geom::Vector3d.new(
             (-view_h.x * bt_dv + view_v.x * bt_dh) / bt_2d,
             (-view_h.y * bt_dv + view_v.y * bt_dh) / bt_2d,
             (-view_h.z * bt_dv + view_v.z * bt_dh) / bt_2d
           )
+          mid_bl_tr = Geom::Point3d.new((bl.x + tr.x) * 0.5, (bl.y + tr.y) * 0.5, (bl.z + tr.z) * 0.5)
+          out_sign_bt = (center_pt.x - mid_bl_tr.x) * perp_tl.x + (center_pt.y - mid_bl_tr.y) * perp_tl.y + (center_pt.z - mid_bl_tr.z) * perp_tl.z
+          diag_off_bt = out_sign_bt > 0 ? -DIAG_OFFSET : DIAG_OFFSET
           align_dim(
-            entities.add_dimension_linear(nudge.call(bl), nudge.call(tr), scale_vec(perp_tl, DIAG_OFFSET)),
+            entities.add_dimension_linear(nudge.call(bl), nudge.call(tr), scale_vec(perp_tl, diag_off_bt)),
             sublayer,
             prefix: "◩ "
           )
@@ -405,7 +442,25 @@ module Timmerman
         end
       end
 
+      add_dimensions_created_label(entities, nudge.call(bottom_right_pt), view_h, view_v, sublayer)
+
       count
+    end
+
+    def dimensions_label_version
+      defined?(EXTENSION) && EXTENSION.respond_to?(:version) ? EXTENSION.version : VERSION
+    end
+
+    def add_dimensions_created_label(entities, corner_pt, view_h, view_v, sublayer)
+      date_time_str = Time.now.strftime('%Y-%m-%d %H:%M')
+      version_str = dimensions_label_version
+      text_str = "Dimensions: v#{version_str}\n#{date_time_str}"
+      # Vector: label at bottom-right, text extends down-right (view_h - view_v), normalized.
+      dir = Geom::Vector3d.new(view_h.x - view_v.x, view_h.y - view_v.y, view_h.z - view_v.z)
+      len = Math.sqrt(dir.x**2 + dir.y**2 + dir.z**2)
+      dir = Geom::Vector3d.new(dir.x / len, dir.y / len, dir.z / len) if len > 1.0e-9
+      text_ent = entities.add_text(text_str, corner_pt, dir)
+      text_ent.layer = sublayer
     end
 
     # ---------------------------------------------------------------------------
@@ -547,8 +602,7 @@ module Timmerman
       end
       sub_layer.visible = true
 
-      debug("Dimension sublayer: '#{sub_name}' " \
-            "(folder: '#{parent_folder ? parent_folder.name : 'none'}')")
+      debug("Dimension sublayer: '#{sub_name}' (folder: '#{parent_folder ? parent_folder.name : 'none'}')")
       sub_layer
     end
 
@@ -556,6 +610,15 @@ module Timmerman
       candidates = selection.grep(Sketchup::ComponentInstance)
       return nil unless candidates.length == 1
       candidates.first
+    end
+
+    # Returns the Entities collection that contains the instance (root or group).
+    # When the instance is at model root, parent can be the Model; use model.entities.
+    def entities_containing_instance(inst)
+      parent = inst.parent
+      return inst.model.entities if parent.is_a?(Sketchup::Model)
+      return parent if parent.respond_to?(:grep) && parent.respond_to?(:erase_entities)
+      inst.model.entities
     end
 
     def selection_error_message(selection)

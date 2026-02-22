@@ -28,10 +28,13 @@ When you need to **run code inside SketchUp** and see results (e.g. test `Timmer
 
 3. **Run and wait for result**  
    Execute: `ruby sketchup_bridge/run_and_wait.rb`  
-   This waits until SketchUp has run `command.rb` (listener polls every 2s), then prints `result.txt`.
+   The script touches `command.rb` so the listener runs it, then waits for `result.txt` written *this* run. It only succeeds when SketchUp actually runs the command (so you never get stale output). If the listener is not running, it times out and fails.
 
 4. **Use the output**  
    stdout/stderr from the command are in the printed result. Parse it to decide the next edit and repeat.
+
+5. **If the bridge is not connected**  
+   When the listener is not running in SketchUp (or the IDE was not opened with the correct port), `run_and_wait.rb` will **fail** after a short timeout and print a clear **"BRIDGE NOT CONNECTED"** message. **Report that to the user**: tell them the bridge could not reach SketchUp and they need to start the listener in SketchUp (Extensions → SketchUp Bridge → Start Listener, or load the listener from the Ruby Console) and set the bridge directory, then rerun.
 
 Do not ask the user to paste code into the Ruby Console for iteration; use the bridge (edit `command.rb` → run `run_and_wait.rb` → read output).
 
