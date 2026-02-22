@@ -26,6 +26,12 @@ description: Package a SketchUp Ruby plugin into a .rbz file. Use when the user 
 
 5. **Confirm** — verify the new `.rbz` appears in `dist/` and report the filename to the user.
 
+## Learnings (don't rediscover each time)
+
+- **`dist/` is git-ignored.** The `.rbz` file is never committed. When the user asks to "package and commit", commit only the version-bumped loader and the plugin source files (e.g. `plugins/timmerman_skeleton_dimensions.rb`, `plugins/timmerman_skeleton_dimensions/core.rb`). Do not try to add or commit anything under `dist/`, and don't report that the .rbz wasn't committed as if it were an oversight.
+
+- **Packager command:** `bash package.sh skeleton` builds only Skeleton Dimensions; `bash package.sh bridge` builds only the bridge; `bash package.sh` builds all. The script reads the version from the loader and writes `dist/<plugin_id>-<version>.rbz`.
+
 ## Version bump rules
 
 | Change type        | Which part to bump |
