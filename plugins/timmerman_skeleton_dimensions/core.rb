@@ -25,7 +25,7 @@ module Timmerman
     # up the latest values. The loader constants (PLUGIN_ID, PLUGIN_ROOT,
     # EXTENSION) live in the loader file and are intentionally left untouched.
     %i[
-      OUTER_PADDING STAGGER_STEP BEAM_LENGTH_OFFSET DIAG_OFFSET
+      OUTER_PADDING STAGGER_STEP BEAM_LENGTH_OFFSET DIAG_OFFSET_PADDING
       DIM_FOLDER DIM_LAYER_PREFIX DEDUP_EPSILON MIN_DIMENSION_GAP MIN_BEAM_SPAN
       AXIS_ALIGN_TOL MAX_DIMENSIONS_PER_RUN VERSION DIMENSIONS_LABEL_PREFIX
     ].each { |c| remove_const(c) if const_defined?(c, false) }
@@ -51,8 +51,9 @@ module Timmerman
     # Half the beam thickness in that direction is added on top so the line stays clear.
     BEAM_LENGTH_OFFSET = 80.mm
 
-    # Perpendicular offset for the outer diagonal dimension line.
-    DIAG_OFFSET = 100.mm
+    # Extra padding beyond the corner so the diagonal dimension line sits clearly outside
+    # the frame. The main offset is computed from the diagonal so the line clears the corner.
+    DIAG_OFFSET_PADDING = 200.mm
 
     # Tag folder that groups all dimension sub-layers in the SketchUp tag panel.
     DIM_FOLDER = 'maten'.freeze
@@ -386,55 +387,32 @@ module Timmerman
         origin_pt.y + view_h.y * (beam_max_h - origin_x) + view_v.y * (beam_min_v - origin_y) + view_dir.y * depth_off,
         origin_pt.z + view_h.z * (beam_max_h - origin_x) + view_v.z * (beam_min_v - origin_y) + view_dir.z * depth_off
       )
+      bottom_left_pt = Geom::Point3d.new(
+        origin_pt.x + view_v.x * (beam_min_v - origin_y) + view_dir.x * depth_off,
+        origin_pt.y + view_v.y * (beam_min_v - origin_y) + view_dir.y * depth_off,
+        origin_pt.z + view_v.z * (beam_min_v - origin_y) + view_dir.z * depth_off
+      )
 
       tl_br_len = tl.distance(br)
       if tl_br_len >= MIN_DIMENSION_GAP && (!max_dimensions_cap || count < max_dimensions_cap)
-        # TL to BR overall diagonal. Perpendicular computed from the actual segment
-        # direction (not bounding-box extents) so the offset is exactly 90 deg to the line.
-        # Offset is applied on the side *away* from the bbox center so the dimension sits outside the frame.
-        tb_dh = dot(br, view_h) - dot(tl, view_h)
-        tb_dv = dot(br, view_v) - dot(tl, view_v)
-        tb_2d = Math.sqrt(tb_dh**2 + tb_dv**2)
-        perp_tr = Geom::Vector3d.new(
-          (-view_h.x * tb_dv + view_v.x * tb_dh) / tb_2d,
-          (-view_h.y * tb_dv + view_v.y * tb_dh) / tb_2d,
-          (-view_h.z * tb_dv + view_v.z * tb_dh) / tb_2d
+        perp_tb, diag_off_tb = diagonal_offset_outside(
+          tl, br, center_pt, top_right_pt, top_right_pt, bottom_left_pt, view_h, view_v
         )
-        mid_tl_br = Geom::Point3d.new((tl.x + br.x) * 0.5, (tl.y + br.y) * 0.5, (tl.z + br.z) * 0.5)
-        out_sign_tb = (center_pt.x - mid_tl_br.x) * perp_tr.x + (center_pt.y - mid_tl_br.y) * perp_tr.y + (center_pt.z - mid_tl_br.z) * perp_tr.z
-        diag_off_tb = out_sign_tb > 0 ? -DIAG_OFFSET : DIAG_OFFSET
         align_dim(
-          entities.add_dimension_linear(nudge.call(tl), nudge.call(br), scale_vec(perp_tr, diag_off_tb)),
+          entities.add_dimension_linear(nudge.call(tl), nudge.call(br), scale_vec(perp_tb, diag_off_tb)),
           sublayer,
           prefix: "◩ "
         )
         count += 1
 
-        # BL to TR overall diagonal. Same plane as TL-BR; offset to outside (away from center).
-        bl = Geom::Point3d.new(
-          origin_pt.x + view_v.x * (beam_min_v - origin_y) + view_dir.x * depth_off,
-          origin_pt.y + view_v.y * (beam_min_v - origin_y) + view_dir.y * depth_off,
-          origin_pt.z + view_v.z * (beam_min_v - origin_y) + view_dir.z * depth_off
-        )
-        tr = Geom::Point3d.new(
-          origin_pt.x + view_h.x * (beam_max_h - origin_x) + view_v.x * (beam_max_v - origin_y) + view_dir.x * depth_off,
-          origin_pt.y + view_h.y * (beam_max_h - origin_x) + view_v.y * (beam_max_v - origin_y) + view_dir.y * depth_off,
-          origin_pt.z + view_h.z * (beam_max_h - origin_x) + view_v.z * (beam_max_v - origin_y) + view_dir.z * depth_off
-        )
-        bt_2d = bl.distance(tr)
+        # BL to TR overall diagonal; use same corners (bottom_left_pt, top_right_pt).
+        bt_2d = bottom_left_pt.distance(top_right_pt)
         if bt_2d >= MIN_DIMENSION_GAP && (!max_dimensions_cap || count < max_dimensions_cap)
-          bt_dh = dot(tr, view_h) - dot(bl, view_h)
-          bt_dv = dot(tr, view_v) - dot(bl, view_v)
-          perp_tl = Geom::Vector3d.new(
-            (-view_h.x * bt_dv + view_v.x * bt_dh) / bt_2d,
-            (-view_h.y * bt_dv + view_v.y * bt_dh) / bt_2d,
-            (-view_h.z * bt_dv + view_v.z * bt_dh) / bt_2d
+          perp_bt, diag_off_bt = diagonal_offset_outside(
+            bottom_left_pt, top_right_pt, center_pt, bottom_right_pt, bottom_right_pt, tl, view_h, view_v
           )
-          mid_bl_tr = Geom::Point3d.new((bl.x + tr.x) * 0.5, (bl.y + tr.y) * 0.5, (bl.z + tr.z) * 0.5)
-          out_sign_bt = (center_pt.x - mid_bl_tr.x) * perp_tl.x + (center_pt.y - mid_bl_tr.y) * perp_tl.y + (center_pt.z - mid_bl_tr.z) * perp_tl.z
-          diag_off_bt = out_sign_bt > 0 ? -DIAG_OFFSET : DIAG_OFFSET
           align_dim(
-            entities.add_dimension_linear(nudge.call(bl), nudge.call(tr), scale_vec(perp_tl, diag_off_bt)),
+            entities.add_dimension_linear(nudge.call(bottom_left_pt), nudge.call(top_right_pt), scale_vec(perp_bt, diag_off_bt)),
             sublayer,
             prefix: "◩ "
           )
@@ -537,6 +515,31 @@ module Timmerman
     # Dot product of a Point3d with a Vector3d axis.
     def dot(pt, axis)
       pt.x * axis.x + pt.y * axis.y + pt.z * axis.z
+    end
+
+    # Compute perpendicular and signed offset so an overall diagonal dimension line
+    # sits outside the frame: offset = perpendicular distance to the chosen corner + padding.
+    # Returns [perp_unit, offset_scalar] for the diagonal from start_pt to end_pt.
+    # tiebreaker_pt chooses offset side when center lies on the diagonal (out_sign == 0).
+    def diagonal_offset_outside(start_pt, end_pt, center_pt, tiebreaker_pt, corner_a, corner_b, view_h, view_v)
+      dh = dot(end_pt, view_h) - dot(start_pt, view_h)
+      dv = dot(end_pt, view_v) - dot(start_pt, view_v)
+      len_2d = Math.sqrt(dh**2 + dv**2)
+      perp = Geom::Vector3d.new(
+        (-view_h.x * dv + view_v.x * dh) / len_2d,
+        (-view_h.y * dv + view_v.y * dh) / len_2d,
+        (-view_h.z * dv + view_v.z * dh) / len_2d
+      )
+      mid = Geom::Point3d.new((start_pt.x + end_pt.x) * 0.5, (start_pt.y + end_pt.y) * 0.5, (start_pt.z + end_pt.z) * 0.5)
+      out_sign = (center_pt.x - mid.x) * perp.x + (center_pt.y - mid.y) * perp.y + (center_pt.z - mid.z) * perp.z
+      sign = if out_sign > 0 then -1
+      elsif out_sign < 0 then 1
+      else (tiebreaker_pt.x - mid.x) * perp.x + (tiebreaker_pt.y - mid.y) * perp.y + (tiebreaker_pt.z - mid.z) * perp.z > 0 ? 1 : -1
+      end
+      dist_a = (corner_a.x - mid.x) * perp.x + (corner_a.y - mid.y) * perp.y + (corner_a.z - mid.z) * perp.z
+      dist_b = (corner_b.x - mid.x) * perp.x + (corner_b.y - mid.y) * perp.y + (corner_b.z - mid.z) * perp.z
+      corner_dist = sign > 0 ? [dist_a, dist_b].max : -[dist_a, dist_b].min
+      [perp, sign * (corner_dist + DIAG_OFFSET_PADDING)]
     end
 
     # Recursively collect all leaf entities (beams) at any nesting depth.
