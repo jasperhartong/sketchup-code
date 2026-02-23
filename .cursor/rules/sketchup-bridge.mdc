@@ -66,12 +66,17 @@ After the fix, write another temporary `command.rb` that:
 - **Never declare success based on the run log alone** — always verify the actual rendered output through the bridge before telling the user it is fixed.
 - Leave the final `command.rb` as the normal run command (`Timmerman::SkeletonDimensions.clear` + `.run`) once validation passes.
 
-**`DimensionLinear` audit pattern** (verified working):
+**`DimensionLinear` audit pattern** (verified working). When auditing dimensions added by the plugin, use the same scope as clear (sublayer + target_entities):
 ```ruby
-model.entities.grep(Sketchup::DimensionLinear).each_with_index do |d, i|
+model = Sketchup.active_model
+inst = Timmerman::SkeletonDimensions.selected_component_instance(model.selection)
+sublayer = Timmerman::SkeletonDimensions.find_or_create_maten_sublayer(model, inst)
+target_entities = Timmerman::SkeletonDimensions.entities_containing_instance(inst)
+dims = target_entities.grep(Sketchup::DimensionLinear).select { |d| d.layer == sublayer }
+dims.each_with_index do |d, i|
   p1 = d.start[1]   # start returns [nil_or_entity, Point3d]
   p2 = d.send(:end)[1]
-  puts "dim #{i}: text='#{d.text}'  3d_dist=#{(p1.distance(p2)*25.4).round(1)}mm"
+  puts "dim #{i}: text='#{d.text}' 3d_dist=#{(p1.distance(p2)*25.4).round(1)}mm"
 end
 ```
 
@@ -82,3 +87,4 @@ end
 - **Only the right edge of vertical beams** — push only `hs.max` into `far_x`; adding `hs.min` (left edge) doubles the cumulative dims unnecessarily.
 - **Cumulative dim anchors must be coplanar** — construct the second anchor as `origin_pt + h_diff * view_h` (not a raw bbox corner) so SketchUp measures a pure in-plane horizontal distance. Using real 3D corners from different beams introduces a depth component that inflates the shown value.
 - **Verify dimension values via the bridge** — `d.start` returns `[entity_or_nil, Point3d]`; use index `[1]` for the Point3d. `d.end` is a Ruby keyword; call it as `d.send(:end)`.
+- **Audit dimensions the same way clear finds them** — When validating dimensions in a one-off script, use the same scope as `clear`: `target_entities = entities_containing_instance(inst)`, `sublayer = find_or_create_maten_sublayer(model, inst)`, and `dims = target_entities.grep(Sketchup::DimensionLinear).select { |d| d.layer == sublayer }`. Otherwise you may include dimensions from other layers and get wrong counts or wrong dimensions.
