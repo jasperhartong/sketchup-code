@@ -1,7 +1,7 @@
 # SketchUp Bridge — standalone listener (no plugin required)
 #
 # Load once in the Ruby Console (Window → Ruby Console):
-#   load '/Users/jasper/Timmerman/sketchup-code/sketchup_bridge/listener.rb'
+#   load '/path/to/sketchup-code/sketchup_bridge/listener.rb'
 #
 # Preferred alternative: install the bridge plugin and use
 #   Extensions → SketchUp Bridge → Start Listener
