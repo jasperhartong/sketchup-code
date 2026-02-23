@@ -293,65 +293,57 @@ module Timmerman
         count += 1
       end
 
-      beam_max_h = all_beam_corners.map { |c| dot(c, view_h) }.max
-      front_depth = all_beam_corners.map { |c| dot(c, view_dir) }.min
-      depth_off   = front_depth - dot(origin_pt, view_dir)
-      tl = Geom::Point3d.new(
-        origin_pt.x + view_v.x * (beam_max_v - origin_y) + view_dir.x * depth_off,
-        origin_pt.y + view_v.y * (beam_max_v - origin_y) + view_dir.y * depth_off,
-        origin_pt.z + view_v.z * (beam_max_v - origin_y) + view_dir.z * depth_off
-      )
-      br = Geom::Point3d.new(
-        origin_pt.x + view_h.x * (beam_max_h - origin_x) + view_v.x * (beam_min_v - origin_y) + view_dir.x * depth_off,
-        origin_pt.y + view_h.y * (beam_max_h - origin_x) + view_v.y * (beam_min_v - origin_y) + view_dir.y * depth_off,
-        origin_pt.z + view_h.z * (beam_max_h - origin_x) + view_v.z * (beam_min_v - origin_y) + view_dir.z * depth_off
-      )
+      # Frame corners: silhouette’s 2D convex hull in view-space, then BL/TL/TR/BR from hull vertices.
+      # Collect 3D points (beam geometry or fallback to bounds corners), project to (u,v), hull, pick extrema.
+      all_geometry_pts = structural_beams.flat_map { |child, world_t|
+        pts = beam_geometry_points(child, world_t)
+        pts = (0..7).map { |i| child.bounds.corner(i).transform(world_t) } if pts.empty?
+        pts
+      }
+      corners_4 = frame_corners_from_silhouette_hull(all_geometry_pts, view_h, view_v)
+      unless corners_4
+        bottom_left_pt  = all_geometry_pts.min_by { |c| [dot(c, view_h), dot(c, view_v)] }
+        top_left_pt     = all_geometry_pts.min_by { |c| [dot(c, view_h), -dot(c, view_v)] }
+        top_right_pt    = all_geometry_pts.max_by { |c| [dot(c, view_h), dot(c, view_v)] }
+        bottom_right_pt = all_geometry_pts.max_by { |c| [dot(c, view_h), -dot(c, view_v)] }
+      else
+        bottom_left_pt, top_left_pt, top_right_pt, bottom_right_pt = corners_4
+      end
 
       center_pt = Geom::Point3d.new(
-        origin_pt.x + view_h.x * (beam_max_h - origin_x) * 0.5 + view_v.x * ((beam_min_v + beam_max_v) * 0.5 - origin_y) + view_dir.x * depth_off,
-        origin_pt.y + view_h.y * (beam_max_h - origin_x) * 0.5 + view_v.y * ((beam_min_v + beam_max_v) * 0.5 - origin_y) + view_dir.y * depth_off,
-        origin_pt.z + view_h.z * (beam_max_h - origin_x) * 0.5 + view_v.z * ((beam_min_v + beam_max_v) * 0.5 - origin_y) + view_dir.z * depth_off
-      )
-      top_right_pt = Geom::Point3d.new(
-        origin_pt.x + view_h.x * (beam_max_h - origin_x) + view_v.x * (beam_max_v - origin_y) + view_dir.x * depth_off,
-        origin_pt.y + view_h.y * (beam_max_h - origin_x) + view_v.y * (beam_max_v - origin_y) + view_dir.y * depth_off,
-        origin_pt.z + view_h.z * (beam_max_h - origin_x) + view_v.z * (beam_max_v - origin_y) + view_dir.z * depth_off
-      )
-      bottom_right_pt = Geom::Point3d.new(
-        origin_pt.x + view_h.x * (beam_max_h - origin_x) + view_v.x * (beam_min_v - origin_y) + view_dir.x * depth_off,
-        origin_pt.y + view_h.y * (beam_max_h - origin_x) + view_v.y * (beam_min_v - origin_y) + view_dir.y * depth_off,
-        origin_pt.z + view_h.z * (beam_max_h - origin_x) + view_v.z * (beam_min_v - origin_y) + view_dir.z * depth_off
-      )
-      bottom_left_pt = Geom::Point3d.new(
-        origin_pt.x + view_v.x * (beam_min_v - origin_y) + view_dir.x * depth_off,
-        origin_pt.y + view_v.y * (beam_min_v - origin_y) + view_dir.y * depth_off,
-        origin_pt.z + view_v.z * (beam_min_v - origin_y) + view_dir.z * depth_off
+        (bottom_left_pt.x + bottom_right_pt.x + top_left_pt.x + top_right_pt.x) * 0.25,
+        (bottom_left_pt.y + bottom_right_pt.y + top_left_pt.y + top_right_pt.y) * 0.25,
+        (bottom_left_pt.z + bottom_right_pt.z + top_left_pt.z + top_right_pt.z) * 0.25
       )
 
-      tl_br_len = tl.distance(br)
+      tl_br_len = top_left_pt.distance(bottom_right_pt)
+      bl_tr_len = bottom_left_pt.distance(top_right_pt)
+      same_segment = (
+        (top_left_pt.distance(bottom_left_pt) < DEDUP_EPSILON && bottom_right_pt.distance(top_right_pt) < DEDUP_EPSILON) ||
+        (top_left_pt.distance(top_right_pt) < DEDUP_EPSILON && bottom_right_pt.distance(bottom_left_pt) < DEDUP_EPSILON)
+      )
       if tl_br_len >= MIN_DIMENSION_GAP && (!max_dimensions_cap || count < max_dimensions_cap)
         perp_tb, diag_off_tb = diagonal_offset_outside(
-          tl, br, center_pt, top_right_pt, top_right_pt, bottom_left_pt, view_h, view_v
+          top_left_pt, bottom_right_pt, center_pt, top_right_pt, top_right_pt, bottom_left_pt, view_h, view_v
         )
         align_dim(
-          entities.add_dimension_linear(nudge.call(tl), nudge.call(br), scale_vec(perp_tb, diag_off_tb)),
+          entities.add_dimension_linear(nudge.call(top_left_pt), nudge.call(bottom_right_pt), scale_vec(perp_tb, diag_off_tb)),
           sublayer,
           prefix: "◩ "
         )
         count += 1
+      end
 
-        bt_2d = bottom_left_pt.distance(top_right_pt)
-        if bt_2d >= MIN_DIMENSION_GAP && (!max_dimensions_cap || count < max_dimensions_cap)
-          perp_bt, diag_off_bt = diagonal_offset_outside(
-            bottom_left_pt, top_right_pt, center_pt, bottom_right_pt, bottom_right_pt, tl, view_h, view_v
-          )
-          align_dim(
-            entities.add_dimension_linear(nudge.call(bottom_left_pt), nudge.call(top_right_pt), scale_vec(perp_bt, diag_off_bt)),
-            sublayer,
-            prefix: "◩ "
-          )
-          count += 1
-        end
+      if bl_tr_len >= MIN_DIMENSION_GAP && !same_segment && (!max_dimensions_cap || count < max_dimensions_cap)
+        perp_bt, diag_off_bt = diagonal_offset_outside(
+          bottom_left_pt, top_right_pt, center_pt, bottom_right_pt, bottom_right_pt, top_left_pt, view_h, view_v
+        )
+        align_dim(
+          entities.add_dimension_linear(nudge.call(bottom_left_pt), nudge.call(top_right_pt), scale_vec(perp_bt, diag_off_bt)),
+          sublayer,
+          prefix: "◩ "
+        )
+        count += 1
       end
 
       add_dimensions_created_label(entities, nudge.call(bottom_right_pt), view_h, view_v, sublayer)

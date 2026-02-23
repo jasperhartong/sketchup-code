@@ -18,27 +18,6 @@ module Timmerman
       h_extent >= v_extent ? :horizontal : :vertical
     end
 
-    def beam_principal_direction_2d(hs, vs)
-      n   = hs.size.to_f
-      mh  = hs.sum / n
-      mv  = vs.sum / n
-      chh = hs.sum { |h| (h - mh)**2 } / n
-      cvv = vs.sum { |v| (v - mv)**2 } / n
-      chv = hs.zip(vs).sum { |h, v| (h - mh) * (v - mv) } / n
-      tr  = chh + cvv
-      di  = Math.sqrt([(tr * 0.5)**2 - (chh * cvv - chv**2), 0.0].max)
-      l1  = tr * 0.5 + di
-      if chv.abs > 1.0e-12
-        uh, uv = l1 - cvv, chv
-      elsif chh >= cvv
-        uh, uv = 1.0, 0.0
-      else
-        uh, uv = 0.0, 1.0
-      end
-      len = Math.sqrt(uh**2 + uv**2)
-      len < 1.0e-12 ? [1.0, 0.0] : [uh / len, uv / len]
-    end
-
     def dedup_sorted(sorted_pairs)
       out = []
       sorted_pairs.each do |v, pt|
@@ -60,6 +39,49 @@ module Timmerman
 
     def dot(pt, axis)
       pt.x * axis.x + pt.y * axis.y + pt.z * axis.z
+    end
+
+    # Project 3D points to view plane, compute 2D convex hull (Andrew's monotone chain),
+    # then pick BL/TL/TR/BR as the hull vertex nearest each bbox corner.
+    # Returns [bl_pt, tl_pt, tr_pt, br_pt] or nil.
+    def frame_corners_from_silhouette_hull(points_3d, view_h, view_v)
+      return nil if points_3d.size < 2
+      pts_2d = points_3d.map { |p| { u: dot(p, view_h), v: dot(p, view_v), pt: p } }
+      hull = convex_hull_2d(pts_2d)
+      return nil if hull.size < 2
+
+      us = hull.map { |q| q[:u] }
+      vs = hull.map { |q| q[:v] }
+      min_u, max_u = us.min, us.max
+      min_v, max_v = vs.min, vs.max
+
+      nearest = ->(target_u, target_v) {
+        hull.min_by { |q| (q[:u] - target_u)**2 + (q[:v] - target_v)**2 }
+      }
+
+      bl = nearest.call(min_u, min_v)
+      tl = nearest.call(min_u, max_v)
+      tr = nearest.call(max_u, max_v)
+      br = nearest.call(max_u, min_v)
+      [bl[:pt], tl[:pt], tr[:pt], br[:pt]]
+    end
+
+    # Andrew's monotone chain: 2D convex hull. pts = [{ u:, v:, pt: }, ...]. Returns hull vertices (with :pt).
+    def convex_hull_2d(pts)
+      return pts.dup if pts.size <= 2
+      sorted = pts.sort_by { |p| [p[:u], p[:v]] }
+      cross = ->(o, a, b) { (a[:u] - o[:u]) * (b[:v] - o[:v]) - (a[:v] - o[:v]) * (b[:u] - o[:u]) }
+      lower = []
+      sorted.each do |p|
+        lower.pop while lower.size >= 2 && cross.call(lower[-2], lower[-1], p) <= 0
+        lower << p
+      end
+      upper = []
+      sorted.reverse_each do |p|
+        upper.pop while upper.size >= 2 && cross.call(upper[-2], upper[-1], p) <= 0
+        upper << p
+      end
+      (lower[0..-2] + upper[0..-2]).uniq
     end
 
     def diagonal_offset_outside(start_pt, end_pt, center_pt, tiebreaker_pt, corner_a, corner_b, view_h, view_v)
@@ -99,6 +121,23 @@ module Timmerman
         end
       end
       result
+    end
+
+    # Actual geometry points of a beam (vertices from edges/faces), not bbox. For angled beams these are the real corners.
+    # Returns array of Point3d in the same space as world_t (use full_t = world_t * child.transformation for child's local geom).
+    def beam_geometry_points(child, world_t)
+      full_t = world_t * child.transformation
+      pts = []
+      child.definition.entities.each do |e|
+        if e.is_a?(Sketchup::Edge)
+          pts << e.start.position.transform(full_t)
+          pts << e.end.position.transform(full_t)
+        elsif e.is_a?(Sketchup::Face)
+          e.vertices.each { |v| pts << v.position.transform(full_t) }
+        end
+      end
+      # Dedupe by position (within epsilon) so we don't get huge arrays for dense meshes.
+      pts.uniq { |p| [p.x, p.y, p.z].map { |c| (c / DEDUP_EPSILON).round }.freeze }
     end
 
     def beam_length_anchors(child, world_t, child_corners, hs, vs, _h_extent, _v_extent,
