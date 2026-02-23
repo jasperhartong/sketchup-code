@@ -1,2 +1,20 @@
+# Build output
 dist/
+
+# macOS
 .DS_Store
+
+# Editor / IDE
+.ruby-lsp/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Cursor agent transcripts (per-session, not shareable)
+.cursor/projects/
+
+# Ruby
+*.gem
+*.bundle
+vendor/bundle/

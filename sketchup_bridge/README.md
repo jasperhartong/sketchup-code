@@ -17,7 +17,7 @@ The preference is saved; you only need to click Start on each SketchUp session (
 Open **Window → Ruby Console** and run:
 
 ```ruby
-load '/Users/jasper/Timmerman/sketchup-code/sketchup_bridge/listener.rb'
+load File.join('<path-to-this-repo>', 'sketchup_bridge', 'listener.rb')
 ```
 
 You should see: `[SketchUp Bridge] Listening. Command file: ...`

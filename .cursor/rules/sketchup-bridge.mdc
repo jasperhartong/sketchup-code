@@ -12,7 +12,7 @@ When you need to **run code inside SketchUp** and see results (e.g. test `Timmer
 1. **Ensure the listener is running in SketchUp**  
    **Option A (plugin — preferred):** Install `dist/timmerman_sketchup_bridge-1.0.0.rbz`, set the bridge directory to this project's `sketchup_bridge/` folder via *Extensions → SketchUp Bridge → Set Bridge Directory…*, then click *Start Listener*. The listener persists across sessions.  
    **Option B (manual):** Paste once in the Ruby Console:  
-   `load '/Users/jasper/Timmerman/sketchup-code/sketchup_bridge/listener.rb'`
+   `load File.join('<path-to-this-repo>', 'sketchup_bridge', 'listener.rb')`
 
 2. **Write the code to run**  
    Edit `sketchup_bridge/command.rb`. The default loads `core.rb` directly and calls run/clear:
