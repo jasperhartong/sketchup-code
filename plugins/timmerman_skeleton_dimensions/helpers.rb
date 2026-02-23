@@ -140,24 +140,29 @@ module Timmerman
       pts.uniq { |p| [p.x, p.y, p.z].map { |c| (c / DEDUP_EPSILON).round }.freeze }
     end
 
-    def beam_length_anchors(child, world_t, child_corners, hs, vs, _h_extent, _v_extent,
+    def beam_length_anchors(child, world_t, child_corners, geom_pts, hs, vs, _h_extent, _v_extent,
                             beam_axis, view_h, view_v)
       case beam_axis
       when :vertical
-        top_grp  = child_corners.select { |c| (dot(c, view_v) - vs.max).abs <= DEDUP_EPSILON }
-        top_grp  = child_corners if top_grp.empty?
-        bot_grp  = child_corners.select { |c| (dot(c, view_v) - vs.min).abs <= DEDUP_EPSILON }
-        bot_grp  = child_corners if bot_grp.empty?
-        start_pt = top_grp.min_by { |c| dot(c, view_h) }
-        end_pt   = bot_grp.min_by { |c| dot(c, view_h) }
-        return [start_pt, end_pt, scale_vec(view_h.reverse, BEAM_LENGTH_OFFSET)]
+        top_pt = geom_pts.max_by { |c| dot(c, view_v) }
+        bot_pt = geom_pts.min_by { |c| dot(c, view_v) }
+        h_mid  = (hs.min + hs.max) / 2.0
+        left_v  = geom_pts.select { |c| dot(c, view_h) < h_mid }.map { |c| dot(c, view_v) }
+        right_v = geom_pts.select { |c| dot(c, view_h) >= h_mid }.map { |c| dot(c, view_v) }
+        left_span  = left_v.empty?  ? 0 : left_v.max - left_v.min
+        right_span = right_v.empty? ? 0 : right_v.max - right_v.min
+        side = right_span >= left_span ? view_h : view_h.reverse
+        return [top_pt, bot_pt, scale_vec(side, BEAM_LENGTH_OFFSET)]
       when :horizontal
-        left_grp  = child_corners.select { |c| (dot(c, view_h) - hs.min).abs <= DEDUP_EPSILON }
-        left_grp  = child_corners if left_grp.empty?
-        right_grp = child_corners.select { |c| (dot(c, view_h) - hs.max).abs <= DEDUP_EPSILON }
-        right_grp = child_corners if right_grp.empty?
-        start_pt = left_grp.max_by  { |c| dot(c, view_v) }
-        end_pt   = right_grp.max_by { |c| dot(c, view_v) }
+        start_pt = geom_pts.min_by { |c| dot(c, view_h) }
+        end_pt   = geom_pts.max_by { |c| dot(c, view_h) }
+        v_mid  = (vs.min + vs.max) / 2.0
+        top_h  = geom_pts.select { |c| dot(c, view_v) >= v_mid }.map { |c| dot(c, view_h) }
+        bot_h  = geom_pts.select { |c| dot(c, view_v) < v_mid }.map { |c| dot(c, view_h) }
+        top_span = top_h.empty? ? 0 : top_h.max - top_h.min
+        bot_span = bot_h.empty? ? 0 : bot_h.max - bot_h.min
+        side = top_span >= bot_span ? view_v : view_v.reverse
+        return [start_pt, end_pt, scale_vec(side, BEAM_LENGTH_OFFSET)]
       else
         start_pt, end_pt = diagonal_beam_endpoints(child, world_t)
       end

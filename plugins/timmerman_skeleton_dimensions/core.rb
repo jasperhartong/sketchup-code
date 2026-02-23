@@ -197,8 +197,11 @@ module Timmerman
           target_far << [hs.max, far_h_pt]
         end
 
+        geom_pts = beam_geometry_points(child, world_t)
+        geom_pts = child_corners if geom_pts.empty?
+
         start_pt, end_pt, offset = beam_length_anchors(
-          child, world_t, child_corners, hs, vs, h_extent, v_extent, beam_axis, view_h, view_v
+          child, world_t, child_corners, geom_pts, hs, vs, h_extent, v_extent, beam_axis, view_h, view_v
         )
         if start_pt.distance(end_pt) >= MIN_DIMENSION_GAP
           beam_lengths << {

@@ -3,5 +3,4 @@ load core
 Timmerman::SkeletonDimensions.debug_mode = true
 Timmerman::SkeletonDimensions.clear
 Timmerman::SkeletonDimensions.run
-
 "OK"

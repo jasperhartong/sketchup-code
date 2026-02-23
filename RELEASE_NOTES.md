@@ -1,6 +1,11 @@
-# Skeleton Dimensions — Release notes (1.0.0 → 1.3.4)
+# Skeleton Dimensions — Release notes (1.0.0 → 1.3.5)
 
 ## 1.3.x
+
+### 1.3.5
+- **bugfix: ◩ Frame diagonals** — Convex-hull corner selection now finds all four frame corners correctly; both TL–BR and BL–TR diagonals are always drawn.
+- **📏 Beam length** — Beam length dimensions now use actual geometry vertices instead of bounding-box corners, measuring the true longest extent along the beam axis (matters for beams with angled cuts).
+- **📐 Dimension placement** — Per-beam length dimension is placed on the side of the beam with the longest edge.
 
 ### 1.3.4
 - **Internal** — Algorithm split into `helpers.rb`, `dimension_cumulative.rb`, and `label.rb` for maintainability; behavior unchanged.
