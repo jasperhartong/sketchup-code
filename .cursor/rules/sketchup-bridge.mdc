@@ -28,13 +28,19 @@ When you need to **run code inside SketchUp** and see results (e.g. test `Timmer
 
 3. **Run and wait for result**  
    Execute: `ruby sketchup_bridge/run_and_wait.rb`  
-   The script touches `command.rb` so the listener runs it, then waits for `result.txt` written *this* run. It only succeeds when SketchUp actually runs the command (so you never get stale output). If the listener is not running, it times out and fails.
+   The script touches `command.rb` so the listener runs it, then waits for `results/result.txt` written *this* run. It only succeeds when SketchUp actually runs the command (so you never get stale output). If the listener is not running, it times out and fails.
 
 4. **Use the output**  
    stdout/stderr from the command are in the printed result. Parse it to decide the next edit and repeat.
 
 5. **Programmatic screenshots (optional)**  
-   To capture the current SketchUp view after running code, set `TAKE_SCREENSHOT = true` in `command.rb`. The script calls `view.refresh` then `view.write_image(path, ...)`; the file is written under `sketchup_bridge/` with a timestamped name (e.g. `screenshot_2026-02-23_08-15-30.png`).
+   Load the utils helper in `command.rb` and call `take_screenshot`:
+   ```ruby
+   load File.expand_path('utils.rb', __dir__)
+   SketchupBridgeUtils.take_screenshot                     # timestamped PNG in results/
+   SketchupBridgeUtils.take_screenshot(name: "after_fix")  # results/after_fix.png
+   ```
+   The image is saved under `sketchup_bridge/results/`. See `sketchup_bridge/utils.rb` for options (width, height, antialias).
 
 6. **If the bridge is not connected**  
    When the listener is not running in SketchUp (or the IDE was not opened with the correct port), `run_and_wait.rb` will **fail** after a short timeout and print a clear **"BRIDGE NOT CONNECTED"** message. **Report that to the user**: tell them the bridge could not reach SketchUp and they need to start the listener in SketchUp (Extensions → SketchUp Bridge → Start Listener, or load the listener from the Ruby Console) and set the bridge directory, then rerun.

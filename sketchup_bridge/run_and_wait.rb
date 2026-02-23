@@ -7,7 +7,9 @@ require 'fileutils'
 # fails and reports that clearly so the user knows to start the listener.
 
 bridge_dir = File.expand_path(File.dirname(__FILE__))
-result_file = File.join(bridge_dir, 'result.txt')
+results_dir = File.join(bridge_dir, 'results')
+FileUtils.mkdir_p(results_dir)
+result_file = File.join(results_dir, 'result.txt')
 command_file = File.join(bridge_dir, 'command.rb')
 
 unless File.exist?(command_file)

@@ -1,2 +1,3 @@
-result.txt
+results/*
+!results/.gitkeep
 .last_run

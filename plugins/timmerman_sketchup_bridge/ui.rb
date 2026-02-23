@@ -44,7 +44,7 @@ module Timmerman
         puts "[SketchUp Bridge] Bridge dir → #{chosen}"
         Timmerman::SketchupBridge.start if was_running
       }
-      cmd_dir.tooltip         = 'Choose the folder containing command.rb / result.txt'
+      cmd_dir.tooltip         = 'Choose the folder containing command.rb and the results/ subfolder'
       cmd_dir.status_bar_text = 'Point the bridge at your project\'s sketchup_bridge/ folder.'
 
       cmd_status = UI::Command.new('Show Status') {

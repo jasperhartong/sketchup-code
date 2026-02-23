@@ -85,7 +85,9 @@ module Timmerman
       FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
 
       command_file = File.join(dir, 'command.rb')
-      result_file  = File.join(dir, 'result.txt')
+      results_dir  = File.join(dir, 'results')
+      FileUtils.mkdir_p(results_dir) unless Dir.exist?(results_dir)
+      result_file  = File.join(results_dir, 'result.txt')
 
       @bridge_last_mtime = 0
 

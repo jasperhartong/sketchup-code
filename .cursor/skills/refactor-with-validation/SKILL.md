@@ -58,7 +58,7 @@ Per dimension this captures:
 
 ## Step 1: Capture baseline
 
-Use the **project** baseline path (`sketchup_bridge/dim_baseline.txt`) so the file is visible and not confused with other runs. When the bridge runs `command.rb`, `__dir__` is the bridge directory.
+Use the **project** baseline path (`sketchup_bridge/results/dim_baseline.txt`) so the file is visible and not confused with other runs. When the bridge runs `command.rb`, `__dir__` is the bridge directory; use `File.expand_path('results', __dir__)` to reach the results folder.
 
 ```ruby
 load File.expand_path('../plugins/timmerman_skeleton_dimensions/core.rb', __dir__)
@@ -69,7 +69,8 @@ model = Sketchup.active_model
 # ... paste audit helper + plugin_dims here ...
 dims = plugin_dims(model)
 output = audit_dims(dims)
-baseline_path = File.expand_path('dim_baseline.txt', __dir__)
+results_dir = File.expand_path('results', __dir__)
+baseline_path = File.join(results_dir, 'dim_baseline.txt')
 timestamp = Time.now.strftime('%Y-%m-%d %H:%M:%S')
 File.write(baseline_path, "# Baseline captured at #{timestamp}\n#{output}")
 puts "BASELINE: #{dims.size} dimensions written at #{timestamp} to #{baseline_path}"
@@ -89,7 +90,7 @@ Edit the production file (`plugins/timmerman_skeleton_dimensions/core.rb`). Rule
 
 ## Step 3: Validate
 
-Use the **same** baseline path as Step 1 (`sketchup_bridge/dim_baseline.txt` via `File.expand_path('dim_baseline.txt', __dir__)`).
+Use the **same** baseline path as Step 1 (`sketchup_bridge/results/dim_baseline.txt` via `File.join(File.expand_path('results', __dir__), 'dim_baseline.txt')`).
 
 ```ruby
 load File.expand_path('../plugins/timmerman_skeleton_dimensions/core.rb', __dir__)
@@ -101,7 +102,8 @@ model = Sketchup.active_model
 dims = plugin_dims(model)
 new_output = audit_dims(dims)
 
-baseline_path = File.expand_path('dim_baseline.txt', __dir__)
+results_dir = File.expand_path('results', __dir__)
+baseline_path = File.join(results_dir, 'dim_baseline.txt')
 if File.exist?(baseline_path)
   baseline_raw = File.read(baseline_path)
   baseline_header = baseline_raw.lines.first.to_s.strip
@@ -146,6 +148,6 @@ Timmerman::SkeletonDimensions.run
 
 ## Notes
 
-- Baseline is stored at **`sketchup_bridge/dim_baseline.txt`** (project path). The first line is a timestamp, e.g. `# Baseline captured at 2025-02-22 14:30:00`, so you can see when it was captured. Step 3 compares only the content (lines after the first); the header is ignored for comparison. The baseline file is **not** deleted on PASS — it is kept so you can re-validate or compare again later.
+- Baseline is stored at **`sketchup_bridge/results/dim_baseline.txt`** (project path). The first line is a timestamp, e.g. `# Baseline captured at 2025-02-22 14:30:00`, so you can see when it was captured. Step 3 compares only the content (lines after the first); the header is ignored for comparison. The baseline file is **not** deleted on PASS — it is kept so you can re-validate or compare again later.
 - The **count** reported is the number of **plugin** dimensions (selection + maten sublayer), not all linear dimensions in the model. Auditing `model.entities` would include other plugins’ and manual dimensions (e.g. 158 instead of 49).
 - If `Timmerman::SkeletonDimensions.run` is non-deterministic (random ordering), sort `lines` inside `audit_dims` before joining.

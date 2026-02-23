@@ -88,7 +88,7 @@ See [`sketchup_bridge/README.md`](sketchup_bridge/README.md) for full details.
 
 The `.cursor/skills/refactor-with-validation` skill provides a safe workflow for cleaning up Ruby code without breaking anything:
 
-1. **Capture baseline** — runs the current code via the bridge and saves every dimension's anchor coordinates, offset vector, and computed normal to `/tmp/dim_baseline.txt`.
+1. **Capture baseline** — runs the current code via the bridge and saves every dimension's anchor coordinates, offset vector, and computed normal to `sketchup_bridge/results/dim_baseline.txt`.
 2. **Refactor** — edit `plugins/timmerman_skeleton_dimensions/core.rb`.
 3. **Validate** — re-runs via the bridge and diffs the new output against the baseline line-by-line. Prints `PASS` and deletes the baseline on a match; prints the exact changed lines on a mismatch.
 4. **Restore** — resets `command.rb` to the standard run command.
