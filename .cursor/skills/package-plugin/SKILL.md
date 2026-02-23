@@ -24,7 +24,11 @@ description: Package a SketchUp Ruby plugin into a .rbz file. Use when the user 
    # or: bash package.sh   (builds all)
    ```
 
-5. **Update changelog** — For Skeleton Dimensions, add an entry for the new version to `CHANGELOG.md`. Follow [Keep a Changelog](https://keepachangelog.com/) format: `## [x.y.z]` heading, then group changes under `### Added`, `### Changed`, `### Fixed`, or `### Removed` as appropriate. **Focus on user-facing features only** (what users see or get from the plugin), not internal refactors, dev tooling, or API docs. Place the new version at the top (below the header). Keep the doc covering 1.0.0 → latest.
+5. **Update changelog** — Each plugin has its own changelog:
+   - Skeleton Dimensions: `plugins/timmerman_skeleton_dimensions/CHANGELOG.md`
+   - Bridge: `plugins/timmerman_sketchup_bridge/CHANGELOG.md`
+
+   Add an entry for the new version to the **plugin's** changelog. Follow [Keep a Changelog](https://keepachangelog.com/) format: `## [x.y.z]` heading, then group changes under `### Added`, `### Changed`, `### Fixed`, or `### Removed` as appropriate. **Focus on user-facing features only** (what users see or get from the plugin), not internal refactors, dev tooling, or API docs. Place the new version at the top (below the header).
 
 6. **Tag and push** — after committing the version bump and changelog, create a date-based release tag and push it so GitHub Actions builds the release:
    ```bash
