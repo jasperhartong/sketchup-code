@@ -37,6 +37,17 @@ module Timmerman
       Geom::Vector3d.new(vec.x * scalar, vec.y * scalar, vec.z * scalar)
     end
 
+    # Move pt along depth_axis so it sits at the same depth as ref_pt.
+    # Ensures both points are coplanar for accurate in-plane measurement.
+    def flatten_to_plane(pt, ref_pt, depth_axis)
+      diff = dot(ref_pt, depth_axis) - dot(pt, depth_axis)
+      Geom::Point3d.new(
+        pt.x + depth_axis.x * diff,
+        pt.y + depth_axis.y * diff,
+        pt.z + depth_axis.z * diff
+      )
+    end
+
     def dot(pt, axis)
       pt.x * axis.x + pt.y * axis.y + pt.z * axis.z
     end
@@ -142,10 +153,13 @@ module Timmerman
 
     def beam_length_anchors(child, world_t, child_corners, geom_pts, hs, vs, _h_extent, _v_extent,
                             beam_axis, view_h, view_v)
+      depth_axis = view_h.cross(view_v)
+
       case beam_axis
       when :vertical
         top_pt = geom_pts.max_by { |c| dot(c, view_v) }
         bot_pt = geom_pts.min_by { |c| dot(c, view_v) }
+        bot_pt = flatten_to_plane(bot_pt, top_pt, depth_axis)
         h_mid  = (hs.min + hs.max) / 2.0
         left_v  = geom_pts.select { |c| dot(c, view_h) < h_mid }.map { |c| dot(c, view_v) }
         right_v = geom_pts.select { |c| dot(c, view_h) >= h_mid }.map { |c| dot(c, view_v) }
@@ -156,6 +170,7 @@ module Timmerman
       when :horizontal
         start_pt = geom_pts.min_by { |c| dot(c, view_h) }
         end_pt   = geom_pts.max_by { |c| dot(c, view_h) }
+        end_pt   = flatten_to_plane(end_pt, start_pt, depth_axis)
         v_mid  = (vs.min + vs.max) / 2.0
         top_h  = geom_pts.select { |c| dot(c, view_v) >= v_mid }.map { |c| dot(c, view_h) }
         bot_h  = geom_pts.select { |c| dot(c, view_v) < v_mid }.map { |c| dot(c, view_h) }
@@ -165,6 +180,7 @@ module Timmerman
         return [start_pt, end_pt, scale_vec(side, BEAM_LENGTH_OFFSET)]
       else
         start_pt, end_pt = diagonal_beam_endpoints(child, world_t)
+        end_pt = flatten_to_plane(end_pt, start_pt, depth_axis)
       end
 
       dh      = dot(end_pt, view_h) - dot(start_pt, view_h)

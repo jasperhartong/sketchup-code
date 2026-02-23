@@ -145,11 +145,16 @@ module Timmerman
         (0..7).map { |i| child.bounds.corner(i).transform(world_t) }
       }
 
-      depth_projs = all_beam_corners.map { |c| dot(c, view_dir) }
-      cam_depth   = depth_projs.max - depth_projs.min
-      cam_nudge   = scale_vec(view_dir.reverse, cam_depth)
+      depth_projs  = all_beam_corners.map { |c| dot(c, view_dir) }
+      front_depth  = depth_projs.min
+      nudge_margin = 1.mm
       nudge = ->(pt) {
-        Geom::Point3d.new(pt.x + cam_nudge.x, pt.y + cam_nudge.y, pt.z + cam_nudge.z)
+        depth_correction = front_depth - dot(pt, view_dir) - nudge_margin
+        Geom::Point3d.new(
+          pt.x + view_dir.x * depth_correction,
+          pt.y + view_dir.y * depth_correction,
+          pt.z + view_dir.z * depth_correction
+        )
       }
 
       bottom_left_per_beam = structural_beams.map { |child, world_t|
@@ -312,6 +317,11 @@ module Timmerman
       else
         bottom_left_pt, top_left_pt, top_right_pt, bottom_right_pt = corners_4
       end
+
+      depth_axis = view_h.cross(view_v)
+      top_left_pt     = flatten_to_plane(top_left_pt,     bottom_left_pt, depth_axis)
+      top_right_pt    = flatten_to_plane(top_right_pt,    bottom_left_pt, depth_axis)
+      bottom_right_pt = flatten_to_plane(bottom_right_pt, bottom_left_pt, depth_axis)
 
       center_pt = Geom::Point3d.new(
         (bottom_left_pt.x + bottom_right_pt.x + top_left_pt.x + top_right_pt.x) * 0.25,

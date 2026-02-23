@@ -5,6 +5,12 @@ All notable changes to this plugin will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.3.7]
+
+### Fixed
+- **Dimension accuracy** — Beam length and frame diagonal dimensions now measure the true in-plane (projected) distance instead of the inflated 3D distance when geometry vertices are at different depths.
+- **Dimension placement** — All dimensions are now placed on a single plane (the front surface of the component) instead of scattered across different depth planes.
+
 ## [1.3.6]
 
 ### Fixed
