@@ -26,7 +26,14 @@ description: Package a SketchUp Ruby plugin into a .rbz file. Use when the user 
 
 5. **Update changelog** — For Skeleton Dimensions, add an entry for the new version to `CHANGELOG.md`. Follow [Keep a Changelog](https://keepachangelog.com/) format: `## [x.y.z]` heading, then group changes under `### Added`, `### Changed`, `### Fixed`, or `### Removed` as appropriate. **Focus on user-facing features only** (what users see or get from the plugin), not internal refactors, dev tooling, or API docs. Place the new version at the top (below the header). Keep the doc covering 1.0.0 → latest.
 
-6. **Confirm** — verify the new `.rbz` appears in `dist/` and report the filename to the user.
+6. **Tag and push** — after committing the version bump and changelog, create a git tag and push it so GitHub Actions builds the release:
+   ```bash
+   git tag v<new-version>
+   git push origin main --tags
+   ```
+   The `.github/workflows/release.yml` workflow will build the `.rbz` files and attach them to a GitHub Release automatically.
+
+7. **Confirm** — verify the new `.rbz` appears in `dist/` locally, and tell the user the tag has been pushed (the GitHub Release will appear shortly).
 
 ## Learnings (don't rediscover each time)
 
