@@ -1,10 +1,12 @@
 # SketchUp Code
 
-> This README (and most of the code in this repo) was written by an AI agent (Claude) in Cursor — using the very bridge described below.
+![SketchUp Bridge](docs/SketchupBrige.png)
 
 An AI-agent-driven development workflow for SketchUp Ruby plugins. The core of this repo is the **SketchUp Bridge** — a file-based protocol that lets an AI coding agent (Cursor, etc.) execute Ruby code inside a running SketchUp instance and read back the results, without any manual copy-pasting in the Ruby Console.
 
 The repo also includes **Skeleton Dimensions**, a real SketchUp plugin built and iterated entirely through this workflow.
+
+> This README (and most of the code in this repo) was written by an AI agent (Claude) in Cursor — using the very bridge described below.
 
 ## Requirements
 
@@ -117,3 +119,7 @@ To iterate: edit `core.rb`, run the bridge, inspect output. When ready, `./packa
 ## License
 
 [MIT](LICENSE)
+
+---
+
+<sub>SketchUp is a trademark of Trimble Inc. Cursor is a trademark of Anysphere Inc. All trademarks, logos, and brand names mentioned or shown in this repository belong to their respective owners. This project is not affiliated with or endorsed by Trimble or Anysphere.</sub>
