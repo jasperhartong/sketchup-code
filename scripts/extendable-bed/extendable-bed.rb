@@ -148,6 +148,12 @@ module Timmerman
       z_leg_top
     end
 
+    # Head and foot frames: outer -X/+X corner legs run through the cap band so the shortened end cap bears on their inner ±X faces.
+    # Inset corner legs stay at +leg_height+.
+    def outer_corner_leg_height_through_cap
+      z_beam_bottom
+    end
+
     # Mid-run legs share X with outer comb columns; tops must stop at sister-beam bottom (no Z overlap).
     def mid_run_leg_height(z_slats)
       z_slats - BEAM_Z
@@ -662,15 +668,18 @@ module Timmerman
       zb = z_beam_bottom
       z_slats = z_slats_box_bottom
       lh = leg_height
+      lh_head_outer = outer_corner_leg_height_through_cap
       lh_mid = mid_run_leg_height(z_slats)
       zlt = z_leg_top
+      cap_x0 = LEG_X
+      cap_dx = w - (2 * LEG_X)
 
-      add_stock_beam(e, 'EB | leg | head | -X', 0, 0, 0, LEG_X, LEG_Y, lh,
+      add_stock_beam(e, 'EB | leg | head | -X', 0, 0, 0, LEG_X, LEG_Y, lh_head_outer,
                      layer: layer,
-                     note: 'Corner leg at head (+Y end of back group), -X side.')
-      add_stock_beam(e, 'EB | leg | head | +X', w - LEG_X, 0, 0, LEG_X, LEG_Y, lh,
+                     note: 'Corner leg at head (+Y), -X; extruded to top of head cap; inner +X face bears cap end.')
+      add_stock_beam(e, 'EB | leg | head | +X', w - LEG_X, 0, 0, LEG_X, LEG_Y, lh_head_outer,
                      layer: layer,
-                     note: 'Corner leg at head (+Y end of back group), +X side.')
+                     note: 'Corner leg at head (+Y), +X; extruded to top of head cap; inner −X face bears cap end.')
 
       mid_y0 = LENGTH_RETRACTED - LEG_Y
       add_stock_beam(e, 'EB | leg | mid run | -X', 0, mid_y0, 0, LEG_X, LEG_Y, lh_mid,
@@ -694,11 +703,12 @@ module Timmerman
                      layer: layer,
                      note: 'Inset strengthener; duplicate of EB | leg | mid run | +X, −X of its inner face.')
 
+      # Head behind-leg beams stay at +leg_height+ so they do not occupy the same Z band as EB | beam | sister | outer ±X.
       add_beams_behind_back_legs(e, mid_y0, lh, lh_mid, layer: layer)
 
-      add_stock_beam(e, 'EB | beam | head | cap', 0, 0, zlt, w, BEAM_Y, BEAM_Z,
+      add_stock_beam(e, 'EB | beam | head | cap', cap_x0, 0, zlt, cap_dx, BEAM_Y, BEAM_Z,
                      layer: layer,
-                     note: 'Same stock face as end beam: full width × BEAM_Y × BEAM_Z (44×69 mm in Y×Z).')
+                     note: 'Head cap between outer legs: X from inner face of head | -X to inner face of head | +X; BEAM_Y × BEAM_Z in Y×Z.')
       add_stock_beam(e, 'EB | beam | head | end', 0, 0, zb, w, BEAM_Y, BEAM_Z,
                      layer: layer,
                      note: 'Head end beam 44×69 mm (BEAM_Y × BEAM_Z); under cap.')
@@ -727,14 +737,17 @@ module Timmerman
       zb = z_beam_bottom
       z_slats = z_slats_box_bottom
       lh = leg_height
+      lh_foot_outer = outer_corner_leg_height_through_cap
       zlt = z_leg_top
+      cap_x0 = LEG_X
+      cap_dx = w - (2 * LEG_X)
 
-      add_stock_beam(entities, 'EB | leg | foot | -X', 0, -BEAM_Y, 0, LEG_X, LEG_Y, lh,
+      add_stock_beam(entities, 'EB | leg | foot | -X', 0, -BEAM_Y, 0, LEG_X, LEG_Y, lh_foot_outer,
                      layer: layer,
-                     note: 'Corner leg at foot (-Y side of front group local coords), -X.')
-      add_stock_beam(entities, 'EB | leg | foot | +X', w - LEG_X, -BEAM_Y, 0, LEG_X, LEG_Y, lh,
+                     note: 'Corner leg at foot (-Y), -X; extruded to top of foot cap so inner +X face bears cap end.')
+      add_stock_beam(entities, 'EB | leg | foot | +X', w - LEG_X, -BEAM_Y, 0, LEG_X, LEG_Y, lh_foot_outer,
                      layer: layer,
-                     note: 'Corner leg at foot, +X.')
+                     note: 'Corner leg at foot, +X; extruded to top of foot cap; inner −X face bears cap end.')
 
       add_stock_beam(entities, 'EB | leg | foot | -X | inset', LEG_X, -BEAM_Y, 0, LEG_X, LEG_Y, lh,
                      layer: layer,
@@ -743,9 +756,9 @@ module Timmerman
                      layer: layer,
                      note: 'Inset strengthener; duplicate of EB | leg | foot | +X, −X of its inner face.')
 
-      add_stock_beam(entities, 'EB | beam | foot | cap', 0, -BEAM_Y, zlt, w, BEAM_Y, BEAM_Z,
+      add_stock_beam(entities, 'EB | beam | foot | cap', cap_x0, -BEAM_Y, zlt, cap_dx, BEAM_Y, BEAM_Z,
                      layer: layer,
-                     note: 'Same stock face as end beam: full width × BEAM_Y × BEAM_Z (44×69 mm in Y×Z).')
+                     note: 'Foot cap between outer legs: X from inner face of foot | -X to inner face of foot | +X; BEAM_Y × BEAM_Z in Y×Z.')
       add_stock_beam(entities, 'EB | beam | foot | end', 0, -BEAM_Y, zb, w, BEAM_Y, BEAM_Z,
                      layer: layer,
                      note: 'Foot end beam 44×69 mm (BEAM_Y × BEAM_Z); under cap.')
