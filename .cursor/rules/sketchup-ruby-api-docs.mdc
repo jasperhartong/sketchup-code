@@ -25,10 +25,13 @@ When you need a class, method, or guide: open that file. It contains the officia
 - **Entities#add_dimension_linear:** https://ruby.sketchup.com/Sketchup/Entities.html#add_dimension_linear-instance_method
 - **Sketchup::DimensionLinear:** https://ruby.sketchup.com/Sketchup/DimensionLinear.html
 - **Sketchup::Model:** https://ruby.sketchup.com/Sketchup/Model.html
+- **Model#close_active:** https://ruby.sketchup.com/Sketchup/Model.html#close_active-instance_method (exit nested group/component edit before erasing entities on the active path)
 - **Geom module:** https://ruby.sketchup.com/Geom.html (Point3d, Vector3d, BoundingBox, Transformation)
 - **Sketchup::ComponentInstance:** https://ruby.sketchup.com/Sketchup/ComponentInstance.html
 - **Sketchup::Group:** https://ruby.sketchup.com/Sketchup/Group.html
 - **UI::Notification:** https://ruby.sketchup.com/UI/Notification.html (non-blocking toast; constructor: extension, message, icon_name, icon_tooltip; use `.show`; auto-dismisses if no on_accept/on_dismiss)
+- **Sketchup::Materials / Material#color:** https://ruby.sketchup.com/Sketchup/Material.html#color-instance_method (`model.materials[name] || model.materials.add(name)`; `Sketchup::Color.new(r, g, b)` RGB 0–255)
+- **Sketchup::Face#material / #back_material:** https://ruby.sketchup.com/Sketchup/Face.html#material-instance_method
 
 For any other class or method, use **`docs/sketchup-ruby-api-index.md`** or the official alphabetic index above.
 

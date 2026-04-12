@@ -161,6 +161,37 @@ module Timmerman
       layer
     end
 
+    # Shaded-view preview: back (fixed) vs front (sliding) root groups. RGB 0–255; edit to taste.
+    EB_PREVIEW_MAT_BACK = 'EB preview | back'.freeze
+    EB_PREVIEW_MAT_FRONT = 'EB preview | front'.freeze
+    EB_PREVIEW_RGB_BACK = [188, 152, 106].freeze
+    EB_PREVIEW_RGB_FRONT = [106, 142, 188].freeze
+
+    def ensure_preview_material(model, name, rgb)
+      m = model.materials[name] || model.materials.add(name)
+      m.color = Sketchup::Color.new(rgb[0], rgb[1], rgb[2])
+      m
+    end
+
+    # Paints every face under a root group (nested named part groups).
+    def paint_entities_preview_color(entities, material)
+      entities.each do |e|
+        case e
+        when Sketchup::Face
+          e.material = material
+          e.back_material = material
+        when Sketchup::Group
+          paint_entities_preview_color(e.entities, material)
+        when Sketchup::ComponentInstance
+          paint_entities_preview_color(e.definition.entities, material)
+        end
+      end
+    end
+
+    def paint_root_group_preview_color(group, model, rgb, material_name)
+      paint_entities_preview_color(group.entities, ensure_preview_material(model, material_name, rgb))
+    end
+
     ATTR_DICT = 'Timmerman::ExtendableBed'
 
     # Millimetres — all stock checks and usage tallies are metric (SU stores lengths internally as Length).
@@ -302,6 +333,25 @@ module Timmerman
         entities, HEADWARD_BEHIND_LEG_MID_POS_X,
         w - LEG_Y, y_behind_mid, 0, LEG_Y, LEG_X, lh_mid,
         layer: layer, note: note_mid
+      )
+    end
+
+    # Front frame: one beam under slats 1…N at the foot end; X spans outer faces of first/last front tooth; BEAM_Z up from below.
+    def add_beam_under_front_slats_foot_end(entities, z_slats, layer: nil)
+      _, front_xs = slat_starts_along_x
+      lo_x = front_xs.min
+      hi_x = front_xs.max
+      span_x = (hi_x + SLAT_DX) - lo_x
+      y_slat_foot = -BEAM_Y - SLAT_LENGTH
+      # Slat footward face at y = y_slat_foot; beam’s −Y face (origin y) is flush with that line; extends +Y by BEAM_Y.
+      y_beam = y_slat_foot
+      z_lo = z_slats - BEAM_Z
+      add_stock_beam(
+        entities,
+        'EB | beam | front | under slats | foot end',
+        lo_x, y_beam, z_lo, span_x, BEAM_Y, BEAM_Z,
+        layer: layer,
+        note: 'Under EB | slat | front | 1–8; X from outer −X of slat 1 to outer +X of slat 8; top flush slat bottom; −Y face flush foot ends.'
       )
     end
 
@@ -464,6 +514,7 @@ module Timmerman
       add_beams_below_outermost_slats_back(e, z_slats, layer: layer)
       add_mid_tie_beam_between_sisters(e, mid_y0, lh_mid, layer: layer)
 
+      paint_root_group_preview_color(g, model, EB_PREVIEW_RGB_BACK, EB_PREVIEW_MAT_BACK)
       g
     end
 
@@ -506,6 +557,8 @@ module Timmerman
           note: 'Front (sliding) comb tooth; sits in gaps of back slats.'
         )
       end
+
+      add_beam_under_front_slats_foot_end(entities, z_slats, layer: layer)
     end
 
     def build_front_group(model, name:, foot_world_y:, offset_x: 0)
@@ -514,6 +567,7 @@ module Timmerman
       g.name = name
       g.layer = layer
       build_front_geometry(g.entities, layer: layer)
+      paint_root_group_preview_color(g, model, EB_PREVIEW_RGB_FRONT, EB_PREVIEW_MAT_FRONT)
       g.transformation = Geom::Transformation.translation([offset_x, foot_world_y, 0])
       g
     end
