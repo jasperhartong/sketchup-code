@@ -426,6 +426,20 @@ module Timmerman
                      layer: layer,
                      note: 'Mid-span leg, +X; top flush with bottom of EB | beam | sister | outer +X.')
 
+      # Inset copies flush on the inner ±X faces of the outer legs (same stock/heights) for extra stiffness.
+      add_stock_beam(e, 'EB | leg | head | -X | inset', LEG_X, 0, 0, LEG_X, LEG_Y, lh,
+                     layer: layer,
+                     note: 'Inset strengthener; duplicate of EB | leg | head | -X, +X of its inner face.')
+      add_stock_beam(e, 'EB | leg | head | +X | inset', w - (2 * LEG_X), 0, 0, LEG_X, LEG_Y, lh,
+                     layer: layer,
+                     note: 'Inset strengthener; duplicate of EB | leg | head | +X, −X of its inner face.')
+      add_stock_beam(e, 'EB | leg | mid run | -X | inset', LEG_X, mid_y0, 0, LEG_X, LEG_Y, lh_mid,
+                     layer: layer,
+                     note: 'Inset strengthener; duplicate of EB | leg | mid run | -X, +X of its inner face.')
+      add_stock_beam(e, 'EB | leg | mid run | +X | inset', w - (2 * LEG_X), mid_y0, 0, LEG_X, LEG_Y, lh_mid,
+                     layer: layer,
+                     note: 'Inset strengthener; duplicate of EB | leg | mid run | +X, −X of its inner face.')
+
       add_beams_behind_back_legs(e, mid_y0, lh, lh_mid, layer: layer)
 
       add_stock_beam(e, 'EB | beam | head | cap', 0, 0, zlt, w, BEAM_Y, BEAM_Z,
@@ -466,6 +480,13 @@ module Timmerman
       add_stock_beam(entities, 'EB | leg | foot | +X', w - LEG_X, -BEAM_Y, 0, LEG_X, LEG_Y, lh,
                      layer: layer,
                      note: 'Corner leg at foot, +X.')
+
+      add_stock_beam(entities, 'EB | leg | foot | -X | inset', LEG_X, -BEAM_Y, 0, LEG_X, LEG_Y, lh,
+                     layer: layer,
+                     note: 'Inset strengthener; duplicate of EB | leg | foot | -X, +X of its inner face.')
+      add_stock_beam(entities, 'EB | leg | foot | +X | inset', w - (2 * LEG_X), -BEAM_Y, 0, LEG_X, LEG_Y, lh,
+                     layer: layer,
+                     note: 'Inset strengthener; duplicate of EB | leg | foot | +X, −X of its inner face.')
 
       add_stock_beam(entities, 'EB | beam | foot | cap', 0, -BEAM_Y, zlt, w, BEAM_Y, BEAM_Z,
                      layer: layer,
