@@ -199,8 +199,8 @@ module Timmerman
     # Millimetres — all stock checks and usage tallies are metric (SU stores lengths internally as Length).
     BEAM_SECTION_TOL_MM = 0.01
 
-    # Purchased 44×69 stock length along the extrusion axis (cutting / bar count). Typical retail: 2000 or 2400 mm.
-    BEAM_STOCK_BAR_LENGTH = 2000.mm
+    # Purchased 44×69 stock length along the extrusion axis (cutting / bar count).
+    BEAM_STOCK_BAR_LENGTH = 2100.mm
 
     # `create` builds two side-by-side pairs (extended + retracted preview). Stock metre count and cut plan
     # only include the first pair — one physical bed (GROUP_EXT_BACK + GROUP_EXT_FRONT).
