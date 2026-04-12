@@ -197,9 +197,25 @@ module Timmerman
     # Millimetres — all stock checks and usage tallies are metric (SU stores lengths internally as Length).
     BEAM_SECTION_TOL_MM = 0.01
 
+    # Purchased 44×69 stock length along the extrusion axis (cutting / bar count). Typical retail: 2000 or 2400 mm.
+    BEAM_STOCK_BAR_LENGTH = 2000.mm
+
+    # `create` builds two side-by-side pairs (extended + retracted preview). Stock metre count and cut plan
+    # only include the first pair — one physical bed (GROUP_EXT_BACK + GROUP_EXT_FRONT).
+
+    # Subtracted between consecutive cuts from the same bar (blade kerf). 0 if you nest cuts in planning only.
+    BEAM_STOCK_KERF_MM = 0.0
+
     def reset_beam_stock_usage!
       @beam_stock_extrusion_m = 0.0
       @beam_stock_piece_count = 0
+      @beam_stock_cuts = []
+      @eb_stock_tally = true
+    end
+
+    # When false, `add_stock_beam` still creates geometry but does not update cut list / metre tally.
+    def stock_tally?
+      @eb_stock_tally != false
     end
 
     def beam_stock_extrusion_m
@@ -208,6 +224,71 @@ module Timmerman
 
     def beam_stock_piece_count
       @beam_stock_piece_count ||= 0
+    end
+
+    # Each physical prism tallied for stock: `{ name:, mm: }` (mm along extrusion).
+    def beam_stock_cuts
+      @beam_stock_cuts ||= []
+    end
+
+    # Greedy bin packing: sort cuts descending, place each in the first bar that still fits (First Fit Decreasing).
+    # Returns `{ ok: true, bars: [ { used_mm:, waste_mm:, parts: [{name, mm}, ...] }, ... ] }` or
+    # `{ ok: false, oversize: [{name, mm}, ...] }` if any cut exceeds +stock_mm+.
+    def pack_beam_cuts_into_bars(cuts, stock_mm, kerf_mm: BEAM_STOCK_KERF_MM)
+      tol = BEAM_SECTION_TOL_MM
+      list = cuts.map { |c| { name: c[:name], mm: c[:mm].to_f } }
+      oversize = list.select { |c| c[:mm] > stock_mm + tol }
+      return { ok: false, oversize: oversize } unless oversize.empty?
+
+      bars = []
+      list.sort_by! { |c| -c[:mm] }
+      list.each do |cut|
+        placed = false
+        bars.each do |bar|
+          gap = (kerf_mm.to_f > 0 && !bar[:parts].empty?) ? kerf_mm.to_f : 0.0
+          next if bar[:used_mm] + gap + cut[:mm] > stock_mm + tol
+
+          bar[:used_mm] += gap + cut[:mm]
+          bar[:parts] << cut
+          placed = true
+          break
+        end
+        next if placed
+
+        bars << { used_mm: cut[:mm], parts: [cut] }
+      end
+
+      bars.map! do |bar|
+        waste = stock_mm - bar[:used_mm]
+        { used_mm: bar[:used_mm], waste_mm: waste, parts: bar[:parts] }
+      end
+      { ok: true, bars: bars }
+    end
+
+    def puts_beam_stock_cut_plan(cuts = beam_stock_cuts, stock_length: BEAM_STOCK_BAR_LENGTH, kerf_mm: BEAM_STOCK_KERF_MM)
+      stock_mm = stock_length.to_mm
+      kerf = kerf_mm.to_f
+      result = pack_beam_cuts_into_bars(cuts, stock_mm, kerf_mm: kerf)
+      unless result[:ok]
+        puts '[EB stock] Cut plan: some pieces are longer than one stock bar — increase BEAM_STOCK_BAR_LENGTH or shorten cuts:'
+        result[:oversize].each { |c| puts format('  %s — %.1f mm (bar %.1f mm)', c[:name], c[:mm], stock_mm) }
+        return result
+      end
+
+      bars = result[:bars]
+      total_waste = bars.sum { |b| b[:waste_mm] }
+      sum_cuts = cuts.sum { |c| c[:mm].to_f }
+      puts format('[EB stock] Cut plan (same scope as metre/piece tally): %.1f mm bars, %d bar(s) for %d cut(s); total cut length %.1f mm; combined offcuts %.1f mm (%.3f m).',
+                  stock_mm, bars.size, cuts.size, sum_cuts, total_waste, total_waste / 1000.0)
+      puts '  Kerf between cuts on the same bar is included (see BEAM_STOCK_KERF_MM).' if kerf > 0
+
+      bars.each_with_index do |bar, i|
+        puts format('  Bar %d: used %.1f mm, offcut %.1f mm', i + 1, bar[:used_mm], bar[:waste_mm])
+        bar[:parts].each do |p|
+          puts format('    — %.1f mm  %s', p[:mm], p[:name])
+        end
+      end
+      result
     end
 
     def stock_section_match?(len)
@@ -236,9 +317,10 @@ module Timmerman
     # All solid stock (legs, slats, caps, sisters, ties) goes through here — validates 44×69 extrusion and tallies metres.
     def add_stock_beam(parent_entities, name, x, y, z, dx, dy, dz, note: nil, layer: nil, count_usage: true)
       extrusion_mm = extrusion_length_mm(dx, dy, dz)
-      if count_usage
+      if count_usage && stock_tally?
         @beam_stock_extrusion_m = (beam_stock_extrusion_m + (extrusion_mm / 1000.0))
         @beam_stock_piece_count = beam_stock_piece_count + 1
+        (@beam_stock_cuts ||= []) << { name: name, mm: extrusion_mm }
       end
       add_named_part(parent_entities, name, x, y, z, dx, dy, dz, note: note, layer: layer)
     end
@@ -591,6 +673,7 @@ module Timmerman
         back_name: GROUP_EXT_BACK,
         front_name: GROUP_EXT_FRONT
       )
+      @eb_stock_tally = false
       place_pair(
         model,
         offset_x: w + gap,
@@ -603,8 +686,9 @@ module Timmerman
       validate_eb_solids(model)
       m = beam_stock_extrusion_m
       n = beam_stock_piece_count
-      puts format('[EB stock] %.3f m total extrusion length (%d prism pieces); two side-by-side pairs in model.',
-                  m, n)
+      puts format('[EB stock] %.3f m extrusion, %d pieces — one bed (%s + %s). Retracted preview pair is not counted.',
+                  m, n, GROUP_EXT_BACK, GROUP_EXT_FRONT)
+      puts_beam_stock_cut_plan
     end
   end
 end

@@ -1,6 +1,10 @@
-core = File.expand_path('../plugins/timmerman_skeleton_dimensions/core.rb', __dir__)
-load core
-Timmerman::SkeletonDimensions.debug_mode = true
-Timmerman::SkeletonDimensions.clear
-Timmerman::SkeletonDimensions.run
-"OK"
+bed_script = File.expand_path('../scripts/extendable-bed/extendable-bed.rb', __dir__)
+load bed_script
+
+Timmerman::ExtendableBed.clear
+Timmerman::ExtendableBed.create
+
+load File.expand_path('utils.rb', __dir__)
+SketchupBridgeUtils.take_screenshot(name: "extendable_bed_side_by_side")
+
+"OK — Extendable bed (extended + retracted side by side)"
