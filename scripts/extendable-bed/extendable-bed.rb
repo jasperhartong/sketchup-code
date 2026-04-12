@@ -231,7 +231,130 @@ module Timmerman
       @beam_stock_cuts ||= []
     end
 
-    # Greedy bin packing: sort cuts descending, place each in the first bar that still fits (First Fit Decreasing).
+    # Sum of cut lengths + kerf between cuts on one bar (order-independent).
+    def beam_bar_used_mm(parts, kerf_mm)
+      return 0.0 if parts.nil? || parts.empty?
+
+      k = kerf_mm.to_f
+      parts.sum { |p| p[:mm].to_f } + (parts.size > 1 ? k * (parts.size - 1) : 0.0)
+    end
+
+    def beam_bins_deep_dup(bins)
+      bins.map { |b| { parts: b[:parts].map { |p| { name: p[:name], mm: p[:mm].to_f } } } }
+    end
+
+    # Lexicographic: fewer bars first, then less total offcut (mm).
+    def beam_packing_lex_score(bins, stock_mm, kerf_mm)
+      kerf = kerf_mm.to_f
+      waste = bins.sum { |b| stock_mm - beam_bar_used_mm(b[:parts], kerf) }
+      [bins.size, waste]
+    end
+
+    # SketchUp Ruby may not define Array#< for lexicographic compare.
+    def beam_packing_score_better?(candidate, than)
+      return true if than.nil?
+
+      c0, c1 = candidate[0], candidate[1]
+      t0, t1 = than[0], than[1]
+      c0 < t0 || (c0 == t0 && c1 < t1)
+    end
+
+    def beam_pack_ffd_decreasing(list, stock_mm, kerf_mm, tol)
+      kerf = kerf_mm.to_f
+      bins = []
+      list.sort_by! { |c| [-c[:mm], c[:name].to_s] }
+      list.each do |cut|
+        c = { name: cut[:name], mm: cut[:mm].to_f }
+        placed = bins.any? do |bar|
+          trial = bar[:parts] + [c]
+          next false if beam_bar_used_mm(trial, kerf) > stock_mm + tol
+
+          bar[:parts] << c
+          true
+        end
+        bins << { parts: [c] } unless placed
+      end
+      bins
+    end
+
+    # Tightest-fit bar first (smallest slack after placing the cut).
+    def beam_pack_bfd_decreasing(list, stock_mm, kerf_mm, tol)
+      kerf = kerf_mm.to_f
+      bins = []
+      list.sort_by! { |c| [-c[:mm], c[:name].to_s] }
+      list.each do |cut|
+        c = { name: cut[:name], mm: cut[:mm].to_f }
+        best_bar = nil
+        best_slack = nil
+        bins.each do |bar|
+          trial = bar[:parts] + [c]
+          u = beam_bar_used_mm(trial, kerf)
+          next if u > stock_mm + tol
+
+          slack = stock_mm - u
+          if best_slack.nil? || slack < best_slack
+            best_slack = slack
+            best_bar = bar
+          end
+        end
+        if best_bar
+          best_bar[:parts] << c
+        else
+          bins << { parts: [c] }
+        end
+      end
+      bins
+    end
+
+    # Greedy: move one cut to another bar if it reduces (bar count, total waste).
+    def beam_improve_bins_local!(bins, stock_mm, kerf_mm, tol)
+      kerf = kerf_mm.to_f
+      loop do
+        baseline = beam_packing_lex_score(bins, stock_mm, kerf)
+        best_candidate = nil
+        best_score = baseline
+
+        bins.size.times do |i|
+          bins.size.times do |j|
+            next if i == j
+
+            donor = bins[i]
+            recv = bins[j]
+            donor[:parts].each_index do |pi|
+              trial = beam_bins_deep_dup(bins)
+              p = trial[i][:parts].delete_at(pi)
+              next if p.nil?
+
+              trial[j][:parts] << p
+              trial.reject! { |b| b[:parts].empty? }
+              next if trial.any? { |b| beam_bar_used_mm(b[:parts], kerf) > stock_mm + tol }
+
+              sc = beam_packing_lex_score(trial, stock_mm, kerf)
+              next unless beam_packing_score_better?(sc, best_score)
+
+              best_score = sc
+              best_candidate = trial
+            end
+          end
+        end
+
+        break if best_candidate.nil?
+
+        bins.replace(best_candidate)
+      end
+      bins
+    end
+
+    def beam_finalize_bins(bins, stock_mm, kerf_mm)
+      kerf = kerf_mm.to_f
+      bins.map do |bar|
+        u = beam_bar_used_mm(bar[:parts], kerf)
+        { used_mm: u, waste_mm: stock_mm - u, parts: bar[:parts].map(&:dup) }
+      end
+    end
+
+    # Packs cuts into stock bars: tries First Fit Decreasing, Best Fit Decreasing, each with optional
+    # local improvement (single-cut relocations), and keeps the best (fewest bars, then least total offcut).
     # Returns `{ ok: true, bars: [ { used_mm:, waste_mm:, parts: [{name, mm}, ...] }, ... ] }` or
     # `{ ok: false, oversize: [{name, mm}, ...] }` if any cut exceeds +stock_mm+.
     def pack_beam_cuts_into_bars(cuts, stock_mm, kerf_mm: BEAM_STOCK_KERF_MM)
@@ -240,29 +363,26 @@ module Timmerman
       oversize = list.select { |c| c[:mm] > stock_mm + tol }
       return { ok: false, oversize: oversize } unless oversize.empty?
 
-      bars = []
-      list.sort_by! { |c| -c[:mm] }
-      list.each do |cut|
-        placed = false
-        bars.each do |bar|
-          gap = (kerf_mm.to_f > 0 && !bar[:parts].empty?) ? kerf_mm.to_f : 0.0
-          next if bar[:used_mm] + gap + cut[:mm] > stock_mm + tol
+      kerf = kerf_mm.to_f
+      seeds = []
+      seeds << beam_pack_ffd_decreasing(list.map(&:dup), stock_mm, kerf, tol)
+      seeds << beam_pack_bfd_decreasing(list.map(&:dup), stock_mm, kerf, tol)
 
-          bar[:used_mm] += gap + cut[:mm]
-          bar[:parts] << cut
-          placed = true
-          break
+      best_bins = nil
+      best_score = nil
+      seeds.each do |raw|
+        [false, true].each do |improve|
+          b = beam_bins_deep_dup(raw)
+          beam_improve_bins_local!(b, stock_mm, kerf, tol) if improve
+          sc = beam_packing_lex_score(b, stock_mm, kerf)
+          if best_score.nil? || beam_packing_score_better?(sc, best_score)
+            best_score = sc
+            best_bins = b
+          end
         end
-        next if placed
-
-        bars << { used_mm: cut[:mm], parts: [cut] }
       end
 
-      bars.map! do |bar|
-        waste = stock_mm - bar[:used_mm]
-        { used_mm: bar[:used_mm], waste_mm: waste, parts: bar[:parts] }
-      end
-      { ok: true, bars: bars }
+      { ok: true, bars: beam_finalize_bins(best_bins, stock_mm, kerf) }
     end
 
     def puts_beam_stock_cut_plan(cuts = beam_stock_cuts, stock_length: BEAM_STOCK_BAR_LENGTH, kerf_mm: BEAM_STOCK_KERF_MM)
@@ -278,7 +398,7 @@ module Timmerman
       bars = result[:bars]
       total_waste = bars.sum { |b| b[:waste_mm] }
       sum_cuts = cuts.sum { |c| c[:mm].to_f }
-      puts format('[EB stock] Cut plan (same scope as metre/piece tally): %.1f mm bars, %d bar(s) for %d cut(s); total cut length %.1f mm; combined offcuts %.1f mm (%.3f m).',
+      puts format('[EB stock] Cut plan (same scope as metre/piece tally): %.1f mm bars, %d bar(s) for %d cut(s); total cut length %.1f mm; combined offcuts %.1f mm (%.3f m). (best of FFD/BFD + local moves)',
                   stock_mm, bars.size, cuts.size, sum_cuts, total_waste, total_waste / 1000.0)
       puts '  Kerf between cuts on the same bar is included (see BEAM_STOCK_KERF_MM).' if kerf > 0
 
