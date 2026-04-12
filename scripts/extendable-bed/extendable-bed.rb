@@ -7,7 +7,7 @@
 # SketchUp uses inches internally; dimensions below use .mm.
 #
 # Design is driven by actual section size and cut lengths — not nominal 800/2000/etc.
-# Tune: BEAM_NARROW/WIDE, comb counts, SLAT_GAP, SLAT_LENGTH, OVERLAP_WHEN_EXTENDED,
+# Tune: BEAM_NARROW/WIDE, comb counts, SLAT_GAP, LENGTH_EXTENDED, OVERLAP_WHEN_EXTENDED (SLAT_LENGTH is derived),
 # TOP_OF_SLATS_Z (mattress support), SIDE_INSET.
 #
 # Coordinates: +Y head → foot (extension). +Z up. Slats run parallel to Y.
@@ -47,14 +47,16 @@ module Timmerman
     LEG_X = BEAM_WIDE
     LEG_Y = BEAM_NARROW
 
-    # --- Length chain (from cut length + overlap, not a guessed “2000”) ---
-    # Each slat stick length after cut (along Y)
-    SLAT_LENGTH = 1100.mm
-    # Overlap of the two slat runs when the bed is fully open (structural bridge)
-    OVERLAP_WHEN_EXTENDED = 200.mm
-
-    # Outer span head → foot when open: two slat runs minus one overlap
-    LENGTH_EXTENDED = (2 * SLAT_LENGTH) - OVERLAP_WHEN_EXTENDED
+    # --- Length chain: target open span, optional extra slat overlap, then slat cut length ---
+    # Outer span head → foot when fully extended (along Y, mattress/slat run).
+    LENGTH_EXTENDED = 2000.mm
+    # Extra overlap of the two slat runs *beyond* what the end beams already force. Back slats start at y = BEAM_Y
+    # (past head beam); front slats stop BEAM_Y short of the front frame — so measured overlap along Y is always
+    # at least 2×BEAM_Y (~88 mm). Setting this to 0 keeps that minimum only; a positive value adds that much again
+    # (e.g. 88 mm here gave ~176 mm measured: 88 inset + 88 extra).
+    OVERLAP_WHEN_EXTENDED = 0.mm
+    # 2×SLAT_LENGTH − OVERLAP_WHEN_EXTENDED = LENGTH_EXTENDED  ⇒  SLAT_LENGTH = (LENGTH_EXTENDED + OVERLAP) / 2
+    SLAT_LENGTH = (LENGTH_EXTENDED + OVERLAP_WHEN_EXTENDED) / 2
 
     # Outer span when nested: head end depth (BEAM_Y) + slat run
     LENGTH_RETRACTED = SLAT_LENGTH + BEAM_Y
