@@ -112,13 +112,16 @@ module Timmerman
     ].freeze
     HEADWARD_BEHIND_LEG_MID_NEG_X = 'EB | beam | behind leg | mid -X | headward'
     HEADWARD_BEHIND_LEG_MID_POS_X = 'EB | beam | behind leg | mid +X | headward'
+    # Vertical 69×44×lh_mid beside inner face of mid leg; top z = lh_mid under mid tie (same Y band as tie).
+    MID_TIE_VERTICAL_FILLER_NEG_X = 'EB | beam | mid tie | vertical filler | -X'
+    MID_TIE_VERTICAL_FILLER_POS_X = 'EB | beam | mid tie | vertical filler | +X'
     HEAD_TIE_BETWEEN_SISTERS = 'EB | beam | head tie | between sisters'
     FRONT_RIGIDITY_BEAM_BELOW_CAP = 'EB | beam | front | rigidity | below foot cap'
 
     # Footward (−Y) placement: beam spans up to y = −BEAM_Y (flush with foot-leg / cap plane) so validate has no false AABB hits.
     FRONT_RIGIDITY_BEAM_Y0 = (-2 * BEAM_Y)
     # Reusable stock thickness offset (currently used to shift selected foot-end parts toward +Y).
-    PLANK_THICKNESS = 10.mm
+    PLANK_THICKNESS = 18.mm
 
     # Mattress / couch cushions: one physical stock thickness (short edge of the foam); any orientation in the model
     # must keep that length as one prism edge — use PillowFactory only.
@@ -217,7 +220,8 @@ module Timmerman
     EB_PREVIEW_MAT_BACK = 'EB preview | back'.freeze
     EB_PREVIEW_MAT_FRONT = 'EB preview | front'.freeze
     EB_PREVIEW_RGB_BACK = [188, 152, 106].freeze
-    EB_PREVIEW_RGB_FRONT = [106, 142, 188].freeze
+    # Same warm wood family as back; a step deeper so front vs back reads more clearly in shaded view.
+    EB_PREVIEW_RGB_FRONT = [168, 130, 90].freeze
 
     def ensure_preview_material(model, name, rgb)
       m = model.materials[name] || model.materials.add(name)
@@ -844,6 +848,28 @@ module Timmerman
       )
     end
 
+    # Same 44×69 stock as headward behind-leg mids, rotated: extrusion +Z (lh_mid), LEG_X along +X (parallel to mid tie), BEAM_Y in Y.
+    # Sits headward (−Y) of mid-run legs with Y band matching mid tie; +X filler’s +X face flush inner −X of +X mid leg (mirror for −X).
+    def add_mid_tie_vertical_fillers_beside_mid_legs(entities, lh_mid, layer: nil)
+      w = outer_width
+      y_mid = (LENGTH_RETRACTED - (2 * BEAM_Y)) - PLANK_THICKNESS
+
+      add_stock_beam(
+        entities,
+        MID_TIE_VERTICAL_FILLER_NEG_X,
+        LEG_Y, y_mid, 0, LEG_X, BEAM_Y, lh_mid,
+        layer: layer,
+        note: 'Under EB | beam | mid tie | between sisters; z = 0..lh_mid; inner +X face flush EB | leg | mid run | −X; BEAM_WIDE along +X.'
+      )
+      add_stock_beam(
+        entities,
+        MID_TIE_VERTICAL_FILLER_POS_X,
+        w - LEG_Y - LEG_X, y_mid, 0, LEG_X, BEAM_Y, lh_mid,
+        layer: layer,
+        note: 'Under EB | beam | mid tie | between sisters; z = 0..lh_mid; inner −X face flush EB | leg | mid run | +X; BEAM_WIDE along +X.'
+      )
+    end
+
     # Axis-aligned overlap in world space (SketchUp inches). Touching faces do not count.
     def aabb_overlap?(bb1, bb2)
       bb1.max.x > bb2.min.x && bb2.max.x > bb1.min.x &&
@@ -1009,6 +1035,7 @@ module Timmerman
 
       add_beams_below_outermost_slats_back(e, z_low, layer: layer)
       add_head_and_mid_tie_beams_between_sisters(e, lh_mid, layer: layer)
+      add_mid_tie_vertical_fillers_beside_mid_legs(e, lh_mid, layer: layer)
 
       paint_root_group_preview_color(g, model, EB_PREVIEW_RGB_BACK, EB_PREVIEW_MAT_BACK)
       g
