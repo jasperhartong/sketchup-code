@@ -9,7 +9,7 @@
 #   load '/path/to/extendable-bed.rb'
 #
 # Then:
-#   Timmerman::ExtendableBed::BedLayout.new.create    # build all four preview pairs
+#   Timmerman::ExtendableBed::BedLayout.new.create    # build all preview pairs
 #   Timmerman::ExtendableBed::BedLayout.new.clear     # erase all EB groups
 #   Timmerman::ExtendableBed::BedLayout.new.validate  # AABB overlap check
 #

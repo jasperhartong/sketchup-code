@@ -2,17 +2,17 @@
 
 module Timmerman
   module ExtendableBed
-    # Orchestrates the four side-by-side preview pairs, rendering each one into
+    # Orchestrates the side-by-side preview pairs, rendering each one into
     # SketchUp and wiring up the stock planner, validator, and dimensions.
     #
-    # Only the first pair (extended) is counted in the stock/cut-list tally;
-    # the remaining three are visual previews of different configurations.
+    # Only the full extended pair (EB_Ext_*) is counted in the stock/cut-list tally;
+    # the other pairs are visual previews (extension 1 → 2 → 3, then retracted).
     class BedLayout
       def initialize(config = nil)
         @config = config || Config.new
       end
 
-      # ── Four preview pairs ─────────────────────────────────────────────────
+      # ── Preview pairs ──────────────────────────────────────────────────────
 
       # Ordered list of pairs to build.  offset_mult is applied against
       # (outer_width + pair_gap_x) to space the pairs along +X.
@@ -20,13 +20,14 @@ module Timmerman
         c    = @config
         step = c.outer_width + c.pair_gap_x
         [
+          # Extension degree left → right: 1 small, 2 small, full (3), then couch / stored.
           BedPair.new(c,
-                      back_name:    Config::GROUP_EXT_BACK,
-                      front_name:   Config::GROUP_EXT_FRONT,
+                      back_name:    Config::GROUP_EXT1_BACK,
+                      front_name:   Config::GROUP_EXT1_FRONT,
                       offset_x:     0,
-                      foot_world_y: c.extended_front_foot_world_y,
-                      pillow_mode:  :extended,
-                      tally_stock:  true),
+                      foot_world_y: c.one_small_extension_front_foot_world_y,
+                      pillow_mode:  :extended_one_small,
+                      tally_stock:  false),
 
           BedPair.new(c,
                       back_name:    Config::GROUP_HALF_BACK,
@@ -37,9 +38,17 @@ module Timmerman
                       tally_stock:  false),
 
           BedPair.new(c,
+                      back_name:    Config::GROUP_EXT_BACK,
+                      front_name:   Config::GROUP_EXT_FRONT,
+                      offset_x:     2 * step,
+                      foot_world_y: c.extended_front_foot_world_y,
+                      pillow_mode:  :extended,
+                      tally_stock:  true),
+
+          BedPair.new(c,
                       back_name:    Config::GROUP_RET_BACK,
                       front_name:   Config::GROUP_RET_FRONT,
-                      offset_x:     2 * step,
+                      offset_x:     3 * step,
                       foot_world_y: c.retracted_foot_world_y,
                       pillow_mode:  :retracted,
                       tally_stock:  false),
@@ -47,7 +56,7 @@ module Timmerman
           BedPair.new(c,
                       back_name:    Config::GROUP_RETGND_BACK,
                       front_name:   Config::GROUP_RETGND_FRONT,
-                      offset_x:     3 * step,
+                      offset_x:     4 * step,
                       foot_world_y: c.retracted_foot_world_y,
                       pillow_mode:  :retracted_gnd,
                       tally_stock:  false)

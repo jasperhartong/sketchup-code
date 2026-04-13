@@ -32,12 +32,12 @@ module Timmerman
 
       def initialize(
         back_slat_count:  9,
-        top_of_slats_z:   250.mm,
+        top_of_slats_z:   260.mm,
         length_extended:  2000.mm,
         beam_narrow:      44.mm,
         beam_wide:        69.mm,
         plank_thickness:  18.mm,
-        pillow_thickness: 100.mm,
+        pillow_thickness: 120.mm,
         slat_gap:         3.mm,
         pair_gap_x:       600.mm,
         stock_bar_length: 2100.mm,
@@ -124,13 +124,17 @@ module Timmerman
 
       # ── Pillows ───────────────────────────────────────────────────────────────
 
-      # Big pillow spans the retracted length; three equal smalls cover the extension.
+      # Big pillow spans the retracted length; three equal smalls share the full span.
+      # Extended layout (foot→head): small | 1, big, small | 2, small | 3.
       def pillow_big_length   = length_retracted + beam_narrow
       def small_pillow_count  = 3
       def pillow_small_length = (length_extended - length_retracted - beam_narrow) / small_pillow_count
 
       # Half-extended preview: front foot is one small cushion short of full extension.
       def halfway_front_foot_world_y = length_extended - pillow_small_length
+
+      # Ext1 preview: retracted + one small flat’s worth of extension (3 sm total still defined).
+      def one_small_extension_front_foot_world_y = retracted_foot_world_y + pillow_small_length
 
       # ── Cap geometry ─────────────────────────────────────────────────────────
 
@@ -179,6 +183,8 @@ module Timmerman
 
       GROUP_EXT_BACK     = 'EB_Ext_Back'
       GROUP_EXT_FRONT    = 'EB_Ext_Front'
+      GROUP_EXT1_BACK    = 'EB_Ext1_Back'
+      GROUP_EXT1_FRONT   = 'EB_Ext1_Front'
       GROUP_HALF_BACK    = 'EB_Half_Back'
       GROUP_HALF_FRONT   = 'EB_Half_Front'
       GROUP_RET_BACK     = 'EB_Ret_Back'
@@ -187,7 +193,7 @@ module Timmerman
       GROUP_RETGND_FRONT = 'EB_RetGnd_Front'
 
       # Matches any auto-generated EB pair root group name.
-      GROUP_NAME_RE = /\AEB_(Ext|Ret|Half|RetGnd)_(Back|Front)\z/
+      GROUP_NAME_RE = /\AEB_(Ext|Ext1|Ret|Half|RetGnd)_(Back|Front)\z/
 
       # Legacy single-pair root names (cleared together with the multi-pair set).
       SINGLE_PAIR_ROOTS = %w[EB_Back EB_Front].freeze

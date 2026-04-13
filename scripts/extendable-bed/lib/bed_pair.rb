@@ -7,6 +7,7 @@ module Timmerman
     #
     # +pillow_mode+ controls which cushion arrangement is generated:
     #   :extended       — big flat + three small flats (bed fully open)
+    #   :extended_one_small — 3 smalls total: 1 flat extends frame + 2 stacked on big at head (cf. retracted)
     #   :halfway        — big flat + couch head + two small flats on front frame
     #   :retracted      — big flat + couch stack (small|3 / head / right)
     #   :retracted_gnd  — big flat on slats, three smalls stored on the floor
@@ -41,8 +42,9 @@ module Timmerman
         c  = @config
         sm = c.pillow_small_length.to_f
         case @pillow_mode
-        when :extended      then _extended_pillows(c, sm)
-        when :halfway       then _halfway_pillows(c, sm)
+        when :extended           then _extended_pillows(c, sm)
+        when :extended_one_small then _extended_one_small_pillows(c, sm)
+        when :halfway            then _halfway_pillows(c, sm)
         when :retracted     then _retracted_pillows(c, sm)
         when :retracted_gnd then _retracted_gnd_pillows(c, sm)
         else {}
@@ -88,6 +90,44 @@ module Timmerman
               note: "Extended; small #{i + 1}/#{c.small_pillow_count}; equal thirds of extension gap."
             )
           end
+        end
+
+        { back: back_pillows, front: front_pillows }
+      end
+
+      # ── Ext1: 1 small flat on front (one segment extension) + 2 on big like retracted bottom of stack ─
+
+      def _extended_one_small_pillows(c, sm)
+        t            = c.pillow_thickness
+        z_on_big     = c.z_slat_top + t
+        back_pillows = [_big_pillow('Ext1; big flat on slats; two smalls stacked at head (same as retracted base).')]
+        front_pillows = []
+
+        if sm > 0
+          # Same boxes as retracted small|3 and couch|head — two of three stack layers.
+          back_pillows << Pillow.new(
+            'EB | pillow | small | 2',
+            at:   [0, y_pillow, z_on_big],
+            size: [c.outer_width, t, sm],
+            config: c,
+            note: 'Ext1; upright on big at head (retracted small|3 geometry).'
+          )
+          back_pillows << Pillow.new(
+            'EB | pillow | small | 3',
+            at:   [0, y_pillow + t, z_on_big],
+            size: [c.outer_width, t, sm],
+            config: c,
+            note: 'Ext1; second stack layer (retracted couch|head geometry).'
+          )
+
+          y0 = y_pillow + c.pillow_big_length
+          front_pillows << Pillow.new(
+            'EB | pillow | small | 1',
+            at:   [0, y0 - @foot_world_y, c.z_slat_top],
+            size: [c.outer_width, sm, c.pillow_thickness],
+            config: c,
+            note: 'Ext1; one flat extends frame (foot = retracted + one small).'
+          )
         end
 
         { back: back_pillows, front: front_pillows }
