@@ -22,7 +22,7 @@ end
 # when the listener isn't running.
 FileUtils.touch(command_file)
 cmd_mtime = File.mtime(command_file)
-max_wait = 15
+max_wait = (ENV['SKETCHUP_BRIDGE_MAX_WAIT'] || '15').to_f
 elapsed = 0
 step = 0.25  # catch result soon after SketchUp writes (SketchUp polls every 2s)
 
