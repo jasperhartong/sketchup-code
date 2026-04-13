@@ -19,12 +19,15 @@ module Timmerman
     LAYER_NAME = 'EB_ExtendableBed'
 
     # Main inputs:
-    BACK_SLAT_COUNT = 9
-    # Upper face of comb slats (+Z). Plank ledges extend higher by (2×BEAM_WIDE − SLAT_DZ) when SLAT_DZ = BEAM_Z.
-    TOP_OF_SLATS_Z = 300.mm
-    LENGTH_EXTENDED = 2000.mm
+    BACK_SLAT_COUNT = 9 # Back comb tooth count must be odd — layout (outer sisters, ties, mid legs)
+    TOP_OF_SLATS_Z = 300.mm # Upper face of comb slats (+Z).
+    LENGTH_EXTENDED = 2000.mm # Extended bed length.
 
-    # Material dimensions:
+    unless BACK_SLAT_COUNT.is_a?(Integer) && BACK_SLAT_COUNT.positive? && BACK_SLAT_COUNT.odd?
+      raise ArgumentError, "ExtendableBed: BACK_SLAT_COUNT must be a positive odd integer (got #{BACK_SLAT_COUNT.inspect})"
+    end
+
+    # Material dimensions (based on standard stock dimensions)
     BEAM_NARROW = 44.mm
     BEAM_WIDE = 69.mm
     PLANK_THICKNESS = 18.mm
