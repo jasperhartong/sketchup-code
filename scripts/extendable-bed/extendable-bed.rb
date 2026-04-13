@@ -7,7 +7,8 @@
 # SketchUp uses inches internally; dimensions below use .mm.
 #
 # Design is driven by actual section size and cut lengths — not nominal 800/2000/etc.
-# Main inputs are grouped at the top of ExtendableBed (after LAYER_NAME); SLAT_LENGTH = LENGTH_EXTENDED/2;
+# TOP_OF_SLATS_Z is the world +Z of the upper face of the comb slats (not the plank ledges above them).
+# Main inputs live in ExtendableBed after LAYER_NAME; SLAT_LENGTH = LENGTH_EXTENDED/2;
 # BACK_SLAT_RUN_Y / FRONT_SLAT_RUN_Y = SLAT_LENGTH + BEAM_Y. PillowFactory uses PILLOW_THICKNESS on every pillow prism.
 #
 # Coordinates: +Y head → foot (extension). +Z up. Slats run parallel to Y.
@@ -19,7 +20,8 @@ module Timmerman
 
     # Main inputs:
     BACK_SLAT_COUNT = 9
-    TOP_OF_SLATS_Z = 420.mm
+    # Upper face of comb slats (+Z). Plank ledges extend higher by (2×BEAM_WIDE − SLAT_DZ) when SLAT_DZ = BEAM_Z.
+    TOP_OF_SLATS_Z = 300.mm
     LENGTH_EXTENDED = 2000.mm
 
     # Material dimensions:
@@ -146,13 +148,17 @@ module Timmerman
       end
     end
 
-    def z_slat_bottom
-      TOP_OF_SLATS_Z - SLAT_DZ
+    def z_slat_top
+      TOP_OF_SLATS_Z
     end
 
-    # One BEAM_Z below slat bottom: slats sit flush with leg top crossbeam; caps / end beams use this chain too.
+    def z_slat_bottom
+      z_slat_top - SLAT_DZ
+    end
+
+    # Same +Z as slat lower face: end beams and slats share z_low in build_back_geometry / build_front_geometry.
     def z_beam_bottom
-      z_slat_bottom - BEAM_Z
+      z_slat_bottom
     end
 
     def z_leg_top
@@ -551,8 +557,7 @@ module Timmerman
     def add_pillows_extended_pair(back_group, front_group, layer: nil)
       m = frame_layout_metrics
       w = m[:w]
-      z_low = m[:z_low]
-      z_top_slats = z_low + SLAT_DZ
+      z_top_slats = z_slat_top
       y_pillow = BEAM_Y - BEAM_NARROW
 
       PillowFactory.add_on_slats(
@@ -588,8 +593,7 @@ module Timmerman
     def add_pillows_retracted_pair(back_group, layer: nil)
       m = frame_layout_metrics
       w = m[:w]
-      z_low = m[:z_low]
-      z_top_slats = z_low + SLAT_DZ
+      z_top_slats = z_slat_top
       y_pillow = BEAM_Y - BEAM_NARROW
       z_on_big = z_top_slats + PILLOW_THICKNESS
       t = PILLOW_THICKNESS
@@ -632,8 +636,7 @@ module Timmerman
     def add_pillows_halfway_pair(back_group, front_group, layer: nil)
       m = frame_layout_metrics
       w = m[:w]
-      z_low = m[:z_low]
-      z_top_slats = z_low + SLAT_DZ
+      z_top_slats = z_slat_top
       y_pillow = BEAM_Y - BEAM_NARROW
       z_on_big = z_top_slats + PILLOW_THICKNESS
       t = PILLOW_THICKNESS
@@ -913,7 +916,7 @@ module Timmerman
     # Shared Z chain, leg heights, and cap X span for both frame halves (back / front local space).
     def frame_layout_metrics
       w = outer_width
-      z_low = z_beam_bottom
+      z_low = z_slat_bottom
       {
         w: w,
         z_low: z_low,
