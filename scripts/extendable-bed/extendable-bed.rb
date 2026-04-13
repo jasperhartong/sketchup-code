@@ -8,7 +8,8 @@
 #
 # Design is driven by actual section size and cut lengths — not nominal 800/2000/etc.
 # Tune: BEAM_NARROW/WIDE, comb counts, SLAT_GAP, LENGTH_EXTENDED, OVERLAP_WHEN_EXTENDED (SLAT_LENGTH is derived),
-# BACK_SLAT_RUN_Y / FRONT_SLAT_RUN_Y (SLAT_LENGTH + BEAM_Y on each frame), TOP_OF_SLATS_Z, SIDE_INSET.
+# BACK_SLAT_RUN_Y / FRONT_SLAT_RUN_Y (SLAT_LENGTH + BEAM_Y on each frame), TOP_OF_SLATS_Z, SIDE_INSET,
+# PILLOW_THICKNESS (one foam short edge on every pillow prism; PillowFactory — extended flat + retracted couch layout).
 #
 # Coordinates: +Y head → foot (extension). +Z up. Slats run parallel to Y.
 # create always places two full copies side by side along +X: extended and retracted.
@@ -117,10 +118,27 @@ module Timmerman
     # Reusable stock thickness offset (currently used to shift selected foot-end parts toward +Y).
     PLANK_THICKNESS = 10.mm
 
+    # Mattress / couch cushions: one physical stock thickness (short edge of the foam); any orientation in the model
+    # must keep that length as one prism edge — use PillowFactory only.
+    PILLOW_THICKNESS = 100.mm
+
+    # Big: retracted span + BEAM_NARROW so it sits between head/foot planks; each small is half of the remainder so extended run still sums to LENGTH_EXTENDED:
+    # PILLOW_BIG_LENGTH + 2×PILLOW_SMALL_LENGTH = LENGTH_EXTENDED.
+    PILLOW_BIG_LENGTH = LENGTH_RETRACTED + BEAM_NARROW
+    PILLOW_SMALL_LENGTH = (LENGTH_EXTENDED - LENGTH_RETRACTED - BEAM_NARROW) / 2
+
     # Named planks (non-stock): Outliner prefix and known part names — use only via PlankFactory.
     EB_PLANK_NAME_RE = /\AEB \| plank \|/
     PLANK_FOOT_LEDGE = 'EB | plank | foot | ledge'
     PLANK_HEAD_LEDGE = 'EB | plank | head | ledge'
+
+    # Named pillows — use only via PillowFactory (+PILLOW_THICKNESS).
+    EB_PILLOW_NAME_RE = /\AEB \| pillow \|/
+    PILLOW_BIG = 'EB | pillow | big'
+    PILLOW_SMALL_1 = 'EB | pillow | small | 1'
+    PILLOW_SMALL_2 = 'EB | pillow | small | 2'
+    PILLOW_COUCH_HEAD = 'EB | pillow | couch | head'
+    PILLOW_COUCH_RIGHT = 'EB | pillow | couch | right'
 
     # Beams + legs only (excludes slats); used for overlap checks between structural solids.
     EB_SOLID_NAME_RE = /\AEB \| (beam|leg) \|/
@@ -489,12 +507,18 @@ module Timmerman
     # Nested group: shows +name+ in Outliner; optional +note+ on ATTR_DICT (Entity Info → second tab).
     # Use +add_stock_beam+ for all 44×69 stock; this is the low-level primitive only.
     def add_named_part(parent_entities, name, x, y, z, dx, dy, dz, note: nil, layer: nil)
+      add_named_part_with_transform(
+        parent_entities, name, Geom::Transformation.translation([x, y, z]), dx, dy, dz, note: note, layer: layer
+      )
+    end
+
+    def add_named_part_with_transform(parent_entities, name, transformation, dx, dy, dz, note: nil, layer: nil)
       g = parent_entities.add_group
       g.name = name
       g.layer = layer if layer
       g.set_attribute(ATTR_DICT, 'note', note) if note && !note.to_s.empty?
       add_box(g.entities, 0, 0, 0, dx, dy, dz)
-      g.transformation = Geom::Transformation.translation([x, y, z])
+      g.transformation = transformation
       g
     end
 
@@ -510,6 +534,128 @@ module Timmerman
 
         ExtendableBed.add_named_part(parent_entities, n, x, y, z, dx, ExtendableBed::PLANK_THICKNESS, dz, layer: layer, note: note)
       end
+    end
+
+    # Sole entry point for pillows: one of dx, dy, dz must equal PILLOW_THICKNESS (foam short edge); name EB | pillow | …
+    module PillowFactory
+      module_function
+
+      def prism_has_pillow_thickness_edge?(dx, dy, dz)
+        t = ExtendableBed::PILLOW_THICKNESS.to_mm.abs
+        [dx, dy, dz].any? { |e| (e.to_mm.abs - t).abs < 0.05 }
+      end
+
+      def assert_pillow_prism!(dx, dy, dz)
+        return if prism_has_pillow_thickness_edge?(dx, dy, dz)
+
+        raise ArgumentError,
+              "EB pillow: one of dx, dy, dz must be PILLOW_THICKNESS (#{ExtendableBed::PILLOW_THICKNESS}), got #{dx} × #{dy} × #{dz}"
+      end
+
+      # Axis-aligned prism: local box (0..dx, 0..dy, 0..dz) then +transform+ into parent space.
+      def add_prism(parent_entities, name, transform, dx, dy, dz, layer: nil, note: nil)
+        n = name.to_s
+        unless ExtendableBed::EB_PILLOW_NAME_RE.match?(n)
+          raise ArgumentError, "EB pillow: name must match /^EB | pillow |/, got #{n.inspect}"
+        end
+
+        assert_pillow_prism!(dx, dy, dz)
+        ExtendableBed.add_named_part_with_transform(parent_entities, n, transform, dx, dy, dz, layer: layer, note: note)
+      end
+
+      # Flat on slats: stock thickness along +Z.
+      def add_on_slats(parent_entities, name, x, y, z_slat_top, dx, dy, layer: nil, note: nil)
+        add_prism(
+          parent_entities, name, Geom::Transformation.translation([x, y, z_slat_top]), dx, dy, ExtendableBed::PILLOW_THICKNESS,
+          layer: layer, note: note
+        )
+      end
+    end
+
+    # Big pillow in back-root space; two smalls in front-root space (footward of big). All shifted −Y by BEAM_NARROW
+    # so the headward +Y face meets the head plank (footward face of head ledge at y = 0).
+    def add_pillows_extended_pair(back_group, front_group, layer: nil)
+      m = frame_layout_metrics
+      w = m[:w]
+      z_low = m[:z_low]
+      z_top_slats = z_low + SLAT_DZ
+      y_pillow = BEAM_Y - BEAM_NARROW
+
+      PillowFactory.add_on_slats(
+        back_group.entities,
+        PILLOW_BIG,
+        0, y_pillow, z_top_slats,
+        w, PILLOW_BIG_LENGTH,
+        layer: layer,
+        note: 'Extended bed only; on slats between planks; +Y edge flush head plank; Y span = retracted outer length.'
+      )
+
+      small_len = PILLOW_SMALL_LENGTH
+      return unless small_len.to_f > 0.0
+
+      y0 = y_pillow + PILLOW_BIG_LENGTH
+      foot_y = EXTENDED_FRONT_FOOT_WORLD_Y
+
+      [PILLOW_SMALL_1, PILLOW_SMALL_2].each_with_index do |name, i|
+        # Foot→head order vs previous: pillow 1 sits footward, 2 headward (mirrored along Y in the extension).
+        y_world = y0 + ((1 - i) * small_len)
+        PillowFactory.add_on_slats(
+          front_group.entities,
+          name,
+          0, y_world - foot_y, z_top_slats,
+          w, small_len,
+          layer: layer,
+          note: "Extended bed only; small #{i + 1}/2; Y order foot→head; (LENGTH_EXTENDED − LENGTH_RETRACTED − BEAM_NARROW)/2 each."
+        )
+      end
+    end
+
+    # Retracted pair: big cushion flat between planks; two small cushions on top — same prism as extended smalls (w × PILLOW_SMALL_LENGTH × PILLOW_THICKNESS), permuted.
+    def add_pillows_retracted_pair(back_group, layer: nil)
+      m = frame_layout_metrics
+      w = m[:w]
+      z_low = m[:z_low]
+      z_top_slats = z_low + SLAT_DZ
+      y_pillow = BEAM_Y - BEAM_NARROW
+      z_on_big = z_top_slats + PILLOW_THICKNESS
+      t = PILLOW_THICKNESS
+      sm = PILLOW_SMALL_LENGTH
+
+      PillowFactory.add_on_slats(
+        back_group.entities,
+        PILLOW_BIG,
+        0, y_pillow, z_top_slats,
+        w, PILLOW_BIG_LENGTH,
+        layer: layer,
+        note: 'Retracted bed / couch seat; flat on slats; +Y edge flush head plank; Y span = LENGTH_RETRACTED + BEAM_NARROW (between planks).'
+      )
+
+      return unless sm.to_f > 0.0
+
+      # Smaller face (w × T) on the big pillow; height Z = sm — at head (+Y low) end of seat (opposite former foot strip).
+      PillowFactory.add_prism(
+        back_group.entities,
+        PILLOW_COUCH_HEAD,
+        Geom::Transformation.translation([0, y_pillow, z_on_big]),
+        w, t, sm,
+        layer: layer,
+        note: 'Couch mode; head end of seat; PILLOW_THICKNESS along Y onto seat; height PILLOW_SMALL_LENGTH along Z.'
+      )
+
+      # Same edges as flat small (w, sm, t): thickness along +X at max-X; +Y by T past head strip so no overlap with couch | head.
+      y_right = y_pillow + t
+      PillowFactory.add_prism(
+        back_group.entities,
+        PILLOW_COUCH_RIGHT,
+        Geom::Transformation.translation([w - t, y_right, z_on_big]),
+        t, w, sm,
+        layer: layer,
+        note: 'Couch mode; +X side; Y0 = y_pillow + PILLOW_THICKNESS clears head cushion band; same prism as small flat pillow.'
+      )
+    end
+
+    def find_placement_group_by_name(model, name)
+      placement_entities(model).grep(Sketchup::Group).find { |g| g.valid? && g.name == name }
     end
 
     def slat_starts_along_x
@@ -908,6 +1054,11 @@ module Timmerman
         back_name: GROUP_EXT_BACK,
         front_name: GROUP_EXT_FRONT
       )
+      layer = ensure_layer(model)
+      back_g = find_placement_group_by_name(model, GROUP_EXT_BACK)
+      front_g = find_placement_group_by_name(model, GROUP_EXT_FRONT)
+      add_pillows_extended_pair(back_g, front_g, layer: layer) if back_g && front_g
+
       @eb_stock_tally = false
       place_pair(
         model,
@@ -916,6 +1067,9 @@ module Timmerman
         back_name: GROUP_RET_BACK,
         front_name: GROUP_RET_FRONT
       )
+      ret_back = find_placement_group_by_name(model, GROUP_RET_BACK)
+      add_pillows_retracted_pair(ret_back, layer: layer) if ret_back
+
       model.commit_operation
       model.active_view.invalidate
       validate_eb_solids(model)
