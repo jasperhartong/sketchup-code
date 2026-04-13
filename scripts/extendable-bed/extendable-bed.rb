@@ -7,9 +7,8 @@
 # SketchUp uses inches internally; dimensions below use .mm.
 #
 # Design is driven by actual section size and cut lengths — not nominal 800/2000/etc.
-# Tune: BEAM_NARROW/WIDE, comb counts, SLAT_GAP, LENGTH_EXTENDED, OVERLAP_WHEN_EXTENDED (SLAT_LENGTH is derived),
-# BACK_SLAT_RUN_Y / FRONT_SLAT_RUN_Y (SLAT_LENGTH + BEAM_Y on each frame), TOP_OF_SLATS_Z, SIDE_INSET,
-# PILLOW_THICKNESS (one foam short edge on every pillow prism; PillowFactory — extended flat + retracted couch layout).
+# Main inputs are grouped at the top of ExtendableBed (after LAYER_NAME); SLAT_LENGTH = LENGTH_EXTENDED/2;
+# BACK_SLAT_RUN_Y / FRONT_SLAT_RUN_Y = SLAT_LENGTH + BEAM_Y. PillowFactory uses PILLOW_THICKNESS on every pillow prism.
 #
 # Coordinates: +Y head → foot (extension). +Z up. Slats run parallel to Y.
 # create places three side-by-side pairs along +X: extended, half-extended, retracted (pillow previews).
@@ -18,76 +17,51 @@ module Timmerman
   module ExtendableBed
     LAYER_NAME = 'EB_ExtendableBed'
 
-    # --- Stock section (edit to match your timber) ---
+    # Main inputs:
+    BACK_SLAT_COUNT = 9
+    TOP_OF_SLATS_Z = 420.mm
+    LENGTH_EXTENDED = 2000.mm
+
+    # Material dimensions:
     BEAM_NARROW = 44.mm
     BEAM_WIDE = 69.mm
+    PLANK_THICKNESS = 18.mm
+    PILLOW_THICKNESS = 100.mm
 
-    # Sliding clearance between neighbours along X (kerf + play)
+    # Slat dimensions:
     SLAT_GAP = 3.mm
 
-    # Comb: back “teeth” + front “teeth” (front sits in gaps of back)
-    # 9 + 8 → outer width 17×44 + 16×3 = 796 mm (was 10+9 → 890 mm)
-    BACK_SLAT_COUNT = 9
-    FRONT_SLAT_COUNT = 8
+    # Dimensions related to variants:
+    PAIR_GAP_X = 600.mm
 
-    # Optional flush inset from outer X for legs/slats (0 = comb fills full width)
-    SIDE_INSET = 0.mm
+    # Stock dimensions:
+    BEAM_STOCK_BAR_LENGTH = 2100.mm
 
+
+    # --- Derived from main inputs ---
+    # Front slat count: one fewer than back (front sits in gaps of back).
+    FRONT_SLAT_COUNT = BACK_SLAT_COUNT - 1
     # Slats: narrow edge along bed width (X), wide edge vertical (Z) — stiffer in bending
     SLAT_DX = BEAM_NARROW
     SLAT_DZ = BEAM_WIDE
-
-    # End beams: narrow along run (Y), wide vertical (Z)
+    # End beams: narrow along run (Y), wide vertical (Z). Head/foot caps: same sawn face; full width X; depth Y = BEAM_Y.
     BEAM_Y = BEAM_NARROW
     BEAM_Z = BEAM_WIDE
-
-    # Head/foot caps: same sawn face as other beams (BEAM_Y × BEAM_Z = 44 × 69 in Y × Z); full width X. Depth along Y is BEAM_Y.
-
-    # Leg posts under end beams — 90° vs old layout: wide along X (across slats), narrow along Y
-    # (same as slats: 44 mm parallel to slat run, 69 mm across the comb)
+    # Leg posts: wide along X (across comb), narrow along Y (parallel to slat run)
     LEG_X = BEAM_WIDE
     LEG_Y = BEAM_NARROW
-
-    # --- Length chain: target open span, optional extra slat overlap, then slat cut length ---
-    # Outer span head → foot when fully extended (along Y, mattress/slat run).
-    LENGTH_EXTENDED = 2000.mm
-    # Extra overlap of the two slat runs *beyond* what the end beams already force. Back slats start at y = BEAM_Y
-    # (past head beam); front slats stop BEAM_Y short of the front frame — so measured overlap along Y is always
-    # at least 2×BEAM_Y (~88 mm). Setting this to 0 keeps that minimum only; a positive value adds that much again
-    # (e.g. 88 mm here gave ~176 mm measured: 88 inset + 88 extra).
-    OVERLAP_WHEN_EXTENDED = 0.mm
-    # 2×SLAT_LENGTH − OVERLAP_WHEN_EXTENDED = LENGTH_EXTENDED  ⇒  SLAT_LENGTH = (LENGTH_EXTENDED + OVERLAP) / 2
-    SLAT_LENGTH = (LENGTH_EXTENDED + OVERLAP_WHEN_EXTENDED) / 2
-
-    # Physical comb tooth run along Y (half-length + BEAM_Y): back slats, outer sisters, and front slats.
+    # Half the open span per slat run; end beams supply structural overlap along Y.
+    SLAT_LENGTH = LENGTH_EXTENDED / 2
     BACK_SLAT_RUN_Y = SLAT_LENGTH + BEAM_Y
     FRONT_SLAT_RUN_Y = BACK_SLAT_RUN_Y
-
-    # Outer span when nested: head end depth (BEAM_Y) + back slat run
     LENGTH_RETRACTED = BACK_SLAT_RUN_Y + BEAM_Y
-
-    # Extended pair: front root translation +Y (head→foot). Matches LENGTH_EXTENDED after longer BACK_SLAT_RUN_Y /
-    # FRONT_SLAT_RUN_Y (was LENGTH_EXTENDED − 2×BEAM_Y when slats were shorter — +88 mm restores open layout).
     EXTENDED_FRONT_FOOT_WORLD_Y = LENGTH_EXTENDED
-
-    # Retracted front-group foot Y: offset + narrow face (BEAM_NARROW) so foot legs sit past the
-    # back middle legs instead of sharing the same Y band as BEAM_Y-deep corner legs.
     RETRACTED_FOOT_WORLD_Y = LENGTH_RETRACTED + BEAM_NARROW
-
-    # --- Height chain: top of slats is the only vertical “target”; leg is the remainder ---
-    # +20 mm vs 400 so caps use full BEAM_Z in Z (sawn 44×69 face); keeps z_leg_top / leg_height unchanged.
-    TOP_OF_SLATS_Z = 420.mm
-
     N_SLATS_X = BACK_SLAT_COUNT + FRONT_SLAT_COUNT
     GAPS_ALONG_X = N_SLATS_X - 1
-
     OUTER_WIDTH =
-      (2 * SIDE_INSET) +
       (N_SLATS_X * SLAT_DX) +
       (GAPS_ALONG_X * SLAT_GAP)
-
-    # Gap between adjacent bed preview copies along +X (outside edge to outside edge)
-    PAIR_GAP_X = 600.mm
 
     GROUP_EXT_BACK = 'EB_Ext_Back'
     GROUP_EXT_FRONT = 'EB_Ext_Front'
@@ -120,12 +94,6 @@ module Timmerman
 
     # Footward (−Y) placement: beam spans up to y = −BEAM_Y (flush with foot-leg / cap plane) so validate has no false AABB hits.
     FRONT_RIGIDITY_BEAM_Y0 = (-2 * BEAM_Y)
-    # Reusable stock thickness offset (currently used to shift selected foot-end parts toward +Y).
-    PLANK_THICKNESS = 18.mm
-
-    # Mattress / couch cushions: one physical stock thickness (short edge of the foam); any orientation in the model
-    # must keep that length as one prism edge — use PillowFactory only.
-    PILLOW_THICKNESS = 100.mm
 
     # Big: retracted span + BEAM_NARROW so it sits between head/foot planks; each small is half of the remainder so extended run still sums to LENGTH_EXTENDED:
     # PILLOW_BIG_LENGTH + 2×PILLOW_SMALL_LENGTH = LENGTH_EXTENDED.
@@ -252,9 +220,6 @@ module Timmerman
 
     # Millimetres — all stock checks and usage tallies are metric (SU stores lengths internally as Length).
     BEAM_SECTION_TOL_MM = 0.01
-
-    # Purchased 44×69 stock length along the extrusion axis (cutting / bar count).
-    BEAM_STOCK_BAR_LENGTH = 2100.mm
 
     # `create` builds three side-by-side pairs (extended + retracted + half-extended previews). Stock metre count and cut plan
     # only include the first pair — one physical bed (GROUP_EXT_BACK + GROUP_EXT_FRONT).
@@ -711,10 +676,9 @@ module Timmerman
     end
 
     def slat_starts_along_x
-      margin = SIDE_INSET
       step = 2 * (SLAT_DX + SLAT_GAP)
-      back = (0...BACK_SLAT_COUNT).map { |k| margin + k * step }
-      front = (0...FRONT_SLAT_COUNT).map { |j| margin + (SLAT_DX + SLAT_GAP) + j * step }
+      back = (0...BACK_SLAT_COUNT).map { |k| k * step }
+      front = (0...FRONT_SLAT_COUNT).map { |j| (SLAT_DX + SLAT_GAP) + j * step }
       [back, front]
     end
 
