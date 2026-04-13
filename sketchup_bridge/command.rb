@@ -4,4 +4,4 @@ load bed_script
 Timmerman::ExtendableBed.clear
 Timmerman::ExtendableBed.create
 
-"OK — Extendable bed (extended + half + retracted side by side)"
+"OK — Extendable bed (four previews: ext, half, ret, ret + smalls on ground)"
