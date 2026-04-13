@@ -8,7 +8,7 @@
 #
 # Design is driven by actual section size and cut lengths — not nominal 800/2000/etc.
 # Tune: BEAM_NARROW/WIDE, comb counts, SLAT_GAP, LENGTH_EXTENDED, OVERLAP_WHEN_EXTENDED (SLAT_LENGTH is derived),
-# BACK_SLAT_RUN_Y / FRONT_SLAT_RUN_Y (physical Y run incl. +BEAM_Y each side vs comb half-length), TOP_OF_SLATS_Z, SIDE_INSET.
+# BACK_SLAT_RUN_Y / FRONT_SLAT_RUN_Y (SLAT_LENGTH + BEAM_Y on each frame), TOP_OF_SLATS_Z, SIDE_INSET.
 #
 # Coordinates: +Y head → foot (extension). +Z up. Slats run parallel to Y.
 # create always places two full copies side by side along +X: extended and retracted.
@@ -58,12 +58,9 @@ module Timmerman
     # 2×SLAT_LENGTH − OVERLAP_WHEN_EXTENDED = LENGTH_EXTENDED  ⇒  SLAT_LENGTH = (LENGTH_EXTENDED + OVERLAP) / 2
     SLAT_LENGTH = (LENGTH_EXTENDED + OVERLAP_WHEN_EXTENDED) / 2
 
-    FRONT_SLAT_LENGTH = SLAT_LENGTH
-
-    # Comb half-length SLAT_LENGTH plus BEAM_Y each on back (slats + outer sisters) and on front (slats) so extended
-    # outer span matches LENGTH_EXTENDED with EXTENDED_FRONT_FOOT_WORLD_Y.
+    # Physical comb tooth run along Y (half-length + BEAM_Y): back slats, outer sisters, and front slats.
     BACK_SLAT_RUN_Y = SLAT_LENGTH + BEAM_Y
-    FRONT_SLAT_RUN_Y = FRONT_SLAT_LENGTH + BEAM_Y
+    FRONT_SLAT_RUN_Y = BACK_SLAT_RUN_Y
 
     # Outer span when nested: head end depth (BEAM_Y) + back slat run
     LENGTH_RETRACTED = BACK_SLAT_RUN_Y + BEAM_Y
@@ -135,25 +132,15 @@ module Timmerman
       end
     end
 
-    # Erase nested groups by exact name (Groups only — skips ComponentInstance definitions).
-    def purge_named_groups_recursive(entities, names_to_erase)
+    # Erase nested groups by exact name (Groups only). With +skip_reference_subtrees+, does not recurse into
+    # EB_REFERENCE_ROOT_NAME_RE roots (design copies in the model).
+    def purge_named_groups_recursive(entities, names_to_erase, skip_reference_subtrees: false)
       entities.to_a.each do |e|
         next unless e.valid?
         next unless e.is_a?(Sketchup::Group)
+        next if skip_reference_subtrees && EB_REFERENCE_ROOT_NAME_RE.match?(e.name)
 
-        purge_named_groups_recursive(e.entities, names_to_erase)
-        e.erase! if names_to_erase.include?(e.name)
-      end
-    end
-
-    # Same as purge_named_groups_recursive but does not enter subtrees rooted at a reference design group.
-    def purge_named_groups_recursive_skip_reference_roots(entities, names_to_erase)
-      entities.to_a.each do |e|
-        next unless e.valid?
-        next unless e.is_a?(Sketchup::Group)
-        next if EB_REFERENCE_ROOT_NAME_RE.match?(e.name)
-
-        purge_named_groups_recursive_skip_reference_roots(e.entities, names_to_erase)
+        purge_named_groups_recursive(e.entities, names_to_erase, skip_reference_subtrees: skip_reference_subtrees)
         e.erase! if names_to_erase.include?(e.name)
       end
     end
@@ -162,12 +149,7 @@ module Timmerman
       TOP_OF_SLATS_Z - SLAT_DZ
     end
 
-    # Slat boxes only: one BEAM_Z lower than the nominal chain so slats sit flush with the leg
-    # top crossbeam; legs / cap / head-foot end beams keep the chain from TOP_OF_SLATS_Z.
-    def z_slats_box_bottom
-      z_slat_bottom - BEAM_Z
-    end
-
+    # One BEAM_Z below slat bottom: slats sit flush with leg top crossbeam; caps / end beams use this chain too.
     def z_beam_bottom
       z_slat_bottom - BEAM_Z
     end
@@ -359,7 +341,6 @@ module Timmerman
             next if i == j
 
             donor = bins[i]
-            recv = bins[j]
             donor[:parts].each_index do |pi|
               trial = beam_bins_deep_dup(bins)
               p = trial[i][:parts].delete_at(pi)
@@ -525,25 +506,38 @@ module Timmerman
       [merged.min, merged.max]
     end
 
+    # Outer −X/+X of front comb only: min X start and span to outer +X face of last front tooth.
+    def front_comb_outer_lo_x_and_span_x
+      _, front_xs = slat_starts_along_x
+      lo_x = front_xs.min
+      hi_x = front_xs.max
+      span_x = (hi_x + SLAT_DX) - lo_x
+      [lo_x, span_x]
+    end
+
+    # Inner X start (past outer −X back tooth) and span to outer +X sister line — for ties between sisters.
+    def sister_tie_inner_x1_and_span_x
+      lo_x, hi_x = outermost_comb_slat_x_starts
+      x1 = lo_x + SLAT_DX
+      span_x = hi_x - x1
+      [x1, span_x]
+    end
+
     # Fixed (back) frame only: two beams, same plan as the outermost slats, stacked under them (BEAM_Z).
     def add_beams_below_outermost_slats_back(entities, z_slats, layer: nil)
       z_lo = z_slats - BEAM_Z
       y0 = BEAM_Y
       lo_x, hi_x = outermost_comb_slat_x_starts
-      add_stock_beam(
-        entities,
-        'EB | beam | sister | outer -X',
-        lo_x, y0, z_lo, SLAT_DX, BACK_SLAT_RUN_Y, BEAM_Z,
-        layer: layer,
-        note: 'Sister under outermost comb slat at -X; same XY as that slat; BEAM_Z thick; top flush with slat bottom.'
-      )
-      add_stock_beam(
-        entities,
-        'EB | beam | sister | outer +X',
-        hi_x, y0, z_lo, SLAT_DX, BACK_SLAT_RUN_Y, BEAM_Z,
-        layer: layer,
-        note: 'Sister under outermost comb slat at +X; same XY as that slat; BEAM_Z thick; top flush with slat bottom.'
-      )
+      [
+        ['EB | beam | sister | outer -X', lo_x, 'at -X'],
+        ['EB | beam | sister | outer +X', hi_x, 'at +X']
+      ].each do |name, x0, at|
+        add_stock_beam(
+          entities, name, x0, y0, z_lo, SLAT_DX, BACK_SLAT_RUN_Y, BEAM_Z,
+          layer: layer,
+          note: "Sister under outermost comb slat #{at}; same XY as that slat; BEAM_Z thick; top flush with slat bottom."
+        )
+      end
     end
 
     # Four 44×69 prisms, all inside the slat frame in Y:
@@ -579,10 +573,7 @@ module Timmerman
 
     # Front frame: one beam under slats 1…N at the foot end; X spans outer faces of first/last front tooth; BEAM_Z up from below.
     def add_beam_under_front_slats_foot_end(entities, z_slats, layer: nil)
-      _, front_xs = slat_starts_along_x
-      lo_x = front_xs.min
-      hi_x = front_xs.max
-      span_x = (hi_x + SLAT_DX) - lo_x
+      lo_x, span_x = front_comb_outer_lo_x_and_span_x
       y_slat_foot = -BEAM_Y - FRONT_SLAT_RUN_Y
       # Slat footward face at y = y_slat_foot; beam sits BEAM_Y (44 mm) headward — gap from slat foot to beam −Y face.
       y_beam = y_slat_foot + BEAM_Y
@@ -598,10 +589,7 @@ module Timmerman
 
     # Second full-width front beam below foot cap (same X span as foot-end slat beam); stiffens foot assembly.
     def add_front_rigidity_beam_below_foot_cap(entities, z_slats, layer: nil)
-      _, front_xs = slat_starts_along_x
-      lo_x = front_xs.min
-      hi_x = front_xs.max
-      span_x = (hi_x + SLAT_DX) - lo_x
+      lo_x, span_x = front_comb_outer_lo_x_and_span_x
       y_beam = FRONT_RIGIDITY_BEAM_Y0
       z_lo = z_slats - BEAM_Z
       add_stock_beam(
@@ -615,9 +603,7 @@ module Timmerman
 
     # Two ties spanning inner face of outer −X sister to outer +X sister (708 mm in reference geometry).
     def add_head_and_mid_tie_beams_between_sisters(entities, lh_mid, layer: nil)
-      lo_x, hi_x = outermost_comb_slat_x_starts
-      x1 = lo_x + SLAT_DX
-      span_x = hi_x - x1
+      x1, span_x = sister_tie_inner_x1_and_span_x
       return if span_x <= 0
 
       y_head = BEAM_Y
@@ -708,11 +694,26 @@ module Timmerman
     def clear(model = Sketchup.active_model)
       exit_edit_context!(model)
       roots = placement_entities(model)
-      purge_named_groups_recursive_skip_reference_roots(roots, BEHIND_LEG_MID_UNQUALIFIED_NAMES)
+      purge_named_groups_recursive(roots, BEHIND_LEG_MID_UNQUALIFIED_NAMES, skip_reference_subtrees: true)
       to_erase = roots.grep(Sketchup::Group).select do |g|
         EB_GROUP_NAME_RE.match?(g.name) || EB_SINGLE_PAIR_ROOTS.include?(g.name)
       end
       to_erase.each(&:erase!)
+    end
+
+    # Shared Z chain, leg heights, and cap X span for both frame halves (back / front local space).
+    def frame_layout_metrics
+      w = outer_width
+      z_low = z_beam_bottom
+      {
+        w: w,
+        z_low: z_low,
+        zlt: z_leg_top,
+        lh: leg_height,
+        lh_corner_through_cap: outer_corner_leg_height_through_cap,
+        cap_x0: LEG_X,
+        cap_dx: w - (2 * LEG_X)
+      }
     end
 
     def build_back_group(model, name:)
@@ -721,16 +722,15 @@ module Timmerman
       g.name = name
       g.layer = layer
       e = g.entities
-      w = outer_width
-
-      zb = z_beam_bottom
-      z_slats = z_slats_box_bottom
-      lh = leg_height
-      lh_head_outer = outer_corner_leg_height_through_cap
-      lh_mid = mid_run_leg_height(z_slats)
-      zlt = z_leg_top
-      cap_x0 = LEG_X
-      cap_dx = w - (2 * LEG_X)
+      m = frame_layout_metrics
+      w = m[:w]
+      z_low = m[:z_low]
+      lh = m[:lh]
+      lh_head_outer = m[:lh_corner_through_cap]
+      lh_mid = mid_run_leg_height(z_low)
+      zlt = m[:zlt]
+      cap_x0 = m[:cap_x0]
+      cap_dx = m[:cap_dx]
 
       add_stock_beam(e, 'EB | leg | head | -X', 0, 0, 0, LEG_X, LEG_Y, lh_head_outer,
                      layer: layer,
@@ -761,7 +761,7 @@ module Timmerman
       add_stock_beam(e, 'EB | beam | head | cap', cap_x0, 0, zlt, cap_dx, BEAM_Y, BEAM_Z,
                      layer: layer,
                      note: 'Head cap between outer legs: X from inner face of head | -X to inner face of head | +X; BEAM_Y × BEAM_Z in Y×Z.')
-      add_stock_beam(e, 'EB | beam | head | end', 0, 0, zb, w, BEAM_Y, BEAM_Z,
+      add_stock_beam(e, 'EB | beam | head | end', 0, 0, z_low, w, BEAM_Y, BEAM_Z,
                      layer: layer,
                      note: 'Head end beam 44×69 mm (BEAM_Y × BEAM_Z); under cap.')
 
@@ -771,13 +771,13 @@ module Timmerman
         add_stock_beam(
           e,
           format('EB | slat | back | %d/%d', i + 1, BACK_SLAT_COUNT),
-          x0, y0, z_slats, SLAT_DX, BACK_SLAT_RUN_Y, SLAT_DZ,
+          x0, y0, z_low, SLAT_DX, BACK_SLAT_RUN_Y, SLAT_DZ,
           layer: layer,
           note: 'Back (fixed) comb tooth; interlocks with front slats when assembled.'
         )
       end
 
-      add_beams_below_outermost_slats_back(e, z_slats, layer: layer)
+      add_beams_below_outermost_slats_back(e, z_low, layer: layer)
       add_head_and_mid_tie_beams_between_sisters(e, lh_mid, layer: layer)
 
       paint_root_group_preview_color(g, model, EB_PREVIEW_RGB_BACK, EB_PREVIEW_MAT_BACK)
@@ -785,14 +785,14 @@ module Timmerman
     end
 
     def build_front_geometry(entities, layer: nil)
-      w = outer_width
-      zb = z_beam_bottom
-      z_slats = z_slats_box_bottom
-      lh = leg_height
-      lh_foot_outer = outer_corner_leg_height_through_cap
-      zlt = z_leg_top
-      cap_x0 = LEG_X
-      cap_dx = w - (2 * LEG_X)
+      m = frame_layout_metrics
+      w = m[:w]
+      z_low = m[:z_low]
+      lh = m[:lh]
+      lh_foot_outer = m[:lh_corner_through_cap]
+      zlt = m[:zlt]
+      cap_x0 = m[:cap_x0]
+      cap_dx = m[:cap_dx]
 
       add_stock_beam(entities, 'EB | leg | foot | -X', 0, -BEAM_Y, 0, LEG_X, LEG_Y, lh_foot_outer,
                      layer: layer,
@@ -811,7 +811,7 @@ module Timmerman
       add_stock_beam(entities, 'EB | beam | foot | cap', cap_x0, -BEAM_Y, zlt, cap_dx, BEAM_Y, BEAM_Z,
                      layer: layer,
                      note: 'Foot cap between outer legs: X from inner face of foot | -X to inner face of foot | +X; BEAM_Y × BEAM_Z in Y×Z.')
-      add_stock_beam(entities, 'EB | beam | foot | end', 0, -BEAM_Y, zb, w, BEAM_Y, BEAM_Z,
+      add_stock_beam(entities, 'EB | beam | foot | end', 0, -BEAM_Y, z_low, w, BEAM_Y, BEAM_Z,
                      layer: layer,
                      note: 'Foot end beam 44×69 mm (BEAM_Y × BEAM_Z); under cap.')
 
@@ -821,14 +821,14 @@ module Timmerman
         add_stock_beam(
           entities,
           format('EB | slat | front | %d/%d', i + 1, FRONT_SLAT_COUNT),
-          x0, y1, z_slats, SLAT_DX, FRONT_SLAT_RUN_Y, SLAT_DZ,
+          x0, y1, z_low, SLAT_DX, FRONT_SLAT_RUN_Y, SLAT_DZ,
           layer: layer,
           note: 'Front (sliding) comb tooth; sits in gaps of back slats; Y run = FRONT_SLAT_RUN_Y (SLAT_LENGTH + BEAM_Y).'
         )
       end
 
-      add_beam_under_front_slats_foot_end(entities, z_slats, layer: layer)
-      add_front_rigidity_beam_below_foot_cap(entities, z_slats, layer: layer)
+      add_beam_under_front_slats_foot_end(entities, z_low, layer: layer)
+      add_front_rigidity_beam_below_foot_cap(entities, z_low, layer: layer)
     end
 
     def build_front_group(model, name:, foot_world_y:, offset_x: 0)
