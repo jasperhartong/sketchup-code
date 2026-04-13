@@ -153,11 +153,11 @@ module Timmerman
             note: 'Couch; back cushion; pillow_thickness along Y; height = small_len; Y0 = y_pillow + t.'
           )
           back_pillows << Pillow.new(
-            'EB | pillow | couch | right',
-            at:   [c.outer_width - t, y_pillow + 2 * t, z_on_big],
-            size: [t, c.outer_width, sm],
+            'EB | pillow | small | 1',
+            at:   [0, y_pillow + 2 * t, z_on_big],
+            size: [c.outer_width, t, sm],
             config: c,
-            note: 'Couch; +X arm; Y0 = y_pillow + 2t; clears both Y bands of couch | head.'
+            note: 'Retracted; 3rd small upright, same orientation as the other two; Y0 = y_pillow + 2t.'
           )
         end
 
