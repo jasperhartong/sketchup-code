@@ -114,6 +114,13 @@ module Timmerman
 
     # Footward (−Y) placement: beam spans up to y = −BEAM_Y (flush with foot-leg / cap plane) so validate has no false AABB hits.
     FRONT_RIGIDITY_BEAM_Y0 = (-2 * BEAM_Y)
+    # Reusable stock thickness offset (currently used to shift selected foot-end parts toward +Y).
+    PLANK_THICKNESS = 10.mm
+
+    # Named planks (non-stock): Outliner prefix and known part names — use only via PlankFactory.
+    EB_PLANK_NAME_RE = /\AEB \| plank \|/
+    PLANK_FOOT_LEDGE = 'EB | plank | foot | ledge'
+    PLANK_HEAD_LEDGE = 'EB | plank | head | ledge'
 
     # Beams + legs only (excludes slats); used for overlap checks between structural solids.
     EB_SOLID_NAME_RE = /\AEB \| (beam|leg) \|/
@@ -491,6 +498,20 @@ module Timmerman
       g
     end
 
+    # Sole entry point for planks: thin dimension along +Y is always PLANK_THICKNESS; name must be EB | plank | …
+    module PlankFactory
+      module_function
+
+      def add_thin_y(parent_entities, name, x, y, z, dx, dz, layer: nil, note: nil)
+        n = name.to_s
+        unless ExtendableBed::EB_PLANK_NAME_RE.match?(n)
+          raise ArgumentError, "EB plank: name must match /^EB | plank |/, got #{n.inspect}"
+        end
+
+        ExtendableBed.add_named_part(parent_entities, n, x, y, z, dx, ExtendableBed::PLANK_THICKNESS, dz, layer: layer, note: note)
+      end
+    end
+
     def slat_starts_along_x
       margin = SIDE_INSET
       step = 2 * (SLAT_DX + SLAT_GAP)
@@ -526,16 +547,19 @@ module Timmerman
     # Fixed (back) frame only: two beams, same plan as the outermost slats, stacked under them (BEAM_Z).
     def add_beams_below_outermost_slats_back(entities, z_slats, layer: nil)
       z_lo = z_slats - BEAM_Z
-      y0 = BEAM_Y
+      # Head legs end at y = BEAM_Y − PLANK_THICKNESS (+Y face); start sisters there so they meet the legs;
+      # keep footward end at BEAM_Y + BACK_SLAT_RUN_Y + PLANK_THICKNESS (same as slat run + prior extension).
+      y0 = BEAM_Y - PLANK_THICKNESS
+      sister_dy = BACK_SLAT_RUN_Y + (2 * PLANK_THICKNESS)
       lo_x, hi_x = outermost_comb_slat_x_starts
       [
         ['EB | beam | sister | outer -X', lo_x, 'at -X'],
         ['EB | beam | sister | outer +X', hi_x, 'at +X']
       ].each do |name, x0, at|
         add_stock_beam(
-          entities, name, x0, y0, z_lo, SLAT_DX, BACK_SLAT_RUN_Y, BEAM_Z,
+          entities, name, x0, y0, z_lo, SLAT_DX, sister_dy, BEAM_Z,
           layer: layer,
-          note: "Sister under outermost comb slat #{at}; same XY as that slat; BEAM_Z thick; top flush with slat bottom."
+          note: "Sister under outermost comb slat #{at}; −Y start offset PLANK_THICKNESS to meet head legs; +Y length +2×PLANK_THICKNESS vs BACK_SLAT_RUN_Y; BEAM_Z thick; top flush slat bottom."
         )
       end
     end
@@ -545,7 +569,7 @@ module Timmerman
     # beam sits headward of mid leg −Y face (y = mid_y0 − LEG_X).
     def add_beams_behind_back_legs(entities, mid_y0, lh_corner, lh_mid, layer: nil)
       w = outer_width
-      y_behind_head = LEG_Y
+      y_behind_head = LEG_Y - PLANK_THICKNESS
       y_behind_mid = mid_y0 - LEG_X
       note_head = '44×69 plan (LEG_Y×LEG_X in X×Y), extruded Z; +Y of head leg; 69 mm along Y on outer ±X face.'
       note_mid = '44×69 plan (LEG_Y×LEG_X in X×Y), extruded Z; −Y of mid leg, headward; 69 mm along Y on outer ±X face.'
@@ -576,21 +600,22 @@ module Timmerman
       lo_x, span_x = front_comb_outer_lo_x_and_span_x
       y_slat_foot = -BEAM_Y - FRONT_SLAT_RUN_Y
       # Slat footward face at y = y_slat_foot; beam sits BEAM_Y (44 mm) headward — gap from slat foot to beam −Y face.
-      y_beam = y_slat_foot + BEAM_Y
+      # −PLANK_THICKNESS in Y (footward vs prior slat-foot geometry).
+      y_beam = y_slat_foot + BEAM_Y - PLANK_THICKNESS
       z_lo = z_slats - BEAM_Z
       add_stock_beam(
         entities,
         'EB | beam | front | under slats | foot end',
         lo_x, y_beam, z_lo, span_x, BEAM_Y, BEAM_Z,
         layer: layer,
-        note: 'Under EB | slat | front | 1–8; X from outer −X of slat 1 to outer +X of slat 8; top flush slat bottom; −Y face BEAM_Y headward of slat foot ends.'
+        note: 'Under EB | slat | front | 1–8; X from outer −X of slat 1 to outer +X of slat 8; top flush slat bottom; Y offset −PLANK_THICKNESS vs slat-foot geometry; −Y face BEAM_Y headward of slat foot ends.'
       )
     end
 
     # Second full-width front beam below foot cap (same X span as foot-end slat beam); stiffens foot assembly.
     def add_front_rigidity_beam_below_foot_cap(entities, z_slats, layer: nil)
       lo_x, span_x = front_comb_outer_lo_x_and_span_x
-      y_beam = FRONT_RIGIDITY_BEAM_Y0
+      y_beam = FRONT_RIGIDITY_BEAM_Y0 + PLANK_THICKNESS
       z_lo = z_slats - BEAM_Z
       add_stock_beam(
         entities,
@@ -606,8 +631,8 @@ module Timmerman
       x1, span_x = sister_tie_inner_x1_and_span_x
       return if span_x <= 0
 
-      y_head = BEAM_Y
-      y_mid = LENGTH_RETRACTED - (2 * BEAM_Y)
+      y_head = BEAM_Y - PLANK_THICKNESS
+      y_mid = (LENGTH_RETRACTED - (2 * BEAM_Y)) - PLANK_THICKNESS
 
       add_stock_beam(
         entities,
@@ -731,15 +756,16 @@ module Timmerman
       zlt = m[:zlt]
       cap_x0 = m[:cap_x0]
       cap_dx = m[:cap_dx]
+      y_head = -PLANK_THICKNESS
 
-      add_stock_beam(e, 'EB | leg | head | -X', 0, 0, 0, LEG_X, LEG_Y, lh_head_outer,
+      add_stock_beam(e, 'EB | leg | head | -X', 0, y_head, 0, LEG_X, LEG_Y, lh_head_outer,
                      layer: layer,
                      note: 'Corner leg at head (+Y), -X; extruded to top of head cap; inner +X face bears cap end.')
-      add_stock_beam(e, 'EB | leg | head | +X', w - LEG_X, 0, 0, LEG_X, LEG_Y, lh_head_outer,
+      add_stock_beam(e, 'EB | leg | head | +X', w - LEG_X, y_head, 0, LEG_X, LEG_Y, lh_head_outer,
                      layer: layer,
                      note: 'Corner leg at head (+Y), +X; extruded to top of head cap; inner −X face bears cap end.')
 
-      mid_y0 = LENGTH_RETRACTED - LEG_X
+      mid_y0 = (LENGTH_RETRACTED - LEG_X) + PLANK_THICKNESS
       add_stock_beam(e, 'EB | leg | mid run | -X', 0, mid_y0, 0, LEG_Y, LEG_X, lh_mid,
                      layer: layer,
                      note: 'Mid-span leg, -X; 44 mm along X at outer column, 69 mm along Y; top flush with sister bottom.')
@@ -748,19 +774,29 @@ module Timmerman
                      note: 'Mid-span leg, +X; mirror of −X mid run leg.')
 
       # Inset copies flush on the inner ±X faces of the outer legs (same stock/heights) for extra stiffness.
-      add_stock_beam(e, 'EB | leg | head | -X | inset', LEG_X, 0, 0, LEG_X, LEG_Y, lh,
+      add_stock_beam(e, 'EB | leg | head | -X | inset', LEG_X, y_head, 0, LEG_X, LEG_Y, lh,
                      layer: layer,
                      note: 'Inset strengthener; duplicate of EB | leg | head | -X, +X of its inner face.')
-      add_stock_beam(e, 'EB | leg | head | +X | inset', w - (2 * LEG_X), 0, 0, LEG_X, LEG_Y, lh,
+      add_stock_beam(e, 'EB | leg | head | +X | inset', w - (2 * LEG_X), y_head, 0, LEG_X, LEG_Y, lh,
                      layer: layer,
                      note: 'Inset strengthener; duplicate of EB | leg | head | +X, −X of its inner face.')
 
       # Head behind-leg beams stay at +leg_height+ so they do not occupy the same Z band as EB | beam | sister | outer ±X.
       add_beams_behind_back_legs(e, mid_y0, lh, lh_mid, layer: layer)
 
-      add_stock_beam(e, 'EB | beam | head | cap', cap_x0, 0, zlt, cap_dx, BEAM_Y, BEAM_Z,
+      add_stock_beam(e, 'EB | beam | head | cap', cap_x0, y_head, zlt, cap_dx, BEAM_Y, BEAM_Z,
                      layer: layer,
                      note: 'Head cap between outer legs: X from inner face of head | -X to inner face of head | +X; BEAM_Y × BEAM_Z in Y×Z.')
+
+      # Head end of bed: Y band y_head..y_head+PLANK_THICKNESS (flush headward with shifted head cap / corner legs); same X/Z as foot plank.
+      PlankFactory.add_thin_y(
+        e,
+        PLANK_HEAD_LEDGE,
+        0, y_head, z_low, w, (2 * BEAM_WIDE),
+        layer: layer,
+        note: 'Sits on top of EB | beam | head | cap and EB | leg | head | ±X; full bed width; headward face flush with bed end; top BEAM_WIDE above slat tops.'
+      )
+
       add_stock_beam(e, 'EB | beam | head | end', 0, 0, z_low, w, BEAM_Y, BEAM_Z,
                      layer: layer,
                      note: 'Head end beam 44×69 mm (BEAM_Y × BEAM_Z); under cap.')
@@ -793,24 +829,35 @@ module Timmerman
       zlt = m[:zlt]
       cap_x0 = m[:cap_x0]
       cap_dx = m[:cap_dx]
+      y_foot_protrude = -BEAM_Y + PLANK_THICKNESS
 
-      add_stock_beam(entities, 'EB | leg | foot | -X', 0, -BEAM_Y, 0, LEG_X, LEG_Y, lh_foot_outer,
+      add_stock_beam(entities, 'EB | leg | foot | -X', 0, y_foot_protrude, 0, LEG_X, LEG_Y, lh_foot_outer,
                      layer: layer,
                      note: 'Corner leg at foot (-Y), -X; extruded to top of foot cap so inner +X face bears cap end.')
-      add_stock_beam(entities, 'EB | leg | foot | +X', w - LEG_X, -BEAM_Y, 0, LEG_X, LEG_Y, lh_foot_outer,
+      add_stock_beam(entities, 'EB | leg | foot | +X', w - LEG_X, y_foot_protrude, 0, LEG_X, LEG_Y, lh_foot_outer,
                      layer: layer,
                      note: 'Corner leg at foot, +X; extruded to top of foot cap; inner −X face bears cap end.')
 
-      add_stock_beam(entities, 'EB | leg | foot | -X | inset', LEG_X, -BEAM_Y, 0, LEG_X, LEG_Y, lh,
+      add_stock_beam(entities, 'EB | leg | foot | -X | inset', LEG_X, y_foot_protrude, 0, LEG_X, LEG_Y, lh,
                      layer: layer,
                      note: 'Inset strengthener; duplicate of EB | leg | foot | -X, +X of its inner face.')
-      add_stock_beam(entities, 'EB | leg | foot | +X | inset', w - (2 * LEG_X), -BEAM_Y, 0, LEG_X, LEG_Y, lh,
+      add_stock_beam(entities, 'EB | leg | foot | +X | inset', w - (2 * LEG_X), y_foot_protrude, 0, LEG_X, LEG_Y, lh,
                      layer: layer,
                      note: 'Inset strengthener; duplicate of EB | leg | foot | +X, −X of its inner face.')
 
-      add_stock_beam(entities, 'EB | beam | foot | cap', cap_x0, -BEAM_Y, zlt, cap_dx, BEAM_Y, BEAM_Z,
+      add_stock_beam(entities, 'EB | beam | foot | cap', cap_x0, y_foot_protrude, zlt, cap_dx, BEAM_Y, BEAM_Z,
                      layer: layer,
                      note: 'Foot cap between outer legs: X from inner face of foot | -X to inner face of foot | +X; BEAM_Y × BEAM_Z in Y×Z.')
+
+      # Non-stock front plank: shifted foot-cap/leg ledge (Y: 0..PLANK_THICKNESS); full width; 2×BEAM_WIDE in Z.
+      PlankFactory.add_thin_y(
+        entities,
+        PLANK_FOOT_LEDGE,
+        0, 0, z_low, w, (2 * BEAM_WIDE),
+        layer: layer,
+        note: 'Sits on top of EB | beam | foot | cap and EB | leg | foot | ±X; full bed width; top BEAM_WIDE above slat tops.'
+      )
+
       add_stock_beam(entities, 'EB | beam | foot | end', 0, -BEAM_Y, z_low, w, BEAM_Y, BEAM_Z,
                      layer: layer,
                      note: 'Foot end beam 44×69 mm (BEAM_Y × BEAM_Z); under cap.')
