@@ -21,8 +21,25 @@ End-to-end workflow: capture a **target** snapshot from the manually edited mode
 
 ## Preconditions
 
-1. Listener running; use the bridge ([`sketchup_bridge/command.rb`](sketchup_bridge/command.rb) + `ruby sketchup_bridge/run_and_wait.rb`) — do not ask the user to paste into the Ruby Console for iteration.
-2. User has **not** run bed `create` after manual edits (rebuild would erase them). If they already did, they must re-apply manual edits or restore from a saved `.skp`.
+1. Listener running; use the bridge — do not ask the user to paste into the Ruby Console for iteration.
+2. User has **not** run bed `clear` / `create` after manual edits (rebuild would erase them). If they already did, they must re-apply manual edits or restore from a saved `.skp`.
+
+## Bridge: capture without rebuild (KISS)
+
+The listener only runs [`sketchup_bridge/command.rb`](sketchup_bridge/command.rb). A default run calls **`clear` + `create`**, which **erases manual edits** — so capture the target **before** any default run while the model still has your changes.
+
+**Capture target (no rebuild):**
+
+1. In `command.rb`, temporarily **replace** the default `load … extendable-bed` + `clear` + `create` block with:
+   ```ruby
+   load File.expand_path('commands/capture_extendable_bed_target.rb', __dir__)
+   ```
+2. `ruby sketchup_bridge/run_and_wait.rb`
+3. **Restore** `command.rb` (e.g. `git checkout -- sketchup_bridge/command.rb` or undo in the editor).
+
+**Iterate after code changes:** leave the default `command.rb`, then `ruby sketchup_bridge/run_and_wait.rb` (rebuilds).
+
+**Risk:** if something triggers a default bridge run while `command.rb` still rebuilds, you lose manual edits — keep capture as a short, deliberate swap + restore.
 
 ## Root filter (extendable bed)
 
@@ -37,33 +54,13 @@ end
 
 ## Step A — Capture target snapshot (once per manual session)
 
-In `command.rb` (bridge), after loading extendable-bed + util:
+Swap `command.rb` to load [`sketchup_bridge/commands/capture_extendable_bed_target.rb`](sketchup_bridge/commands/capture_extendable_bed_target.rb) (see section above), run `ruby sketchup_bridge/run_and_wait.rb`, restore `command.rb`.
 
-```ruby
-eb = File.expand_path('../scripts/extendable-bed/extendable-bed.rb', __dir__)
-load eb
-util = File.expand_path('../scripts/sketchup_utils/named_group_geometry_snapshot.rb', __dir__)
-load util
-
-Snap = Timmerman::SketchupUtils::NamedGroupGeometrySnapshot
-cfg  = Timmerman::ExtendableBed::Config
-root_filter = ->(g) { cfg::GROUP_NAME_RE.match?(g.name) || cfg::SINGLE_PAIR_ROOTS.include?(g.name) }
-
-target = File.expand_path('../scripts/extendable-bed/references/extendable_bed_geometry_target.json', __dir__)
-Snap.save_snapshot(target, Sketchup.active_model, root_filter: root_filter)
-"OK"
-```
-
-Adjust paths if `command.rb` is resolved differently (use `File.expand_path` from the bridge dir).
+To change what is saved, edit that capture file (still **no** `clear` / `create` there).
 
 ## Step B — Initial diff (optional)
 
-Compare last **code** baseline to **target** (what the user changed vs last `create`):
-
-```ruby
-issues = Snap.diff_files(cfg::GEOMETRY_BASELINE_JSON, target, label_a: 'baseline', label_b: 'target')
-puts issues.empty? ? 'No diff vs last create' : issues.join("\n")
-```
+The capture script already prints baseline vs target. To compare only, run the same `Snap.diff_files` logic from a temporary `command.rb` or a small Ruby script on the host.
 
 ## Step C — Map mismatches to code
 
@@ -73,12 +70,30 @@ For each `[MISMATCH]` / `[ADDED]` / `[MISSING]` line:
 - **Grep** the repo for that string and for parent root names from [`config.rb`](scripts/extendable-bed/lib/config.rb) (`GROUP_EXT_BACK`, etc.).
 - Edit generators: [`frame_assembly.rb`](scripts/extendable-bed/lib/frame_assembly.rb), [`bed_pair.rb`](scripts/extendable-bed/lib/bed_pair.rb), [`config.rb`](scripts/extendable-bed/lib/config.rb) — prefer **one** `Config` change when many parts move together.
 
+### Config-first and relational dimensions (critical)
+
+- **Reuse and extend what exists** in [`config.rb`](scripts/extendable-bed/lib/config.rb): primary inputs (`beam_narrow`, `beam_wide`, `plank_thickness`, `top_of_slats_z`, …) and derived `def` helpers (`z_slat_bottom`, `leg_height`, `cap_x0`, …). Add a new `def` there when a value is a design parameter or reused in more than one part, instead of embedding unexplained literals in assemblies.
+- **Express geometry as alignment to other dimensions**: positions/sizes should read as relationships (flush with `z_slat_bottom`, span from inner leg to inner leg, `2 * beam_wide`, `leg_height + plank_thickness`, same X as another beam) rather than orphan numbers lifted from a bbox unless that number is intentionally a new primary input.
+- When a manual delta is a raw length (e.g. +50 mm), **interpret it**: is it a stock section, a gap, a multiple of `plank_thickness` / `beam_narrow`, or an offset from an existing chain? Prefer wiring through `Config` so the model stays self-consistent when inputs change.
+
+### All variants = same components, different placement (critical)
+
+The extendable-bed **preview pairs** (`EB_Ext1_*`, `EB_Half_*`, `EB_Ext_*`, `EB_Ret_*`, `EB_RetGnd_*`, …) are **not** five independent designs. Each pair is the same **`BackFrame` / `FrontFrame`** geometry in **local** space; [`bed_layout.rb`](scripts/extendable-bed/lib/bed_layout.rb) only varies **`offset_x`**, **`foot_world_y`**, and **`pillow_mode`** ([`bed_pair.rb`](scripts/extendable-bed/lib/bed_pair.rb)).
+
+When a mismatch appears under **one** root (e.g. `EB_Half_Front / EB | plank | foot | ledge`):
+
+- **Do not** fix it by branching on that root name (`group_name == GROUP_HALF_FRONT`, etc.) unless the user explicitly wants **that** mode to differ from the others.
+- **Do** interpret the bbox delta as a change to the **shared** part definition (usually `Config` or `BackFrame` / `FrontFrame` in [`frame_assembly.rb`](scripts/extendable-bed/lib/frame_assembly.rb)) so **every** pair’s copy of that part updates the same way.
+- If the user only edited **one** variant in SketchUp, either **repeat the same edit** on every preview root before capture, or implement the shared code change and accept that the target snapshot will show mismatches on the roots they did not touch until they align the model (or recapture after editing all copies).
+
+The same leaf name under multiple roots should produce **matching local** boxes (world AABBs differ only by translation of the pair). Multiple `[MISMATCH]` lines for the same **last path segment** under different `EB_*` roots usually mean **one** shared fix, not per-root hacks.
+
 ## Step D — Mandatory iteration until snapshots match
 
 **Do not stop after a single edit.** After every code change:
 
-1. Run bridge `command.rb` that loads extendable-bed and calls `Timmerman::ExtendableBed::BedLayout.new.create` (or `Timmerman::ExtendableBed.create` if that is wired).
-2. Write a **fresh** after-create snapshot to a temp path, e.g. `extendable_bed_geometry_after_create.json`, with the **same** `root_filter`.
+1. Run `ruby sketchup_bridge/run_and_wait.rb` (default — rebuilds).
+2. After rebuild, `GEOMETRY_BASELINE_JSON` is refreshed by `create`; you can diff that file against the target, or snapshot to another path via a temporary `command.rb` load if you need a side-by-side file.
 3. `issues = Snap.diff_files(target, after_create_path)` (or `Snap.diff(target_hash, new_hash)`).
 4. **If `issues.any?`**: print the list, patch code, go to step 1.
 5. **If `issues.empty?`**: print **`PASS: snapshots match`** and stop. The on-disk `GEOMETRY_BASELINE_JSON` from `create` should now align with the target for future runs.

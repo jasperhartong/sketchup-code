@@ -1,10 +1,14 @@
 #!/usr/bin/env ruby
 require 'fileutils'
-# Run from Cursor/agent: after writing sketchup_bridge/command.rb, run:
+# Run from Cursor/agent:
 #   ruby sketchup_bridge/run_and_wait.rb
-# Waits for SketchUp to execute command.rb, then prints result.txt.
-# If the bridge is not connected (listener not running in SketchUp), this script
-# fails and reports that clearly so the user knows to start the listener.
+#
+# Touches command.rb on purpose: the listener only re-executes when that file's mtime
+# advances (saving an edit also works; touch covers re-runs without a content change).
+# Then waits for results/result.txt from this run so you never read stale output.
+# Fails with BRIDGE NOT CONNECTED if SketchUp does not respond.
+#
+# command.rb must already say what you want (default rebuild, or a temporary capture load — see comment in command.rb).
 
 bridge_dir = File.expand_path(File.dirname(__FILE__))
 results_dir = File.join(bridge_dir, 'results')
@@ -13,18 +17,16 @@ result_file = File.join(results_dir, 'result.txt')
 command_file = File.join(bridge_dir, 'command.rb')
 
 unless File.exist?(command_file)
-  puts "ERROR: command.rb not found. Write code to sketchup_bridge/command.rb first."
+  puts "ERROR: command.rb not found under #{bridge_dir}"
   exit 1
 end
 
-# Touch command.rb so the listener will run it (it runs when command.rb is newer than last run).
-# Then we only accept result.txt written after this moment — so we never use stale output
-# when the listener isn't running.
+# Trigger listener + align result.txt mtime with this invocation.
 FileUtils.touch(command_file)
 cmd_mtime = File.mtime(command_file)
 max_wait = (ENV['SKETCHUP_BRIDGE_MAX_WAIT'] || '15').to_f
 elapsed = 0
-step = 0.25  # catch result soon after SketchUp writes (SketchUp polls every 2s)
+step = 0.25 # catch result soon after SketchUp writes (SketchUp polls every 2s)
 
 while elapsed < max_wait
   sleep(step)

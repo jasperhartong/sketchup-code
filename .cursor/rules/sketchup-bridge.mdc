@@ -28,7 +28,8 @@ When you need to **run code inside SketchUp** and see results (e.g. test `Timmer
 
 3. **Run and wait for result**  
    Execute: `ruby sketchup_bridge/run_and_wait.rb`  
-   The script touches `command.rb` so the listener runs it, then waits for `results/result.txt` written *this* run. It only succeeds when SketchUp actually runs the command (so you never get stale output). If the listener is not running, it times out and fails.
+   The script touches `command.rb` so the listener runs it, then waits for `results/result.txt` written *this* run. It only succeeds when SketchUp actually runs the command (so you never get stale output). If the listener is not running, it times out and fails.  
+   **Extendable bed — capture manual geometry without rebuild:** temporarily set `command.rb` to `load File.expand_path('commands/capture_extendable_bed_target.rb', __dir__)`, run `ruby sketchup_bridge/run_and_wait.rb`, then restore `command.rb` (see `.cursor/skills/manual-sketchup-to-code/SKILL.md`). A default `clear`/`create` run wipes manual edits — restore promptly after capture.
 
 4. **Use the output**  
    stdout/stderr from the command are in the printed result. Parse it to decide the next edit and repeat.
