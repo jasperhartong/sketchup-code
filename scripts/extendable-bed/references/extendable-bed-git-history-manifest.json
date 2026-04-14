@@ -1,0 +1,125 @@
+{
+  "frames": [
+    {
+      "index": 1,
+      "sha": "fd675b1a0640c574101b22e5fe5d59ce2387d8b6",
+      "subject": "Add extendable bed SketchUp generator script",
+      "frame": "eb_git_hist_001.png"
+    },
+    {
+      "index": 2,
+      "sha": "9ad2f4e1cd7f49c961db3e4d6b49fae29cabaf45",
+      "subject": "Extendable bed: add inset duplicate legs for stiffness",
+      "frame": "eb_git_hist_002.png"
+    },
+    {
+      "index": 3,
+      "sha": "6715ee52331a66babf402ba5ac2e83658b312be2",
+      "subject": "Extendable bed: foot-end sister beam, preview colours, API notes",
+      "frame": "eb_git_hist_003.png"
+    },
+    {
+      "index": 4,
+      "sha": "94cba5015e44ee2da1991d3b9b5361b5573d42ba",
+      "subject": "Extendable bed: single-instance stock tally and 2 m cut plan",
+      "frame": "eb_git_hist_004.png"
+    },
+    {
+      "index": 5,
+      "sha": "4532672148da56c8b5e60a704e441572b0067ae9",
+      "subject": "Extendable bed: stronger 1D stock packer (BFD + local search)",
+      "frame": "eb_git_hist_005.png"
+    },
+    {
+      "index": 6,
+      "sha": "8c2d2f04681dc4fa37b1c53aee025f8a070bb209",
+      "subject": "Extendable bed: fix slat overlap and shorten slats for 2 m stock",
+      "frame": "eb_git_hist_006.png"
+    },
+    {
+      "index": 7,
+      "sha": "7f3fb20475f1ed26e3f73a649e5f5e924905ed4e",
+      "subject": "Extendable bed: cut plan uses 2100 mm stock bar length",
+      "frame": "eb_git_hist_007.png"
+    },
+    {
+      "index": 8,
+      "sha": "9de10814a0da5921dec9ac4a083d7b23fbaca380",
+      "subject": "Extendable bed: sandwich head/foot caps between outer corner legs",
+      "frame": "eb_git_hist_008.png"
+    },
+    {
+      "index": 9,
+      "sha": "6f07b420113e1b10b7dea2e47e8285bb7af17e74",
+      "subject": "Extendable bed: rigidity, slat runs, reference-safe clear",
+      "frame": "eb_git_hist_009.png"
+    },
+    {
+      "index": 10,
+      "sha": "fc72c4c78743a4ac465af2b181d28c9cd4934af6",
+      "subject": "Extendable bed: DRY layout helpers and purge merge",
+      "frame": "eb_git_hist_010.png"
+    },
+    {
+      "index": 11,
+      "sha": "f9fc34a66b0e3adcc9ce0398c101f434095f7cc4",
+      "subject": "Extendable bed: PLANK_THICKNESS offsets, sister/tie tweaks, PlankFactory ledges",
+      "frame": "eb_git_hist_011.png"
+    },
+    {
+      "index": 12,
+      "sha": "2da77e9d6f8c01956b58521d2bacc978505aa749",
+      "subject": "Extendable bed: pillow factory, extended and couch layouts",
+      "frame": "eb_git_hist_012.png"
+    },
+    {
+      "index": 13,
+      "sha": "76b92f9270ea5ab022dbd49e3713026a71083461",
+      "subject": "Extendable bed: half-extended preview variant and layout",
+      "frame": "eb_git_hist_013.png"
+    },
+    {
+      "index": 14,
+      "sha": "b2f3b3a960a6adbcc680584afce03c63703a4427",
+      "subject": "Extendable bed: PLANK_THICKNESS 18mm, mid-tie vertical fillers",
+      "frame": "eb_git_hist_014.png"
+    },
+    {
+      "index": 15,
+      "sha": "b78aff84559a1a5d965b6c95b774a4869706ade5",
+      "subject": "Extendable bed: hoist main inputs, drop overlap/inset leftovers",
+      "frame": "eb_git_hist_015.png"
+    },
+    {
+      "index": 16,
+      "sha": "357f191b96c2d18b637173250f373f962f6ec6fc",
+      "subject": "Extendable bed: TOP_OF_SLATS_Z = true slat top; fix vertical chain",
+      "frame": "eb_git_hist_016.png"
+    },
+    {
+      "index": 17,
+      "sha": "bbb46105027bc9ea79fd5b5c9815159789db675e",
+      "subject": "Extendable bed: assert BACK_SLAT_COUNT odd; tidy main-input comments",
+      "frame": "eb_git_hist_017.png"
+    },
+    {
+      "index": 18,
+      "sha": "1ccd8ec5cfdc3b0a030f0a5e7db9e59e119ea9b1",
+      "subject": "Extendable bed: three small pillows; retracted couch stack on big cushion",
+      "frame": "eb_git_hist_018.png"
+    }
+  ],
+  "gif": {
+    "dedupe_consecutive": true,
+    "capture_count": 18,
+    "gif_frame_count": 12,
+    "dropped_capture_indices_duplicate_of_previous": [
+      4,
+      5,
+      7,
+      10,
+      15,
+      17
+    ]
+  }
+}
