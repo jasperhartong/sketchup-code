@@ -110,6 +110,8 @@ module Timmerman
           label: format('[EB stock] (one bed = %s + %s) ——',
                         Config::GROUP_EXT_BACK, Config::GROUP_EXT_FRONT)
         )
+
+        _save_geometry_baseline(model)
       end
 
       def clear(model = Sketchup.active_model)
@@ -127,6 +129,20 @@ module Timmerman
       end
 
       private
+
+      def _save_geometry_baseline(model)
+        snap_rb = File.expand_path('../../sketchup_utils/named_group_geometry_snapshot.rb', __dir__)
+        load snap_rb unless defined?(Timmerman::SketchupUtils::NamedGroupGeometrySnapshot)
+
+        root_filter = lambda do |g|
+          Config::GROUP_NAME_RE.match?(g.name) || Config::SINGLE_PAIR_ROOTS.include?(g.name)
+        end
+        Timmerman::SketchupUtils::NamedGroupGeometrySnapshot.save_snapshot(
+          Config::GEOMETRY_BASELINE_JSON,
+          model,
+          root_filter: root_filter
+        )
+      end
 
       def _ensure_layer(model)
         model.layers[Config::LAYER_NAME] || model.layers.add(Config::LAYER_NAME)

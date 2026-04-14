@@ -198,6 +198,10 @@ module Timmerman
       # Legacy single-pair root names (cleared together with the multi-pair set).
       SINGLE_PAIR_ROOTS = %w[EB_Back EB_Front].freeze
 
+      # Written on each successful BedLayout#create (named-group geometry snapshot).
+      GEOMETRY_BASELINE_JSON =
+        File.expand_path('../references/extendable_bed_geometry_baseline.json', __dir__).freeze
+
       # Design-reference copies placed manually in the model — cleared must NOT touch these.
       REFERENCE_ROOT_RE = /\A(?:NEW|New)_EB_Ext_(Back|Front)\z/
 
