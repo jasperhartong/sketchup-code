@@ -66,6 +66,16 @@ module Timmerman
       # Front comb has one fewer tooth than back (sits in back gaps).
       def front_slat_count = back_slat_count - 1
 
+      # Outliner names for slat groups (matches `FrameAssembly#_back_slats` / `#_front_slats`).
+      def back_slat_group_names
+        (0...back_slat_count).map { |i| "EB | slat | back | #{i + 1}/#{back_slat_count}" }
+      end
+
+      def front_slat_group_names
+        fc = front_slat_count
+        (0...fc).map { |i| "EB | slat | front | #{i + 1}/#{fc}" }
+      end
+
       # Slats: narrow face along X (bed width), wide face vertical (stiffer in bending).
       def slat_dx = beam_narrow
       def slat_dz = beam_wide
@@ -118,6 +128,67 @@ module Timmerman
 
       # Front foot at the far end when fully extended.
       def extended_front_foot_world_y = length_extended
+
+      # Upside-down construction row: front half one small-pillow segment past nominal
+      # extension (visible comb gap). Upright steps 1–3 use extended_front_foot_world_y.
+      def decoupled_front_foot_world_y = length_extended + pillow_small_length
+
+      # World Y offset for the construction-step preview row (headward of y=0).
+      def construction_steps_row_y = -(length_extended + pair_gap_x)
+
+      # Extra +X for the upside-down step: 180° about +Y mirrors local X, so the
+      # group's geometry lies mostly left of its anchor; shift by outer_width so it
+      # clears the previous construction column (same row_y).
+      def construction_flip_extra_offset_x = outer_width
+
+      # Part names for upside-down construction step (blue leg callouts).
+      FLIP_STEP_BACK_LEG_HIGHLIGHTS = [
+        'EB | leg | head | -X',
+        'EB | leg | head | +X',
+        'EB | leg | head | -X | inset',
+        'EB | leg | head | +X | inset',
+        'EB | leg | mid run | -X',
+        'EB | leg | mid run | +X',
+        'EB | leg | post | behind head | -X',
+        'EB | leg | post | behind head | +X',
+        'EB | leg | post | behind mid | -X | headward',
+        'EB | leg | post | behind mid | +X | headward',
+        'EB | leg | post | mid tie filler | -X',
+        'EB | leg | post | mid tie filler | +X'
+      ].freeze
+      FLIP_STEP_FRONT_LEG_HIGHLIGHTS = [
+        'EB | leg | foot | -X',
+        'EB | leg | foot | +X',
+        'EB | leg | foot | -X | inset',
+        'EB | leg | foot | +X | inset'
+      ].freeze
+
+      # Step 6 (no caps): blue callouts for outer sisters, sister ties, front rigidity.
+      FLIP_NOCAPS_BACK_BRACE_HIGHLIGHTS = [
+        'EB | beam | sister | outer -X',
+        'EB | beam | sister | outer +X',
+        'EB | beam | head tie | between sisters',
+        'EB | beam | mid tie | between sisters'
+      ].freeze
+      FLIP_NOCAPS_FRONT_BRACE_HIGHLIGHTS = [
+        'EB | beam | front | rigidity | below foot cap'
+      ].freeze
+
+      # Step 7: blue every `EB | beam |` child that exists (omitted geometry is skipped).
+      FLIP_NOBRACE_BACK_BEAM_HIGHLIGHTS = [
+        'EB | beam | head | cap',
+        'EB | beam | head | end',
+        'EB | beam | sister | outer -X',
+        'EB | beam | sister | outer +X',
+        'EB | beam | head tie | between sisters',
+        'EB | beam | mid tie | between sisters'
+      ].freeze
+      FLIP_NOBRACE_FRONT_BEAM_HIGHLIGHTS = [
+        'EB | beam | foot | cap',
+        'EB | beam | foot | end',
+        'EB | beam | front | under slats | foot end',
+        'EB | beam | front | rigidity | below foot cap'
+      ].freeze
 
       # Front foot position when retracted (outer face of front end beam).
       def retracted_foot_world_y = length_retracted + beam_narrow
@@ -178,6 +249,7 @@ module Timmerman
       PREVIEW_MAT_FRONT   = 'EB preview | front'
       PREVIEW_RGB_BACK    = [188, 152, 106].freeze
       PREVIEW_RGB_FRONT   = [168, 130,  90].freeze
+      PREVIEW_RGB_ACTIVE  = [56, 119, 234].freeze
 
       # ── Outliner group names for the four preview pairs ───────────────────────
 
@@ -192,10 +264,25 @@ module Timmerman
       GROUP_RETGND_BACK  = 'EB_RetGnd_Back'
       GROUP_RETGND_FRONT = 'EB_RetGnd_Front'
 
-      # Matches any auto-generated EB pair root group name.
-      GROUP_NAME_RE = /\AEB_(Ext|Ext1|Ret|Half|RetGnd)_(Back|Front)\z/
+      GROUP_STEP_EXT_BACK        = 'EB_StepExt_Back'
+      GROUP_STEP_EXT_FRONT       = 'EB_StepExt_Front'
+      GROUP_STEP_DECOUP_BACK     = 'EB_StepDecoup_Back'
+      GROUP_STEP_DECOUP_FRONT    = 'EB_StepDecoup_Front'
+      GROUP_STEP_NOLEDGES_BACK   = 'EB_StepNoLedges_Back'
+      GROUP_STEP_NOLEDGES_FRONT  = 'EB_StepNoLedges_Front'
+      GROUP_STEP_FLIP_BACK       = 'EB_StepFlip_Back'
+      GROUP_STEP_FLIP_FRONT      = 'EB_StepFlip_Front'
+      GROUP_STEP_FLIP_NOLEGS_BACK  = 'EB_StepFlipNoLegs_Back'
+      GROUP_STEP_FLIP_NOLEGS_FRONT = 'EB_StepFlipNoLegs_Front'
+      GROUP_STEP_FLIP_NOCAPS_BACK  = 'EB_StepFlipNoCaps_Back'
+      GROUP_STEP_FLIP_NOCAPS_FRONT = 'EB_StepFlipNoCaps_Front'
+      GROUP_STEP_FLIP_NOBRACE_BACK   = 'EB_StepFlipNoBrace_Back'
+      GROUP_STEP_FLIP_NOBRACE_FRONT  = 'EB_StepFlipNoBrace_Front'
 
-      # Legacy single-pair root names (cleared together with the multi-pair set).
+      # Matches any auto-generated EB pair root group name.
+      GROUP_NAME_RE = /\AEB_(Ext|Ext1|Ret|Half|RetGnd|StepExt|StepDecoup|StepNoLedges|StepFlip|StepFlipNoLegs|StepFlipNoCaps|StepFlipNoBrace)_(Back|Front)\z/
+
+      # Single-pair root names (cleared together with the multi-pair preview set).
       SINGLE_PAIR_ROOTS = %w[EB_Back EB_Front].freeze
 
       # Written on each successful BedLayout#create (named-group geometry snapshot).
@@ -212,10 +299,16 @@ module Timmerman
       # Beams and legs only (excludes slats) — used by the AABB validator.
       SOLID_NAME_RE  = /\AEB \| (beam|leg) \|/
 
-      # Legacy unqualified mid behind-leg names — purged on clear.
-      LEGACY_BEHIND_LEG_MID_NAMES = %w[
+      # Nested part-group names to erase on clear (previous labels after part renames).
+      PURGE_NESTED_PART_GROUP_NAMES = %w[
         EB | beam | behind leg | mid -X
         EB | beam | behind leg | mid +X
+        EB | beam | behind leg | head -X
+        EB | beam | behind leg | head +X
+        EB | beam | behind leg | mid -X | headward
+        EB | beam | behind leg | mid +X | headward
+        EB | beam | mid tie | vertical filler | -X
+        EB | beam | mid tie | vertical filler | +X
       ].freeze
     end
   end

@@ -1,4 +1,2908 @@
 {
+  "EB_StepExt_Back / EB | leg | head | -X": {
+    "min": [
+      0.0,
+      -2618.0,
+      0.0
+    ],
+    "max": [
+      69.0,
+      -2574.0,
+      191.0
+    ]
+  },
+  "EB_StepExt_Back / EB | leg | head | +X": {
+    "min": [
+      727.0,
+      -2618.0,
+      0.0
+    ],
+    "max": [
+      796.0,
+      -2574.0,
+      191.0
+    ]
+  },
+  "EB_StepExt_Back / EB | leg | head | -X | inset": {
+    "min": [
+      69.0,
+      -2618.0,
+      0.0
+    ],
+    "max": [
+      138.0,
+      -2574.0,
+      122.0
+    ]
+  },
+  "EB_StepExt_Back / EB | leg | head | +X | inset": {
+    "min": [
+      658.0,
+      -2618.0,
+      0.0
+    ],
+    "max": [
+      727.0,
+      -2574.0,
+      122.0
+    ]
+  },
+  "EB_StepExt_Back / EB | leg | mid run | -X": {
+    "min": [
+      0.0,
+      -1563.0,
+      0.0
+    ],
+    "max": [
+      44.0,
+      -1494.0,
+      122.0
+    ]
+  },
+  "EB_StepExt_Back / EB | leg | mid run | +X": {
+    "min": [
+      752.0,
+      -1563.0,
+      0.0
+    ],
+    "max": [
+      796.0,
+      -1494.0,
+      122.0
+    ]
+  },
+  "EB_StepExt_Back / EB | leg | post | behind head | -X": {
+    "min": [
+      0.0,
+      -2574.0,
+      0.0
+    ],
+    "max": [
+      44.0,
+      -2505.0,
+      122.0
+    ]
+  },
+  "EB_StepExt_Back / EB | leg | post | behind head | +X": {
+    "min": [
+      752.0,
+      -2574.0,
+      0.0
+    ],
+    "max": [
+      796.0,
+      -2505.0,
+      122.0
+    ]
+  },
+  "EB_StepExt_Back / EB | leg | post | behind mid | -X | headward": {
+    "min": [
+      0.0,
+      -1632.0,
+      0.0
+    ],
+    "max": [
+      44.0,
+      -1563.0,
+      122.0
+    ]
+  },
+  "EB_StepExt_Back / EB | leg | post | behind mid | +X | headward": {
+    "min": [
+      752.0,
+      -1632.0,
+      0.0
+    ],
+    "max": [
+      796.0,
+      -1563.0,
+      122.0
+    ]
+  },
+  "EB_StepExt_Back / EB | beam | head | cap": {
+    "min": [
+      69.0,
+      -2618.0,
+      122.0
+    ],
+    "max": [
+      727.0,
+      -2574.0,
+      191.0
+    ]
+  },
+  "EB_StepExt_Back / EB | plank | head | ledge": {
+    "min": [
+      0.0,
+      -2618.0,
+      191.0
+    ],
+    "max": [
+      796.0,
+      -2600.0,
+      329.0
+    ]
+  },
+  "EB_StepExt_Back / EB | beam | head | end": {
+    "min": [
+      0.0,
+      -2600.0,
+      191.0
+    ],
+    "max": [
+      796.0,
+      -2556.0,
+      260.0
+    ]
+  },
+  "EB_StepExt_Back / EB | slat | back | 1/9": {
+    "min": [
+      0.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      44.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepExt_Back / EB | slat | back | 2/9": {
+    "min": [
+      94.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      138.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepExt_Back / EB | slat | back | 3/9": {
+    "min": [
+      188.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      232.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepExt_Back / EB | slat | back | 4/9": {
+    "min": [
+      282.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      326.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepExt_Back / EB | slat | back | 5/9": {
+    "min": [
+      376.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      420.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepExt_Back / EB | slat | back | 6/9": {
+    "min": [
+      470.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      514.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepExt_Back / EB | slat | back | 7/9": {
+    "min": [
+      564.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      608.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepExt_Back / EB | slat | back | 8/9": {
+    "min": [
+      658.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      702.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepExt_Back / EB | slat | back | 9/9": {
+    "min": [
+      752.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      796.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepExt_Back / EB | beam | sister | outer -X": {
+    "min": [
+      0.0,
+      -2574.0,
+      122.0
+    ],
+    "max": [
+      44.0,
+      -1494.0,
+      191.0
+    ]
+  },
+  "EB_StepExt_Back / EB | beam | sister | outer +X": {
+    "min": [
+      752.0,
+      -2574.0,
+      122.0
+    ],
+    "max": [
+      796.0,
+      -1494.0,
+      191.0
+    ]
+  },
+  "EB_StepExt_Back / EB | beam | head tie | between sisters": {
+    "min": [
+      44.0,
+      -2574.0,
+      122.0
+    ],
+    "max": [
+      752.0,
+      -2530.0,
+      191.0
+    ]
+  },
+  "EB_StepExt_Back / EB | beam | mid tie | between sisters": {
+    "min": [
+      44.0,
+      -1618.0,
+      122.0
+    ],
+    "max": [
+      752.0,
+      -1574.0,
+      191.0
+    ]
+  },
+  "EB_StepExt_Back / EB | leg | post | mid tie filler | -X": {
+    "min": [
+      44.0,
+      -1618.0,
+      0.0
+    ],
+    "max": [
+      113.0,
+      -1574.0,
+      122.0
+    ]
+  },
+  "EB_StepExt_Back / EB | leg | post | mid tie filler | +X": {
+    "min": [
+      683.0,
+      -1618.0,
+      0.0
+    ],
+    "max": [
+      752.0,
+      -1574.0,
+      122.0
+    ]
+  },
+  "EB_StepExt_Front / EB | leg | foot | -X": {
+    "min": [
+      0.0,
+      -626.0,
+      0.0
+    ],
+    "max": [
+      69.0,
+      -582.0,
+      191.0
+    ]
+  },
+  "EB_StepExt_Front / EB | leg | foot | +X": {
+    "min": [
+      727.0,
+      -626.0,
+      0.0
+    ],
+    "max": [
+      796.0,
+      -582.0,
+      191.0
+    ]
+  },
+  "EB_StepExt_Front / EB | leg | foot | -X | inset": {
+    "min": [
+      69.0,
+      -626.0,
+      0.0
+    ],
+    "max": [
+      138.0,
+      -582.0,
+      122.0
+    ]
+  },
+  "EB_StepExt_Front / EB | leg | foot | +X | inset": {
+    "min": [
+      658.0,
+      -626.0,
+      0.0
+    ],
+    "max": [
+      727.0,
+      -582.0,
+      122.0
+    ]
+  },
+  "EB_StepExt_Front / EB | beam | foot | cap": {
+    "min": [
+      69.0,
+      -626.0,
+      122.0
+    ],
+    "max": [
+      727.0,
+      -582.0,
+      191.0
+    ]
+  },
+  "EB_StepExt_Front / EB | plank | foot | ledge": {
+    "min": [
+      0.0,
+      -600.0,
+      191.0
+    ],
+    "max": [
+      796.0,
+      -582.0,
+      329.0
+    ]
+  },
+  "EB_StepExt_Front / EB | beam | foot | end": {
+    "min": [
+      0.0,
+      -644.0,
+      191.0
+    ],
+    "max": [
+      796.0,
+      -600.0,
+      260.0
+    ]
+  },
+  "EB_StepExt_Front / EB | slat | front | 1/8": {
+    "min": [
+      47.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      91.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepExt_Front / EB | slat | front | 2/8": {
+    "min": [
+      141.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      185.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepExt_Front / EB | slat | front | 3/8": {
+    "min": [
+      235.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      279.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepExt_Front / EB | slat | front | 4/8": {
+    "min": [
+      329.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      373.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepExt_Front / EB | slat | front | 5/8": {
+    "min": [
+      423.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      467.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepExt_Front / EB | slat | front | 6/8": {
+    "min": [
+      517.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      561.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepExt_Front / EB | slat | front | 7/8": {
+    "min": [
+      611.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      655.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepExt_Front / EB | slat | front | 8/8": {
+    "min": [
+      705.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      749.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepExt_Front / EB | beam | front | under slats | foot end": {
+    "min": [
+      47.0,
+      -1662.0,
+      122.0
+    ],
+    "max": [
+      749.0,
+      -1618.0,
+      191.0
+    ]
+  },
+  "EB_StepExt_Front / EB | beam | front | rigidity | below foot cap": {
+    "min": [
+      47.0,
+      -670.0,
+      122.0
+    ],
+    "max": [
+      749.0,
+      -626.0,
+      191.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | leg | head | -X": {
+    "min": [
+      1396.0,
+      -2618.0,
+      0.0
+    ],
+    "max": [
+      1465.0,
+      -2574.0,
+      191.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | leg | head | +X": {
+    "min": [
+      2123.0,
+      -2618.0,
+      0.0
+    ],
+    "max": [
+      2192.0,
+      -2574.0,
+      191.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | leg | head | -X | inset": {
+    "min": [
+      1465.0,
+      -2618.0,
+      0.0
+    ],
+    "max": [
+      1534.0,
+      -2574.0,
+      122.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | leg | head | +X | inset": {
+    "min": [
+      2054.0,
+      -2618.0,
+      0.0
+    ],
+    "max": [
+      2123.0,
+      -2574.0,
+      122.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | leg | mid run | -X": {
+    "min": [
+      1396.0,
+      -1563.0,
+      0.0
+    ],
+    "max": [
+      1440.0,
+      -1494.0,
+      122.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | leg | mid run | +X": {
+    "min": [
+      2148.0,
+      -1563.0,
+      0.0
+    ],
+    "max": [
+      2192.0,
+      -1494.0,
+      122.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | leg | post | behind head | -X": {
+    "min": [
+      1396.0,
+      -2574.0,
+      0.0
+    ],
+    "max": [
+      1440.0,
+      -2505.0,
+      122.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | leg | post | behind head | +X": {
+    "min": [
+      2148.0,
+      -2574.0,
+      0.0
+    ],
+    "max": [
+      2192.0,
+      -2505.0,
+      122.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | leg | post | behind mid | -X | headward": {
+    "min": [
+      1396.0,
+      -1632.0,
+      0.0
+    ],
+    "max": [
+      1440.0,
+      -1563.0,
+      122.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | leg | post | behind mid | +X | headward": {
+    "min": [
+      2148.0,
+      -1632.0,
+      0.0
+    ],
+    "max": [
+      2192.0,
+      -1563.0,
+      122.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | beam | head | cap": {
+    "min": [
+      1465.0,
+      -2618.0,
+      122.0
+    ],
+    "max": [
+      2123.0,
+      -2574.0,
+      191.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | plank | head | ledge": {
+    "min": [
+      1396.0,
+      -2618.0,
+      191.0
+    ],
+    "max": [
+      2192.0,
+      -2600.0,
+      329.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | beam | head | end": {
+    "min": [
+      1396.0,
+      -2600.0,
+      191.0
+    ],
+    "max": [
+      2192.0,
+      -2556.0,
+      260.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | slat | back | 1/9": {
+    "min": [
+      1396.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      1440.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | slat | back | 2/9": {
+    "min": [
+      1490.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      1534.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | slat | back | 3/9": {
+    "min": [
+      1584.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      1628.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | slat | back | 4/9": {
+    "min": [
+      1678.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      1722.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | slat | back | 5/9": {
+    "min": [
+      1772.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      1816.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | slat | back | 6/9": {
+    "min": [
+      1866.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      1910.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | slat | back | 7/9": {
+    "min": [
+      1960.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      2004.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | slat | back | 8/9": {
+    "min": [
+      2054.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      2098.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | slat | back | 9/9": {
+    "min": [
+      2148.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      2192.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | beam | sister | outer -X": {
+    "min": [
+      1396.0,
+      -2574.0,
+      122.0
+    ],
+    "max": [
+      1440.0,
+      -1494.0,
+      191.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | beam | sister | outer +X": {
+    "min": [
+      2148.0,
+      -2574.0,
+      122.0
+    ],
+    "max": [
+      2192.0,
+      -1494.0,
+      191.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | beam | head tie | between sisters": {
+    "min": [
+      1440.0,
+      -2574.0,
+      122.0
+    ],
+    "max": [
+      2148.0,
+      -2530.0,
+      191.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | beam | mid tie | between sisters": {
+    "min": [
+      1440.0,
+      -1618.0,
+      122.0
+    ],
+    "max": [
+      2148.0,
+      -1574.0,
+      191.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | leg | post | mid tie filler | -X": {
+    "min": [
+      1440.0,
+      -1618.0,
+      0.0
+    ],
+    "max": [
+      1509.0,
+      -1574.0,
+      122.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | leg | post | mid tie filler | +X": {
+    "min": [
+      2079.0,
+      -1618.0,
+      0.0
+    ],
+    "max": [
+      2148.0,
+      -1574.0,
+      122.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | leg | foot | -X": {
+    "min": [
+      1396.0,
+      -626.0,
+      0.0
+    ],
+    "max": [
+      1465.0,
+      -582.0,
+      191.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | leg | foot | +X": {
+    "min": [
+      2123.0,
+      -626.0,
+      0.0
+    ],
+    "max": [
+      2192.0,
+      -582.0,
+      191.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | leg | foot | -X | inset": {
+    "min": [
+      1465.0,
+      -626.0,
+      0.0
+    ],
+    "max": [
+      1534.0,
+      -582.0,
+      122.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | leg | foot | +X | inset": {
+    "min": [
+      2054.0,
+      -626.0,
+      0.0
+    ],
+    "max": [
+      2123.0,
+      -582.0,
+      122.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | beam | foot | cap": {
+    "min": [
+      1465.0,
+      -626.0,
+      122.0
+    ],
+    "max": [
+      2123.0,
+      -582.0,
+      191.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | plank | foot | ledge": {
+    "min": [
+      1396.0,
+      -600.0,
+      191.0
+    ],
+    "max": [
+      2192.0,
+      -582.0,
+      329.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | beam | foot | end": {
+    "min": [
+      1396.0,
+      -644.0,
+      191.0
+    ],
+    "max": [
+      2192.0,
+      -600.0,
+      260.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | slat | front | 1/8": {
+    "min": [
+      1443.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      1487.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | slat | front | 2/8": {
+    "min": [
+      1537.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      1581.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | slat | front | 3/8": {
+    "min": [
+      1631.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      1675.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | slat | front | 4/8": {
+    "min": [
+      1725.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      1769.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | slat | front | 5/8": {
+    "min": [
+      1819.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      1863.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | slat | front | 6/8": {
+    "min": [
+      1913.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      1957.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | slat | front | 7/8": {
+    "min": [
+      2007.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      2051.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | slat | front | 8/8": {
+    "min": [
+      2101.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      2145.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | beam | front | rigidity | below foot cap": {
+    "min": [
+      1443.0,
+      -670.0,
+      122.0
+    ],
+    "max": [
+      2145.0,
+      -626.0,
+      191.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | leg | head | -X": {
+    "min": [
+      2792.0,
+      -2618.0,
+      0.0
+    ],
+    "max": [
+      2861.0,
+      -2574.0,
+      191.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | leg | head | +X": {
+    "min": [
+      3519.0,
+      -2618.0,
+      0.0
+    ],
+    "max": [
+      3588.0,
+      -2574.0,
+      191.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | leg | head | -X | inset": {
+    "min": [
+      2861.0,
+      -2618.0,
+      0.0
+    ],
+    "max": [
+      2930.0,
+      -2574.0,
+      122.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | leg | head | +X | inset": {
+    "min": [
+      3450.0,
+      -2618.0,
+      0.0
+    ],
+    "max": [
+      3519.0,
+      -2574.0,
+      122.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | leg | mid run | -X": {
+    "min": [
+      2792.0,
+      -1563.0,
+      0.0
+    ],
+    "max": [
+      2836.0,
+      -1494.0,
+      122.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | leg | mid run | +X": {
+    "min": [
+      3544.0,
+      -1563.0,
+      0.0
+    ],
+    "max": [
+      3588.0,
+      -1494.0,
+      122.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | leg | post | behind head | -X": {
+    "min": [
+      2792.0,
+      -2574.0,
+      0.0
+    ],
+    "max": [
+      2836.0,
+      -2505.0,
+      122.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | leg | post | behind head | +X": {
+    "min": [
+      3544.0,
+      -2574.0,
+      0.0
+    ],
+    "max": [
+      3588.0,
+      -2505.0,
+      122.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | leg | post | behind mid | -X | headward": {
+    "min": [
+      2792.0,
+      -1632.0,
+      0.0
+    ],
+    "max": [
+      2836.0,
+      -1563.0,
+      122.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | leg | post | behind mid | +X | headward": {
+    "min": [
+      3544.0,
+      -1632.0,
+      0.0
+    ],
+    "max": [
+      3588.0,
+      -1563.0,
+      122.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | beam | head | cap": {
+    "min": [
+      2861.0,
+      -2618.0,
+      122.0
+    ],
+    "max": [
+      3519.0,
+      -2574.0,
+      191.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | beam | head | end": {
+    "min": [
+      2792.0,
+      -2600.0,
+      191.0
+    ],
+    "max": [
+      3588.0,
+      -2556.0,
+      260.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | slat | back | 1/9": {
+    "min": [
+      2792.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      2836.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | slat | back | 2/9": {
+    "min": [
+      2886.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      2930.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | slat | back | 3/9": {
+    "min": [
+      2980.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      3024.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | slat | back | 4/9": {
+    "min": [
+      3074.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      3118.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | slat | back | 5/9": {
+    "min": [
+      3168.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      3212.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | slat | back | 6/9": {
+    "min": [
+      3262.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      3306.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | slat | back | 7/9": {
+    "min": [
+      3356.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      3400.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | slat | back | 8/9": {
+    "min": [
+      3450.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      3494.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | slat | back | 9/9": {
+    "min": [
+      3544.0,
+      -2556.0,
+      191.0
+    ],
+    "max": [
+      3588.0,
+      -1512.0,
+      260.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | beam | sister | outer -X": {
+    "min": [
+      2792.0,
+      -2574.0,
+      122.0
+    ],
+    "max": [
+      2836.0,
+      -1494.0,
+      191.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | beam | sister | outer +X": {
+    "min": [
+      3544.0,
+      -2574.0,
+      122.0
+    ],
+    "max": [
+      3588.0,
+      -1494.0,
+      191.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | beam | head tie | between sisters": {
+    "min": [
+      2836.0,
+      -2574.0,
+      122.0
+    ],
+    "max": [
+      3544.0,
+      -2530.0,
+      191.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | beam | mid tie | between sisters": {
+    "min": [
+      2836.0,
+      -1618.0,
+      122.0
+    ],
+    "max": [
+      3544.0,
+      -1574.0,
+      191.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | leg | post | mid tie filler | -X": {
+    "min": [
+      2836.0,
+      -1618.0,
+      0.0
+    ],
+    "max": [
+      2905.0,
+      -1574.0,
+      122.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | leg | post | mid tie filler | +X": {
+    "min": [
+      3475.0,
+      -1618.0,
+      0.0
+    ],
+    "max": [
+      3544.0,
+      -1574.0,
+      122.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | leg | foot | -X": {
+    "min": [
+      2792.0,
+      -626.0,
+      0.0
+    ],
+    "max": [
+      2861.0,
+      -582.0,
+      191.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | leg | foot | +X": {
+    "min": [
+      3519.0,
+      -626.0,
+      0.0
+    ],
+    "max": [
+      3588.0,
+      -582.0,
+      191.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | leg | foot | -X | inset": {
+    "min": [
+      2861.0,
+      -626.0,
+      0.0
+    ],
+    "max": [
+      2930.0,
+      -582.0,
+      122.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | leg | foot | +X | inset": {
+    "min": [
+      3450.0,
+      -626.0,
+      0.0
+    ],
+    "max": [
+      3519.0,
+      -582.0,
+      122.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | beam | foot | cap": {
+    "min": [
+      2861.0,
+      -626.0,
+      122.0
+    ],
+    "max": [
+      3519.0,
+      -582.0,
+      191.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | beam | foot | end": {
+    "min": [
+      2792.0,
+      -644.0,
+      191.0
+    ],
+    "max": [
+      3588.0,
+      -600.0,
+      260.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | slat | front | 1/8": {
+    "min": [
+      2839.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      2883.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | slat | front | 2/8": {
+    "min": [
+      2933.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      2977.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | slat | front | 3/8": {
+    "min": [
+      3027.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      3071.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | slat | front | 4/8": {
+    "min": [
+      3121.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      3165.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | slat | front | 5/8": {
+    "min": [
+      3215.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      3259.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | slat | front | 6/8": {
+    "min": [
+      3309.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      3353.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | slat | front | 7/8": {
+    "min": [
+      3403.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      3447.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | slat | front | 8/8": {
+    "min": [
+      3497.0,
+      -1688.0,
+      191.0
+    ],
+    "max": [
+      3541.0,
+      -644.0,
+      260.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | beam | front | rigidity | below foot cap": {
+    "min": [
+      2839.0,
+      -670.0,
+      122.0
+    ],
+    "max": [
+      3541.0,
+      -626.0,
+      191.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | leg | head | -X": {
+    "min": [
+      4915.0,
+      -2618.0,
+      69.0
+    ],
+    "max": [
+      4984.0,
+      -2574.0,
+      260.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | leg | head | +X": {
+    "min": [
+      4188.0,
+      -2618.0,
+      69.0
+    ],
+    "max": [
+      4257.0,
+      -2574.0,
+      260.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | leg | head | -X | inset": {
+    "min": [
+      4846.0,
+      -2618.0,
+      138.0
+    ],
+    "max": [
+      4915.0,
+      -2574.0,
+      260.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | leg | head | +X | inset": {
+    "min": [
+      4257.0,
+      -2618.0,
+      138.0
+    ],
+    "max": [
+      4326.0,
+      -2574.0,
+      260.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | leg | mid run | -X": {
+    "min": [
+      4940.0,
+      -1563.0,
+      138.0
+    ],
+    "max": [
+      4984.0,
+      -1494.0,
+      260.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | leg | mid run | +X": {
+    "min": [
+      4188.0,
+      -1563.0,
+      138.0
+    ],
+    "max": [
+      4232.0,
+      -1494.0,
+      260.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | leg | post | behind head | -X": {
+    "min": [
+      4940.0,
+      -2574.0,
+      138.0
+    ],
+    "max": [
+      4984.0,
+      -2505.0,
+      260.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | leg | post | behind head | +X": {
+    "min": [
+      4188.0,
+      -2574.0,
+      138.0
+    ],
+    "max": [
+      4232.0,
+      -2505.0,
+      260.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | leg | post | behind mid | -X | headward": {
+    "min": [
+      4940.0,
+      -1632.0,
+      138.0
+    ],
+    "max": [
+      4984.0,
+      -1563.0,
+      260.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | leg | post | behind mid | +X | headward": {
+    "min": [
+      4188.0,
+      -1632.0,
+      138.0
+    ],
+    "max": [
+      4232.0,
+      -1563.0,
+      260.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | beam | head | cap": {
+    "min": [
+      4257.0,
+      -2618.0,
+      69.0
+    ],
+    "max": [
+      4915.0,
+      -2574.0,
+      138.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | beam | head | end": {
+    "min": [
+      4188.0,
+      -2600.0,
+      0.0
+    ],
+    "max": [
+      4984.0,
+      -2556.0,
+      69.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | slat | back | 1/9": {
+    "min": [
+      4940.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      4984.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | slat | back | 2/9": {
+    "min": [
+      4846.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      4890.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | slat | back | 3/9": {
+    "min": [
+      4752.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      4796.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | slat | back | 4/9": {
+    "min": [
+      4658.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      4702.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | slat | back | 5/9": {
+    "min": [
+      4564.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      4608.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | slat | back | 6/9": {
+    "min": [
+      4470.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      4514.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | slat | back | 7/9": {
+    "min": [
+      4376.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      4420.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | slat | back | 8/9": {
+    "min": [
+      4282.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      4326.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | slat | back | 9/9": {
+    "min": [
+      4188.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      4232.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | beam | sister | outer -X": {
+    "min": [
+      4940.0,
+      -2574.0,
+      69.0
+    ],
+    "max": [
+      4984.0,
+      -1494.0,
+      138.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | beam | sister | outer +X": {
+    "min": [
+      4188.0,
+      -2574.0,
+      69.0
+    ],
+    "max": [
+      4232.0,
+      -1494.0,
+      138.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | beam | head tie | between sisters": {
+    "min": [
+      4232.0,
+      -2574.0,
+      69.0
+    ],
+    "max": [
+      4940.0,
+      -2530.0,
+      138.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | beam | mid tie | between sisters": {
+    "min": [
+      4232.0,
+      -1618.0,
+      69.0
+    ],
+    "max": [
+      4940.0,
+      -1574.0,
+      138.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | leg | post | mid tie filler | -X": {
+    "min": [
+      4871.0,
+      -1618.0,
+      138.0
+    ],
+    "max": [
+      4940.0,
+      -1574.0,
+      260.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | leg | post | mid tie filler | +X": {
+    "min": [
+      4232.0,
+      -1618.0,
+      138.0
+    ],
+    "max": [
+      4301.0,
+      -1574.0,
+      260.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | leg | foot | -X": {
+    "min": [
+      4915.0,
+      -336.667,
+      69.0
+    ],
+    "max": [
+      4984.0,
+      -292.667,
+      260.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | leg | foot | +X": {
+    "min": [
+      4188.0,
+      -336.667,
+      69.0
+    ],
+    "max": [
+      4257.0,
+      -292.667,
+      260.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | leg | foot | -X | inset": {
+    "min": [
+      4846.0,
+      -336.667,
+      138.0
+    ],
+    "max": [
+      4915.0,
+      -292.667,
+      260.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | leg | foot | +X | inset": {
+    "min": [
+      4257.0,
+      -336.667,
+      138.0
+    ],
+    "max": [
+      4326.0,
+      -292.667,
+      260.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | beam | foot | cap": {
+    "min": [
+      4257.0,
+      -336.667,
+      69.0
+    ],
+    "max": [
+      4915.0,
+      -292.667,
+      138.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | beam | foot | end": {
+    "min": [
+      4188.0,
+      -354.667,
+      0.0
+    ],
+    "max": [
+      4984.0,
+      -310.667,
+      69.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | slat | front | 1/8": {
+    "min": [
+      4893.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      4937.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | slat | front | 2/8": {
+    "min": [
+      4799.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      4843.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | slat | front | 3/8": {
+    "min": [
+      4705.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      4749.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | slat | front | 4/8": {
+    "min": [
+      4611.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      4655.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | slat | front | 5/8": {
+    "min": [
+      4517.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      4561.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | slat | front | 6/8": {
+    "min": [
+      4423.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      4467.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | slat | front | 7/8": {
+    "min": [
+      4329.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      4373.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | slat | front | 8/8": {
+    "min": [
+      4235.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      4279.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | beam | front | rigidity | below foot cap": {
+    "min": [
+      4235.0,
+      -380.667,
+      69.0
+    ],
+    "max": [
+      4937.0,
+      -336.667,
+      138.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | beam | head | cap": {
+    "min": [
+      5653.0,
+      -2618.0,
+      69.0
+    ],
+    "max": [
+      6311.0,
+      -2574.0,
+      138.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | beam | head | end": {
+    "min": [
+      5584.0,
+      -2600.0,
+      0.0
+    ],
+    "max": [
+      6380.0,
+      -2556.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | slat | back | 1/9": {
+    "min": [
+      6336.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      6380.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | slat | back | 2/9": {
+    "min": [
+      6242.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      6286.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | slat | back | 3/9": {
+    "min": [
+      6148.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      6192.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | slat | back | 4/9": {
+    "min": [
+      6054.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      6098.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | slat | back | 5/9": {
+    "min": [
+      5960.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      6004.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | slat | back | 6/9": {
+    "min": [
+      5866.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      5910.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | slat | back | 7/9": {
+    "min": [
+      5772.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      5816.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | slat | back | 8/9": {
+    "min": [
+      5678.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      5722.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | slat | back | 9/9": {
+    "min": [
+      5584.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      5628.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | beam | sister | outer -X": {
+    "min": [
+      6336.0,
+      -2574.0,
+      69.0
+    ],
+    "max": [
+      6380.0,
+      -1494.0,
+      138.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | beam | sister | outer +X": {
+    "min": [
+      5584.0,
+      -2574.0,
+      69.0
+    ],
+    "max": [
+      5628.0,
+      -1494.0,
+      138.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | beam | head tie | between sisters": {
+    "min": [
+      5628.0,
+      -2574.0,
+      69.0
+    ],
+    "max": [
+      6336.0,
+      -2530.0,
+      138.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | beam | mid tie | between sisters": {
+    "min": [
+      5628.0,
+      -1618.0,
+      69.0
+    ],
+    "max": [
+      6336.0,
+      -1574.0,
+      138.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | beam | foot | cap": {
+    "min": [
+      5653.0,
+      -336.667,
+      69.0
+    ],
+    "max": [
+      6311.0,
+      -292.667,
+      138.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | beam | foot | end": {
+    "min": [
+      5584.0,
+      -354.667,
+      0.0
+    ],
+    "max": [
+      6380.0,
+      -310.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | slat | front | 1/8": {
+    "min": [
+      6289.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      6333.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | slat | front | 2/8": {
+    "min": [
+      6195.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      6239.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | slat | front | 3/8": {
+    "min": [
+      6101.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      6145.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | slat | front | 4/8": {
+    "min": [
+      6007.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      6051.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | slat | front | 5/8": {
+    "min": [
+      5913.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      5957.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | slat | front | 6/8": {
+    "min": [
+      5819.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      5863.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | slat | front | 7/8": {
+    "min": [
+      5725.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      5769.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | slat | front | 8/8": {
+    "min": [
+      5631.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      5675.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | beam | front | rigidity | below foot cap": {
+    "min": [
+      5631.0,
+      -380.667,
+      69.0
+    ],
+    "max": [
+      6333.0,
+      -336.667,
+      138.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | beam | head | end": {
+    "min": [
+      6980.0,
+      -2600.0,
+      0.0
+    ],
+    "max": [
+      7776.0,
+      -2556.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | slat | back | 1/9": {
+    "min": [
+      7732.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      7776.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | slat | back | 2/9": {
+    "min": [
+      7638.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      7682.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | slat | back | 3/9": {
+    "min": [
+      7544.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      7588.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | slat | back | 4/9": {
+    "min": [
+      7450.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      7494.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | slat | back | 5/9": {
+    "min": [
+      7356.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      7400.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | slat | back | 6/9": {
+    "min": [
+      7262.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      7306.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | slat | back | 7/9": {
+    "min": [
+      7168.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      7212.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | slat | back | 8/9": {
+    "min": [
+      7074.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      7118.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | slat | back | 9/9": {
+    "min": [
+      6980.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      7024.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | beam | sister | outer -X": {
+    "min": [
+      7732.0,
+      -2574.0,
+      69.0
+    ],
+    "max": [
+      7776.0,
+      -1494.0,
+      138.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | beam | sister | outer +X": {
+    "min": [
+      6980.0,
+      -2574.0,
+      69.0
+    ],
+    "max": [
+      7024.0,
+      -1494.0,
+      138.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | beam | head tie | between sisters": {
+    "min": [
+      7024.0,
+      -2574.0,
+      69.0
+    ],
+    "max": [
+      7732.0,
+      -2530.0,
+      138.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | beam | mid tie | between sisters": {
+    "min": [
+      7024.0,
+      -1618.0,
+      69.0
+    ],
+    "max": [
+      7732.0,
+      -1574.0,
+      138.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | beam | foot | end": {
+    "min": [
+      6980.0,
+      -354.667,
+      0.0
+    ],
+    "max": [
+      7776.0,
+      -310.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | slat | front | 1/8": {
+    "min": [
+      7685.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      7729.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | slat | front | 2/8": {
+    "min": [
+      7591.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      7635.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | slat | front | 3/8": {
+    "min": [
+      7497.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      7541.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | slat | front | 4/8": {
+    "min": [
+      7403.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      7447.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | slat | front | 5/8": {
+    "min": [
+      7309.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      7353.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | slat | front | 6/8": {
+    "min": [
+      7215.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      7259.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | slat | front | 7/8": {
+    "min": [
+      7121.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      7165.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | slat | front | 8/8": {
+    "min": [
+      7027.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      7071.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | beam | front | rigidity | below foot cap": {
+    "min": [
+      7027.0,
+      -380.667,
+      69.0
+    ],
+    "max": [
+      7729.0,
+      -336.667,
+      138.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | beam | head | end": {
+    "min": [
+      8376.0,
+      -2600.0,
+      0.0
+    ],
+    "max": [
+      9172.0,
+      -2556.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | slat | back | 1/9": {
+    "min": [
+      9128.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      9172.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | slat | back | 2/9": {
+    "min": [
+      9034.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      9078.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | slat | back | 3/9": {
+    "min": [
+      8940.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      8984.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | slat | back | 4/9": {
+    "min": [
+      8846.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      8890.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | slat | back | 5/9": {
+    "min": [
+      8752.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      8796.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | slat | back | 6/9": {
+    "min": [
+      8658.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      8702.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | slat | back | 7/9": {
+    "min": [
+      8564.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      8608.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | slat | back | 8/9": {
+    "min": [
+      8470.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      8514.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | slat | back | 9/9": {
+    "min": [
+      8376.0,
+      -2556.0,
+      0.0
+    ],
+    "max": [
+      8420.0,
+      -1512.0,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | beam | foot | end": {
+    "min": [
+      8376.0,
+      -354.667,
+      0.0
+    ],
+    "max": [
+      9172.0,
+      -310.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | slat | front | 1/8": {
+    "min": [
+      9081.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      9125.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | slat | front | 2/8": {
+    "min": [
+      8987.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      9031.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | slat | front | 3/8": {
+    "min": [
+      8893.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      8937.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | slat | front | 4/8": {
+    "min": [
+      8799.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      8843.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | slat | front | 5/8": {
+    "min": [
+      8705.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      8749.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | slat | front | 6/8": {
+    "min": [
+      8611.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      8655.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | slat | front | 7/8": {
+    "min": [
+      8517.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      8561.0,
+      -354.667,
+      69.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | slat | front | 8/8": {
+    "min": [
+      8423.0,
+      -1398.667,
+      0.0
+    ],
+    "max": [
+      8467.0,
+      -354.667,
+      69.0
+    ]
+  },
   "EB_Ext1_Back / EB | leg | head | -X": {
     "min": [
       0.0,
@@ -71,7 +2975,7 @@
       122.0
     ]
   },
-  "EB_Ext1_Back / EB | beam | behind leg | head -X": {
+  "EB_Ext1_Back / EB | leg | post | behind head | -X": {
     "min": [
       0.0,
       26.0,
@@ -83,7 +2987,7 @@
       122.0
     ]
   },
-  "EB_Ext1_Back / EB | beam | behind leg | head +X": {
+  "EB_Ext1_Back / EB | leg | post | behind head | +X": {
     "min": [
       752.0,
       26.0,
@@ -95,7 +2999,7 @@
       122.0
     ]
   },
-  "EB_Ext1_Back / EB | beam | behind leg | mid -X | headward": {
+  "EB_Ext1_Back / EB | leg | post | behind mid | -X | headward": {
     "min": [
       0.0,
       968.0,
@@ -107,7 +3011,7 @@
       122.0
     ]
   },
-  "EB_Ext1_Back / EB | beam | behind leg | mid +X | headward": {
+  "EB_Ext1_Back / EB | leg | post | behind mid | +X | headward": {
     "min": [
       752.0,
       968.0,
@@ -311,7 +3215,7 @@
       191.0
     ]
   },
-  "EB_Ext1_Back / EB | beam | mid tie | vertical filler | -X": {
+  "EB_Ext1_Back / EB | leg | post | mid tie filler | -X": {
     "min": [
       44.0,
       982.0,
@@ -323,7 +3227,7 @@
       122.0
     ]
   },
-  "EB_Ext1_Back / EB | beam | mid tie | vertical filler | +X": {
+  "EB_Ext1_Back / EB | leg | post | mid tie filler | +X": {
     "min": [
       683.0,
       982.0,
@@ -659,7 +3563,7 @@
       122.0
     ]
   },
-  "EB_Half_Back / EB | beam | behind leg | head -X": {
+  "EB_Half_Back / EB | leg | post | behind head | -X": {
     "min": [
       1396.0,
       26.0,
@@ -671,7 +3575,7 @@
       122.0
     ]
   },
-  "EB_Half_Back / EB | beam | behind leg | head +X": {
+  "EB_Half_Back / EB | leg | post | behind head | +X": {
     "min": [
       2148.0,
       26.0,
@@ -683,7 +3587,7 @@
       122.0
     ]
   },
-  "EB_Half_Back / EB | beam | behind leg | mid -X | headward": {
+  "EB_Half_Back / EB | leg | post | behind mid | -X | headward": {
     "min": [
       1396.0,
       968.0,
@@ -695,7 +3599,7 @@
       122.0
     ]
   },
-  "EB_Half_Back / EB | beam | behind leg | mid +X | headward": {
+  "EB_Half_Back / EB | leg | post | behind mid | +X | headward": {
     "min": [
       2148.0,
       968.0,
@@ -899,7 +3803,7 @@
       191.0
     ]
   },
-  "EB_Half_Back / EB | beam | mid tie | vertical filler | -X": {
+  "EB_Half_Back / EB | leg | post | mid tie filler | -X": {
     "min": [
       1440.0,
       982.0,
@@ -911,7 +3815,7 @@
       122.0
     ]
   },
-  "EB_Half_Back / EB | beam | mid tie | vertical filler | +X": {
+  "EB_Half_Back / EB | leg | post | mid tie filler | +X": {
     "min": [
       2079.0,
       982.0,
@@ -1247,7 +4151,7 @@
       122.0
     ]
   },
-  "EB_Ext_Back / EB | beam | behind leg | head -X": {
+  "EB_Ext_Back / EB | leg | post | behind head | -X": {
     "min": [
       2792.0,
       26.0,
@@ -1259,7 +4163,7 @@
       122.0
     ]
   },
-  "EB_Ext_Back / EB | beam | behind leg | head +X": {
+  "EB_Ext_Back / EB | leg | post | behind head | +X": {
     "min": [
       3544.0,
       26.0,
@@ -1271,7 +4175,7 @@
       122.0
     ]
   },
-  "EB_Ext_Back / EB | beam | behind leg | mid -X | headward": {
+  "EB_Ext_Back / EB | leg | post | behind mid | -X | headward": {
     "min": [
       2792.0,
       968.0,
@@ -1283,7 +4187,7 @@
       122.0
     ]
   },
-  "EB_Ext_Back / EB | beam | behind leg | mid +X | headward": {
+  "EB_Ext_Back / EB | leg | post | behind mid | +X | headward": {
     "min": [
       3544.0,
       968.0,
@@ -1487,7 +4391,7 @@
       191.0
     ]
   },
-  "EB_Ext_Back / EB | beam | mid tie | vertical filler | -X": {
+  "EB_Ext_Back / EB | leg | post | mid tie filler | -X": {
     "min": [
       2836.0,
       982.0,
@@ -1499,7 +4403,7 @@
       122.0
     ]
   },
-  "EB_Ext_Back / EB | beam | mid tie | vertical filler | +X": {
+  "EB_Ext_Back / EB | leg | post | mid tie filler | +X": {
     "min": [
       3475.0,
       982.0,
@@ -1835,7 +4739,7 @@
       122.0
     ]
   },
-  "EB_Ret_Back / EB | beam | behind leg | head -X": {
+  "EB_Ret_Back / EB | leg | post | behind head | -X": {
     "min": [
       4188.0,
       26.0,
@@ -1847,7 +4751,7 @@
       122.0
     ]
   },
-  "EB_Ret_Back / EB | beam | behind leg | head +X": {
+  "EB_Ret_Back / EB | leg | post | behind head | +X": {
     "min": [
       4940.0,
       26.0,
@@ -1859,7 +4763,7 @@
       122.0
     ]
   },
-  "EB_Ret_Back / EB | beam | behind leg | mid -X | headward": {
+  "EB_Ret_Back / EB | leg | post | behind mid | -X | headward": {
     "min": [
       4188.0,
       968.0,
@@ -1871,7 +4775,7 @@
       122.0
     ]
   },
-  "EB_Ret_Back / EB | beam | behind leg | mid +X | headward": {
+  "EB_Ret_Back / EB | leg | post | behind mid | +X | headward": {
     "min": [
       4940.0,
       968.0,
@@ -2075,7 +4979,7 @@
       191.0
     ]
   },
-  "EB_Ret_Back / EB | beam | mid tie | vertical filler | -X": {
+  "EB_Ret_Back / EB | leg | post | mid tie filler | -X": {
     "min": [
       4232.0,
       982.0,
@@ -2087,7 +4991,7 @@
       122.0
     ]
   },
-  "EB_Ret_Back / EB | beam | mid tie | vertical filler | +X": {
+  "EB_Ret_Back / EB | leg | post | mid tie filler | +X": {
     "min": [
       4871.0,
       982.0,
@@ -2423,7 +5327,7 @@
       122.0
     ]
   },
-  "EB_RetGnd_Back / EB | beam | behind leg | head -X": {
+  "EB_RetGnd_Back / EB | leg | post | behind head | -X": {
     "min": [
       5584.0,
       26.0,
@@ -2435,7 +5339,7 @@
       122.0
     ]
   },
-  "EB_RetGnd_Back / EB | beam | behind leg | head +X": {
+  "EB_RetGnd_Back / EB | leg | post | behind head | +X": {
     "min": [
       6336.0,
       26.0,
@@ -2447,7 +5351,7 @@
       122.0
     ]
   },
-  "EB_RetGnd_Back / EB | beam | behind leg | mid -X | headward": {
+  "EB_RetGnd_Back / EB | leg | post | behind mid | -X | headward": {
     "min": [
       5584.0,
       968.0,
@@ -2459,7 +5363,7 @@
       122.0
     ]
   },
-  "EB_RetGnd_Back / EB | beam | behind leg | mid +X | headward": {
+  "EB_RetGnd_Back / EB | leg | post | behind mid | +X | headward": {
     "min": [
       6336.0,
       968.0,
@@ -2663,7 +5567,7 @@
       191.0
     ]
   },
-  "EB_RetGnd_Back / EB | beam | mid tie | vertical filler | -X": {
+  "EB_RetGnd_Back / EB | leg | post | mid tie filler | -X": {
     "min": [
       5628.0,
       982.0,
@@ -2675,7 +5579,7 @@
       122.0
     ]
   },
-  "EB_RetGnd_Back / EB | beam | mid tie | vertical filler | +X": {
+  "EB_RetGnd_Back / EB | leg | post | mid tie filler | +X": {
     "min": [
       6267.0,
       982.0,

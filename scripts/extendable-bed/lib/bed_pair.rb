@@ -13,27 +13,66 @@ module Timmerman
     #   :retracted_gnd  — big flat on slats, three smalls stored on the floor
     #   nil             — no pillows
     class BedPair
-      attr_reader :back_name, :front_name, :offset_x, :foot_world_y,
-                  :pillow_mode, :tally_stock
+      attr_reader :back_name, :front_name, :offset_x, :pair_row_y, :foot_world_y,
+                  :pillow_mode, :tally_stock,
+                  :back_highlight_part_names, :front_highlight_part_names,
+                  :omit_under_slat_foot_end_beam, :omit_head_ledge_plank, :omit_foot_ledge_plank,
+                  :omit_head_cap_beam, :omit_foot_cap_beam,
+                  :omit_back_outer_sisters_and_ties, :omit_front_rigidity_below_foot_cap_beam,
+                  :omit_legs, :upside_down
 
       def initialize(config,
                      back_name:,
                      front_name:,
                      offset_x:,
                      foot_world_y:,
+                     pair_row_y: 0,
                      pillow_mode: nil,
-                     tally_stock: true)
+                     tally_stock: true,
+                     omit_under_slat_foot_end_beam: false,
+                     omit_head_ledge_plank: false,
+                     omit_foot_ledge_plank: false,
+                     omit_head_cap_beam: false,
+                     omit_foot_cap_beam: false,
+                     omit_back_outer_sisters_and_ties: false,
+                     omit_front_rigidity_below_foot_cap_beam: false,
+                     omit_legs: false,
+                     back_highlight_part_names: [],
+                     front_highlight_part_names: [],
+                     upside_down: false)
         @config       = config
         @back_name    = back_name
         @front_name   = front_name
         @offset_x     = offset_x
+        @pair_row_y   = pair_row_y
         @foot_world_y = foot_world_y
         @pillow_mode  = pillow_mode
         @tally_stock  = tally_stock
+        @omit_under_slat_foot_end_beam = omit_under_slat_foot_end_beam
+        @omit_head_ledge_plank        = omit_head_ledge_plank
+        @omit_foot_ledge_plank        = omit_foot_ledge_plank
+        @omit_head_cap_beam           = omit_head_cap_beam
+        @omit_foot_cap_beam           = omit_foot_cap_beam
+        @omit_back_outer_sisters_and_ties = omit_back_outer_sisters_and_ties
+        @omit_front_rigidity_below_foot_cap_beam = omit_front_rigidity_below_foot_cap_beam
+        @omit_legs                    = omit_legs
+        @back_highlight_part_names    = back_highlight_part_names
+        @front_highlight_part_names   = front_highlight_part_names
+        @upside_down                  = upside_down
       end
 
-      def back_frame  = BackFrame.new(@config,  group_name: @back_name)
-      def front_frame = FrontFrame.new(@config, group_name: @front_name)
+      def back_frame = BackFrame.new(@config, group_name: @back_name,
+                                      omit_head_ledge_plank: @omit_head_ledge_plank,
+                                      omit_head_cap_beam: @omit_head_cap_beam,
+                                      omit_back_outer_sisters_and_ties: @omit_back_outer_sisters_and_ties,
+                                      omit_legs: @omit_legs)
+      def front_frame = FrontFrame.new(@config, group_name: @front_name,
+                                         omit_under_slat_foot_end_beam: @omit_under_slat_foot_end_beam,
+                                         omit_foot_ledge_plank: @omit_foot_ledge_plank,
+                                         omit_foot_cap_beam: @omit_foot_cap_beam,
+                                         omit_front_rigidity_below_foot_cap_beam:
+                                           @omit_front_rigidity_below_foot_cap_beam,
+                                         omit_legs: @omit_legs)
 
       # Returns { back: [Pillow, ...], front: [Pillow, ...] }.
       # Keys may be absent if there are no pillows for that group.

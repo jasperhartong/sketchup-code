@@ -33,6 +33,17 @@ module Timmerman
         root
       end
 
+      # Re-paints direct child groups whose names match +names+ (Outliner part names).
+      def repaint_named_children(root, names, rgb)
+        return if names.nil? || names.empty?
+
+        mat = _ensure_material(rgb)
+        Array(names).each do |name|
+          g = root.entities.grep(Sketchup::Group).find { |child| child.name == name }
+          _paint_recursive(g.entities, mat) if g
+        end
+      end
+
       # Renders a single Part into the given entities without wrapping in a root.
       # Used by BedPair to add pillows directly to an existing root group.
       def add_part(entities, part, layer: nil)

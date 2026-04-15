@@ -15,10 +15,12 @@ module Timmerman
       attr_reader :group_name, :parts
 
       # +group_name+ becomes the Outliner name of the root group.
-      def initialize(config, group_name:)
-        @config     = config
-        @group_name = group_name
-        @parts      = []
+      # Subclasses may read +@frame_options+ (construction-step previews).
+      def initialize(config, group_name:, **frame_options)
+        @config        = config
+        @group_name    = group_name
+        @frame_options = frame_options
+        @parts         = []
         assemble
       end
 
@@ -94,9 +96,11 @@ module Timmerman
       private
 
       def assemble
-        _head_legs
-        _mid_run_legs
-        _behind_leg_beams
+        unless @frame_options[:omit_legs]
+          _head_legs
+          _mid_run_legs
+          _behind_leg_posts
+        end
         _head_cap_and_ledge
         _back_slats
         _sister_beams
@@ -142,27 +146,28 @@ module Timmerman
             note: 'Mid-span leg, +X; mirror of -X mid run leg.'
       end
 
-      # Four 44×69 blocks — one behind each outer leg in both head and mid Y bands.
-      def _behind_leg_beams
+      # Four 44×69 stock posts — one behind each outer leg in head and mid Y bands
+      # (same section as legs; named under EB | leg | for clarity).
+      def _behind_leg_posts
         y_head_b = c.leg_y - c.plank_thickness
         y_mid_b  = mid_y0 - c.leg_x
 
-        beam 'EB | beam | behind leg | head -X',
+        beam 'EB | leg | post | behind head | -X',
              at:   [0, y_head_b, 0],
              size: [c.leg_y, c.leg_x, c.leg_height],
              note: '44x69 plan (leg_y×leg_x); +Y of head leg; 69 mm along Y on outer -X face.'
 
-        beam 'EB | beam | behind leg | head +X',
+        beam 'EB | leg | post | behind head | +X',
              at:   [c.outer_width - c.leg_y, y_head_b, 0],
              size: [c.leg_y, c.leg_x, c.leg_height],
              note: '44x69 plan (leg_y×leg_x); +Y of head leg; 69 mm along Y on outer +X face.'
 
-        beam 'EB | beam | behind leg | mid -X | headward',
+        beam 'EB | leg | post | behind mid | -X | headward',
              at:   [0, y_mid_b, 0],
              size: [c.leg_y, c.leg_x, lh_mid],
              note: '44x69 plan (leg_y×leg_x); headward of mid leg; 69 mm along Y on outer -X face.'
 
-        beam 'EB | beam | behind leg | mid +X | headward',
+        beam 'EB | leg | post | behind mid | +X | headward',
              at:   [c.outer_width - c.leg_y, y_mid_b, 0],
              size: [c.leg_y, c.leg_x, lh_mid],
              note: '44x69 plan (leg_y×leg_x); headward of mid leg; 69 mm along Y on outer +X face.'
@@ -170,16 +175,20 @@ module Timmerman
 
       def _head_cap_and_ledge
         # Cap between the inner faces of the corner legs; Z: leg_height..z_slat_bottom.
-        beam 'EB | beam | head | cap',
-             at:   [c.cap_x0, y_head, c.leg_height],
-             size: [c.cap_dx, c.beam_y, c.beam_z],
-             note: 'Head cap between outer legs: X from inner -X to inner +X; BEAM_Y × BEAM_Z in Y×Z.'
+        unless @frame_options[:omit_head_cap_beam]
+          beam 'EB | beam | head | cap',
+               at:   [c.cap_x0, y_head, c.leg_height],
+               size: [c.cap_dx, c.beam_y, c.beam_z],
+               note: 'Head cap between outer legs: X from inner -X to inner +X; BEAM_Y × BEAM_Z in Y×Z.'
+        end
 
         # Head ledge plank: sits on top of cap + corner legs; full bed width; 2×69 mm tall.
-        plank 'EB | plank | head | ledge',
-              at:   [0, y_head, c.z_slat_bottom],
-              size: [c.outer_width, c.plank_thickness, 2 * c.beam_wide],
-              note: 'On cap and corner legs; headward face flush bed end; top 2×BEAM_WIDE above z_slat_bottom.'
+        unless @frame_options[:omit_head_ledge_plank]
+          plank 'EB | plank | head | ledge',
+                at:   [0, y_head, c.z_slat_bottom],
+                size: [c.outer_width, c.plank_thickness, 2 * c.beam_wide],
+                note: 'On cap and corner legs; headward face flush bed end; top 2×BEAM_WIDE above z_slat_bottom.'
+        end
 
         # Full-width end beam at y=0 (headward face of slat run); sits under slat bottoms.
         beam 'EB | beam | head | end',
@@ -199,6 +208,8 @@ module Timmerman
       end
 
       def _sister_beams
+        return if @frame_options[:omit_back_outer_sisters_and_ties]
+
         lo_x, hi_x = outermost_comb_x_starts
         y_sister    = c.beam_y - c.plank_thickness
         sister_dy   = c.back_slat_run_y + 2 * c.plank_thickness
@@ -225,26 +236,30 @@ module Timmerman
         y_head_tie = c.beam_y - c.plank_thickness
         y_mid_tie  = c.length_retracted - 2 * c.beam_y - c.plank_thickness
 
-        beam 'EB | beam | head tie | between sisters',
-             at:   [x1_tie, y_head_tie, lh_mid],
-             size: [span_tie, c.beam_y, c.beam_z],
-             note: 'At head (+Y) end of sister run; same Z as sisters; spans X between outer sister inner faces.'
+        unless @frame_options[:omit_back_outer_sisters_and_ties]
+          beam 'EB | beam | head tie | between sisters',
+               at:   [x1_tie, y_head_tie, lh_mid],
+               size: [span_tie, c.beam_y, c.beam_z],
+               note: 'At head (+Y) end of sister run; same Z as sisters; spans X between outer sister inner faces.'
 
-        beam 'EB | beam | mid tie | between sisters',
-             at:   [x1_tie, y_mid_tie, lh_mid],
-             size: [span_tie, c.beam_y, c.beam_z],
-             note: 'Near mid-run legs (y = length_retracted - 2×beam_y); same Z as sisters.'
+          beam 'EB | beam | mid tie | between sisters',
+               at:   [x1_tie, y_mid_tie, lh_mid],
+               size: [span_tie, c.beam_y, c.beam_z],
+               note: 'Near mid-run legs (y = length_retracted - 2×beam_y); same Z as sisters.'
+        end
 
-        # Vertical fillers beside mid-run legs in the same Y band as the mid tie.
-        beam 'EB | beam | mid tie | vertical filler | -X',
-             at:   [c.leg_y, y_mid_tie, 0],
-             size: [c.leg_x, c.beam_y, lh_mid],
-             note: 'Under mid tie; z=0..lh_mid; inner +X face flush inner -X of mid leg -X; beam_wide along +X.'
+        # Vertical posts beside mid-run legs (same Y band as mid tie); omitted with legs.
+        unless @frame_options[:omit_legs]
+          beam 'EB | leg | post | mid tie filler | -X',
+               at:   [c.leg_y, y_mid_tie, 0],
+               size: [c.leg_x, c.beam_y, lh_mid],
+               note: 'Under mid tie; z=0..lh_mid; inner +X face flush inner -X of mid leg -X; beam_wide along +X.'
 
-        beam 'EB | beam | mid tie | vertical filler | +X',
-             at:   [c.outer_width - c.leg_y - c.leg_x, y_mid_tie, 0],
-             size: [c.leg_x, c.beam_y, lh_mid],
-             note: 'Under mid tie; z=0..lh_mid; inner -X face flush inner +X of mid leg +X; beam_wide along +X.'
+          beam 'EB | leg | post | mid tie filler | +X',
+               at:   [c.outer_width - c.leg_y - c.leg_x, y_mid_tie, 0],
+               size: [c.leg_x, c.beam_y, lh_mid],
+               note: 'Under mid tie; z=0..lh_mid; inner -X face flush inner +X of mid leg +X; beam_wide along +X.'
+        end
       end
 
       # ── Z and Y constants (methods keep them readable at call sites) ────────
@@ -267,7 +282,7 @@ module Timmerman
       private
 
       def assemble
-        _foot_legs
+        _foot_legs unless @frame_options[:omit_legs]
         _foot_cap_and_ledge
         _front_slats
         _under_slat_beams
@@ -298,16 +313,20 @@ module Timmerman
       end
 
       def _foot_cap_and_ledge
-        beam 'EB | beam | foot | cap',
-             at:   [c.cap_x0, y_foot, c.leg_height],
-             size: [c.cap_dx, c.beam_y, c.beam_z],
-             note: 'Foot cap between outer legs: X from inner -X to inner +X; BEAM_Y × BEAM_Z.'
+        unless @frame_options[:omit_foot_cap_beam]
+          beam 'EB | beam | foot | cap',
+               at:   [c.cap_x0, y_foot, c.leg_height],
+               size: [c.cap_dx, c.beam_y, c.beam_z],
+               note: 'Foot cap between outer legs: X from inner -X to inner +X; BEAM_Y × BEAM_Z.'
+        end
 
         # Foot ledge plank at y=0 (footward face of slat run).
-        plank 'EB | plank | foot | ledge',
-              at:   [0, 0, c.z_slat_bottom],
-              size: [c.outer_width, c.plank_thickness, 2 * c.beam_wide],
-              note: 'On cap and corner legs; full bed width; top 2×BEAM_WIDE above z_slat_bottom.'
+        unless @frame_options[:omit_foot_ledge_plank]
+          plank 'EB | plank | foot | ledge',
+                at:   [0, 0, c.z_slat_bottom],
+                size: [c.outer_width, c.plank_thickness, 2 * c.beam_wide],
+                note: 'On cap and corner legs; full bed width; top 2×BEAM_WIDE above z_slat_bottom.'
+        end
 
         # Full-width foot end beam; footward of all slats.
         beam 'EB | beam | foot | end',
@@ -333,21 +352,25 @@ module Timmerman
         z_lo         = c.z_slat_bottom - c.beam_z
 
         # Beam under the foot end of the front slats.
-        y_slat_foot  = -c.beam_y - c.front_slat_run_y
-        y_under_slat = y_slat_foot + c.beam_y - c.plank_thickness
+        unless @frame_options[:omit_under_slat_foot_end_beam]
+          y_slat_foot  = -c.beam_y - c.front_slat_run_y
+          y_under_slat = y_slat_foot + c.beam_y - c.plank_thickness
 
-        beam 'EB | beam | front | under slats | foot end',
-             at:   [lo_x, y_under_slat, z_lo],
-             size: [span_x, c.beam_y, c.beam_z],
-             note: 'Under front slats at foot end; top flush slat bottom; -Y face beam_y headward of slat foot ends.'
+          beam 'EB | beam | front | under slats | foot end',
+               at:   [lo_x, y_under_slat, z_lo],
+               size: [span_x, c.beam_y, c.beam_z],
+               note: 'Under front slats at foot end; top flush slat bottom; -Y face beam_y headward of slat foot ends.'
+        end
 
         # Rigidity beam below the foot cap assembly.
-        y_rigidity = (-2 * c.beam_y) + c.plank_thickness
+        unless @frame_options[:omit_front_rigidity_below_foot_cap_beam]
+          y_rigidity = (-2 * c.beam_y) + c.plank_thickness
 
-        beam 'EB | beam | front | rigidity | below foot cap',
-             at:   [lo_x, y_rigidity, z_lo],
-             size: [span_x, c.beam_y, c.beam_z],
-             note: 'Same X as under-slats beam; below foot cap band; beam_y × beam_z.'
+          beam 'EB | beam | front | rigidity | below foot cap',
+               at:   [lo_x, y_rigidity, z_lo],
+               size: [span_x, c.beam_y, c.beam_z],
+               note: 'Same X as under-slats beam; below foot cap band; beam_y × beam_z.'
+        end
       end
 
       # ── Z and Y helpers ────────────────────────────────────────────────────
