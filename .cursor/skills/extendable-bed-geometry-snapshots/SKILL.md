@@ -1,11 +1,14 @@
 ---
-name: manual-sketchup-to-code
-description: Sync manual SketchUp edits back into Ruby generators (e.g. extendable bed) using named-group geometry snapshots, the SketchUp bridge, and grep-guided code edits. Iterates until post-create snapshot matches a saved target. Use when the user adjusted EB groups in SketchUp and wants Config/parts code updated to match.
+name: extendable-bed-geometry-snapshots
+description: Extendable bed geometry via named-group world AABB snapshots and the SketchUp bridge — (1) sync manual SketchUp edits into Ruby by diffing a saved target vs post-create snapshot, or (2) prove refactors unchanged by diffing a frozen baseline JSON vs post-create. Uses NamedGroupGeometrySnapshot, capture/validate bridge commands, and grep-guided edits to Config / frame_assembly / bed_pair.
 ---
 
-# Manual SketchUp edits → code (geometry snapshot loop)
+# Extendable bed geometry snapshots (SketchUp bridge)
 
-End-to-end workflow: capture a **target** snapshot from the manually edited model, patch Ruby (`Config`, `Part` `at:`/`size:`, assemblies), re-run **`create` in SketchUp**, and **repeat until `diff(target, after_create)` is empty**.
+Two workflows share the same tooling:
+
+1. **Manual → code** — Capture a **target** snapshot from the edited model, patch Ruby (`Config`, `Part` `at:`/`size:`, assemblies), re-run **`create` in SketchUp**, and **repeat until `diff(target, after_create)` is empty**.
+2. **Refactor check** — Freeze the committed baseline, run `create`, **`diff_files(reference, GEOMETRY_BASELINE_JSON)`**; empty diff means geometry unchanged (see [Refactor regression check](#refactor-regression-check-geometry-must-stay-identical)).
 
 ## Limitations (tell the user if relevant)
 
@@ -18,6 +21,7 @@ End-to-end workflow: capture a **target** snapshot from the manually edited mode
 - Snapshot API: [`scripts/sketchup_utils/named_group_geometry_snapshot.rb`](scripts/sketchup_utils/named_group_geometry_snapshot.rb) — `Timmerman::SketchupUtils::NamedGroupGeometrySnapshot`.
 - After each successful bed build, baseline JSON: `Timmerman::ExtendableBed::Config::GEOMETRY_BASELINE_JSON` → [`scripts/extendable-bed/references/extendable_bed_geometry_baseline.json`](scripts/extendable-bed/references/extendable_bed_geometry_baseline.json).
 - **Target** (manual model, stable until the loop passes): e.g. `scripts/extendable-bed/references/extendable_bed_geometry_target.json` — **do not overwrite** once captured for a session until verification passes or the user aborts.
+- **Refactor / regression check** (no manual model): bridge command [`sketchup_bridge/commands/validate_extendable_bed_geometry_baseline.rb`](sketchup_bridge/commands/validate_extendable_bed_geometry_baseline.rb) — freezes the committed baseline, runs `clear` + `create`, diffs reference vs freshly written `GEOMETRY_BASELINE_JSON` with `NamedGroupGeometrySnapshot.diff_files`. See subsection below.
 
 ## Preconditions
 
@@ -78,7 +82,7 @@ For each `[MISMATCH]` / `[ADDED]` / `[MISSING]` line:
 
 ### All variants = same components, different placement (critical)
 
-The extendable-bed **preview pairs** (`EB_Ext1_*`, `EB_Half_*`, `EB_Ext_*`, `EB_Ret_*`, `EB_RetGnd_*`, …) are **not** five independent designs. Each pair is the same **`BackFrame` / `FrontFrame`** geometry in **local** space; [`bed_layout.rb`](scripts/extendable-bed/lib/bed_layout.rb) only varies **`offset_x`**, **`foot_world_y`**, and **`pillow_mode`** ([`bed_pair.rb`](scripts/extendable-bed/lib/bed_pair.rb)).
+The extendable-bed **preview pairs** (`EB_Ext1_*`, `EB_Half_*`, `EB_Ext_*`, `EB_Ret_*`, `EB_RetGnd_*`, …) are **not** five independent designs. Each pair is the same **`BackFrame` / `FrontFrame`** geometry in **local** space; [`bed_layout.rb`](scripts/extendable-bed/lib/bed_layout.rb) composes them via [`BedPairCatalog`](scripts/extendable-bed/lib/construction_steps.rb) / [`bed_pair.rb`](scripts/extendable-bed/lib/bed_pair.rb), varying **`offset_x`**, **`foot_world_y`**, **`pillow_mode`**, and construction-step **`variant`** / highlights.
 
 When a mismatch appears under **one** root (e.g. `EB_Half_Front / EB | plank | foot | ledge`):
 
@@ -99,6 +103,20 @@ The same leaf name under multiple roots should produce **matching local** boxes 
 5. **If `issues.empty?`**: print **`PASS: snapshots match`** and stop. The on-disk `GEOMETRY_BASELINE_JSON` from `create` should now align with the target for future runs.
 
 Only skip the loop if the user **explicitly** accepts a documented residual (e.g. unavoidable AABB ambiguity).
+
+## Refactor regression check (geometry must stay identical)
+
+Use this when **Ruby generators** change (refactor, DRY, reorder `BedPair` list) and there is **no** manual SketchUp target — you only need proof that world AABBs match the **last good committed** baseline.
+
+1. **Freeze reference:** `cp scripts/extendable-bed/references/extendable_bed_geometry_baseline.json /tmp/eb_geometry_baseline_ref.json` (or any stable path; the validate script defaults to `/tmp/eb_geometry_baseline_ref.json`).
+2. **Swap** [`sketchup_bridge/command.rb`](sketchup_bridge/command.rb) to load only:
+   ```ruby
+   load File.expand_path('commands/validate_extendable_bed_geometry_baseline.rb', __dir__)
+   ```
+3. `ruby sketchup_bridge/run_and_wait.rb` — expect **`PASS: geometry snapshot matches reference`** in stdout.
+4. **Restore** `command.rb` to the normal `clear` + `create` block.
+
+**Not** the skeleton-dimensions flow in [refactor-with-validation](.cursor/skills/refactor-with-validation/SKILL.md) (`dim_baseline.txt`); that plugin is separate from extendable bed.
 
 ## Flow summary
 

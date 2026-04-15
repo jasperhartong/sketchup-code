@@ -27,6 +27,7 @@ _eb_lib = File.expand_path('lib', __dir__)
   validator
   frame_assembly
   bed_pair
+  construction_steps
   bed_layout
   dimensions
 ].each { |f| load File.join(_eb_lib, "#{f}.rb") }

@@ -21,6 +21,12 @@ module Timmerman
                   :omit_back_outer_sisters_and_ties, :omit_front_rigidity_below_foot_cap_beam,
                   :omit_legs, :upside_down
 
+      # Construction-step row: +variant+ selects `omit_*` flags (see `BedPairCatalog::VARIANT_OMITS`).
+      def self.from_assembly_row(config, variant:, **kwargs)
+        omits = BedPairCatalog.omit_flags_for_variant(variant)
+        new(config, **omits, **kwargs)
+      end
+
       def initialize(config,
                      back_name:,
                      front_name:,
@@ -233,7 +239,7 @@ module Timmerman
           )
           back_pillows << Pillow.new(
             'EB | pillow | small | 1',
-            at:   [0, y_pillow + 2 * t, z_on_big],
+            at:   [0, y_pillow + (2 * t), z_on_big],
             size: [c.outer_width, t, sm],
             config: c,
             note: 'Retracted; 3rd small upright, same orientation as the other two; Y0 = y_pillow + 2t.'
