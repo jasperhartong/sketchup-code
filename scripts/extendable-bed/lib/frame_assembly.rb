@@ -12,7 +12,7 @@ module Timmerman
     # use `.mm` literals).  Named keyword args (`at:`, `size:`) eliminate the
     # classic x/y/z/dx/dy/dz positional-argument soup.
     class FrameAssembly
-      attr_reader :group_name, :parts
+      attr_reader :group_name, :parts, :hardware
 
       # +group_name+ becomes the Outliner name of the root group.
       # Subclasses may read +@frame_options+ (construction-step previews).
@@ -21,6 +21,7 @@ module Timmerman
         @group_name    = group_name
         @frame_options = frame_options
         @parts         = []
+        @hardware      = []
         assemble
       end
 
@@ -46,6 +47,20 @@ module Timmerman
 
       def pillow(name, at:, size:, note: nil)
         @parts << Pillow.new(name, at: at, size: size, config: @config, note: note)
+      end
+
+      # Hardware: screws relative to a named part face (see `ScrewPlacement`).
+      def screw(name, host_name:, face:, u:, v:, spec_id:, shaft_length_index: 0,
+                pocket_tilt_from_normal_deg: 0, pocket_tilt_toward: :pos_v,
+                pocket_away_from_host: false)
+        @hardware << ScrewPlacement.new(
+          name,
+          host_name: host_name, face: face, u: u, v: v,
+          spec_id: spec_id, shaft_length_index: shaft_length_index,
+          pocket_tilt_from_normal_deg: pocket_tilt_from_normal_deg,
+          pocket_tilt_toward: pocket_tilt_toward,
+          pocket_away_from_host: pocket_away_from_host
+        )
       end
 
       # ── Shared geometry helpers (used by both frames) ─────────────────────
@@ -105,6 +120,8 @@ module Timmerman
         _back_slats
         _sister_beams
         _tie_beams
+        _sister_outer_minus_x_tie_screws
+        _sister_outer_plus_x_tie_screws
       end
 
       # ── private helpers ──────────────────────────────────────────────────
@@ -188,6 +205,15 @@ module Timmerman
                 at:   [0, y_head, c.z_slat_bottom],
                 size: [c.outer_width, c.plank_thickness, 2 * c.beam_wide],
                 note: 'On cap and corner legs; headward face flush bed end; top 2×BEAM_WIDE above z_slat_bottom.'
+
+          # Demo hardware: validates screw transform + hole path on the head ledge top face.
+          screw 'EB | screw | demo | head ledge',
+                host_name: 'EB | plank | head | ledge',
+                face:      :max_z,
+                u:         c.outer_width / 2,
+                v:         c.plank_thickness / 2,
+                spec_id:   :eb_pocket_4mm,
+                shaft_length_index: 0
         end
 
         # Full-width end beam at y=0 (headward face of slat run); sits under slat bottoms.
@@ -195,6 +221,36 @@ module Timmerman
              at:   [0, 0, c.z_slat_bottom],
              size: [c.outer_width, c.beam_y, c.beam_z],
              note: 'Head end beam 44x69 mm (beam_y × beam_z); under cap.'
+
+        # Two screws per back slat: from headward face (:min_y, debug bright green) inward +Y
+        # toward the slats; X at slat centre; Z slightly staggered on the narrow face.
+        _head_end_beam_into_slats_screws
+      end
+
+      # Screws on `EB | beam | head | end`: :min_y is the headward narrow face (u +X, v +Z in part local).
+      # Vertical positions at one-third and two-thirds of beam height (69 mm stock).
+      def _head_end_beam_into_slats_screws
+        back_xs, = slat_x_starts
+        v_lower = c.beam_z / 3.0
+        v_upper = (2.0 * c.beam_z) / 3.0
+        back_xs.each_with_index do |x0, i|
+          u = x0 + (c.slat_dx / 2.0)
+          n = i + 1
+          screw "EB | screw | head end | #{n}/#{c.back_slat_count} | lower",
+                host_name: 'EB | beam | head | end',
+                face:      :min_y,
+                u:         u,
+                v:         v_lower,
+                spec_id:   :eb_pocket_4mm,
+                shaft_length_index: 0
+          screw "EB | screw | head end | #{n}/#{c.back_slat_count} | upper",
+                host_name: 'EB | beam | head | end',
+                face:      :min_y,
+                u:         u,
+                v:         v_upper,
+                spec_id:   :eb_pocket_4mm,
+                shaft_length_index: 0
+        end
       end
 
       def _back_slats
@@ -262,6 +318,104 @@ module Timmerman
         end
       end
 
+      # From outer -X sister's :min_x (bright red) inward +X toward head/mid tie centres.
+      def _sister_outer_minus_x_tie_screws
+        return if @frame_options[:omit_back_outer_sisters_and_ties]
+
+        _, span_tie = sister_tie_x
+        return if span_tie <= 0
+
+        y_sister = c.beam_y - c.plank_thickness
+        y_head_tie = c.beam_y - c.plank_thickness
+        y_mid_tie  = c.length_retracted - (2 * c.beam_y) - c.plank_thickness
+
+        host = 'EB | beam | sister | outer -X'
+        v_lo = c.beam_z / 3.0
+        v_hi = (2.0 * c.beam_z) / 3.0
+
+        u_head = (y_head_tie + (c.beam_y / 2.0)) - y_sister
+        u_mid  = (y_mid_tie + (c.beam_y / 2.0)) - y_sister
+
+        screw 'EB | screw | sister -X | head tie | lower',
+              host_name: host,
+              face:      :min_x,
+              u:         u_head,
+              v:         v_lo,
+              spec_id:   :eb_pocket_4mm,
+              shaft_length_index: 0
+        screw 'EB | screw | sister -X | head tie | upper',
+              host_name: host,
+              face:      :min_x,
+              u:         u_head,
+              v:         v_hi,
+              spec_id:   :eb_pocket_4mm,
+              shaft_length_index: 0
+
+        screw 'EB | screw | sister -X | mid tie | lower',
+              host_name: host,
+              face:      :min_x,
+              u:         u_mid,
+              v:         v_lo,
+              spec_id:   :eb_pocket_4mm,
+              shaft_length_index: 0
+        screw 'EB | screw | sister -X | mid tie | upper',
+              host_name: host,
+              face:      :min_x,
+              u:         u_mid,
+              v:         v_hi,
+              spec_id:   :eb_pocket_4mm,
+              shaft_length_index: 0
+      end
+
+      # Mirror of _sister_outer_minus_x_tie_screws: :max_x (dark red) inward −X into the same ties.
+      def _sister_outer_plus_x_tie_screws
+        return if @frame_options[:omit_back_outer_sisters_and_ties]
+
+        _, span_tie = sister_tie_x
+        return if span_tie <= 0
+
+        y_sister = c.beam_y - c.plank_thickness
+        y_head_tie = c.beam_y - c.plank_thickness
+        y_mid_tie  = c.length_retracted - (2 * c.beam_y) - c.plank_thickness
+
+        host = 'EB | beam | sister | outer +X'
+        v_lo = c.beam_z / 3.0
+        v_hi = (2.0 * c.beam_z) / 3.0
+
+        u_head = (y_head_tie + (c.beam_y / 2.0)) - y_sister
+        u_mid  = (y_mid_tie + (c.beam_y / 2.0)) - y_sister
+
+        screw 'EB | screw | sister +X | head tie | lower',
+              host_name: host,
+              face:      :max_x,
+              u:         u_head,
+              v:         v_lo,
+              spec_id:   :eb_pocket_4mm,
+              shaft_length_index: 0
+        screw 'EB | screw | sister +X | head tie | upper',
+              host_name: host,
+              face:      :max_x,
+              u:         u_head,
+              v:         v_hi,
+              spec_id:   :eb_pocket_4mm,
+              shaft_length_index: 0
+
+        screw 'EB | screw | sister +X | mid tie | lower',
+              host_name: host,
+              face:      :max_x,
+              u:         u_mid,
+              v:         v_lo,
+              spec_id:   :eb_pocket_4mm,
+              shaft_length_index: 0
+        screw 'EB | screw | sister +X | mid tie | upper',
+              host_name: host,
+              face:      :max_x,
+              u:         u_mid,
+              v:         v_hi,
+              spec_id:   :eb_pocket_4mm,
+              shaft_length_index: 0
+      end
+
       # ── Z and Y constants (methods keep them readable at call sites) ────────
 
       # Head corner legs run through the cap band to z_slat_bottom.
@@ -326,6 +480,14 @@ module Timmerman
                 at:   [0, 0, c.z_slat_bottom],
                 size: [c.outer_width, c.plank_thickness, 2 * c.beam_wide],
                 note: 'On cap and corner legs; full bed width; top 2×BEAM_WIDE above z_slat_bottom.'
+
+          screw 'EB | screw | demo | foot ledge',
+                host_name: 'EB | plank | foot | ledge',
+                face:      :max_z,
+                u:         c.outer_width / 2,
+                v:         c.plank_thickness / 2,
+                spec_id:   :eb_pocket_4mm,
+                shaft_length_index: 0
         end
 
         # Full-width foot end beam; footward of all slats.
@@ -333,6 +495,35 @@ module Timmerman
              at:   [0, -c.beam_y, c.z_slat_bottom],
              size: [c.outer_width, c.beam_y, c.beam_z],
              note: 'Foot end beam 44x69 mm (beam_y × beam_z); under cap.'
+
+        # Two screws per front slat (one fewer than back): from footward narrow face (:max_y,
+        # opposite of head end :min_y) inward −Y toward the slats; X at slat centre; Z at thirds.
+        _foot_end_beam_into_slats_screws
+      end
+
+      def _foot_end_beam_into_slats_screws
+        _, front_xs = slat_x_starts
+        v_lower = c.beam_z / 3.0
+        v_upper = (2.0 * c.beam_z) / 3.0
+        fc = c.front_slat_count
+        front_xs.each_with_index do |x0, i|
+          u = x0 + (c.slat_dx / 2.0)
+          n = i + 1
+          screw "EB | screw | foot end | #{n}/#{fc} | lower",
+                host_name: 'EB | beam | foot | end',
+                face:      :max_y,
+                u:         u,
+                v:         v_lower,
+                spec_id:   :eb_pocket_4mm,
+                shaft_length_index: 0
+          screw "EB | screw | foot end | #{n}/#{fc} | upper",
+                host_name: 'EB | beam | foot | end',
+                face:      :max_y,
+                u:         u,
+                v:         v_upper,
+                spec_id:   :eb_pocket_4mm,
+                shaft_length_index: 0
+        end
       end
 
       def _front_slats

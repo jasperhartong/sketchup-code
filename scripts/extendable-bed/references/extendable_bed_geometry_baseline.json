@@ -335,6 +335,330 @@
       122.0
     ]
   },
+  "EB_StepExt_Back / EB | screw | demo | head ledge": {
+    "min": [
+      394.0,
+      -2613.0,
+      241.0
+    ],
+    "max": [
+      402.0,
+      -2605.0,
+      329.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head end | 1/9 | lower": {
+    "min": [
+      18.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      26.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head end | 1/9 | upper": {
+    "min": [
+      18.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      26.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head end | 2/9 | lower": {
+    "min": [
+      112.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      120.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head end | 2/9 | upper": {
+    "min": [
+      112.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      120.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head end | 3/9 | lower": {
+    "min": [
+      206.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      214.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head end | 3/9 | upper": {
+    "min": [
+      206.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      214.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head end | 4/9 | lower": {
+    "min": [
+      300.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      308.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head end | 4/9 | upper": {
+    "min": [
+      300.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      308.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head end | 5/9 | lower": {
+    "min": [
+      394.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      402.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head end | 5/9 | upper": {
+    "min": [
+      394.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      402.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head end | 6/9 | lower": {
+    "min": [
+      488.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      496.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head end | 6/9 | upper": {
+    "min": [
+      488.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      496.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head end | 7/9 | lower": {
+    "min": [
+      582.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      590.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head end | 7/9 | upper": {
+    "min": [
+      582.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      590.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head end | 8/9 | lower": {
+    "min": [
+      676.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      684.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head end | 8/9 | upper": {
+    "min": [
+      676.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      684.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head end | 9/9 | lower": {
+    "min": [
+      770.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      778.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head end | 9/9 | upper": {
+    "min": [
+      770.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      778.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | sister -X | head tie | lower": {
+    "min": [
+      0.0,
+      -2556.0,
+      141.0
+    ],
+    "max": [
+      88.0,
+      -2548.0,
+      149.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | sister -X | head tie | upper": {
+    "min": [
+      0.0,
+      -2556.0,
+      164.0
+    ],
+    "max": [
+      88.0,
+      -2548.0,
+      172.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | sister -X | mid tie | lower": {
+    "min": [
+      0.0,
+      -1600.0,
+      141.0
+    ],
+    "max": [
+      88.0,
+      -1592.0,
+      149.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | sister -X | mid tie | upper": {
+    "min": [
+      0.0,
+      -1600.0,
+      164.0
+    ],
+    "max": [
+      88.0,
+      -1592.0,
+      172.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | sister +X | head tie | lower": {
+    "min": [
+      708.0,
+      -2556.0,
+      141.0
+    ],
+    "max": [
+      796.0,
+      -2548.0,
+      149.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | sister +X | head tie | upper": {
+    "min": [
+      708.0,
+      -2556.0,
+      164.0
+    ],
+    "max": [
+      796.0,
+      -2548.0,
+      172.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | sister +X | mid tie | lower": {
+    "min": [
+      708.0,
+      -1600.0,
+      141.0
+    ],
+    "max": [
+      796.0,
+      -1592.0,
+      149.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | sister +X | mid tie | upper": {
+    "min": [
+      708.0,
+      -1600.0,
+      164.0
+    ],
+    "max": [
+      796.0,
+      -1592.0,
+      172.0
+    ]
+  },
   "EB_StepExt_Front / EB | leg | foot | -X": {
     "min": [
       0.0,
@@ -537,6 +861,210 @@
       749.0,
       -626.0,
       191.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | demo | foot ledge": {
+    "min": [
+      394.0,
+      -595.0,
+      241.0
+    ],
+    "max": [
+      402.0,
+      -587.0,
+      329.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot end | 1/8 | lower": {
+    "min": [
+      65.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      73.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot end | 1/8 | upper": {
+    "min": [
+      65.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      73.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot end | 2/8 | lower": {
+    "min": [
+      159.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      167.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot end | 2/8 | upper": {
+    "min": [
+      159.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      167.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot end | 3/8 | lower": {
+    "min": [
+      253.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      261.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot end | 3/8 | upper": {
+    "min": [
+      253.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      261.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot end | 4/8 | lower": {
+    "min": [
+      347.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      355.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot end | 4/8 | upper": {
+    "min": [
+      347.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      355.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot end | 5/8 | lower": {
+    "min": [
+      441.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      449.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot end | 5/8 | upper": {
+    "min": [
+      441.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      449.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot end | 6/8 | lower": {
+    "min": [
+      535.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      543.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot end | 6/8 | upper": {
+    "min": [
+      535.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      543.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot end | 7/8 | lower": {
+    "min": [
+      629.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      637.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot end | 7/8 | upper": {
+    "min": [
+      629.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      637.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot end | 8/8 | lower": {
+    "min": [
+      723.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      731.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot end | 8/8 | upper": {
+    "min": [
+      723.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      731.0,
+      -600.0,
+      241.0
     ]
   },
   "EB_StepDecoup_Back / EB | leg | head | -X": {
@@ -875,6 +1403,330 @@
       122.0
     ]
   },
+  "EB_StepDecoup_Back / EB | screw | demo | head ledge": {
+    "min": [
+      1790.0,
+      -2613.0,
+      241.0
+    ],
+    "max": [
+      1798.0,
+      -2605.0,
+      329.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head end | 1/9 | lower": {
+    "min": [
+      1414.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      1422.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head end | 1/9 | upper": {
+    "min": [
+      1414.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      1422.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head end | 2/9 | lower": {
+    "min": [
+      1508.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      1516.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head end | 2/9 | upper": {
+    "min": [
+      1508.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      1516.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head end | 3/9 | lower": {
+    "min": [
+      1602.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      1610.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head end | 3/9 | upper": {
+    "min": [
+      1602.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      1610.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head end | 4/9 | lower": {
+    "min": [
+      1696.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      1704.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head end | 4/9 | upper": {
+    "min": [
+      1696.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      1704.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head end | 5/9 | lower": {
+    "min": [
+      1790.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      1798.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head end | 5/9 | upper": {
+    "min": [
+      1790.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      1798.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head end | 6/9 | lower": {
+    "min": [
+      1884.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      1892.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head end | 6/9 | upper": {
+    "min": [
+      1884.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      1892.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head end | 7/9 | lower": {
+    "min": [
+      1978.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      1986.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head end | 7/9 | upper": {
+    "min": [
+      1978.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      1986.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head end | 8/9 | lower": {
+    "min": [
+      2072.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      2080.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head end | 8/9 | upper": {
+    "min": [
+      2072.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      2080.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head end | 9/9 | lower": {
+    "min": [
+      2166.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      2174.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head end | 9/9 | upper": {
+    "min": [
+      2166.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      2174.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | sister -X | head tie | lower": {
+    "min": [
+      1396.0,
+      -2556.0,
+      141.0
+    ],
+    "max": [
+      1484.0,
+      -2548.0,
+      149.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | sister -X | head tie | upper": {
+    "min": [
+      1396.0,
+      -2556.0,
+      164.0
+    ],
+    "max": [
+      1484.0,
+      -2548.0,
+      172.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | sister -X | mid tie | lower": {
+    "min": [
+      1396.0,
+      -1600.0,
+      141.0
+    ],
+    "max": [
+      1484.0,
+      -1592.0,
+      149.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | sister -X | mid tie | upper": {
+    "min": [
+      1396.0,
+      -1600.0,
+      164.0
+    ],
+    "max": [
+      1484.0,
+      -1592.0,
+      172.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | sister +X | head tie | lower": {
+    "min": [
+      2104.0,
+      -2556.0,
+      141.0
+    ],
+    "max": [
+      2192.0,
+      -2548.0,
+      149.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | sister +X | head tie | upper": {
+    "min": [
+      2104.0,
+      -2556.0,
+      164.0
+    ],
+    "max": [
+      2192.0,
+      -2548.0,
+      172.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | sister +X | mid tie | lower": {
+    "min": [
+      2104.0,
+      -1600.0,
+      141.0
+    ],
+    "max": [
+      2192.0,
+      -1592.0,
+      149.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | sister +X | mid tie | upper": {
+    "min": [
+      2104.0,
+      -1600.0,
+      164.0
+    ],
+    "max": [
+      2192.0,
+      -1592.0,
+      172.0
+    ]
+  },
   "EB_StepDecoup_Front / EB | leg | foot | -X": {
     "min": [
       1396.0,
@@ -1065,6 +1917,210 @@
       2145.0,
       -626.0,
       191.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | demo | foot ledge": {
+    "min": [
+      1790.0,
+      -595.0,
+      241.0
+    ],
+    "max": [
+      1798.0,
+      -587.0,
+      329.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot end | 1/8 | lower": {
+    "min": [
+      1461.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      1469.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot end | 1/8 | upper": {
+    "min": [
+      1461.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      1469.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot end | 2/8 | lower": {
+    "min": [
+      1555.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      1563.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot end | 2/8 | upper": {
+    "min": [
+      1555.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      1563.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot end | 3/8 | lower": {
+    "min": [
+      1649.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      1657.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot end | 3/8 | upper": {
+    "min": [
+      1649.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      1657.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot end | 4/8 | lower": {
+    "min": [
+      1743.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      1751.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot end | 4/8 | upper": {
+    "min": [
+      1743.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      1751.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot end | 5/8 | lower": {
+    "min": [
+      1837.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      1845.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot end | 5/8 | upper": {
+    "min": [
+      1837.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      1845.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot end | 6/8 | lower": {
+    "min": [
+      1931.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      1939.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot end | 6/8 | upper": {
+    "min": [
+      1931.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      1939.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot end | 7/8 | lower": {
+    "min": [
+      2025.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      2033.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot end | 7/8 | upper": {
+    "min": [
+      2025.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      2033.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot end | 8/8 | lower": {
+    "min": [
+      2119.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      2127.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot end | 8/8 | upper": {
+    "min": [
+      2119.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      2127.0,
+      -600.0,
+      241.0
     ]
   },
   "EB_StepNoLedges_Back / EB | leg | head | -X": {
@@ -1391,6 +2447,318 @@
       122.0
     ]
   },
+  "EB_StepNoLedges_Back / EB | screw | head end | 1/9 | lower": {
+    "min": [
+      2810.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      2818.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head end | 1/9 | upper": {
+    "min": [
+      2810.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      2818.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head end | 2/9 | lower": {
+    "min": [
+      2904.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      2912.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head end | 2/9 | upper": {
+    "min": [
+      2904.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      2912.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head end | 3/9 | lower": {
+    "min": [
+      2998.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      3006.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head end | 3/9 | upper": {
+    "min": [
+      2998.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      3006.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head end | 4/9 | lower": {
+    "min": [
+      3092.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      3100.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head end | 4/9 | upper": {
+    "min": [
+      3092.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      3100.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head end | 5/9 | lower": {
+    "min": [
+      3186.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      3194.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head end | 5/9 | upper": {
+    "min": [
+      3186.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      3194.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head end | 6/9 | lower": {
+    "min": [
+      3280.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      3288.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head end | 6/9 | upper": {
+    "min": [
+      3280.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      3288.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head end | 7/9 | lower": {
+    "min": [
+      3374.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      3382.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head end | 7/9 | upper": {
+    "min": [
+      3374.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      3382.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head end | 8/9 | lower": {
+    "min": [
+      3468.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      3476.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head end | 8/9 | upper": {
+    "min": [
+      3468.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      3476.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head end | 9/9 | lower": {
+    "min": [
+      3562.0,
+      -2600.0,
+      210.0
+    ],
+    "max": [
+      3570.0,
+      -2512.0,
+      218.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head end | 9/9 | upper": {
+    "min": [
+      3562.0,
+      -2600.0,
+      233.0
+    ],
+    "max": [
+      3570.0,
+      -2512.0,
+      241.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | sister -X | head tie | lower": {
+    "min": [
+      2792.0,
+      -2556.0,
+      141.0
+    ],
+    "max": [
+      2880.0,
+      -2548.0,
+      149.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | sister -X | head tie | upper": {
+    "min": [
+      2792.0,
+      -2556.0,
+      164.0
+    ],
+    "max": [
+      2880.0,
+      -2548.0,
+      172.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | sister -X | mid tie | lower": {
+    "min": [
+      2792.0,
+      -1600.0,
+      141.0
+    ],
+    "max": [
+      2880.0,
+      -1592.0,
+      149.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | sister -X | mid tie | upper": {
+    "min": [
+      2792.0,
+      -1600.0,
+      164.0
+    ],
+    "max": [
+      2880.0,
+      -1592.0,
+      172.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | sister +X | head tie | lower": {
+    "min": [
+      3500.0,
+      -2556.0,
+      141.0
+    ],
+    "max": [
+      3588.0,
+      -2548.0,
+      149.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | sister +X | head tie | upper": {
+    "min": [
+      3500.0,
+      -2556.0,
+      164.0
+    ],
+    "max": [
+      3588.0,
+      -2548.0,
+      172.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | sister +X | mid tie | lower": {
+    "min": [
+      3500.0,
+      -1600.0,
+      141.0
+    ],
+    "max": [
+      3588.0,
+      -1592.0,
+      149.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | sister +X | mid tie | upper": {
+    "min": [
+      3500.0,
+      -1600.0,
+      164.0
+    ],
+    "max": [
+      3588.0,
+      -1592.0,
+      172.0
+    ]
+  },
   "EB_StepNoLedges_Front / EB | leg | foot | -X": {
     "min": [
       2792.0,
@@ -1569,6 +2937,198 @@
       3541.0,
       -626.0,
       191.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot end | 1/8 | lower": {
+    "min": [
+      2857.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      2865.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot end | 1/8 | upper": {
+    "min": [
+      2857.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      2865.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot end | 2/8 | lower": {
+    "min": [
+      2951.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      2959.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot end | 2/8 | upper": {
+    "min": [
+      2951.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      2959.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot end | 3/8 | lower": {
+    "min": [
+      3045.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      3053.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot end | 3/8 | upper": {
+    "min": [
+      3045.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      3053.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot end | 4/8 | lower": {
+    "min": [
+      3139.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      3147.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot end | 4/8 | upper": {
+    "min": [
+      3139.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      3147.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot end | 5/8 | lower": {
+    "min": [
+      3233.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      3241.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot end | 5/8 | upper": {
+    "min": [
+      3233.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      3241.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot end | 6/8 | lower": {
+    "min": [
+      3327.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      3335.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot end | 6/8 | upper": {
+    "min": [
+      3327.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      3335.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot end | 7/8 | lower": {
+    "min": [
+      3421.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      3429.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot end | 7/8 | upper": {
+    "min": [
+      3421.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      3429.0,
+      -600.0,
+      241.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot end | 8/8 | lower": {
+    "min": [
+      3515.0,
+      -688.0,
+      210.0
+    ],
+    "max": [
+      3523.0,
+      -600.0,
+      218.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot end | 8/8 | upper": {
+    "min": [
+      3515.0,
+      -688.0,
+      233.0
+    ],
+    "max": [
+      3523.0,
+      -600.0,
+      241.0
     ]
   },
   "EB_StepFlip_Back / EB | leg | head | -X": {
@@ -1895,6 +3455,318 @@
       260.0
     ]
   },
+  "EB_StepFlip_Back / EB | screw | head end | 1/9 | lower": {
+    "min": [
+      4958.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      4966.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head end | 1/9 | upper": {
+    "min": [
+      4958.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      4966.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head end | 2/9 | lower": {
+    "min": [
+      4864.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      4872.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head end | 2/9 | upper": {
+    "min": [
+      4864.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      4872.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head end | 3/9 | lower": {
+    "min": [
+      4770.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      4778.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head end | 3/9 | upper": {
+    "min": [
+      4770.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      4778.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head end | 4/9 | lower": {
+    "min": [
+      4676.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      4684.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head end | 4/9 | upper": {
+    "min": [
+      4676.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      4684.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head end | 5/9 | lower": {
+    "min": [
+      4582.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      4590.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head end | 5/9 | upper": {
+    "min": [
+      4582.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      4590.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head end | 6/9 | lower": {
+    "min": [
+      4488.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      4496.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head end | 6/9 | upper": {
+    "min": [
+      4488.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      4496.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head end | 7/9 | lower": {
+    "min": [
+      4394.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      4402.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head end | 7/9 | upper": {
+    "min": [
+      4394.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      4402.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head end | 8/9 | lower": {
+    "min": [
+      4300.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      4308.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head end | 8/9 | upper": {
+    "min": [
+      4300.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      4308.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head end | 9/9 | lower": {
+    "min": [
+      4206.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      4214.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head end | 9/9 | upper": {
+    "min": [
+      4206.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      4214.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | sister -X | head tie | lower": {
+    "min": [
+      4896.0,
+      -2556.0,
+      111.0
+    ],
+    "max": [
+      4984.0,
+      -2548.0,
+      119.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | sister -X | head tie | upper": {
+    "min": [
+      4896.0,
+      -2556.0,
+      88.0
+    ],
+    "max": [
+      4984.0,
+      -2548.0,
+      96.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | sister -X | mid tie | lower": {
+    "min": [
+      4896.0,
+      -1600.0,
+      111.0
+    ],
+    "max": [
+      4984.0,
+      -1592.0,
+      119.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | sister -X | mid tie | upper": {
+    "min": [
+      4896.0,
+      -1600.0,
+      88.0
+    ],
+    "max": [
+      4984.0,
+      -1592.0,
+      96.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | sister +X | head tie | lower": {
+    "min": [
+      4188.0,
+      -2556.0,
+      111.0
+    ],
+    "max": [
+      4276.0,
+      -2548.0,
+      119.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | sister +X | head tie | upper": {
+    "min": [
+      4188.0,
+      -2556.0,
+      88.0
+    ],
+    "max": [
+      4276.0,
+      -2548.0,
+      96.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | sister +X | mid tie | lower": {
+    "min": [
+      4188.0,
+      -1600.0,
+      111.0
+    ],
+    "max": [
+      4276.0,
+      -1592.0,
+      119.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | sister +X | mid tie | upper": {
+    "min": [
+      4188.0,
+      -1600.0,
+      88.0
+    ],
+    "max": [
+      4276.0,
+      -1592.0,
+      96.0
+    ]
+  },
   "EB_StepFlip_Front / EB | leg | foot | -X": {
     "min": [
       4915.0,
@@ -2073,6 +3945,198 @@
       4937.0,
       -336.667,
       138.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot end | 1/8 | lower": {
+    "min": [
+      4911.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      4919.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot end | 1/8 | upper": {
+    "min": [
+      4911.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      4919.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot end | 2/8 | lower": {
+    "min": [
+      4817.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      4825.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot end | 2/8 | upper": {
+    "min": [
+      4817.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      4825.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot end | 3/8 | lower": {
+    "min": [
+      4723.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      4731.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot end | 3/8 | upper": {
+    "min": [
+      4723.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      4731.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot end | 4/8 | lower": {
+    "min": [
+      4629.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      4637.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot end | 4/8 | upper": {
+    "min": [
+      4629.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      4637.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot end | 5/8 | lower": {
+    "min": [
+      4535.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      4543.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot end | 5/8 | upper": {
+    "min": [
+      4535.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      4543.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot end | 6/8 | lower": {
+    "min": [
+      4441.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      4449.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot end | 6/8 | upper": {
+    "min": [
+      4441.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      4449.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot end | 7/8 | lower": {
+    "min": [
+      4347.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      4355.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot end | 7/8 | upper": {
+    "min": [
+      4347.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      4355.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot end | 8/8 | lower": {
+    "min": [
+      4253.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      4261.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot end | 8/8 | upper": {
+    "min": [
+      4253.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      4261.0,
+      -310.667,
+      27.0
     ]
   },
   "EB_StepFlipNoLegs_Back / EB | beam | head | cap": {
@@ -2255,6 +4319,318 @@
       138.0
     ]
   },
+  "EB_StepFlipNoLegs_Back / EB | screw | head end | 1/9 | lower": {
+    "min": [
+      6354.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      6362.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head end | 1/9 | upper": {
+    "min": [
+      6354.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      6362.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head end | 2/9 | lower": {
+    "min": [
+      6260.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      6268.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head end | 2/9 | upper": {
+    "min": [
+      6260.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      6268.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head end | 3/9 | lower": {
+    "min": [
+      6166.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      6174.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head end | 3/9 | upper": {
+    "min": [
+      6166.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      6174.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head end | 4/9 | lower": {
+    "min": [
+      6072.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      6080.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head end | 4/9 | upper": {
+    "min": [
+      6072.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      6080.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head end | 5/9 | lower": {
+    "min": [
+      5978.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      5986.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head end | 5/9 | upper": {
+    "min": [
+      5978.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      5986.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head end | 6/9 | lower": {
+    "min": [
+      5884.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      5892.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head end | 6/9 | upper": {
+    "min": [
+      5884.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      5892.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head end | 7/9 | lower": {
+    "min": [
+      5790.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      5798.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head end | 7/9 | upper": {
+    "min": [
+      5790.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      5798.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head end | 8/9 | lower": {
+    "min": [
+      5696.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      5704.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head end | 8/9 | upper": {
+    "min": [
+      5696.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      5704.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head end | 9/9 | lower": {
+    "min": [
+      5602.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      5610.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head end | 9/9 | upper": {
+    "min": [
+      5602.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      5610.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | sister -X | head tie | lower": {
+    "min": [
+      6292.0,
+      -2556.0,
+      111.0
+    ],
+    "max": [
+      6380.0,
+      -2548.0,
+      119.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | sister -X | head tie | upper": {
+    "min": [
+      6292.0,
+      -2556.0,
+      88.0
+    ],
+    "max": [
+      6380.0,
+      -2548.0,
+      96.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | sister -X | mid tie | lower": {
+    "min": [
+      6292.0,
+      -1600.0,
+      111.0
+    ],
+    "max": [
+      6380.0,
+      -1592.0,
+      119.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | sister -X | mid tie | upper": {
+    "min": [
+      6292.0,
+      -1600.0,
+      88.0
+    ],
+    "max": [
+      6380.0,
+      -1592.0,
+      96.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | sister +X | head tie | lower": {
+    "min": [
+      5584.0,
+      -2556.0,
+      111.0
+    ],
+    "max": [
+      5672.0,
+      -2548.0,
+      119.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | sister +X | head tie | upper": {
+    "min": [
+      5584.0,
+      -2556.0,
+      88.0
+    ],
+    "max": [
+      5672.0,
+      -2548.0,
+      96.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | sister +X | mid tie | lower": {
+    "min": [
+      5584.0,
+      -1600.0,
+      111.0
+    ],
+    "max": [
+      5672.0,
+      -1592.0,
+      119.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | sister +X | mid tie | upper": {
+    "min": [
+      5584.0,
+      -1600.0,
+      88.0
+    ],
+    "max": [
+      5672.0,
+      -1592.0,
+      96.0
+    ]
+  },
   "EB_StepFlipNoLegs_Front / EB | beam | foot | cap": {
     "min": [
       5653.0,
@@ -2385,6 +4761,198 @@
       6333.0,
       -336.667,
       138.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | screw | foot end | 1/8 | lower": {
+    "min": [
+      6307.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      6315.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | screw | foot end | 1/8 | upper": {
+    "min": [
+      6307.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      6315.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | screw | foot end | 2/8 | lower": {
+    "min": [
+      6213.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      6221.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | screw | foot end | 2/8 | upper": {
+    "min": [
+      6213.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      6221.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | screw | foot end | 3/8 | lower": {
+    "min": [
+      6119.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      6127.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | screw | foot end | 3/8 | upper": {
+    "min": [
+      6119.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      6127.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | screw | foot end | 4/8 | lower": {
+    "min": [
+      6025.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      6033.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | screw | foot end | 4/8 | upper": {
+    "min": [
+      6025.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      6033.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | screw | foot end | 5/8 | lower": {
+    "min": [
+      5931.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      5939.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | screw | foot end | 5/8 | upper": {
+    "min": [
+      5931.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      5939.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | screw | foot end | 6/8 | lower": {
+    "min": [
+      5837.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      5845.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | screw | foot end | 6/8 | upper": {
+    "min": [
+      5837.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      5845.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | screw | foot end | 7/8 | lower": {
+    "min": [
+      5743.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      5751.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | screw | foot end | 7/8 | upper": {
+    "min": [
+      5743.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      5751.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | screw | foot end | 8/8 | lower": {
+    "min": [
+      5649.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      5657.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | screw | foot end | 8/8 | upper": {
+    "min": [
+      5649.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      5657.0,
+      -310.667,
+      27.0
     ]
   },
   "EB_StepFlipNoCaps_Back / EB | beam | head | end": {
@@ -2555,6 +5123,318 @@
       138.0
     ]
   },
+  "EB_StepFlipNoCaps_Back / EB | screw | head end | 1/9 | lower": {
+    "min": [
+      7750.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      7758.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | head end | 1/9 | upper": {
+    "min": [
+      7750.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      7758.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | head end | 2/9 | lower": {
+    "min": [
+      7656.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      7664.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | head end | 2/9 | upper": {
+    "min": [
+      7656.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      7664.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | head end | 3/9 | lower": {
+    "min": [
+      7562.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      7570.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | head end | 3/9 | upper": {
+    "min": [
+      7562.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      7570.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | head end | 4/9 | lower": {
+    "min": [
+      7468.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      7476.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | head end | 4/9 | upper": {
+    "min": [
+      7468.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      7476.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | head end | 5/9 | lower": {
+    "min": [
+      7374.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      7382.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | head end | 5/9 | upper": {
+    "min": [
+      7374.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      7382.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | head end | 6/9 | lower": {
+    "min": [
+      7280.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      7288.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | head end | 6/9 | upper": {
+    "min": [
+      7280.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      7288.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | head end | 7/9 | lower": {
+    "min": [
+      7186.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      7194.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | head end | 7/9 | upper": {
+    "min": [
+      7186.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      7194.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | head end | 8/9 | lower": {
+    "min": [
+      7092.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      7100.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | head end | 8/9 | upper": {
+    "min": [
+      7092.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      7100.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | head end | 9/9 | lower": {
+    "min": [
+      6998.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      7006.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | head end | 9/9 | upper": {
+    "min": [
+      6998.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      7006.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | sister -X | head tie | lower": {
+    "min": [
+      7688.0,
+      -2556.0,
+      111.0
+    ],
+    "max": [
+      7776.0,
+      -2548.0,
+      119.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | sister -X | head tie | upper": {
+    "min": [
+      7688.0,
+      -2556.0,
+      88.0
+    ],
+    "max": [
+      7776.0,
+      -2548.0,
+      96.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | sister -X | mid tie | lower": {
+    "min": [
+      7688.0,
+      -1600.0,
+      111.0
+    ],
+    "max": [
+      7776.0,
+      -1592.0,
+      119.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | sister -X | mid tie | upper": {
+    "min": [
+      7688.0,
+      -1600.0,
+      88.0
+    ],
+    "max": [
+      7776.0,
+      -1592.0,
+      96.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | sister +X | head tie | lower": {
+    "min": [
+      6980.0,
+      -2556.0,
+      111.0
+    ],
+    "max": [
+      7068.0,
+      -2548.0,
+      119.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | sister +X | head tie | upper": {
+    "min": [
+      6980.0,
+      -2556.0,
+      88.0
+    ],
+    "max": [
+      7068.0,
+      -2548.0,
+      96.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | sister +X | mid tie | lower": {
+    "min": [
+      6980.0,
+      -1600.0,
+      111.0
+    ],
+    "max": [
+      7068.0,
+      -1592.0,
+      119.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Back / EB | screw | sister +X | mid tie | upper": {
+    "min": [
+      6980.0,
+      -1600.0,
+      88.0
+    ],
+    "max": [
+      7068.0,
+      -1592.0,
+      96.0
+    ]
+  },
   "EB_StepFlipNoCaps_Front / EB | beam | foot | end": {
     "min": [
       6980.0,
@@ -2673,6 +5553,198 @@
       7729.0,
       -336.667,
       138.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | screw | foot end | 1/8 | lower": {
+    "min": [
+      7703.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      7711.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | screw | foot end | 1/8 | upper": {
+    "min": [
+      7703.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      7711.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | screw | foot end | 2/8 | lower": {
+    "min": [
+      7609.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      7617.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | screw | foot end | 2/8 | upper": {
+    "min": [
+      7609.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      7617.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | screw | foot end | 3/8 | lower": {
+    "min": [
+      7515.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      7523.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | screw | foot end | 3/8 | upper": {
+    "min": [
+      7515.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      7523.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | screw | foot end | 4/8 | lower": {
+    "min": [
+      7421.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      7429.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | screw | foot end | 4/8 | upper": {
+    "min": [
+      7421.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      7429.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | screw | foot end | 5/8 | lower": {
+    "min": [
+      7327.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      7335.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | screw | foot end | 5/8 | upper": {
+    "min": [
+      7327.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      7335.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | screw | foot end | 6/8 | lower": {
+    "min": [
+      7233.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      7241.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | screw | foot end | 6/8 | upper": {
+    "min": [
+      7233.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      7241.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | screw | foot end | 7/8 | lower": {
+    "min": [
+      7139.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      7147.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | screw | foot end | 7/8 | upper": {
+    "min": [
+      7139.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      7147.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | screw | foot end | 8/8 | lower": {
+    "min": [
+      7045.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      7053.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoCaps_Front / EB | screw | foot end | 8/8 | upper": {
+    "min": [
+      7045.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      7053.0,
+      -310.667,
+      27.0
     ]
   },
   "EB_StepFlipNoBrace_Back / EB | beam | head | end": {
@@ -2795,6 +5867,222 @@
       69.0
     ]
   },
+  "EB_StepFlipNoBrace_Back / EB | screw | head end | 1/9 | lower": {
+    "min": [
+      9146.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      9154.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | screw | head end | 1/9 | upper": {
+    "min": [
+      9146.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      9154.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | screw | head end | 2/9 | lower": {
+    "min": [
+      9052.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      9060.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | screw | head end | 2/9 | upper": {
+    "min": [
+      9052.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      9060.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | screw | head end | 3/9 | lower": {
+    "min": [
+      8958.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      8966.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | screw | head end | 3/9 | upper": {
+    "min": [
+      8958.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      8966.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | screw | head end | 4/9 | lower": {
+    "min": [
+      8864.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      8872.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | screw | head end | 4/9 | upper": {
+    "min": [
+      8864.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      8872.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | screw | head end | 5/9 | lower": {
+    "min": [
+      8770.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      8778.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | screw | head end | 5/9 | upper": {
+    "min": [
+      8770.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      8778.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | screw | head end | 6/9 | lower": {
+    "min": [
+      8676.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      8684.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | screw | head end | 6/9 | upper": {
+    "min": [
+      8676.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      8684.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | screw | head end | 7/9 | lower": {
+    "min": [
+      8582.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      8590.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | screw | head end | 7/9 | upper": {
+    "min": [
+      8582.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      8590.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | screw | head end | 8/9 | lower": {
+    "min": [
+      8488.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      8496.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | screw | head end | 8/9 | upper": {
+    "min": [
+      8488.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      8496.0,
+      -2512.0,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | screw | head end | 9/9 | lower": {
+    "min": [
+      8394.0,
+      -2600.0,
+      42.0
+    ],
+    "max": [
+      8402.0,
+      -2512.0,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Back / EB | screw | head end | 9/9 | upper": {
+    "min": [
+      8394.0,
+      -2600.0,
+      19.0
+    ],
+    "max": [
+      8402.0,
+      -2512.0,
+      27.0
+    ]
+  },
   "EB_StepFlipNoBrace_Front / EB | beam | foot | end": {
     "min": [
       8376.0,
@@ -2901,6 +6189,198 @@
       8467.0,
       -354.667,
       69.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 1/8 | lower": {
+    "min": [
+      9099.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      9107.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 1/8 | upper": {
+    "min": [
+      9099.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      9107.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 2/8 | lower": {
+    "min": [
+      9005.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      9013.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 2/8 | upper": {
+    "min": [
+      9005.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      9013.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 3/8 | lower": {
+    "min": [
+      8911.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      8919.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 3/8 | upper": {
+    "min": [
+      8911.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      8919.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 4/8 | lower": {
+    "min": [
+      8817.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      8825.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 4/8 | upper": {
+    "min": [
+      8817.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      8825.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 5/8 | lower": {
+    "min": [
+      8723.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      8731.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 5/8 | upper": {
+    "min": [
+      8723.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      8731.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 6/8 | lower": {
+    "min": [
+      8629.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      8637.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 6/8 | upper": {
+    "min": [
+      8629.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      8637.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 7/8 | lower": {
+    "min": [
+      8535.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      8543.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 7/8 | upper": {
+    "min": [
+      8535.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      8543.0,
+      -310.667,
+      27.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 8/8 | lower": {
+    "min": [
+      8441.0,
+      -398.667,
+      42.0
+    ],
+    "max": [
+      8449.0,
+      -310.667,
+      50.0
+    ]
+  },
+  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 8/8 | upper": {
+    "min": [
+      8441.0,
+      -398.667,
+      19.0
+    ],
+    "max": [
+      8449.0,
+      -310.667,
+      27.0
     ]
   },
   "EB_Ext1_Back / EB | leg | head | -X": {
@@ -3239,6 +6719,330 @@
       122.0
     ]
   },
+  "EB_Ext1_Back / EB | screw | demo | head ledge": {
+    "min": [
+      394.0,
+      -13.0,
+      241.0
+    ],
+    "max": [
+      402.0,
+      -5.0,
+      329.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head end | 1/9 | lower": {
+    "min": [
+      18.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      26.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head end | 1/9 | upper": {
+    "min": [
+      18.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      26.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head end | 2/9 | lower": {
+    "min": [
+      112.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      120.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head end | 2/9 | upper": {
+    "min": [
+      112.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      120.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head end | 3/9 | lower": {
+    "min": [
+      206.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      214.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head end | 3/9 | upper": {
+    "min": [
+      206.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      214.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head end | 4/9 | lower": {
+    "min": [
+      300.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      308.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head end | 4/9 | upper": {
+    "min": [
+      300.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      308.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head end | 5/9 | lower": {
+    "min": [
+      394.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      402.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head end | 5/9 | upper": {
+    "min": [
+      394.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      402.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head end | 6/9 | lower": {
+    "min": [
+      488.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      496.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head end | 6/9 | upper": {
+    "min": [
+      488.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      496.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head end | 7/9 | lower": {
+    "min": [
+      582.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      590.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head end | 7/9 | upper": {
+    "min": [
+      582.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      590.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head end | 8/9 | lower": {
+    "min": [
+      676.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      684.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head end | 8/9 | upper": {
+    "min": [
+      676.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      684.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head end | 9/9 | lower": {
+    "min": [
+      770.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      778.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head end | 9/9 | upper": {
+    "min": [
+      770.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      778.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | sister -X | head tie | lower": {
+    "min": [
+      0.0,
+      44.0,
+      141.0
+    ],
+    "max": [
+      88.0,
+      52.0,
+      149.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | sister -X | head tie | upper": {
+    "min": [
+      0.0,
+      44.0,
+      164.0
+    ],
+    "max": [
+      88.0,
+      52.0,
+      172.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | sister -X | mid tie | lower": {
+    "min": [
+      0.0,
+      1000.0,
+      141.0
+    ],
+    "max": [
+      88.0,
+      1008.0,
+      149.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | sister -X | mid tie | upper": {
+    "min": [
+      0.0,
+      1000.0,
+      164.0
+    ],
+    "max": [
+      88.0,
+      1008.0,
+      172.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | sister +X | head tie | lower": {
+    "min": [
+      708.0,
+      44.0,
+      141.0
+    ],
+    "max": [
+      796.0,
+      52.0,
+      149.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | sister +X | head tie | upper": {
+    "min": [
+      708.0,
+      44.0,
+      164.0
+    ],
+    "max": [
+      796.0,
+      52.0,
+      172.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | sister +X | mid tie | lower": {
+    "min": [
+      708.0,
+      1000.0,
+      141.0
+    ],
+    "max": [
+      796.0,
+      1008.0,
+      149.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | sister +X | mid tie | upper": {
+    "min": [
+      708.0,
+      1000.0,
+      164.0
+    ],
+    "max": [
+      796.0,
+      1008.0,
+      172.0
+    ]
+  },
   "EB_Ext1_Back / EB | pillow | big": {
     "min": [
       0.0,
@@ -3477,6 +7281,210 @@
       749.0,
       1395.333,
       191.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | demo | foot ledge": {
+    "min": [
+      394.0,
+      1426.333,
+      241.0
+    ],
+    "max": [
+      402.0,
+      1434.333,
+      329.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot end | 1/8 | lower": {
+    "min": [
+      65.0,
+      1333.333,
+      210.0
+    ],
+    "max": [
+      73.0,
+      1421.333,
+      218.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot end | 1/8 | upper": {
+    "min": [
+      65.0,
+      1333.333,
+      233.0
+    ],
+    "max": [
+      73.0,
+      1421.333,
+      241.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot end | 2/8 | lower": {
+    "min": [
+      159.0,
+      1333.333,
+      210.0
+    ],
+    "max": [
+      167.0,
+      1421.333,
+      218.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot end | 2/8 | upper": {
+    "min": [
+      159.0,
+      1333.333,
+      233.0
+    ],
+    "max": [
+      167.0,
+      1421.333,
+      241.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot end | 3/8 | lower": {
+    "min": [
+      253.0,
+      1333.333,
+      210.0
+    ],
+    "max": [
+      261.0,
+      1421.333,
+      218.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot end | 3/8 | upper": {
+    "min": [
+      253.0,
+      1333.333,
+      233.0
+    ],
+    "max": [
+      261.0,
+      1421.333,
+      241.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot end | 4/8 | lower": {
+    "min": [
+      347.0,
+      1333.333,
+      210.0
+    ],
+    "max": [
+      355.0,
+      1421.333,
+      218.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot end | 4/8 | upper": {
+    "min": [
+      347.0,
+      1333.333,
+      233.0
+    ],
+    "max": [
+      355.0,
+      1421.333,
+      241.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot end | 5/8 | lower": {
+    "min": [
+      441.0,
+      1333.333,
+      210.0
+    ],
+    "max": [
+      449.0,
+      1421.333,
+      218.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot end | 5/8 | upper": {
+    "min": [
+      441.0,
+      1333.333,
+      233.0
+    ],
+    "max": [
+      449.0,
+      1421.333,
+      241.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot end | 6/8 | lower": {
+    "min": [
+      535.0,
+      1333.333,
+      210.0
+    ],
+    "max": [
+      543.0,
+      1421.333,
+      218.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot end | 6/8 | upper": {
+    "min": [
+      535.0,
+      1333.333,
+      233.0
+    ],
+    "max": [
+      543.0,
+      1421.333,
+      241.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot end | 7/8 | lower": {
+    "min": [
+      629.0,
+      1333.333,
+      210.0
+    ],
+    "max": [
+      637.0,
+      1421.333,
+      218.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot end | 7/8 | upper": {
+    "min": [
+      629.0,
+      1333.333,
+      233.0
+    ],
+    "max": [
+      637.0,
+      1421.333,
+      241.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot end | 8/8 | lower": {
+    "min": [
+      723.0,
+      1333.333,
+      210.0
+    ],
+    "max": [
+      731.0,
+      1421.333,
+      218.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot end | 8/8 | upper": {
+    "min": [
+      723.0,
+      1333.333,
+      233.0
+    ],
+    "max": [
+      731.0,
+      1421.333,
+      241.0
     ]
   },
   "EB_Ext1_Front / EB | pillow | small | 1": {
@@ -3827,6 +7835,330 @@
       122.0
     ]
   },
+  "EB_Half_Back / EB | screw | demo | head ledge": {
+    "min": [
+      1790.0,
+      -13.0,
+      241.0
+    ],
+    "max": [
+      1798.0,
+      -5.0,
+      329.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | head end | 1/9 | lower": {
+    "min": [
+      1414.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      1422.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | head end | 1/9 | upper": {
+    "min": [
+      1414.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      1422.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | head end | 2/9 | lower": {
+    "min": [
+      1508.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      1516.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | head end | 2/9 | upper": {
+    "min": [
+      1508.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      1516.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | head end | 3/9 | lower": {
+    "min": [
+      1602.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      1610.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | head end | 3/9 | upper": {
+    "min": [
+      1602.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      1610.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | head end | 4/9 | lower": {
+    "min": [
+      1696.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      1704.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | head end | 4/9 | upper": {
+    "min": [
+      1696.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      1704.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | head end | 5/9 | lower": {
+    "min": [
+      1790.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      1798.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | head end | 5/9 | upper": {
+    "min": [
+      1790.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      1798.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | head end | 6/9 | lower": {
+    "min": [
+      1884.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      1892.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | head end | 6/9 | upper": {
+    "min": [
+      1884.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      1892.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | head end | 7/9 | lower": {
+    "min": [
+      1978.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      1986.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | head end | 7/9 | upper": {
+    "min": [
+      1978.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      1986.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | head end | 8/9 | lower": {
+    "min": [
+      2072.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      2080.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | head end | 8/9 | upper": {
+    "min": [
+      2072.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      2080.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | head end | 9/9 | lower": {
+    "min": [
+      2166.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      2174.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | head end | 9/9 | upper": {
+    "min": [
+      2166.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      2174.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | sister -X | head tie | lower": {
+    "min": [
+      1396.0,
+      44.0,
+      141.0
+    ],
+    "max": [
+      1484.0,
+      52.0,
+      149.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | sister -X | head tie | upper": {
+    "min": [
+      1396.0,
+      44.0,
+      164.0
+    ],
+    "max": [
+      1484.0,
+      52.0,
+      172.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | sister -X | mid tie | lower": {
+    "min": [
+      1396.0,
+      1000.0,
+      141.0
+    ],
+    "max": [
+      1484.0,
+      1008.0,
+      149.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | sister -X | mid tie | upper": {
+    "min": [
+      1396.0,
+      1000.0,
+      164.0
+    ],
+    "max": [
+      1484.0,
+      1008.0,
+      172.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | sister +X | head tie | lower": {
+    "min": [
+      2104.0,
+      44.0,
+      141.0
+    ],
+    "max": [
+      2192.0,
+      52.0,
+      149.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | sister +X | head tie | upper": {
+    "min": [
+      2104.0,
+      44.0,
+      164.0
+    ],
+    "max": [
+      2192.0,
+      52.0,
+      172.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | sister +X | mid tie | lower": {
+    "min": [
+      2104.0,
+      1000.0,
+      141.0
+    ],
+    "max": [
+      2192.0,
+      1008.0,
+      149.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | sister +X | mid tie | upper": {
+    "min": [
+      2104.0,
+      1000.0,
+      164.0
+    ],
+    "max": [
+      2192.0,
+      1008.0,
+      172.0
+    ]
+  },
   "EB_Half_Back / EB | pillow | big": {
     "min": [
       1396.0,
@@ -4053,6 +8385,210 @@
       2145.0,
       1684.667,
       191.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | demo | foot ledge": {
+    "min": [
+      1790.0,
+      1715.667,
+      241.0
+    ],
+    "max": [
+      1798.0,
+      1723.667,
+      329.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot end | 1/8 | lower": {
+    "min": [
+      1461.0,
+      1622.667,
+      210.0
+    ],
+    "max": [
+      1469.0,
+      1710.667,
+      218.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot end | 1/8 | upper": {
+    "min": [
+      1461.0,
+      1622.667,
+      233.0
+    ],
+    "max": [
+      1469.0,
+      1710.667,
+      241.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot end | 2/8 | lower": {
+    "min": [
+      1555.0,
+      1622.667,
+      210.0
+    ],
+    "max": [
+      1563.0,
+      1710.667,
+      218.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot end | 2/8 | upper": {
+    "min": [
+      1555.0,
+      1622.667,
+      233.0
+    ],
+    "max": [
+      1563.0,
+      1710.667,
+      241.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot end | 3/8 | lower": {
+    "min": [
+      1649.0,
+      1622.667,
+      210.0
+    ],
+    "max": [
+      1657.0,
+      1710.667,
+      218.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot end | 3/8 | upper": {
+    "min": [
+      1649.0,
+      1622.667,
+      233.0
+    ],
+    "max": [
+      1657.0,
+      1710.667,
+      241.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot end | 4/8 | lower": {
+    "min": [
+      1743.0,
+      1622.667,
+      210.0
+    ],
+    "max": [
+      1751.0,
+      1710.667,
+      218.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot end | 4/8 | upper": {
+    "min": [
+      1743.0,
+      1622.667,
+      233.0
+    ],
+    "max": [
+      1751.0,
+      1710.667,
+      241.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot end | 5/8 | lower": {
+    "min": [
+      1837.0,
+      1622.667,
+      210.0
+    ],
+    "max": [
+      1845.0,
+      1710.667,
+      218.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot end | 5/8 | upper": {
+    "min": [
+      1837.0,
+      1622.667,
+      233.0
+    ],
+    "max": [
+      1845.0,
+      1710.667,
+      241.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot end | 6/8 | lower": {
+    "min": [
+      1931.0,
+      1622.667,
+      210.0
+    ],
+    "max": [
+      1939.0,
+      1710.667,
+      218.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot end | 6/8 | upper": {
+    "min": [
+      1931.0,
+      1622.667,
+      233.0
+    ],
+    "max": [
+      1939.0,
+      1710.667,
+      241.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot end | 7/8 | lower": {
+    "min": [
+      2025.0,
+      1622.667,
+      210.0
+    ],
+    "max": [
+      2033.0,
+      1710.667,
+      218.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot end | 7/8 | upper": {
+    "min": [
+      2025.0,
+      1622.667,
+      233.0
+    ],
+    "max": [
+      2033.0,
+      1710.667,
+      241.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot end | 8/8 | lower": {
+    "min": [
+      2119.0,
+      1622.667,
+      210.0
+    ],
+    "max": [
+      2127.0,
+      1710.667,
+      218.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot end | 8/8 | upper": {
+    "min": [
+      2119.0,
+      1622.667,
+      233.0
+    ],
+    "max": [
+      2127.0,
+      1710.667,
+      241.0
     ]
   },
   "EB_Half_Front / EB | pillow | small | 3": {
@@ -4415,6 +8951,330 @@
       122.0
     ]
   },
+  "EB_Ext_Back / EB | screw | demo | head ledge": {
+    "min": [
+      3186.0,
+      -13.0,
+      241.0
+    ],
+    "max": [
+      3194.0,
+      -5.0,
+      329.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head end | 1/9 | lower": {
+    "min": [
+      2810.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      2818.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head end | 1/9 | upper": {
+    "min": [
+      2810.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      2818.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head end | 2/9 | lower": {
+    "min": [
+      2904.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      2912.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head end | 2/9 | upper": {
+    "min": [
+      2904.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      2912.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head end | 3/9 | lower": {
+    "min": [
+      2998.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      3006.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head end | 3/9 | upper": {
+    "min": [
+      2998.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      3006.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head end | 4/9 | lower": {
+    "min": [
+      3092.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      3100.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head end | 4/9 | upper": {
+    "min": [
+      3092.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      3100.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head end | 5/9 | lower": {
+    "min": [
+      3186.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      3194.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head end | 5/9 | upper": {
+    "min": [
+      3186.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      3194.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head end | 6/9 | lower": {
+    "min": [
+      3280.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      3288.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head end | 6/9 | upper": {
+    "min": [
+      3280.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      3288.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head end | 7/9 | lower": {
+    "min": [
+      3374.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      3382.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head end | 7/9 | upper": {
+    "min": [
+      3374.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      3382.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head end | 8/9 | lower": {
+    "min": [
+      3468.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      3476.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head end | 8/9 | upper": {
+    "min": [
+      3468.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      3476.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head end | 9/9 | lower": {
+    "min": [
+      3562.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      3570.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head end | 9/9 | upper": {
+    "min": [
+      3562.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      3570.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | sister -X | head tie | lower": {
+    "min": [
+      2792.0,
+      44.0,
+      141.0
+    ],
+    "max": [
+      2880.0,
+      52.0,
+      149.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | sister -X | head tie | upper": {
+    "min": [
+      2792.0,
+      44.0,
+      164.0
+    ],
+    "max": [
+      2880.0,
+      52.0,
+      172.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | sister -X | mid tie | lower": {
+    "min": [
+      2792.0,
+      1000.0,
+      141.0
+    ],
+    "max": [
+      2880.0,
+      1008.0,
+      149.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | sister -X | mid tie | upper": {
+    "min": [
+      2792.0,
+      1000.0,
+      164.0
+    ],
+    "max": [
+      2880.0,
+      1008.0,
+      172.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | sister +X | head tie | lower": {
+    "min": [
+      3500.0,
+      44.0,
+      141.0
+    ],
+    "max": [
+      3588.0,
+      52.0,
+      149.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | sister +X | head tie | upper": {
+    "min": [
+      3500.0,
+      44.0,
+      164.0
+    ],
+    "max": [
+      3588.0,
+      52.0,
+      172.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | sister +X | mid tie | lower": {
+    "min": [
+      3500.0,
+      1000.0,
+      141.0
+    ],
+    "max": [
+      3588.0,
+      1008.0,
+      149.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | sister +X | mid tie | upper": {
+    "min": [
+      3500.0,
+      1000.0,
+      164.0
+    ],
+    "max": [
+      3588.0,
+      1008.0,
+      172.0
+    ]
+  },
   "EB_Ext_Back / EB | pillow | big": {
     "min": [
       2792.0,
@@ -4629,6 +9489,210 @@
       3541.0,
       1974.0,
       191.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | demo | foot ledge": {
+    "min": [
+      3186.0,
+      2005.0,
+      241.0
+    ],
+    "max": [
+      3194.0,
+      2013.0,
+      329.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot end | 1/8 | lower": {
+    "min": [
+      2857.0,
+      1912.0,
+      210.0
+    ],
+    "max": [
+      2865.0,
+      2000.0,
+      218.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot end | 1/8 | upper": {
+    "min": [
+      2857.0,
+      1912.0,
+      233.0
+    ],
+    "max": [
+      2865.0,
+      2000.0,
+      241.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot end | 2/8 | lower": {
+    "min": [
+      2951.0,
+      1912.0,
+      210.0
+    ],
+    "max": [
+      2959.0,
+      2000.0,
+      218.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot end | 2/8 | upper": {
+    "min": [
+      2951.0,
+      1912.0,
+      233.0
+    ],
+    "max": [
+      2959.0,
+      2000.0,
+      241.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot end | 3/8 | lower": {
+    "min": [
+      3045.0,
+      1912.0,
+      210.0
+    ],
+    "max": [
+      3053.0,
+      2000.0,
+      218.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot end | 3/8 | upper": {
+    "min": [
+      3045.0,
+      1912.0,
+      233.0
+    ],
+    "max": [
+      3053.0,
+      2000.0,
+      241.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot end | 4/8 | lower": {
+    "min": [
+      3139.0,
+      1912.0,
+      210.0
+    ],
+    "max": [
+      3147.0,
+      2000.0,
+      218.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot end | 4/8 | upper": {
+    "min": [
+      3139.0,
+      1912.0,
+      233.0
+    ],
+    "max": [
+      3147.0,
+      2000.0,
+      241.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot end | 5/8 | lower": {
+    "min": [
+      3233.0,
+      1912.0,
+      210.0
+    ],
+    "max": [
+      3241.0,
+      2000.0,
+      218.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot end | 5/8 | upper": {
+    "min": [
+      3233.0,
+      1912.0,
+      233.0
+    ],
+    "max": [
+      3241.0,
+      2000.0,
+      241.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot end | 6/8 | lower": {
+    "min": [
+      3327.0,
+      1912.0,
+      210.0
+    ],
+    "max": [
+      3335.0,
+      2000.0,
+      218.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot end | 6/8 | upper": {
+    "min": [
+      3327.0,
+      1912.0,
+      233.0
+    ],
+    "max": [
+      3335.0,
+      2000.0,
+      241.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot end | 7/8 | lower": {
+    "min": [
+      3421.0,
+      1912.0,
+      210.0
+    ],
+    "max": [
+      3429.0,
+      2000.0,
+      218.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot end | 7/8 | upper": {
+    "min": [
+      3421.0,
+      1912.0,
+      233.0
+    ],
+    "max": [
+      3429.0,
+      2000.0,
+      241.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot end | 8/8 | lower": {
+    "min": [
+      3515.0,
+      1912.0,
+      210.0
+    ],
+    "max": [
+      3523.0,
+      2000.0,
+      218.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot end | 8/8 | upper": {
+    "min": [
+      3515.0,
+      1912.0,
+      233.0
+    ],
+    "max": [
+      3523.0,
+      2000.0,
+      241.0
     ]
   },
   "EB_Ext_Front / EB | pillow | small | 1": {
@@ -5003,6 +10067,330 @@
       122.0
     ]
   },
+  "EB_Ret_Back / EB | screw | demo | head ledge": {
+    "min": [
+      4582.0,
+      -13.0,
+      241.0
+    ],
+    "max": [
+      4590.0,
+      -5.0,
+      329.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head end | 1/9 | lower": {
+    "min": [
+      4206.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      4214.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head end | 1/9 | upper": {
+    "min": [
+      4206.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      4214.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head end | 2/9 | lower": {
+    "min": [
+      4300.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      4308.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head end | 2/9 | upper": {
+    "min": [
+      4300.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      4308.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head end | 3/9 | lower": {
+    "min": [
+      4394.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      4402.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head end | 3/9 | upper": {
+    "min": [
+      4394.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      4402.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head end | 4/9 | lower": {
+    "min": [
+      4488.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      4496.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head end | 4/9 | upper": {
+    "min": [
+      4488.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      4496.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head end | 5/9 | lower": {
+    "min": [
+      4582.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      4590.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head end | 5/9 | upper": {
+    "min": [
+      4582.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      4590.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head end | 6/9 | lower": {
+    "min": [
+      4676.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      4684.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head end | 6/9 | upper": {
+    "min": [
+      4676.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      4684.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head end | 7/9 | lower": {
+    "min": [
+      4770.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      4778.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head end | 7/9 | upper": {
+    "min": [
+      4770.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      4778.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head end | 8/9 | lower": {
+    "min": [
+      4864.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      4872.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head end | 8/9 | upper": {
+    "min": [
+      4864.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      4872.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head end | 9/9 | lower": {
+    "min": [
+      4958.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      4966.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head end | 9/9 | upper": {
+    "min": [
+      4958.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      4966.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | sister -X | head tie | lower": {
+    "min": [
+      4188.0,
+      44.0,
+      141.0
+    ],
+    "max": [
+      4276.0,
+      52.0,
+      149.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | sister -X | head tie | upper": {
+    "min": [
+      4188.0,
+      44.0,
+      164.0
+    ],
+    "max": [
+      4276.0,
+      52.0,
+      172.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | sister -X | mid tie | lower": {
+    "min": [
+      4188.0,
+      1000.0,
+      141.0
+    ],
+    "max": [
+      4276.0,
+      1008.0,
+      149.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | sister -X | mid tie | upper": {
+    "min": [
+      4188.0,
+      1000.0,
+      164.0
+    ],
+    "max": [
+      4276.0,
+      1008.0,
+      172.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | sister +X | head tie | lower": {
+    "min": [
+      4896.0,
+      44.0,
+      141.0
+    ],
+    "max": [
+      4984.0,
+      52.0,
+      149.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | sister +X | head tie | upper": {
+    "min": [
+      4896.0,
+      44.0,
+      164.0
+    ],
+    "max": [
+      4984.0,
+      52.0,
+      172.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | sister +X | mid tie | lower": {
+    "min": [
+      4896.0,
+      1000.0,
+      141.0
+    ],
+    "max": [
+      4984.0,
+      1008.0,
+      149.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | sister +X | mid tie | upper": {
+    "min": [
+      4896.0,
+      1000.0,
+      164.0
+    ],
+    "max": [
+      4984.0,
+      1008.0,
+      172.0
+    ]
+  },
   "EB_Ret_Back / EB | pillow | big": {
     "min": [
       4188.0,
@@ -5253,6 +10641,210 @@
       4937.0,
       1106.0,
       191.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | demo | foot ledge": {
+    "min": [
+      4582.0,
+      1137.0,
+      241.0
+    ],
+    "max": [
+      4590.0,
+      1145.0,
+      329.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot end | 1/8 | lower": {
+    "min": [
+      4253.0,
+      1044.0,
+      210.0
+    ],
+    "max": [
+      4261.0,
+      1132.0,
+      218.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot end | 1/8 | upper": {
+    "min": [
+      4253.0,
+      1044.0,
+      233.0
+    ],
+    "max": [
+      4261.0,
+      1132.0,
+      241.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot end | 2/8 | lower": {
+    "min": [
+      4347.0,
+      1044.0,
+      210.0
+    ],
+    "max": [
+      4355.0,
+      1132.0,
+      218.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot end | 2/8 | upper": {
+    "min": [
+      4347.0,
+      1044.0,
+      233.0
+    ],
+    "max": [
+      4355.0,
+      1132.0,
+      241.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot end | 3/8 | lower": {
+    "min": [
+      4441.0,
+      1044.0,
+      210.0
+    ],
+    "max": [
+      4449.0,
+      1132.0,
+      218.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot end | 3/8 | upper": {
+    "min": [
+      4441.0,
+      1044.0,
+      233.0
+    ],
+    "max": [
+      4449.0,
+      1132.0,
+      241.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot end | 4/8 | lower": {
+    "min": [
+      4535.0,
+      1044.0,
+      210.0
+    ],
+    "max": [
+      4543.0,
+      1132.0,
+      218.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot end | 4/8 | upper": {
+    "min": [
+      4535.0,
+      1044.0,
+      233.0
+    ],
+    "max": [
+      4543.0,
+      1132.0,
+      241.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot end | 5/8 | lower": {
+    "min": [
+      4629.0,
+      1044.0,
+      210.0
+    ],
+    "max": [
+      4637.0,
+      1132.0,
+      218.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot end | 5/8 | upper": {
+    "min": [
+      4629.0,
+      1044.0,
+      233.0
+    ],
+    "max": [
+      4637.0,
+      1132.0,
+      241.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot end | 6/8 | lower": {
+    "min": [
+      4723.0,
+      1044.0,
+      210.0
+    ],
+    "max": [
+      4731.0,
+      1132.0,
+      218.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot end | 6/8 | upper": {
+    "min": [
+      4723.0,
+      1044.0,
+      233.0
+    ],
+    "max": [
+      4731.0,
+      1132.0,
+      241.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot end | 7/8 | lower": {
+    "min": [
+      4817.0,
+      1044.0,
+      210.0
+    ],
+    "max": [
+      4825.0,
+      1132.0,
+      218.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot end | 7/8 | upper": {
+    "min": [
+      4817.0,
+      1044.0,
+      233.0
+    ],
+    "max": [
+      4825.0,
+      1132.0,
+      241.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot end | 8/8 | lower": {
+    "min": [
+      4911.0,
+      1044.0,
+      210.0
+    ],
+    "max": [
+      4919.0,
+      1132.0,
+      218.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot end | 8/8 | upper": {
+    "min": [
+      4911.0,
+      1044.0,
+      233.0
+    ],
+    "max": [
+      4919.0,
+      1132.0,
+      241.0
     ]
   },
   "EB_RetGnd_Back / EB | leg | head | -X": {
@@ -5591,6 +11183,330 @@
       122.0
     ]
   },
+  "EB_RetGnd_Back / EB | screw | demo | head ledge": {
+    "min": [
+      5978.0,
+      -13.0,
+      241.0
+    ],
+    "max": [
+      5986.0,
+      -5.0,
+      329.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head end | 1/9 | lower": {
+    "min": [
+      5602.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      5610.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head end | 1/9 | upper": {
+    "min": [
+      5602.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      5610.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head end | 2/9 | lower": {
+    "min": [
+      5696.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      5704.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head end | 2/9 | upper": {
+    "min": [
+      5696.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      5704.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head end | 3/9 | lower": {
+    "min": [
+      5790.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      5798.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head end | 3/9 | upper": {
+    "min": [
+      5790.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      5798.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head end | 4/9 | lower": {
+    "min": [
+      5884.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      5892.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head end | 4/9 | upper": {
+    "min": [
+      5884.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      5892.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head end | 5/9 | lower": {
+    "min": [
+      5978.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      5986.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head end | 5/9 | upper": {
+    "min": [
+      5978.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      5986.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head end | 6/9 | lower": {
+    "min": [
+      6072.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      6080.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head end | 6/9 | upper": {
+    "min": [
+      6072.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      6080.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head end | 7/9 | lower": {
+    "min": [
+      6166.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      6174.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head end | 7/9 | upper": {
+    "min": [
+      6166.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      6174.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head end | 8/9 | lower": {
+    "min": [
+      6260.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      6268.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head end | 8/9 | upper": {
+    "min": [
+      6260.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      6268.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head end | 9/9 | lower": {
+    "min": [
+      6354.0,
+      0.0,
+      210.0
+    ],
+    "max": [
+      6362.0,
+      88.0,
+      218.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head end | 9/9 | upper": {
+    "min": [
+      6354.0,
+      0.0,
+      233.0
+    ],
+    "max": [
+      6362.0,
+      88.0,
+      241.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | sister -X | head tie | lower": {
+    "min": [
+      5584.0,
+      44.0,
+      141.0
+    ],
+    "max": [
+      5672.0,
+      52.0,
+      149.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | sister -X | head tie | upper": {
+    "min": [
+      5584.0,
+      44.0,
+      164.0
+    ],
+    "max": [
+      5672.0,
+      52.0,
+      172.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | sister -X | mid tie | lower": {
+    "min": [
+      5584.0,
+      1000.0,
+      141.0
+    ],
+    "max": [
+      5672.0,
+      1008.0,
+      149.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | sister -X | mid tie | upper": {
+    "min": [
+      5584.0,
+      1000.0,
+      164.0
+    ],
+    "max": [
+      5672.0,
+      1008.0,
+      172.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | sister +X | head tie | lower": {
+    "min": [
+      6292.0,
+      44.0,
+      141.0
+    ],
+    "max": [
+      6380.0,
+      52.0,
+      149.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | sister +X | head tie | upper": {
+    "min": [
+      6292.0,
+      44.0,
+      164.0
+    ],
+    "max": [
+      6380.0,
+      52.0,
+      172.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | sister +X | mid tie | lower": {
+    "min": [
+      6292.0,
+      1000.0,
+      141.0
+    ],
+    "max": [
+      6380.0,
+      1008.0,
+      149.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | sister +X | mid tie | upper": {
+    "min": [
+      6292.0,
+      1000.0,
+      164.0
+    ],
+    "max": [
+      6380.0,
+      1008.0,
+      172.0
+    ]
+  },
   "EB_RetGnd_Back / EB | pillow | big": {
     "min": [
       5584.0,
@@ -5841,6 +11757,210 @@
       6333.0,
       1106.0,
       191.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | demo | foot ledge": {
+    "min": [
+      5978.0,
+      1137.0,
+      241.0
+    ],
+    "max": [
+      5986.0,
+      1145.0,
+      329.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot end | 1/8 | lower": {
+    "min": [
+      5649.0,
+      1044.0,
+      210.0
+    ],
+    "max": [
+      5657.0,
+      1132.0,
+      218.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot end | 1/8 | upper": {
+    "min": [
+      5649.0,
+      1044.0,
+      233.0
+    ],
+    "max": [
+      5657.0,
+      1132.0,
+      241.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot end | 2/8 | lower": {
+    "min": [
+      5743.0,
+      1044.0,
+      210.0
+    ],
+    "max": [
+      5751.0,
+      1132.0,
+      218.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot end | 2/8 | upper": {
+    "min": [
+      5743.0,
+      1044.0,
+      233.0
+    ],
+    "max": [
+      5751.0,
+      1132.0,
+      241.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot end | 3/8 | lower": {
+    "min": [
+      5837.0,
+      1044.0,
+      210.0
+    ],
+    "max": [
+      5845.0,
+      1132.0,
+      218.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot end | 3/8 | upper": {
+    "min": [
+      5837.0,
+      1044.0,
+      233.0
+    ],
+    "max": [
+      5845.0,
+      1132.0,
+      241.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot end | 4/8 | lower": {
+    "min": [
+      5931.0,
+      1044.0,
+      210.0
+    ],
+    "max": [
+      5939.0,
+      1132.0,
+      218.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot end | 4/8 | upper": {
+    "min": [
+      5931.0,
+      1044.0,
+      233.0
+    ],
+    "max": [
+      5939.0,
+      1132.0,
+      241.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot end | 5/8 | lower": {
+    "min": [
+      6025.0,
+      1044.0,
+      210.0
+    ],
+    "max": [
+      6033.0,
+      1132.0,
+      218.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot end | 5/8 | upper": {
+    "min": [
+      6025.0,
+      1044.0,
+      233.0
+    ],
+    "max": [
+      6033.0,
+      1132.0,
+      241.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot end | 6/8 | lower": {
+    "min": [
+      6119.0,
+      1044.0,
+      210.0
+    ],
+    "max": [
+      6127.0,
+      1132.0,
+      218.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot end | 6/8 | upper": {
+    "min": [
+      6119.0,
+      1044.0,
+      233.0
+    ],
+    "max": [
+      6127.0,
+      1132.0,
+      241.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot end | 7/8 | lower": {
+    "min": [
+      6213.0,
+      1044.0,
+      210.0
+    ],
+    "max": [
+      6221.0,
+      1132.0,
+      218.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot end | 7/8 | upper": {
+    "min": [
+      6213.0,
+      1044.0,
+      233.0
+    ],
+    "max": [
+      6221.0,
+      1132.0,
+      241.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot end | 8/8 | lower": {
+    "min": [
+      6307.0,
+      1044.0,
+      210.0
+    ],
+    "max": [
+      6315.0,
+      1132.0,
+      218.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot end | 8/8 | upper": {
+    "min": [
+      6307.0,
+      1044.0,
+      233.0
+    ],
+    "max": [
+      6315.0,
+      1132.0,
+      241.0
     ]
   }
 }

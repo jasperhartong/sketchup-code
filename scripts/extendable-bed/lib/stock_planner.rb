@@ -10,15 +10,18 @@ module Timmerman
     # Usage:
     #   planner = StockPlanner.new(config)
     #   planner.record(beam_part)     # called by SketchUpRenderer for every Beam
+    #   planner.record_screw(placement)  # same tally scope — only when planner is passed in
     #   planner.print_report
+    #   planner.print_hardware_report
     class StockPlanner
-      attr_reader :total_extrusion_m, :piece_count, :cuts
+      attr_reader :total_extrusion_m, :piece_count, :cuts, :screw_counts
 
       def initialize(config)
         @config          = config
         @total_extrusion_m = 0.0
         @piece_count     = 0
         @cuts            = []   # [{ name:, mm: }, ...]
+        @screw_counts    = Hash.new(0) # [[spec_id, shaft_length_index], count]
         @active          = true
       end
 
@@ -37,6 +40,29 @@ module Timmerman
         @cuts              << { name: beam.name, mm: mm }
       end
 
+      # Register one screw placement (same +@active+ / tally scope as #record).
+      def record_screw(placement)
+        return unless @active
+
+        key = [placement.spec_id, placement.shaft_length_index]
+        @screw_counts[key] += 1
+      end
+
+      # Prints screw BOM lines for the tallied pair (after #print_report is fine).
+      def print_hardware_report(label: '[EB hardware]')
+        total = @screw_counts.values.sum
+        return if total.zero?
+
+        puts label
+        @screw_counts.sort_by { |(spec_id, idx), _| [spec_id.to_s, idx] }.each do |(spec_id, idx), n|
+          spec = @config.screw_spec(spec_id)
+          mm   = spec.shaft_length_at(idx).to_mm.round(1)
+          dia  = spec.shaft_diameter.to_mm.round(1)
+          puts format('  %d × %s  Ø%.1f mm  shaft %.1f mm', n, spec_id, dia, mm)
+        end
+        puts format('  Total %d screw instances (same one-bed scope as stock above).', total)
+      end
+
       # Returns the cut-plan hash (see #pack) and prints a human-readable report.
       def print_report(label: '[EB stock]')
         stock_mm = @config.stock_bar_length.to_mm
@@ -53,7 +79,6 @@ module Timmerman
 
         bars        = result[:bars]
         total_waste = bars.sum { |b| b[:waste_mm] }
-        sum_cuts    = @cuts.sum { |c| c[:mm] }
         puts format(
           '%s %.3f m extrusion, %d pieces. ' \
           'Cut plan: %d bar(s) for %d cut(s); ' \

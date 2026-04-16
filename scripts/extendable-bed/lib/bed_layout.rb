@@ -25,63 +25,77 @@ module Timmerman
       # ── Main operations ────────────────────────────────────────────────────
 
       def create(model = Sketchup.active_model)
-        model.start_operation('Extendable bed', true)
+        layer = _ensure_layer(model)
+        model.start_operation('Extendable bed: clear', true)
         clear(model)
+        model.commit_operation
 
-        layer    = _ensure_layer(model)
         stock    = StockPlanner.new(@config)
         renderer = SketchUpRenderer.new(@config, model)
 
         pairs.each do |pair|
-          planner = pair.tally_stock ? stock : nil
+          op_label = "#{pair.back_name} + #{pair.front_name}"
+          model.start_operation("Extendable bed: #{op_label}", true)
+          begin
+            planner = pair.tally_stock ? stock : nil
 
-          # Back frame: placed at [offset_x, 0, 0] in world space.
-          back_frame = pair.back_frame
-          back_g     = renderer.render_frame(
-            back_frame, model.entities,
-            layer:        layer,
-            stock_planner: planner,
-            preview_rgb:  Config::PREVIEW_RGB_BACK
-          )
-          ry = pair.pair_row_y
-          ox = pair.offset_x
+            # Back frame: placed at [offset_x, 0, 0] in world space.
+            back_frame = pair.back_frame
+            back_g     = renderer.render_frame(
+              back_frame, model.entities,
+              layer:        layer,
+              stock_planner: planner,
+              preview_rgb:  Config::PREVIEW_RGB_BACK
+            )
+            ry = pair.pair_row_y
+            ox = pair.offset_x
 
-          # Front frame: default [ox, ry + foot_world_y, 0]; same row logic as back.
-          front_frame = pair.front_frame
-          front_g     = renderer.render_frame(
-            front_frame, model.entities,
-            layer:         layer,
-            stock_planner: planner,
-            preview_rgb:   Config::PREVIEW_RGB_FRONT
-          )
+            # Front frame: default [ox, ry + foot_world_y, 0]; same row logic as back.
+            front_frame = pair.front_frame
+            front_g     = renderer.render_frame(
+              front_frame, model.entities,
+              layer:         layer,
+              stock_planner: planner,
+              preview_rgb:   Config::PREVIEW_RGB_FRONT
+            )
 
-          if pair.upside_down
-            _place_root_upside_down!(back_g, ox, ry)
-            _place_root_upside_down!(front_g, ox, ry + pair.foot_world_y)
-          else
-            back_g.transformation = Geom::Transformation.translation([ox, ry, 0])
-            front_g.transformation = Geom::Transformation.translation([ox, ry + pair.foot_world_y, 0])
+            if pair.upside_down
+              _place_root_upside_down!(back_g, ox, ry)
+              _place_root_upside_down!(front_g, ox, ry + pair.foot_world_y)
+            else
+              back_g.transformation = Geom::Transformation.translation([ox, ry, 0])
+              front_g.transformation = Geom::Transformation.translation([ox, ry + pair.foot_world_y, 0])
+            end
+
+            renderer.repaint_named_children(back_g, pair.back_highlight_part_names,
+                                            Config::PREVIEW_RGB_ACTIVE)
+            renderer.repaint_named_children(front_g, pair.front_highlight_part_names,
+                                            Config::PREVIEW_RGB_ACTIVE)
+
+            if @config.debug_paint_faces
+              renderer.paint_axis_aligned_faces_for_debug(back_g)
+              renderer.paint_axis_aligned_faces_for_debug(front_g)
+            end
+
+            # Pillows are added into their respective root groups.
+            pillows = pair.pillows
+            (pillows[:back]  || []).each { |p| renderer.add_part(back_g.entities,  p, layer: layer) }
+            (pillows[:front] || []).each { |p| renderer.add_part(front_g.entities, p, layer: layer) }
+
+            model.commit_operation
+          rescue StandardError
+            model.abort_operation
+            raise
           end
-
-          renderer.repaint_named_children(back_g, pair.back_highlight_part_names,
-                                          Config::PREVIEW_RGB_ACTIVE)
-          renderer.repaint_named_children(front_g, pair.front_highlight_part_names,
-                                          Config::PREVIEW_RGB_ACTIVE)
-
-          # Pillows are added into their respective root groups.
-          pillows = pair.pillows
-          (pillows[:back]  || []).each { |p| renderer.add_part(back_g.entities,  p, layer: layer) }
-          (pillows[:front] || []).each { |p| renderer.add_part(front_g.entities, p, layer: layer) }
         end
 
-        model.commit_operation
         model.active_view.invalidate
 
         Validator.new(@config).validate(model)
-        stock.print_report(
-          label: format('[EB stock] (one bed = %s + %s) ——',
-                        Config::GROUP_EXT_BACK, Config::GROUP_EXT_FRONT)
-        )
+        stock_label = format('(one bed = %s + %s) ——',
+                             Config::GROUP_EXT_BACK, Config::GROUP_EXT_FRONT)
+        stock.print_report(label: "[EB stock] #{stock_label}")
+        stock.print_hardware_report(label: "[EB hardware] #{stock_label}")
 
         _save_geometry_baseline(model)
       end

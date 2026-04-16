@@ -30,6 +30,19 @@ module Timmerman
       attr_reader :stock_bar_length  # standard bar length for cut planning
       attr_reader :stock_kerf_mm     # blade kerf between cuts (0 = no kerf)
 
+      # When true, each axis-aligned face of every part box gets a distinct color (renderer).
+      attr_reader :debug_paint_faces
+
+      # When false, only the countersink pocket is cut; the shaft through-hole step is skipped
+      # (avoids SketchUp deleting the host on some pocket floor orientations).
+      attr_reader :hardware_through_hole
+
+      # When false, no boolean-style cuts are applied to host parts (only screw mesh is added).
+      attr_reader :hardware_cut_hosts
+
+      # When true, cut countersink pocket then through hole; when false, a single through hole only.
+      attr_reader :hardware_countersink_first
+
       def initialize(
         back_slat_count:  9,
         top_of_slats_z:   260.mm,
@@ -41,7 +54,11 @@ module Timmerman
         slat_gap:         3.mm,
         pair_gap_x:       600.mm,
         stock_bar_length: 2100.mm,
-        stock_kerf_mm:    0.0
+        stock_kerf_mm:    0.0,
+        debug_paint_faces: false,
+        hardware_through_hole: true,
+        hardware_cut_hosts: false,
+        hardware_countersink_first: false
       )
         unless back_slat_count.is_a?(Integer) && back_slat_count.positive? && back_slat_count.odd?
           raise ArgumentError,
@@ -59,6 +76,32 @@ module Timmerman
         @pair_gap_x       = pair_gap_x
         @stock_bar_length = stock_bar_length
         @stock_kerf_mm    = stock_kerf_mm.to_f
+        @debug_paint_faces = debug_paint_faces ? true : false
+        @hardware_through_hole = hardware_through_hole ? true : false
+        @hardware_cut_hosts = hardware_cut_hosts ? true : false
+        @hardware_countersink_first = hardware_countersink_first ? true : false
+      end
+
+      # Catalog of screw families for hardware rendering (visual / design intent).
+      # Shaft length for :eb_pocket_4mm is **2 × beam_narrow** (same stock as narrow face).
+      # @return [Hash{Symbol=>ScrewSpec}]
+      def screw_specs
+        shaft = 2 * beam_narrow
+        @screw_specs ||= {
+          :eb_pocket_4mm => ScrewSpec.new(
+            :eb_pocket_4mm,
+            shaft_diameter:       4.2.mm,
+            shaft_lengths:        [shaft],
+            head_diameter:        8.mm,
+            head_height:          2.2.mm,
+            countersink_diameter: 8.5.mm,
+            countersink_depth:   2.5.mm
+          )
+        }.freeze
+      end
+
+      def screw_spec(id)
+        screw_specs.fetch(id) { raise KeyError, "unknown screw spec #{id.inspect}" }
       end
 
       # ── Slat geometry ─────────────────────────────────────────────────────────
@@ -75,6 +118,10 @@ module Timmerman
         fc = front_slat_count
         (0...fc).map { |i| "EB | slat | front | #{i + 1}/#{fc}" }
       end
+
+      # Head tie → middle back slats: pocket axis tilt (degrees) from the face **outward normal**
+      # toward `pocket_tilt_toward: :pos_v` (+foot on :max_z). Matches a typical ~15° pocket jig.
+      def head_tie_slat_pocket_tilt_deg = 15.0
 
       # Slats: narrow face along X (bed width), wide face vertical (stiffer in bending).
       def slat_dx = beam_narrow
@@ -296,6 +343,8 @@ module Timmerman
 
       PLANK_NAME_RE  = /\AEB \| plank \|/
       PILLOW_NAME_RE = /\AEB \| pillow \|/
+      # Sibling hardware groups under each frame root (cleared with parent).
+      SCREW_NAME_RE  = /\AEB \| screw \|/
       # Beams and legs only (excludes slats) — used by the AABB validator.
       SOLID_NAME_RE  = /\AEB \| (beam|leg) \|/
 
