@@ -10,7 +10,6 @@
 # then `ruby sketchup_bridge/run_and_wait.rb`, then restore this file (e.g. git checkout -- sketchup_bridge/command.rb).
 
 load File.expand_path('../scripts/extendable-bed/extendable-bed.rb', __dir__)
-# Debug: six colours on axis-aligned part faces (see extendable-bed.rb header). Set false when done.
 config = Timmerman::ExtendableBed::Config.new(debug_paint_faces: false)
 Timmerman::ExtendableBed.clear
 Timmerman::ExtendableBed::BedLayout.new(config).create

@@ -16,7 +16,7 @@ module Timmerman
     # +u+ and +v+ are SketchUp lengths (use `.mm`). By default the screw follows the face
     # **outward normal** (head on the outer side, shaft along −normal into the host).
     # Optional pocket tilt (`ScrewPlacement` + `SketchUpRenderer#_apply_pocket_tilt_outward!`)
-    # rotates the shaft in the (normal, tangent) plane — e.g. head tie :max_z into slats above.
+    # rotates the shaft in the (normal, tangent) plane — e.g. sister tie :max_z into slats above.
     module BoxFace
       unless const_defined?(:ALL)
         ALL = %i[min_x max_x min_y max_y min_z max_z].freeze

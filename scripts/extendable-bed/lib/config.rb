@@ -144,6 +144,12 @@ module Timmerman
       def back_slat_run_y = slat_length + beam_y
       def front_slat_run_y = back_slat_run_y
 
+      # +Y from front comb min_y to `EB | beam | front | under slats | foot end` min_y before nudge and −beam_wide headward offset in frame_assembly.
+      def foot_under_slat_beam_y_gap = 76.mm
+
+      # Extra +Y (toward foot / bed front) after foot_under_slat_beam_y_gap for that beam only.
+      def foot_under_slat_beam_y_nudge_toward_foot = 13.mm
+
       # Fully retracted: both slat runs overlapping + one beam depth at each end.
       def length_retracted = back_slat_run_y + beam_y
 
@@ -168,8 +174,16 @@ module Timmerman
       # Outer corner legs extend through the cap band so the shortened cap bears on them.
       def outer_corner_leg_height = z_beam_bottom
 
-      # Mid-run leg tops must clear the sister-beam bottom.
-      def mid_run_leg_height = z_slat_bottom - beam_z
+      # Mid-run leg tops align with the bottom of outer sister / tie beams (flat on wide face → 44 mm tall).
+      def mid_run_leg_height = z_slat_bottom - beam_narrow
+
+      # Foot cap min_y and foot corner/inset leg min_y (dy = beam_wide each): same sandwich as head cap vs head corners.
+      # Leg max_y (debug :max_y = dark green) then matches cap max_y at plank_thickness toward the ledge/slats.
+      def foot_corner_leg_y0 = plank_thickness - beam_wide
+
+      # Foot corners moved from the old −beam_y+plank anchor to foot_corner_leg_y0; shift mid-run legs,
+      # mid tie and behind-mid posts headward (−Y) by the same delta.
+      def mid_layout_y_shift = beam_y - beam_wide
 
       # ── World Y positions for the front frame (sliding half) ──────────────────
 
@@ -199,9 +213,7 @@ module Timmerman
         'EB | leg | post | behind head | -X',
         'EB | leg | post | behind head | +X',
         'EB | leg | post | behind mid | -X | headward',
-        'EB | leg | post | behind mid | +X | headward',
-        'EB | leg | post | mid tie filler | -X',
-        'EB | leg | post | mid tie filler | +X'
+        'EB | leg | post | behind mid | +X | headward'
       ].freeze
       FLIP_STEP_FRONT_LEG_HIGHLIGHTS = [
         'EB | leg | foot | -X',
@@ -210,16 +222,13 @@ module Timmerman
         'EB | leg | foot | +X | inset'
       ].freeze
 
-      # Step 6 (no caps): blue callouts for outer sisters, sister ties, front rigidity.
+      # Step 6 (no caps): blue callouts for outer sisters and mid tie (front under-slat beam omitted in this variant).
       FLIP_NOCAPS_BACK_BRACE_HIGHLIGHTS = [
         'EB | beam | sister | outer -X',
         'EB | beam | sister | outer +X',
-        'EB | beam | head tie | between sisters',
         'EB | beam | mid tie | between sisters'
       ].freeze
-      FLIP_NOCAPS_FRONT_BRACE_HIGHLIGHTS = [
-        'EB | beam | front | rigidity | below foot cap'
-      ].freeze
+      FLIP_NOCAPS_FRONT_BRACE_HIGHLIGHTS = [].freeze
 
       # Step 7: blue every `EB | beam |` child that exists (omitted geometry is skipped).
       FLIP_NOBRACE_BACK_BEAM_HIGHLIGHTS = [
@@ -227,14 +236,12 @@ module Timmerman
         'EB | beam | head | end',
         'EB | beam | sister | outer -X',
         'EB | beam | sister | outer +X',
-        'EB | beam | head tie | between sisters',
         'EB | beam | mid tie | between sisters'
       ].freeze
       FLIP_NOBRACE_FRONT_BEAM_HIGHLIGHTS = [
         'EB | beam | foot | cap',
         'EB | beam | foot | end',
-        'EB | beam | front | under slats | foot end',
-        'EB | beam | front | rigidity | below foot cap'
+        'EB | beam | front | under slats | foot end'
       ].freeze
 
       # Front foot position when retracted (outer face of front end beam).

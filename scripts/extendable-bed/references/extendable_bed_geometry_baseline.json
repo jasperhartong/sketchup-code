@@ -6,45 +6,45 @@
       0.0
     ],
     "max": [
-      69.0,
-      -2574.0,
+      44.0,
+      -2549.0,
       191.0
     ]
   },
   "EB_StepExt_Back / EB | leg | head | +X": {
     "min": [
-      727.0,
+      752.0,
       -2618.0,
       0.0
     ],
     "max": [
       796.0,
-      -2574.0,
+      -2549.0,
       191.0
     ]
   },
   "EB_StepExt_Back / EB | leg | head | -X | inset": {
     "min": [
-      69.0,
+      44.0,
       -2618.0,
       0.0
     ],
     "max": [
-      138.0,
-      -2574.0,
-      122.0
+      88.0,
+      -2549.0,
+      147.0
     ]
   },
   "EB_StepExt_Back / EB | leg | head | +X | inset": {
     "min": [
-      658.0,
+      708.0,
       -2618.0,
       0.0
     ],
     "max": [
-      727.0,
-      -2574.0,
-      122.0
+      752.0,
+      -2549.0,
+      147.0
     ]
   },
   "EB_StepExt_Back / EB | leg | mid run | -X": {
@@ -54,45 +54,45 @@
       0.0
     ],
     "max": [
-      44.0,
-      -1494.0,
-      122.0
+      69.0,
+      -1519.0,
+      147.0
     ]
   },
   "EB_StepExt_Back / EB | leg | mid run | +X": {
     "min": [
-      752.0,
+      727.0,
       -1563.0,
       0.0
     ],
     "max": [
       796.0,
-      -1494.0,
-      122.0
+      -1519.0,
+      147.0
     ]
   },
   "EB_StepExt_Back / EB | leg | post | behind head | -X": {
     "min": [
       0.0,
-      -2574.0,
+      -2549.0,
       0.0
     ],
     "max": [
-      44.0,
+      69.0,
       -2505.0,
-      122.0
+      147.0
     ]
   },
   "EB_StepExt_Back / EB | leg | post | behind head | +X": {
     "min": [
-      752.0,
-      -2574.0,
+      727.0,
+      -2549.0,
       0.0
     ],
     "max": [
       796.0,
       -2505.0,
-      122.0
+      147.0
     ]
   },
   "EB_StepExt_Back / EB | leg | post | behind mid | -X | headward": {
@@ -104,7 +104,7 @@
     "max": [
       44.0,
       -1563.0,
-      122.0
+      147.0
     ]
   },
   "EB_StepExt_Back / EB | leg | post | behind mid | +X | headward": {
@@ -116,18 +116,18 @@
     "max": [
       796.0,
       -1563.0,
-      122.0
+      147.0
     ]
   },
   "EB_StepExt_Back / EB | beam | head | cap": {
     "min": [
-      69.0,
+      44.0,
       -2618.0,
-      122.0
+      147.0
     ],
     "max": [
-      727.0,
-      -2574.0,
+      752.0,
+      -2549.0,
       191.0
     ]
   },
@@ -266,73 +266,37 @@
   "EB_StepExt_Back / EB | beam | sister | outer -X": {
     "min": [
       0.0,
-      -2574.0,
-      122.0
+      -2549.0,
+      147.0
     ],
     "max": [
-      44.0,
-      -1494.0,
+      69.0,
+      -1519.0,
       191.0
     ]
   },
   "EB_StepExt_Back / EB | beam | sister | outer +X": {
     "min": [
-      752.0,
-      -2574.0,
-      122.0
+      727.0,
+      -2549.0,
+      147.0
     ],
     "max": [
       796.0,
-      -1494.0,
-      191.0
-    ]
-  },
-  "EB_StepExt_Back / EB | beam | head tie | between sisters": {
-    "min": [
-      44.0,
-      -2574.0,
-      122.0
-    ],
-    "max": [
-      752.0,
-      -2530.0,
+      -1519.0,
       191.0
     ]
   },
   "EB_StepExt_Back / EB | beam | mid tie | between sisters": {
     "min": [
-      44.0,
-      -1618.0,
-      122.0
+      69.0,
+      -1599.0,
+      147.0
     ],
     "max": [
-      752.0,
-      -1574.0,
+      727.0,
+      -1530.0,
       191.0
-    ]
-  },
-  "EB_StepExt_Back / EB | leg | post | mid tie filler | -X": {
-    "min": [
-      44.0,
-      -1618.0,
-      0.0
-    ],
-    "max": [
-      113.0,
-      -1574.0,
-      122.0
-    ]
-  },
-  "EB_StepExt_Back / EB | leg | post | mid tie filler | +X": {
-    "min": [
-      683.0,
-      -1618.0,
-      0.0
-    ],
-    "max": [
-      752.0,
-      -1574.0,
-      122.0
     ]
   },
   "EB_StepExt_Back / EB | screw | demo | head ledge": {
@@ -563,118 +527,22 @@
       241.0
     ]
   },
-  "EB_StepExt_Back / EB | screw | sister -X | head tie | lower": {
-    "min": [
-      0.0,
-      -2556.0,
-      141.0
-    ],
-    "max": [
-      88.0,
-      -2548.0,
-      149.0
-    ]
-  },
-  "EB_StepExt_Back / EB | screw | sister -X | head tie | upper": {
-    "min": [
-      0.0,
-      -2556.0,
-      164.0
-    ],
-    "max": [
-      88.0,
-      -2548.0,
-      172.0
-    ]
-  },
-  "EB_StepExt_Back / EB | screw | sister -X | mid tie | lower": {
-    "min": [
-      0.0,
-      -1600.0,
-      141.0
-    ],
-    "max": [
-      88.0,
-      -1592.0,
-      149.0
-    ]
-  },
-  "EB_StepExt_Back / EB | screw | sister -X | mid tie | upper": {
-    "min": [
-      0.0,
-      -1600.0,
-      164.0
-    ],
-    "max": [
-      88.0,
-      -1592.0,
-      172.0
-    ]
-  },
-  "EB_StepExt_Back / EB | screw | sister +X | head tie | lower": {
-    "min": [
-      708.0,
-      -2556.0,
-      141.0
-    ],
-    "max": [
-      796.0,
-      -2548.0,
-      149.0
-    ]
-  },
-  "EB_StepExt_Back / EB | screw | sister +X | head tie | upper": {
-    "min": [
-      708.0,
-      -2556.0,
-      164.0
-    ],
-    "max": [
-      796.0,
-      -2548.0,
-      172.0
-    ]
-  },
-  "EB_StepExt_Back / EB | screw | sister +X | mid tie | lower": {
-    "min": [
-      708.0,
-      -1600.0,
-      141.0
-    ],
-    "max": [
-      796.0,
-      -1592.0,
-      149.0
-    ]
-  },
-  "EB_StepExt_Back / EB | screw | sister +X | mid tie | upper": {
-    "min": [
-      708.0,
-      -1600.0,
-      164.0
-    ],
-    "max": [
-      796.0,
-      -1592.0,
-      172.0
-    ]
-  },
   "EB_StepExt_Front / EB | leg | foot | -X": {
     "min": [
       0.0,
-      -626.0,
+      -651.0,
       0.0
     ],
     "max": [
-      69.0,
+      44.0,
       -582.0,
       191.0
     ]
   },
   "EB_StepExt_Front / EB | leg | foot | +X": {
     "min": [
-      727.0,
-      -626.0,
+      752.0,
+      -651.0,
       0.0
     ],
     "max": [
@@ -685,36 +553,36 @@
   },
   "EB_StepExt_Front / EB | leg | foot | -X | inset": {
     "min": [
-      69.0,
-      -626.0,
+      44.0,
+      -651.0,
       0.0
     ],
     "max": [
-      138.0,
+      88.0,
       -582.0,
-      122.0
+      147.0
     ]
   },
   "EB_StepExt_Front / EB | leg | foot | +X | inset": {
     "min": [
-      658.0,
-      -626.0,
+      708.0,
+      -651.0,
       0.0
     ],
     "max": [
-      727.0,
+      752.0,
       -582.0,
-      122.0
+      147.0
     ]
   },
   "EB_StepExt_Front / EB | beam | foot | cap": {
     "min": [
-      69.0,
-      -626.0,
-      122.0
+      44.0,
+      -651.0,
+      147.0
     ],
     "max": [
-      727.0,
+      752.0,
       -582.0,
       191.0
     ]
@@ -841,25 +709,13 @@
   },
   "EB_StepExt_Front / EB | beam | front | under slats | foot end": {
     "min": [
-      47.0,
-      -1662.0,
-      122.0
+      69.0,
+      -1668.0,
+      147.0
     ],
     "max": [
-      749.0,
-      -1618.0,
-      191.0
-    ]
-  },
-  "EB_StepExt_Front / EB | beam | front | rigidity | below foot cap": {
-    "min": [
-      47.0,
-      -670.0,
-      122.0
-    ],
-    "max": [
-      749.0,
-      -626.0,
+      727.0,
+      -1599.0,
       191.0
     ]
   },
@@ -1074,45 +930,45 @@
       0.0
     ],
     "max": [
-      1465.0,
-      -2574.0,
+      1440.0,
+      -2549.0,
       191.0
     ]
   },
   "EB_StepDecoup_Back / EB | leg | head | +X": {
     "min": [
-      2123.0,
+      2148.0,
       -2618.0,
       0.0
     ],
     "max": [
       2192.0,
-      -2574.0,
+      -2549.0,
       191.0
     ]
   },
   "EB_StepDecoup_Back / EB | leg | head | -X | inset": {
     "min": [
-      1465.0,
+      1440.0,
       -2618.0,
       0.0
     ],
     "max": [
-      1534.0,
-      -2574.0,
-      122.0
+      1484.0,
+      -2549.0,
+      147.0
     ]
   },
   "EB_StepDecoup_Back / EB | leg | head | +X | inset": {
     "min": [
-      2054.0,
+      2104.0,
       -2618.0,
       0.0
     ],
     "max": [
-      2123.0,
-      -2574.0,
-      122.0
+      2148.0,
+      -2549.0,
+      147.0
     ]
   },
   "EB_StepDecoup_Back / EB | leg | mid run | -X": {
@@ -1122,45 +978,45 @@
       0.0
     ],
     "max": [
-      1440.0,
-      -1494.0,
-      122.0
+      1465.0,
+      -1519.0,
+      147.0
     ]
   },
   "EB_StepDecoup_Back / EB | leg | mid run | +X": {
     "min": [
-      2148.0,
+      2123.0,
       -1563.0,
       0.0
     ],
     "max": [
       2192.0,
-      -1494.0,
-      122.0
+      -1519.0,
+      147.0
     ]
   },
   "EB_StepDecoup_Back / EB | leg | post | behind head | -X": {
     "min": [
       1396.0,
-      -2574.0,
+      -2549.0,
       0.0
     ],
     "max": [
-      1440.0,
+      1465.0,
       -2505.0,
-      122.0
+      147.0
     ]
   },
   "EB_StepDecoup_Back / EB | leg | post | behind head | +X": {
     "min": [
-      2148.0,
-      -2574.0,
+      2123.0,
+      -2549.0,
       0.0
     ],
     "max": [
       2192.0,
       -2505.0,
-      122.0
+      147.0
     ]
   },
   "EB_StepDecoup_Back / EB | leg | post | behind mid | -X | headward": {
@@ -1172,7 +1028,7 @@
     "max": [
       1440.0,
       -1563.0,
-      122.0
+      147.0
     ]
   },
   "EB_StepDecoup_Back / EB | leg | post | behind mid | +X | headward": {
@@ -1184,18 +1040,18 @@
     "max": [
       2192.0,
       -1563.0,
-      122.0
+      147.0
     ]
   },
   "EB_StepDecoup_Back / EB | beam | head | cap": {
     "min": [
-      1465.0,
+      1440.0,
       -2618.0,
-      122.0
+      147.0
     ],
     "max": [
-      2123.0,
-      -2574.0,
+      2148.0,
+      -2549.0,
       191.0
     ]
   },
@@ -1334,73 +1190,37 @@
   "EB_StepDecoup_Back / EB | beam | sister | outer -X": {
     "min": [
       1396.0,
-      -2574.0,
-      122.0
+      -2549.0,
+      147.0
     ],
     "max": [
-      1440.0,
-      -1494.0,
+      1465.0,
+      -1519.0,
       191.0
     ]
   },
   "EB_StepDecoup_Back / EB | beam | sister | outer +X": {
     "min": [
-      2148.0,
-      -2574.0,
-      122.0
+      2123.0,
+      -2549.0,
+      147.0
     ],
     "max": [
       2192.0,
-      -1494.0,
-      191.0
-    ]
-  },
-  "EB_StepDecoup_Back / EB | beam | head tie | between sisters": {
-    "min": [
-      1440.0,
-      -2574.0,
-      122.0
-    ],
-    "max": [
-      2148.0,
-      -2530.0,
+      -1519.0,
       191.0
     ]
   },
   "EB_StepDecoup_Back / EB | beam | mid tie | between sisters": {
     "min": [
-      1440.0,
-      -1618.0,
-      122.0
+      1465.0,
+      -1599.0,
+      147.0
     ],
     "max": [
-      2148.0,
-      -1574.0,
+      2123.0,
+      -1530.0,
       191.0
-    ]
-  },
-  "EB_StepDecoup_Back / EB | leg | post | mid tie filler | -X": {
-    "min": [
-      1440.0,
-      -1618.0,
-      0.0
-    ],
-    "max": [
-      1509.0,
-      -1574.0,
-      122.0
-    ]
-  },
-  "EB_StepDecoup_Back / EB | leg | post | mid tie filler | +X": {
-    "min": [
-      2079.0,
-      -1618.0,
-      0.0
-    ],
-    "max": [
-      2148.0,
-      -1574.0,
-      122.0
     ]
   },
   "EB_StepDecoup_Back / EB | screw | demo | head ledge": {
@@ -1631,118 +1451,22 @@
       241.0
     ]
   },
-  "EB_StepDecoup_Back / EB | screw | sister -X | head tie | lower": {
-    "min": [
-      1396.0,
-      -2556.0,
-      141.0
-    ],
-    "max": [
-      1484.0,
-      -2548.0,
-      149.0
-    ]
-  },
-  "EB_StepDecoup_Back / EB | screw | sister -X | head tie | upper": {
-    "min": [
-      1396.0,
-      -2556.0,
-      164.0
-    ],
-    "max": [
-      1484.0,
-      -2548.0,
-      172.0
-    ]
-  },
-  "EB_StepDecoup_Back / EB | screw | sister -X | mid tie | lower": {
-    "min": [
-      1396.0,
-      -1600.0,
-      141.0
-    ],
-    "max": [
-      1484.0,
-      -1592.0,
-      149.0
-    ]
-  },
-  "EB_StepDecoup_Back / EB | screw | sister -X | mid tie | upper": {
-    "min": [
-      1396.0,
-      -1600.0,
-      164.0
-    ],
-    "max": [
-      1484.0,
-      -1592.0,
-      172.0
-    ]
-  },
-  "EB_StepDecoup_Back / EB | screw | sister +X | head tie | lower": {
-    "min": [
-      2104.0,
-      -2556.0,
-      141.0
-    ],
-    "max": [
-      2192.0,
-      -2548.0,
-      149.0
-    ]
-  },
-  "EB_StepDecoup_Back / EB | screw | sister +X | head tie | upper": {
-    "min": [
-      2104.0,
-      -2556.0,
-      164.0
-    ],
-    "max": [
-      2192.0,
-      -2548.0,
-      172.0
-    ]
-  },
-  "EB_StepDecoup_Back / EB | screw | sister +X | mid tie | lower": {
-    "min": [
-      2104.0,
-      -1600.0,
-      141.0
-    ],
-    "max": [
-      2192.0,
-      -1592.0,
-      149.0
-    ]
-  },
-  "EB_StepDecoup_Back / EB | screw | sister +X | mid tie | upper": {
-    "min": [
-      2104.0,
-      -1600.0,
-      164.0
-    ],
-    "max": [
-      2192.0,
-      -1592.0,
-      172.0
-    ]
-  },
   "EB_StepDecoup_Front / EB | leg | foot | -X": {
     "min": [
       1396.0,
-      -626.0,
+      -651.0,
       0.0
     ],
     "max": [
-      1465.0,
+      1440.0,
       -582.0,
       191.0
     ]
   },
   "EB_StepDecoup_Front / EB | leg | foot | +X": {
     "min": [
-      2123.0,
-      -626.0,
+      2148.0,
+      -651.0,
       0.0
     ],
     "max": [
@@ -1753,36 +1477,36 @@
   },
   "EB_StepDecoup_Front / EB | leg | foot | -X | inset": {
     "min": [
-      1465.0,
-      -626.0,
+      1440.0,
+      -651.0,
       0.0
     ],
     "max": [
-      1534.0,
+      1484.0,
       -582.0,
-      122.0
+      147.0
     ]
   },
   "EB_StepDecoup_Front / EB | leg | foot | +X | inset": {
     "min": [
-      2054.0,
-      -626.0,
+      2104.0,
+      -651.0,
       0.0
     ],
     "max": [
-      2123.0,
+      2148.0,
       -582.0,
-      122.0
+      147.0
     ]
   },
   "EB_StepDecoup_Front / EB | beam | foot | cap": {
     "min": [
-      1465.0,
-      -626.0,
-      122.0
+      1440.0,
+      -651.0,
+      147.0
     ],
     "max": [
-      2123.0,
+      2148.0,
       -582.0,
       191.0
     ]
@@ -1905,18 +1629,6 @@
       2145.0,
       -644.0,
       260.0
-    ]
-  },
-  "EB_StepDecoup_Front / EB | beam | front | rigidity | below foot cap": {
-    "min": [
-      1443.0,
-      -670.0,
-      122.0
-    ],
-    "max": [
-      2145.0,
-      -626.0,
-      191.0
     ]
   },
   "EB_StepDecoup_Front / EB | screw | demo | foot ledge": {
@@ -2130,45 +1842,45 @@
       0.0
     ],
     "max": [
-      2861.0,
-      -2574.0,
+      2836.0,
+      -2549.0,
       191.0
     ]
   },
   "EB_StepNoLedges_Back / EB | leg | head | +X": {
     "min": [
-      3519.0,
+      3544.0,
       -2618.0,
       0.0
     ],
     "max": [
       3588.0,
-      -2574.0,
+      -2549.0,
       191.0
     ]
   },
   "EB_StepNoLedges_Back / EB | leg | head | -X | inset": {
     "min": [
-      2861.0,
+      2836.0,
       -2618.0,
       0.0
     ],
     "max": [
-      2930.0,
-      -2574.0,
-      122.0
+      2880.0,
+      -2549.0,
+      147.0
     ]
   },
   "EB_StepNoLedges_Back / EB | leg | head | +X | inset": {
     "min": [
-      3450.0,
+      3500.0,
       -2618.0,
       0.0
     ],
     "max": [
-      3519.0,
-      -2574.0,
-      122.0
+      3544.0,
+      -2549.0,
+      147.0
     ]
   },
   "EB_StepNoLedges_Back / EB | leg | mid run | -X": {
@@ -2178,45 +1890,45 @@
       0.0
     ],
     "max": [
-      2836.0,
-      -1494.0,
-      122.0
+      2861.0,
+      -1519.0,
+      147.0
     ]
   },
   "EB_StepNoLedges_Back / EB | leg | mid run | +X": {
     "min": [
-      3544.0,
+      3519.0,
       -1563.0,
       0.0
     ],
     "max": [
       3588.0,
-      -1494.0,
-      122.0
+      -1519.0,
+      147.0
     ]
   },
   "EB_StepNoLedges_Back / EB | leg | post | behind head | -X": {
     "min": [
       2792.0,
-      -2574.0,
+      -2549.0,
       0.0
     ],
     "max": [
-      2836.0,
+      2861.0,
       -2505.0,
-      122.0
+      147.0
     ]
   },
   "EB_StepNoLedges_Back / EB | leg | post | behind head | +X": {
     "min": [
-      3544.0,
-      -2574.0,
+      3519.0,
+      -2549.0,
       0.0
     ],
     "max": [
       3588.0,
       -2505.0,
-      122.0
+      147.0
     ]
   },
   "EB_StepNoLedges_Back / EB | leg | post | behind mid | -X | headward": {
@@ -2228,7 +1940,7 @@
     "max": [
       2836.0,
       -1563.0,
-      122.0
+      147.0
     ]
   },
   "EB_StepNoLedges_Back / EB | leg | post | behind mid | +X | headward": {
@@ -2240,18 +1952,18 @@
     "max": [
       3588.0,
       -1563.0,
-      122.0
+      147.0
     ]
   },
   "EB_StepNoLedges_Back / EB | beam | head | cap": {
     "min": [
-      2861.0,
+      2836.0,
       -2618.0,
-      122.0
+      147.0
     ],
     "max": [
-      3519.0,
-      -2574.0,
+      3544.0,
+      -2549.0,
       191.0
     ]
   },
@@ -2378,73 +2090,37 @@
   "EB_StepNoLedges_Back / EB | beam | sister | outer -X": {
     "min": [
       2792.0,
-      -2574.0,
-      122.0
+      -2549.0,
+      147.0
     ],
     "max": [
-      2836.0,
-      -1494.0,
+      2861.0,
+      -1519.0,
       191.0
     ]
   },
   "EB_StepNoLedges_Back / EB | beam | sister | outer +X": {
     "min": [
-      3544.0,
-      -2574.0,
-      122.0
+      3519.0,
+      -2549.0,
+      147.0
     ],
     "max": [
       3588.0,
-      -1494.0,
-      191.0
-    ]
-  },
-  "EB_StepNoLedges_Back / EB | beam | head tie | between sisters": {
-    "min": [
-      2836.0,
-      -2574.0,
-      122.0
-    ],
-    "max": [
-      3544.0,
-      -2530.0,
+      -1519.0,
       191.0
     ]
   },
   "EB_StepNoLedges_Back / EB | beam | mid tie | between sisters": {
     "min": [
-      2836.0,
-      -1618.0,
-      122.0
+      2861.0,
+      -1599.0,
+      147.0
     ],
     "max": [
-      3544.0,
-      -1574.0,
+      3519.0,
+      -1530.0,
       191.0
-    ]
-  },
-  "EB_StepNoLedges_Back / EB | leg | post | mid tie filler | -X": {
-    "min": [
-      2836.0,
-      -1618.0,
-      0.0
-    ],
-    "max": [
-      2905.0,
-      -1574.0,
-      122.0
-    ]
-  },
-  "EB_StepNoLedges_Back / EB | leg | post | mid tie filler | +X": {
-    "min": [
-      3475.0,
-      -1618.0,
-      0.0
-    ],
-    "max": [
-      3544.0,
-      -1574.0,
-      122.0
     ]
   },
   "EB_StepNoLedges_Back / EB | screw | head end | 1/9 | lower": {
@@ -2663,118 +2339,22 @@
       241.0
     ]
   },
-  "EB_StepNoLedges_Back / EB | screw | sister -X | head tie | lower": {
-    "min": [
-      2792.0,
-      -2556.0,
-      141.0
-    ],
-    "max": [
-      2880.0,
-      -2548.0,
-      149.0
-    ]
-  },
-  "EB_StepNoLedges_Back / EB | screw | sister -X | head tie | upper": {
-    "min": [
-      2792.0,
-      -2556.0,
-      164.0
-    ],
-    "max": [
-      2880.0,
-      -2548.0,
-      172.0
-    ]
-  },
-  "EB_StepNoLedges_Back / EB | screw | sister -X | mid tie | lower": {
-    "min": [
-      2792.0,
-      -1600.0,
-      141.0
-    ],
-    "max": [
-      2880.0,
-      -1592.0,
-      149.0
-    ]
-  },
-  "EB_StepNoLedges_Back / EB | screw | sister -X | mid tie | upper": {
-    "min": [
-      2792.0,
-      -1600.0,
-      164.0
-    ],
-    "max": [
-      2880.0,
-      -1592.0,
-      172.0
-    ]
-  },
-  "EB_StepNoLedges_Back / EB | screw | sister +X | head tie | lower": {
-    "min": [
-      3500.0,
-      -2556.0,
-      141.0
-    ],
-    "max": [
-      3588.0,
-      -2548.0,
-      149.0
-    ]
-  },
-  "EB_StepNoLedges_Back / EB | screw | sister +X | head tie | upper": {
-    "min": [
-      3500.0,
-      -2556.0,
-      164.0
-    ],
-    "max": [
-      3588.0,
-      -2548.0,
-      172.0
-    ]
-  },
-  "EB_StepNoLedges_Back / EB | screw | sister +X | mid tie | lower": {
-    "min": [
-      3500.0,
-      -1600.0,
-      141.0
-    ],
-    "max": [
-      3588.0,
-      -1592.0,
-      149.0
-    ]
-  },
-  "EB_StepNoLedges_Back / EB | screw | sister +X | mid tie | upper": {
-    "min": [
-      3500.0,
-      -1600.0,
-      164.0
-    ],
-    "max": [
-      3588.0,
-      -1592.0,
-      172.0
-    ]
-  },
   "EB_StepNoLedges_Front / EB | leg | foot | -X": {
     "min": [
       2792.0,
-      -626.0,
+      -651.0,
       0.0
     ],
     "max": [
-      2861.0,
+      2836.0,
       -582.0,
       191.0
     ]
   },
   "EB_StepNoLedges_Front / EB | leg | foot | +X": {
     "min": [
-      3519.0,
-      -626.0,
+      3544.0,
+      -651.0,
       0.0
     ],
     "max": [
@@ -2785,36 +2365,36 @@
   },
   "EB_StepNoLedges_Front / EB | leg | foot | -X | inset": {
     "min": [
-      2861.0,
-      -626.0,
+      2836.0,
+      -651.0,
       0.0
     ],
     "max": [
-      2930.0,
+      2880.0,
       -582.0,
-      122.0
+      147.0
     ]
   },
   "EB_StepNoLedges_Front / EB | leg | foot | +X | inset": {
     "min": [
-      3450.0,
-      -626.0,
+      3500.0,
+      -651.0,
       0.0
     ],
     "max": [
-      3519.0,
+      3544.0,
       -582.0,
-      122.0
+      147.0
     ]
   },
   "EB_StepNoLedges_Front / EB | beam | foot | cap": {
     "min": [
-      2861.0,
-      -626.0,
-      122.0
+      2836.0,
+      -651.0,
+      147.0
     ],
     "max": [
-      3519.0,
+      3544.0,
       -582.0,
       191.0
     ]
@@ -2925,18 +2505,6 @@
       3541.0,
       -644.0,
       260.0
-    ]
-  },
-  "EB_StepNoLedges_Front / EB | beam | front | rigidity | below foot cap": {
-    "min": [
-      2839.0,
-      -670.0,
-      122.0
-    ],
-    "max": [
-      3541.0,
-      -626.0,
-      191.0
     ]
   },
   "EB_StepNoLedges_Front / EB | screw | foot end | 1/8 | lower": {
@@ -3133,13 +2701,13 @@
   },
   "EB_StepFlip_Back / EB | leg | head | -X": {
     "min": [
-      4915.0,
+      4940.0,
       -2618.0,
       69.0
     ],
     "max": [
       4984.0,
-      -2574.0,
+      -2549.0,
       260.0
     ]
   },
@@ -3150,44 +2718,44 @@
       69.0
     ],
     "max": [
-      4257.0,
-      -2574.0,
+      4232.0,
+      -2549.0,
       260.0
     ]
   },
   "EB_StepFlip_Back / EB | leg | head | -X | inset": {
     "min": [
-      4846.0,
+      4896.0,
       -2618.0,
-      138.0
+      113.0
     ],
     "max": [
-      4915.0,
-      -2574.0,
+      4940.0,
+      -2549.0,
       260.0
     ]
   },
   "EB_StepFlip_Back / EB | leg | head | +X | inset": {
     "min": [
-      4257.0,
+      4232.0,
       -2618.0,
-      138.0
+      113.0
     ],
     "max": [
-      4326.0,
-      -2574.0,
+      4276.0,
+      -2549.0,
       260.0
     ]
   },
   "EB_StepFlip_Back / EB | leg | mid run | -X": {
     "min": [
-      4940.0,
+      4915.0,
       -1563.0,
-      138.0
+      113.0
     ],
     "max": [
       4984.0,
-      -1494.0,
+      -1519.0,
       260.0
     ]
   },
@@ -3195,19 +2763,19 @@
     "min": [
       4188.0,
       -1563.0,
-      138.0
+      113.0
     ],
     "max": [
-      4232.0,
-      -1494.0,
+      4257.0,
+      -1519.0,
       260.0
     ]
   },
   "EB_StepFlip_Back / EB | leg | post | behind head | -X": {
     "min": [
-      4940.0,
-      -2574.0,
-      138.0
+      4915.0,
+      -2549.0,
+      113.0
     ],
     "max": [
       4984.0,
@@ -3218,11 +2786,11 @@
   "EB_StepFlip_Back / EB | leg | post | behind head | +X": {
     "min": [
       4188.0,
-      -2574.0,
-      138.0
+      -2549.0,
+      113.0
     ],
     "max": [
-      4232.0,
+      4257.0,
       -2505.0,
       260.0
     ]
@@ -3231,7 +2799,7 @@
     "min": [
       4940.0,
       -1632.0,
-      138.0
+      113.0
     ],
     "max": [
       4984.0,
@@ -3243,7 +2811,7 @@
     "min": [
       4188.0,
       -1632.0,
-      138.0
+      113.0
     ],
     "max": [
       4232.0,
@@ -3253,14 +2821,14 @@
   },
   "EB_StepFlip_Back / EB | beam | head | cap": {
     "min": [
-      4257.0,
+      4232.0,
       -2618.0,
       69.0
     ],
     "max": [
-      4915.0,
-      -2574.0,
-      138.0
+      4940.0,
+      -2549.0,
+      113.0
     ]
   },
   "EB_StepFlip_Back / EB | beam | head | end": {
@@ -3385,74 +2953,38 @@
   },
   "EB_StepFlip_Back / EB | beam | sister | outer -X": {
     "min": [
-      4940.0,
-      -2574.0,
+      4915.0,
+      -2549.0,
       69.0
     ],
     "max": [
       4984.0,
-      -1494.0,
-      138.0
+      -1519.0,
+      113.0
     ]
   },
   "EB_StepFlip_Back / EB | beam | sister | outer +X": {
     "min": [
       4188.0,
-      -2574.0,
+      -2549.0,
       69.0
     ],
     "max": [
-      4232.0,
-      -1494.0,
-      138.0
-    ]
-  },
-  "EB_StepFlip_Back / EB | beam | head tie | between sisters": {
-    "min": [
-      4232.0,
-      -2574.0,
-      69.0
-    ],
-    "max": [
-      4940.0,
-      -2530.0,
-      138.0
+      4257.0,
+      -1519.0,
+      113.0
     ]
   },
   "EB_StepFlip_Back / EB | beam | mid tie | between sisters": {
     "min": [
-      4232.0,
-      -1618.0,
+      4257.0,
+      -1599.0,
       69.0
     ],
     "max": [
-      4940.0,
-      -1574.0,
-      138.0
-    ]
-  },
-  "EB_StepFlip_Back / EB | leg | post | mid tie filler | -X": {
-    "min": [
-      4871.0,
-      -1618.0,
-      138.0
-    ],
-    "max": [
-      4940.0,
-      -1574.0,
-      260.0
-    ]
-  },
-  "EB_StepFlip_Back / EB | leg | post | mid tie filler | +X": {
-    "min": [
-      4232.0,
-      -1618.0,
-      138.0
-    ],
-    "max": [
-      4301.0,
-      -1574.0,
-      260.0
+      4915.0,
+      -1530.0,
+      113.0
     ]
   },
   "EB_StepFlip_Back / EB | screw | head end | 1/9 | lower": {
@@ -3671,106 +3203,10 @@
       27.0
     ]
   },
-  "EB_StepFlip_Back / EB | screw | sister -X | head tie | lower": {
-    "min": [
-      4896.0,
-      -2556.0,
-      111.0
-    ],
-    "max": [
-      4984.0,
-      -2548.0,
-      119.0
-    ]
-  },
-  "EB_StepFlip_Back / EB | screw | sister -X | head tie | upper": {
-    "min": [
-      4896.0,
-      -2556.0,
-      88.0
-    ],
-    "max": [
-      4984.0,
-      -2548.0,
-      96.0
-    ]
-  },
-  "EB_StepFlip_Back / EB | screw | sister -X | mid tie | lower": {
-    "min": [
-      4896.0,
-      -1600.0,
-      111.0
-    ],
-    "max": [
-      4984.0,
-      -1592.0,
-      119.0
-    ]
-  },
-  "EB_StepFlip_Back / EB | screw | sister -X | mid tie | upper": {
-    "min": [
-      4896.0,
-      -1600.0,
-      88.0
-    ],
-    "max": [
-      4984.0,
-      -1592.0,
-      96.0
-    ]
-  },
-  "EB_StepFlip_Back / EB | screw | sister +X | head tie | lower": {
-    "min": [
-      4188.0,
-      -2556.0,
-      111.0
-    ],
-    "max": [
-      4276.0,
-      -2548.0,
-      119.0
-    ]
-  },
-  "EB_StepFlip_Back / EB | screw | sister +X | head tie | upper": {
-    "min": [
-      4188.0,
-      -2556.0,
-      88.0
-    ],
-    "max": [
-      4276.0,
-      -2548.0,
-      96.0
-    ]
-  },
-  "EB_StepFlip_Back / EB | screw | sister +X | mid tie | lower": {
-    "min": [
-      4188.0,
-      -1600.0,
-      111.0
-    ],
-    "max": [
-      4276.0,
-      -1592.0,
-      119.0
-    ]
-  },
-  "EB_StepFlip_Back / EB | screw | sister +X | mid tie | upper": {
-    "min": [
-      4188.0,
-      -1600.0,
-      88.0
-    ],
-    "max": [
-      4276.0,
-      -1592.0,
-      96.0
-    ]
-  },
   "EB_StepFlip_Front / EB | leg | foot | -X": {
     "min": [
-      4915.0,
-      -336.667,
+      4940.0,
+      -361.667,
       69.0
     ],
     "max": [
@@ -3782,49 +3218,49 @@
   "EB_StepFlip_Front / EB | leg | foot | +X": {
     "min": [
       4188.0,
-      -336.667,
+      -361.667,
       69.0
     ],
     "max": [
-      4257.0,
+      4232.0,
       -292.667,
       260.0
     ]
   },
   "EB_StepFlip_Front / EB | leg | foot | -X | inset": {
     "min": [
-      4846.0,
-      -336.667,
-      138.0
+      4896.0,
+      -361.667,
+      113.0
     ],
     "max": [
-      4915.0,
+      4940.0,
       -292.667,
       260.0
     ]
   },
   "EB_StepFlip_Front / EB | leg | foot | +X | inset": {
     "min": [
-      4257.0,
-      -336.667,
-      138.0
+      4232.0,
+      -361.667,
+      113.0
     ],
     "max": [
-      4326.0,
+      4276.0,
       -292.667,
       260.0
     ]
   },
   "EB_StepFlip_Front / EB | beam | foot | cap": {
     "min": [
-      4257.0,
-      -336.667,
+      4232.0,
+      -361.667,
       69.0
     ],
     "max": [
-      4915.0,
+      4940.0,
       -292.667,
-      138.0
+      113.0
     ]
   },
   "EB_StepFlip_Front / EB | beam | foot | end": {
@@ -3933,18 +3369,6 @@
       4279.0,
       -354.667,
       69.0
-    ]
-  },
-  "EB_StepFlip_Front / EB | beam | front | rigidity | below foot cap": {
-    "min": [
-      4235.0,
-      -380.667,
-      69.0
-    ],
-    "max": [
-      4937.0,
-      -336.667,
-      138.0
     ]
   },
   "EB_StepFlip_Front / EB | screw | foot end | 1/8 | lower": {
@@ -4141,14 +3565,14 @@
   },
   "EB_StepFlipNoLegs_Back / EB | beam | head | cap": {
     "min": [
-      5653.0,
+      5628.0,
       -2618.0,
       69.0
     ],
     "max": [
-      6311.0,
-      -2574.0,
-      138.0
+      6336.0,
+      -2549.0,
+      113.0
     ]
   },
   "EB_StepFlipNoLegs_Back / EB | beam | head | end": {
@@ -4273,50 +3697,38 @@
   },
   "EB_StepFlipNoLegs_Back / EB | beam | sister | outer -X": {
     "min": [
-      6336.0,
-      -2574.0,
+      6311.0,
+      -2549.0,
       69.0
     ],
     "max": [
       6380.0,
-      -1494.0,
-      138.0
+      -1519.0,
+      113.0
     ]
   },
   "EB_StepFlipNoLegs_Back / EB | beam | sister | outer +X": {
     "min": [
       5584.0,
-      -2574.0,
+      -2549.0,
       69.0
     ],
     "max": [
-      5628.0,
-      -1494.0,
-      138.0
-    ]
-  },
-  "EB_StepFlipNoLegs_Back / EB | beam | head tie | between sisters": {
-    "min": [
-      5628.0,
-      -2574.0,
-      69.0
-    ],
-    "max": [
-      6336.0,
-      -2530.0,
-      138.0
+      5653.0,
+      -1519.0,
+      113.0
     ]
   },
   "EB_StepFlipNoLegs_Back / EB | beam | mid tie | between sisters": {
     "min": [
-      5628.0,
-      -1618.0,
+      5653.0,
+      -1599.0,
       69.0
     ],
     "max": [
-      6336.0,
-      -1574.0,
-      138.0
+      6311.0,
+      -1530.0,
+      113.0
     ]
   },
   "EB_StepFlipNoLegs_Back / EB | screw | head end | 1/9 | lower": {
@@ -4535,112 +3947,16 @@
       27.0
     ]
   },
-  "EB_StepFlipNoLegs_Back / EB | screw | sister -X | head tie | lower": {
-    "min": [
-      6292.0,
-      -2556.0,
-      111.0
-    ],
-    "max": [
-      6380.0,
-      -2548.0,
-      119.0
-    ]
-  },
-  "EB_StepFlipNoLegs_Back / EB | screw | sister -X | head tie | upper": {
-    "min": [
-      6292.0,
-      -2556.0,
-      88.0
-    ],
-    "max": [
-      6380.0,
-      -2548.0,
-      96.0
-    ]
-  },
-  "EB_StepFlipNoLegs_Back / EB | screw | sister -X | mid tie | lower": {
-    "min": [
-      6292.0,
-      -1600.0,
-      111.0
-    ],
-    "max": [
-      6380.0,
-      -1592.0,
-      119.0
-    ]
-  },
-  "EB_StepFlipNoLegs_Back / EB | screw | sister -X | mid tie | upper": {
-    "min": [
-      6292.0,
-      -1600.0,
-      88.0
-    ],
-    "max": [
-      6380.0,
-      -1592.0,
-      96.0
-    ]
-  },
-  "EB_StepFlipNoLegs_Back / EB | screw | sister +X | head tie | lower": {
-    "min": [
-      5584.0,
-      -2556.0,
-      111.0
-    ],
-    "max": [
-      5672.0,
-      -2548.0,
-      119.0
-    ]
-  },
-  "EB_StepFlipNoLegs_Back / EB | screw | sister +X | head tie | upper": {
-    "min": [
-      5584.0,
-      -2556.0,
-      88.0
-    ],
-    "max": [
-      5672.0,
-      -2548.0,
-      96.0
-    ]
-  },
-  "EB_StepFlipNoLegs_Back / EB | screw | sister +X | mid tie | lower": {
-    "min": [
-      5584.0,
-      -1600.0,
-      111.0
-    ],
-    "max": [
-      5672.0,
-      -1592.0,
-      119.0
-    ]
-  },
-  "EB_StepFlipNoLegs_Back / EB | screw | sister +X | mid tie | upper": {
-    "min": [
-      5584.0,
-      -1600.0,
-      88.0
-    ],
-    "max": [
-      5672.0,
-      -1592.0,
-      96.0
-    ]
-  },
   "EB_StepFlipNoLegs_Front / EB | beam | foot | cap": {
     "min": [
-      5653.0,
-      -336.667,
+      5628.0,
+      -361.667,
       69.0
     ],
     "max": [
-      6311.0,
+      6336.0,
       -292.667,
-      138.0
+      113.0
     ]
   },
   "EB_StepFlipNoLegs_Front / EB | beam | foot | end": {
@@ -4749,18 +4065,6 @@
       5675.0,
       -354.667,
       69.0
-    ]
-  },
-  "EB_StepFlipNoLegs_Front / EB | beam | front | rigidity | below foot cap": {
-    "min": [
-      5631.0,
-      -380.667,
-      69.0
-    ],
-    "max": [
-      6333.0,
-      -336.667,
-      138.0
     ]
   },
   "EB_StepFlipNoLegs_Front / EB | screw | foot end | 1/8 | lower": {
@@ -5077,50 +4381,38 @@
   },
   "EB_StepFlipNoCaps_Back / EB | beam | sister | outer -X": {
     "min": [
-      7732.0,
-      -2574.0,
+      7707.0,
+      -2549.0,
       69.0
     ],
     "max": [
       7776.0,
-      -1494.0,
-      138.0
+      -1519.0,
+      113.0
     ]
   },
   "EB_StepFlipNoCaps_Back / EB | beam | sister | outer +X": {
     "min": [
       6980.0,
-      -2574.0,
+      -2549.0,
       69.0
     ],
     "max": [
-      7024.0,
-      -1494.0,
-      138.0
-    ]
-  },
-  "EB_StepFlipNoCaps_Back / EB | beam | head tie | between sisters": {
-    "min": [
-      7024.0,
-      -2574.0,
-      69.0
-    ],
-    "max": [
-      7732.0,
-      -2530.0,
-      138.0
+      7049.0,
+      -1519.0,
+      113.0
     ]
   },
   "EB_StepFlipNoCaps_Back / EB | beam | mid tie | between sisters": {
     "min": [
-      7024.0,
-      -1618.0,
+      7049.0,
+      -1599.0,
       69.0
     ],
     "max": [
-      7732.0,
-      -1574.0,
-      138.0
+      7707.0,
+      -1530.0,
+      113.0
     ]
   },
   "EB_StepFlipNoCaps_Back / EB | screw | head end | 1/9 | lower": {
@@ -5339,102 +4631,6 @@
       27.0
     ]
   },
-  "EB_StepFlipNoCaps_Back / EB | screw | sister -X | head tie | lower": {
-    "min": [
-      7688.0,
-      -2556.0,
-      111.0
-    ],
-    "max": [
-      7776.0,
-      -2548.0,
-      119.0
-    ]
-  },
-  "EB_StepFlipNoCaps_Back / EB | screw | sister -X | head tie | upper": {
-    "min": [
-      7688.0,
-      -2556.0,
-      88.0
-    ],
-    "max": [
-      7776.0,
-      -2548.0,
-      96.0
-    ]
-  },
-  "EB_StepFlipNoCaps_Back / EB | screw | sister -X | mid tie | lower": {
-    "min": [
-      7688.0,
-      -1600.0,
-      111.0
-    ],
-    "max": [
-      7776.0,
-      -1592.0,
-      119.0
-    ]
-  },
-  "EB_StepFlipNoCaps_Back / EB | screw | sister -X | mid tie | upper": {
-    "min": [
-      7688.0,
-      -1600.0,
-      88.0
-    ],
-    "max": [
-      7776.0,
-      -1592.0,
-      96.0
-    ]
-  },
-  "EB_StepFlipNoCaps_Back / EB | screw | sister +X | head tie | lower": {
-    "min": [
-      6980.0,
-      -2556.0,
-      111.0
-    ],
-    "max": [
-      7068.0,
-      -2548.0,
-      119.0
-    ]
-  },
-  "EB_StepFlipNoCaps_Back / EB | screw | sister +X | head tie | upper": {
-    "min": [
-      6980.0,
-      -2556.0,
-      88.0
-    ],
-    "max": [
-      7068.0,
-      -2548.0,
-      96.0
-    ]
-  },
-  "EB_StepFlipNoCaps_Back / EB | screw | sister +X | mid tie | lower": {
-    "min": [
-      6980.0,
-      -1600.0,
-      111.0
-    ],
-    "max": [
-      7068.0,
-      -1592.0,
-      119.0
-    ]
-  },
-  "EB_StepFlipNoCaps_Back / EB | screw | sister +X | mid tie | upper": {
-    "min": [
-      6980.0,
-      -1600.0,
-      88.0
-    ],
-    "max": [
-      7068.0,
-      -1592.0,
-      96.0
-    ]
-  },
   "EB_StepFlipNoCaps_Front / EB | beam | foot | end": {
     "min": [
       6980.0,
@@ -5541,18 +4737,6 @@
       7071.0,
       -354.667,
       69.0
-    ]
-  },
-  "EB_StepFlipNoCaps_Front / EB | beam | front | rigidity | below foot cap": {
-    "min": [
-      7027.0,
-      -380.667,
-      69.0
-    ],
-    "max": [
-      7729.0,
-      -336.667,
-      138.0
     ]
   },
   "EB_StepFlipNoCaps_Front / EB | screw | foot end | 1/8 | lower": {
@@ -6390,45 +5574,45 @@
       0.0
     ],
     "max": [
-      69.0,
-      26.0,
+      44.0,
+      51.0,
       191.0
     ]
   },
   "EB_Ext1_Back / EB | leg | head | +X": {
     "min": [
-      727.0,
+      752.0,
       -18.0,
       0.0
     ],
     "max": [
       796.0,
-      26.0,
+      51.0,
       191.0
     ]
   },
   "EB_Ext1_Back / EB | leg | head | -X | inset": {
     "min": [
-      69.0,
+      44.0,
       -18.0,
       0.0
     ],
     "max": [
-      138.0,
-      26.0,
-      122.0
+      88.0,
+      51.0,
+      147.0
     ]
   },
   "EB_Ext1_Back / EB | leg | head | +X | inset": {
     "min": [
-      658.0,
+      708.0,
       -18.0,
       0.0
     ],
     "max": [
-      727.0,
-      26.0,
-      122.0
+      752.0,
+      51.0,
+      147.0
     ]
   },
   "EB_Ext1_Back / EB | leg | mid run | -X": {
@@ -6438,45 +5622,45 @@
       0.0
     ],
     "max": [
-      44.0,
-      1106.0,
-      122.0
+      69.0,
+      1081.0,
+      147.0
     ]
   },
   "EB_Ext1_Back / EB | leg | mid run | +X": {
     "min": [
-      752.0,
+      727.0,
       1037.0,
       0.0
     ],
     "max": [
       796.0,
-      1106.0,
-      122.0
+      1081.0,
+      147.0
     ]
   },
   "EB_Ext1_Back / EB | leg | post | behind head | -X": {
     "min": [
       0.0,
-      26.0,
+      51.0,
       0.0
     ],
     "max": [
-      44.0,
+      69.0,
       95.0,
-      122.0
+      147.0
     ]
   },
   "EB_Ext1_Back / EB | leg | post | behind head | +X": {
     "min": [
-      752.0,
-      26.0,
+      727.0,
+      51.0,
       0.0
     ],
     "max": [
       796.0,
       95.0,
-      122.0
+      147.0
     ]
   },
   "EB_Ext1_Back / EB | leg | post | behind mid | -X | headward": {
@@ -6488,7 +5672,7 @@
     "max": [
       44.0,
       1037.0,
-      122.0
+      147.0
     ]
   },
   "EB_Ext1_Back / EB | leg | post | behind mid | +X | headward": {
@@ -6500,18 +5684,18 @@
     "max": [
       796.0,
       1037.0,
-      122.0
+      147.0
     ]
   },
   "EB_Ext1_Back / EB | beam | head | cap": {
     "min": [
-      69.0,
+      44.0,
       -18.0,
-      122.0
+      147.0
     ],
     "max": [
-      727.0,
-      26.0,
+      752.0,
+      51.0,
       191.0
     ]
   },
@@ -6650,73 +5834,37 @@
   "EB_Ext1_Back / EB | beam | sister | outer -X": {
     "min": [
       0.0,
-      26.0,
-      122.0
+      51.0,
+      147.0
     ],
     "max": [
-      44.0,
-      1106.0,
+      69.0,
+      1081.0,
       191.0
     ]
   },
   "EB_Ext1_Back / EB | beam | sister | outer +X": {
     "min": [
-      752.0,
-      26.0,
-      122.0
+      727.0,
+      51.0,
+      147.0
     ],
     "max": [
       796.0,
-      1106.0,
-      191.0
-    ]
-  },
-  "EB_Ext1_Back / EB | beam | head tie | between sisters": {
-    "min": [
-      44.0,
-      26.0,
-      122.0
-    ],
-    "max": [
-      752.0,
-      70.0,
+      1081.0,
       191.0
     ]
   },
   "EB_Ext1_Back / EB | beam | mid tie | between sisters": {
     "min": [
-      44.0,
-      982.0,
-      122.0
+      69.0,
+      1001.0,
+      147.0
     ],
     "max": [
-      752.0,
-      1026.0,
+      727.0,
+      1070.0,
       191.0
-    ]
-  },
-  "EB_Ext1_Back / EB | leg | post | mid tie filler | -X": {
-    "min": [
-      44.0,
-      982.0,
-      0.0
-    ],
-    "max": [
-      113.0,
-      1026.0,
-      122.0
-    ]
-  },
-  "EB_Ext1_Back / EB | leg | post | mid tie filler | +X": {
-    "min": [
-      683.0,
-      982.0,
-      0.0
-    ],
-    "max": [
-      752.0,
-      1026.0,
-      122.0
     ]
   },
   "EB_Ext1_Back / EB | screw | demo | head ledge": {
@@ -6947,102 +6095,6 @@
       241.0
     ]
   },
-  "EB_Ext1_Back / EB | screw | sister -X | head tie | lower": {
-    "min": [
-      0.0,
-      44.0,
-      141.0
-    ],
-    "max": [
-      88.0,
-      52.0,
-      149.0
-    ]
-  },
-  "EB_Ext1_Back / EB | screw | sister -X | head tie | upper": {
-    "min": [
-      0.0,
-      44.0,
-      164.0
-    ],
-    "max": [
-      88.0,
-      52.0,
-      172.0
-    ]
-  },
-  "EB_Ext1_Back / EB | screw | sister -X | mid tie | lower": {
-    "min": [
-      0.0,
-      1000.0,
-      141.0
-    ],
-    "max": [
-      88.0,
-      1008.0,
-      149.0
-    ]
-  },
-  "EB_Ext1_Back / EB | screw | sister -X | mid tie | upper": {
-    "min": [
-      0.0,
-      1000.0,
-      164.0
-    ],
-    "max": [
-      88.0,
-      1008.0,
-      172.0
-    ]
-  },
-  "EB_Ext1_Back / EB | screw | sister +X | head tie | lower": {
-    "min": [
-      708.0,
-      44.0,
-      141.0
-    ],
-    "max": [
-      796.0,
-      52.0,
-      149.0
-    ]
-  },
-  "EB_Ext1_Back / EB | screw | sister +X | head tie | upper": {
-    "min": [
-      708.0,
-      44.0,
-      164.0
-    ],
-    "max": [
-      796.0,
-      52.0,
-      172.0
-    ]
-  },
-  "EB_Ext1_Back / EB | screw | sister +X | mid tie | lower": {
-    "min": [
-      708.0,
-      1000.0,
-      141.0
-    ],
-    "max": [
-      796.0,
-      1008.0,
-      149.0
-    ]
-  },
-  "EB_Ext1_Back / EB | screw | sister +X | mid tie | upper": {
-    "min": [
-      708.0,
-      1000.0,
-      164.0
-    ],
-    "max": [
-      796.0,
-      1008.0,
-      172.0
-    ]
-  },
   "EB_Ext1_Back / EB | pillow | big": {
     "min": [
       0.0,
@@ -7082,19 +6134,19 @@
   "EB_Ext1_Front / EB | leg | foot | -X": {
     "min": [
       0.0,
-      1395.333,
+      1370.333,
       0.0
     ],
     "max": [
-      69.0,
+      44.0,
       1439.333,
       191.0
     ]
   },
   "EB_Ext1_Front / EB | leg | foot | +X": {
     "min": [
-      727.0,
-      1395.333,
+      752.0,
+      1370.333,
       0.0
     ],
     "max": [
@@ -7105,36 +6157,36 @@
   },
   "EB_Ext1_Front / EB | leg | foot | -X | inset": {
     "min": [
-      69.0,
-      1395.333,
+      44.0,
+      1370.333,
       0.0
     ],
     "max": [
-      138.0,
+      88.0,
       1439.333,
-      122.0
+      147.0
     ]
   },
   "EB_Ext1_Front / EB | leg | foot | +X | inset": {
     "min": [
-      658.0,
-      1395.333,
+      708.0,
+      1370.333,
       0.0
     ],
     "max": [
-      727.0,
+      752.0,
       1439.333,
-      122.0
+      147.0
     ]
   },
   "EB_Ext1_Front / EB | beam | foot | cap": {
     "min": [
-      69.0,
-      1395.333,
-      122.0
+      44.0,
+      1370.333,
+      147.0
     ],
     "max": [
-      727.0,
+      752.0,
       1439.333,
       191.0
     ]
@@ -7261,25 +6313,13 @@
   },
   "EB_Ext1_Front / EB | beam | front | under slats | foot end": {
     "min": [
-      47.0,
-      359.333,
-      122.0
+      69.0,
+      353.333,
+      147.0
     ],
     "max": [
-      749.0,
-      403.333,
-      191.0
-    ]
-  },
-  "EB_Ext1_Front / EB | beam | front | rigidity | below foot cap": {
-    "min": [
-      47.0,
-      1351.333,
-      122.0
-    ],
-    "max": [
-      749.0,
-      1395.333,
+      727.0,
+      422.333,
       191.0
     ]
   },
@@ -7506,45 +6546,45 @@
       0.0
     ],
     "max": [
-      1465.0,
-      26.0,
+      1440.0,
+      51.0,
       191.0
     ]
   },
   "EB_Half_Back / EB | leg | head | +X": {
     "min": [
-      2123.0,
+      2148.0,
       -18.0,
       0.0
     ],
     "max": [
       2192.0,
-      26.0,
+      51.0,
       191.0
     ]
   },
   "EB_Half_Back / EB | leg | head | -X | inset": {
     "min": [
-      1465.0,
+      1440.0,
       -18.0,
       0.0
     ],
     "max": [
-      1534.0,
-      26.0,
-      122.0
+      1484.0,
+      51.0,
+      147.0
     ]
   },
   "EB_Half_Back / EB | leg | head | +X | inset": {
     "min": [
-      2054.0,
+      2104.0,
       -18.0,
       0.0
     ],
     "max": [
-      2123.0,
-      26.0,
-      122.0
+      2148.0,
+      51.0,
+      147.0
     ]
   },
   "EB_Half_Back / EB | leg | mid run | -X": {
@@ -7554,45 +6594,45 @@
       0.0
     ],
     "max": [
-      1440.0,
-      1106.0,
-      122.0
+      1465.0,
+      1081.0,
+      147.0
     ]
   },
   "EB_Half_Back / EB | leg | mid run | +X": {
     "min": [
-      2148.0,
+      2123.0,
       1037.0,
       0.0
     ],
     "max": [
       2192.0,
-      1106.0,
-      122.0
+      1081.0,
+      147.0
     ]
   },
   "EB_Half_Back / EB | leg | post | behind head | -X": {
     "min": [
       1396.0,
-      26.0,
+      51.0,
       0.0
     ],
     "max": [
-      1440.0,
+      1465.0,
       95.0,
-      122.0
+      147.0
     ]
   },
   "EB_Half_Back / EB | leg | post | behind head | +X": {
     "min": [
-      2148.0,
-      26.0,
+      2123.0,
+      51.0,
       0.0
     ],
     "max": [
       2192.0,
       95.0,
-      122.0
+      147.0
     ]
   },
   "EB_Half_Back / EB | leg | post | behind mid | -X | headward": {
@@ -7604,7 +6644,7 @@
     "max": [
       1440.0,
       1037.0,
-      122.0
+      147.0
     ]
   },
   "EB_Half_Back / EB | leg | post | behind mid | +X | headward": {
@@ -7616,18 +6656,18 @@
     "max": [
       2192.0,
       1037.0,
-      122.0
+      147.0
     ]
   },
   "EB_Half_Back / EB | beam | head | cap": {
     "min": [
-      1465.0,
+      1440.0,
       -18.0,
-      122.0
+      147.0
     ],
     "max": [
-      2123.0,
-      26.0,
+      2148.0,
+      51.0,
       191.0
     ]
   },
@@ -7766,73 +6806,37 @@
   "EB_Half_Back / EB | beam | sister | outer -X": {
     "min": [
       1396.0,
-      26.0,
-      122.0
+      51.0,
+      147.0
     ],
     "max": [
-      1440.0,
-      1106.0,
+      1465.0,
+      1081.0,
       191.0
     ]
   },
   "EB_Half_Back / EB | beam | sister | outer +X": {
     "min": [
-      2148.0,
-      26.0,
-      122.0
+      2123.0,
+      51.0,
+      147.0
     ],
     "max": [
       2192.0,
-      1106.0,
-      191.0
-    ]
-  },
-  "EB_Half_Back / EB | beam | head tie | between sisters": {
-    "min": [
-      1440.0,
-      26.0,
-      122.0
-    ],
-    "max": [
-      2148.0,
-      70.0,
+      1081.0,
       191.0
     ]
   },
   "EB_Half_Back / EB | beam | mid tie | between sisters": {
     "min": [
-      1440.0,
-      982.0,
-      122.0
+      1465.0,
+      1001.0,
+      147.0
     ],
     "max": [
-      2148.0,
-      1026.0,
+      2123.0,
+      1070.0,
       191.0
-    ]
-  },
-  "EB_Half_Back / EB | leg | post | mid tie filler | -X": {
-    "min": [
-      1440.0,
-      982.0,
-      0.0
-    ],
-    "max": [
-      1509.0,
-      1026.0,
-      122.0
-    ]
-  },
-  "EB_Half_Back / EB | leg | post | mid tie filler | +X": {
-    "min": [
-      2079.0,
-      982.0,
-      0.0
-    ],
-    "max": [
-      2148.0,
-      1026.0,
-      122.0
     ]
   },
   "EB_Half_Back / EB | screw | demo | head ledge": {
@@ -8063,102 +7067,6 @@
       241.0
     ]
   },
-  "EB_Half_Back / EB | screw | sister -X | head tie | lower": {
-    "min": [
-      1396.0,
-      44.0,
-      141.0
-    ],
-    "max": [
-      1484.0,
-      52.0,
-      149.0
-    ]
-  },
-  "EB_Half_Back / EB | screw | sister -X | head tie | upper": {
-    "min": [
-      1396.0,
-      44.0,
-      164.0
-    ],
-    "max": [
-      1484.0,
-      52.0,
-      172.0
-    ]
-  },
-  "EB_Half_Back / EB | screw | sister -X | mid tie | lower": {
-    "min": [
-      1396.0,
-      1000.0,
-      141.0
-    ],
-    "max": [
-      1484.0,
-      1008.0,
-      149.0
-    ]
-  },
-  "EB_Half_Back / EB | screw | sister -X | mid tie | upper": {
-    "min": [
-      1396.0,
-      1000.0,
-      164.0
-    ],
-    "max": [
-      1484.0,
-      1008.0,
-      172.0
-    ]
-  },
-  "EB_Half_Back / EB | screw | sister +X | head tie | lower": {
-    "min": [
-      2104.0,
-      44.0,
-      141.0
-    ],
-    "max": [
-      2192.0,
-      52.0,
-      149.0
-    ]
-  },
-  "EB_Half_Back / EB | screw | sister +X | head tie | upper": {
-    "min": [
-      2104.0,
-      44.0,
-      164.0
-    ],
-    "max": [
-      2192.0,
-      52.0,
-      172.0
-    ]
-  },
-  "EB_Half_Back / EB | screw | sister +X | mid tie | lower": {
-    "min": [
-      2104.0,
-      1000.0,
-      141.0
-    ],
-    "max": [
-      2192.0,
-      1008.0,
-      149.0
-    ]
-  },
-  "EB_Half_Back / EB | screw | sister +X | mid tie | upper": {
-    "min": [
-      2104.0,
-      1000.0,
-      164.0
-    ],
-    "max": [
-      2192.0,
-      1008.0,
-      172.0
-    ]
-  },
   "EB_Half_Back / EB | pillow | big": {
     "min": [
       1396.0,
@@ -8186,19 +7094,19 @@
   "EB_Half_Front / EB | leg | foot | -X": {
     "min": [
       1396.0,
-      1684.667,
+      1659.667,
       0.0
     ],
     "max": [
-      1465.0,
+      1440.0,
       1728.667,
       191.0
     ]
   },
   "EB_Half_Front / EB | leg | foot | +X": {
     "min": [
-      2123.0,
-      1684.667,
+      2148.0,
+      1659.667,
       0.0
     ],
     "max": [
@@ -8209,36 +7117,36 @@
   },
   "EB_Half_Front / EB | leg | foot | -X | inset": {
     "min": [
-      1465.0,
-      1684.667,
+      1440.0,
+      1659.667,
       0.0
     ],
     "max": [
-      1534.0,
+      1484.0,
       1728.667,
-      122.0
+      147.0
     ]
   },
   "EB_Half_Front / EB | leg | foot | +X | inset": {
     "min": [
-      2054.0,
-      1684.667,
+      2104.0,
+      1659.667,
       0.0
     ],
     "max": [
-      2123.0,
+      2148.0,
       1728.667,
-      122.0
+      147.0
     ]
   },
   "EB_Half_Front / EB | beam | foot | cap": {
     "min": [
-      1465.0,
-      1684.667,
-      122.0
+      1440.0,
+      1659.667,
+      147.0
     ],
     "max": [
-      2123.0,
+      2148.0,
       1728.667,
       191.0
     ]
@@ -8365,25 +7273,13 @@
   },
   "EB_Half_Front / EB | beam | front | under slats | foot end": {
     "min": [
-      1443.0,
-      648.667,
-      122.0
+      1465.0,
+      642.667,
+      147.0
     ],
     "max": [
-      2145.0,
-      692.667,
-      191.0
-    ]
-  },
-  "EB_Half_Front / EB | beam | front | rigidity | below foot cap": {
-    "min": [
-      1443.0,
-      1640.667,
-      122.0
-    ],
-    "max": [
-      2145.0,
-      1684.667,
+      2123.0,
+      711.667,
       191.0
     ]
   },
@@ -8622,45 +7518,45 @@
       0.0
     ],
     "max": [
-      2861.0,
-      26.0,
+      2836.0,
+      51.0,
       191.0
     ]
   },
   "EB_Ext_Back / EB | leg | head | +X": {
     "min": [
-      3519.0,
+      3544.0,
       -18.0,
       0.0
     ],
     "max": [
       3588.0,
-      26.0,
+      51.0,
       191.0
     ]
   },
   "EB_Ext_Back / EB | leg | head | -X | inset": {
     "min": [
-      2861.0,
+      2836.0,
       -18.0,
       0.0
     ],
     "max": [
-      2930.0,
-      26.0,
-      122.0
+      2880.0,
+      51.0,
+      147.0
     ]
   },
   "EB_Ext_Back / EB | leg | head | +X | inset": {
     "min": [
-      3450.0,
+      3500.0,
       -18.0,
       0.0
     ],
     "max": [
-      3519.0,
-      26.0,
-      122.0
+      3544.0,
+      51.0,
+      147.0
     ]
   },
   "EB_Ext_Back / EB | leg | mid run | -X": {
@@ -8670,45 +7566,45 @@
       0.0
     ],
     "max": [
-      2836.0,
-      1106.0,
-      122.0
+      2861.0,
+      1081.0,
+      147.0
     ]
   },
   "EB_Ext_Back / EB | leg | mid run | +X": {
     "min": [
-      3544.0,
+      3519.0,
       1037.0,
       0.0
     ],
     "max": [
       3588.0,
-      1106.0,
-      122.0
+      1081.0,
+      147.0
     ]
   },
   "EB_Ext_Back / EB | leg | post | behind head | -X": {
     "min": [
       2792.0,
-      26.0,
+      51.0,
       0.0
     ],
     "max": [
-      2836.0,
+      2861.0,
       95.0,
-      122.0
+      147.0
     ]
   },
   "EB_Ext_Back / EB | leg | post | behind head | +X": {
     "min": [
-      3544.0,
-      26.0,
+      3519.0,
+      51.0,
       0.0
     ],
     "max": [
       3588.0,
       95.0,
-      122.0
+      147.0
     ]
   },
   "EB_Ext_Back / EB | leg | post | behind mid | -X | headward": {
@@ -8720,7 +7616,7 @@
     "max": [
       2836.0,
       1037.0,
-      122.0
+      147.0
     ]
   },
   "EB_Ext_Back / EB | leg | post | behind mid | +X | headward": {
@@ -8732,18 +7628,18 @@
     "max": [
       3588.0,
       1037.0,
-      122.0
+      147.0
     ]
   },
   "EB_Ext_Back / EB | beam | head | cap": {
     "min": [
-      2861.0,
+      2836.0,
       -18.0,
-      122.0
+      147.0
     ],
     "max": [
-      3519.0,
-      26.0,
+      3544.0,
+      51.0,
       191.0
     ]
   },
@@ -8882,73 +7778,37 @@
   "EB_Ext_Back / EB | beam | sister | outer -X": {
     "min": [
       2792.0,
-      26.0,
-      122.0
+      51.0,
+      147.0
     ],
     "max": [
-      2836.0,
-      1106.0,
+      2861.0,
+      1081.0,
       191.0
     ]
   },
   "EB_Ext_Back / EB | beam | sister | outer +X": {
     "min": [
-      3544.0,
-      26.0,
-      122.0
+      3519.0,
+      51.0,
+      147.0
     ],
     "max": [
       3588.0,
-      1106.0,
-      191.0
-    ]
-  },
-  "EB_Ext_Back / EB | beam | head tie | between sisters": {
-    "min": [
-      2836.0,
-      26.0,
-      122.0
-    ],
-    "max": [
-      3544.0,
-      70.0,
+      1081.0,
       191.0
     ]
   },
   "EB_Ext_Back / EB | beam | mid tie | between sisters": {
     "min": [
-      2836.0,
-      982.0,
-      122.0
+      2861.0,
+      1001.0,
+      147.0
     ],
     "max": [
-      3544.0,
-      1026.0,
+      3519.0,
+      1070.0,
       191.0
-    ]
-  },
-  "EB_Ext_Back / EB | leg | post | mid tie filler | -X": {
-    "min": [
-      2836.0,
-      982.0,
-      0.0
-    ],
-    "max": [
-      2905.0,
-      1026.0,
-      122.0
-    ]
-  },
-  "EB_Ext_Back / EB | leg | post | mid tie filler | +X": {
-    "min": [
-      3475.0,
-      982.0,
-      0.0
-    ],
-    "max": [
-      3544.0,
-      1026.0,
-      122.0
     ]
   },
   "EB_Ext_Back / EB | screw | demo | head ledge": {
@@ -9179,102 +8039,6 @@
       241.0
     ]
   },
-  "EB_Ext_Back / EB | screw | sister -X | head tie | lower": {
-    "min": [
-      2792.0,
-      44.0,
-      141.0
-    ],
-    "max": [
-      2880.0,
-      52.0,
-      149.0
-    ]
-  },
-  "EB_Ext_Back / EB | screw | sister -X | head tie | upper": {
-    "min": [
-      2792.0,
-      44.0,
-      164.0
-    ],
-    "max": [
-      2880.0,
-      52.0,
-      172.0
-    ]
-  },
-  "EB_Ext_Back / EB | screw | sister -X | mid tie | lower": {
-    "min": [
-      2792.0,
-      1000.0,
-      141.0
-    ],
-    "max": [
-      2880.0,
-      1008.0,
-      149.0
-    ]
-  },
-  "EB_Ext_Back / EB | screw | sister -X | mid tie | upper": {
-    "min": [
-      2792.0,
-      1000.0,
-      164.0
-    ],
-    "max": [
-      2880.0,
-      1008.0,
-      172.0
-    ]
-  },
-  "EB_Ext_Back / EB | screw | sister +X | head tie | lower": {
-    "min": [
-      3500.0,
-      44.0,
-      141.0
-    ],
-    "max": [
-      3588.0,
-      52.0,
-      149.0
-    ]
-  },
-  "EB_Ext_Back / EB | screw | sister +X | head tie | upper": {
-    "min": [
-      3500.0,
-      44.0,
-      164.0
-    ],
-    "max": [
-      3588.0,
-      52.0,
-      172.0
-    ]
-  },
-  "EB_Ext_Back / EB | screw | sister +X | mid tie | lower": {
-    "min": [
-      3500.0,
-      1000.0,
-      141.0
-    ],
-    "max": [
-      3588.0,
-      1008.0,
-      149.0
-    ]
-  },
-  "EB_Ext_Back / EB | screw | sister +X | mid tie | upper": {
-    "min": [
-      3500.0,
-      1000.0,
-      164.0
-    ],
-    "max": [
-      3588.0,
-      1008.0,
-      172.0
-    ]
-  },
   "EB_Ext_Back / EB | pillow | big": {
     "min": [
       2792.0,
@@ -9290,19 +8054,19 @@
   "EB_Ext_Front / EB | leg | foot | -X": {
     "min": [
       2792.0,
-      1974.0,
+      1949.0,
       0.0
     ],
     "max": [
-      2861.0,
+      2836.0,
       2018.0,
       191.0
     ]
   },
   "EB_Ext_Front / EB | leg | foot | +X": {
     "min": [
-      3519.0,
-      1974.0,
+      3544.0,
+      1949.0,
       0.0
     ],
     "max": [
@@ -9313,36 +8077,36 @@
   },
   "EB_Ext_Front / EB | leg | foot | -X | inset": {
     "min": [
-      2861.0,
-      1974.0,
+      2836.0,
+      1949.0,
       0.0
     ],
     "max": [
-      2930.0,
+      2880.0,
       2018.0,
-      122.0
+      147.0
     ]
   },
   "EB_Ext_Front / EB | leg | foot | +X | inset": {
     "min": [
-      3450.0,
-      1974.0,
+      3500.0,
+      1949.0,
       0.0
     ],
     "max": [
-      3519.0,
+      3544.0,
       2018.0,
-      122.0
+      147.0
     ]
   },
   "EB_Ext_Front / EB | beam | foot | cap": {
     "min": [
-      2861.0,
-      1974.0,
-      122.0
+      2836.0,
+      1949.0,
+      147.0
     ],
     "max": [
-      3519.0,
+      3544.0,
       2018.0,
       191.0
     ]
@@ -9469,25 +8233,13 @@
   },
   "EB_Ext_Front / EB | beam | front | under slats | foot end": {
     "min": [
-      2839.0,
-      938.0,
-      122.0
+      2861.0,
+      932.0,
+      147.0
     ],
     "max": [
-      3541.0,
-      982.0,
-      191.0
-    ]
-  },
-  "EB_Ext_Front / EB | beam | front | rigidity | below foot cap": {
-    "min": [
-      2839.0,
-      1930.0,
-      122.0
-    ],
-    "max": [
-      3541.0,
-      1974.0,
+      3519.0,
+      1001.0,
       191.0
     ]
   },
@@ -9738,45 +8490,45 @@
       0.0
     ],
     "max": [
-      4257.0,
-      26.0,
+      4232.0,
+      51.0,
       191.0
     ]
   },
   "EB_Ret_Back / EB | leg | head | +X": {
     "min": [
-      4915.0,
+      4940.0,
       -18.0,
       0.0
     ],
     "max": [
       4984.0,
-      26.0,
+      51.0,
       191.0
     ]
   },
   "EB_Ret_Back / EB | leg | head | -X | inset": {
     "min": [
-      4257.0,
+      4232.0,
       -18.0,
       0.0
     ],
     "max": [
-      4326.0,
-      26.0,
-      122.0
+      4276.0,
+      51.0,
+      147.0
     ]
   },
   "EB_Ret_Back / EB | leg | head | +X | inset": {
     "min": [
-      4846.0,
+      4896.0,
       -18.0,
       0.0
     ],
     "max": [
-      4915.0,
-      26.0,
-      122.0
+      4940.0,
+      51.0,
+      147.0
     ]
   },
   "EB_Ret_Back / EB | leg | mid run | -X": {
@@ -9786,45 +8538,45 @@
       0.0
     ],
     "max": [
-      4232.0,
-      1106.0,
-      122.0
+      4257.0,
+      1081.0,
+      147.0
     ]
   },
   "EB_Ret_Back / EB | leg | mid run | +X": {
     "min": [
-      4940.0,
+      4915.0,
       1037.0,
       0.0
     ],
     "max": [
       4984.0,
-      1106.0,
-      122.0
+      1081.0,
+      147.0
     ]
   },
   "EB_Ret_Back / EB | leg | post | behind head | -X": {
     "min": [
       4188.0,
-      26.0,
+      51.0,
       0.0
     ],
     "max": [
-      4232.0,
+      4257.0,
       95.0,
-      122.0
+      147.0
     ]
   },
   "EB_Ret_Back / EB | leg | post | behind head | +X": {
     "min": [
-      4940.0,
-      26.0,
+      4915.0,
+      51.0,
       0.0
     ],
     "max": [
       4984.0,
       95.0,
-      122.0
+      147.0
     ]
   },
   "EB_Ret_Back / EB | leg | post | behind mid | -X | headward": {
@@ -9836,7 +8588,7 @@
     "max": [
       4232.0,
       1037.0,
-      122.0
+      147.0
     ]
   },
   "EB_Ret_Back / EB | leg | post | behind mid | +X | headward": {
@@ -9848,18 +8600,18 @@
     "max": [
       4984.0,
       1037.0,
-      122.0
+      147.0
     ]
   },
   "EB_Ret_Back / EB | beam | head | cap": {
     "min": [
-      4257.0,
+      4232.0,
       -18.0,
-      122.0
+      147.0
     ],
     "max": [
-      4915.0,
-      26.0,
+      4940.0,
+      51.0,
       191.0
     ]
   },
@@ -9998,73 +8750,37 @@
   "EB_Ret_Back / EB | beam | sister | outer -X": {
     "min": [
       4188.0,
-      26.0,
-      122.0
+      51.0,
+      147.0
     ],
     "max": [
-      4232.0,
-      1106.0,
+      4257.0,
+      1081.0,
       191.0
     ]
   },
   "EB_Ret_Back / EB | beam | sister | outer +X": {
     "min": [
-      4940.0,
-      26.0,
-      122.0
+      4915.0,
+      51.0,
+      147.0
     ],
     "max": [
       4984.0,
-      1106.0,
-      191.0
-    ]
-  },
-  "EB_Ret_Back / EB | beam | head tie | between sisters": {
-    "min": [
-      4232.0,
-      26.0,
-      122.0
-    ],
-    "max": [
-      4940.0,
-      70.0,
+      1081.0,
       191.0
     ]
   },
   "EB_Ret_Back / EB | beam | mid tie | between sisters": {
     "min": [
-      4232.0,
-      982.0,
-      122.0
+      4257.0,
+      1001.0,
+      147.0
     ],
     "max": [
-      4940.0,
-      1026.0,
+      4915.0,
+      1070.0,
       191.0
-    ]
-  },
-  "EB_Ret_Back / EB | leg | post | mid tie filler | -X": {
-    "min": [
-      4232.0,
-      982.0,
-      0.0
-    ],
-    "max": [
-      4301.0,
-      1026.0,
-      122.0
-    ]
-  },
-  "EB_Ret_Back / EB | leg | post | mid tie filler | +X": {
-    "min": [
-      4871.0,
-      982.0,
-      0.0
-    ],
-    "max": [
-      4940.0,
-      1026.0,
-      122.0
     ]
   },
   "EB_Ret_Back / EB | screw | demo | head ledge": {
@@ -10295,102 +9011,6 @@
       241.0
     ]
   },
-  "EB_Ret_Back / EB | screw | sister -X | head tie | lower": {
-    "min": [
-      4188.0,
-      44.0,
-      141.0
-    ],
-    "max": [
-      4276.0,
-      52.0,
-      149.0
-    ]
-  },
-  "EB_Ret_Back / EB | screw | sister -X | head tie | upper": {
-    "min": [
-      4188.0,
-      44.0,
-      164.0
-    ],
-    "max": [
-      4276.0,
-      52.0,
-      172.0
-    ]
-  },
-  "EB_Ret_Back / EB | screw | sister -X | mid tie | lower": {
-    "min": [
-      4188.0,
-      1000.0,
-      141.0
-    ],
-    "max": [
-      4276.0,
-      1008.0,
-      149.0
-    ]
-  },
-  "EB_Ret_Back / EB | screw | sister -X | mid tie | upper": {
-    "min": [
-      4188.0,
-      1000.0,
-      164.0
-    ],
-    "max": [
-      4276.0,
-      1008.0,
-      172.0
-    ]
-  },
-  "EB_Ret_Back / EB | screw | sister +X | head tie | lower": {
-    "min": [
-      4896.0,
-      44.0,
-      141.0
-    ],
-    "max": [
-      4984.0,
-      52.0,
-      149.0
-    ]
-  },
-  "EB_Ret_Back / EB | screw | sister +X | head tie | upper": {
-    "min": [
-      4896.0,
-      44.0,
-      164.0
-    ],
-    "max": [
-      4984.0,
-      52.0,
-      172.0
-    ]
-  },
-  "EB_Ret_Back / EB | screw | sister +X | mid tie | lower": {
-    "min": [
-      4896.0,
-      1000.0,
-      141.0
-    ],
-    "max": [
-      4984.0,
-      1008.0,
-      149.0
-    ]
-  },
-  "EB_Ret_Back / EB | screw | sister +X | mid tie | upper": {
-    "min": [
-      4896.0,
-      1000.0,
-      164.0
-    ],
-    "max": [
-      4984.0,
-      1008.0,
-      172.0
-    ]
-  },
   "EB_Ret_Back / EB | pillow | big": {
     "min": [
       4188.0,
@@ -10442,19 +9062,19 @@
   "EB_Ret_Front / EB | leg | foot | -X": {
     "min": [
       4188.0,
-      1106.0,
+      1081.0,
       0.0
     ],
     "max": [
-      4257.0,
+      4232.0,
       1150.0,
       191.0
     ]
   },
   "EB_Ret_Front / EB | leg | foot | +X": {
     "min": [
-      4915.0,
-      1106.0,
+      4940.0,
+      1081.0,
       0.0
     ],
     "max": [
@@ -10465,36 +9085,36 @@
   },
   "EB_Ret_Front / EB | leg | foot | -X | inset": {
     "min": [
-      4257.0,
-      1106.0,
+      4232.0,
+      1081.0,
       0.0
     ],
     "max": [
-      4326.0,
+      4276.0,
       1150.0,
-      122.0
+      147.0
     ]
   },
   "EB_Ret_Front / EB | leg | foot | +X | inset": {
     "min": [
-      4846.0,
-      1106.0,
+      4896.0,
+      1081.0,
       0.0
     ],
     "max": [
-      4915.0,
+      4940.0,
       1150.0,
-      122.0
+      147.0
     ]
   },
   "EB_Ret_Front / EB | beam | foot | cap": {
     "min": [
-      4257.0,
-      1106.0,
-      122.0
+      4232.0,
+      1081.0,
+      147.0
     ],
     "max": [
-      4915.0,
+      4940.0,
       1150.0,
       191.0
     ]
@@ -10621,25 +9241,13 @@
   },
   "EB_Ret_Front / EB | beam | front | under slats | foot end": {
     "min": [
-      4235.0,
-      70.0,
-      122.0
+      4257.0,
+      64.0,
+      147.0
     ],
     "max": [
-      4937.0,
-      114.0,
-      191.0
-    ]
-  },
-  "EB_Ret_Front / EB | beam | front | rigidity | below foot cap": {
-    "min": [
-      4235.0,
-      1062.0,
-      122.0
-    ],
-    "max": [
-      4937.0,
-      1106.0,
+      4915.0,
+      133.0,
       191.0
     ]
   },
@@ -10854,45 +9462,45 @@
       0.0
     ],
     "max": [
-      5653.0,
-      26.0,
+      5628.0,
+      51.0,
       191.0
     ]
   },
   "EB_RetGnd_Back / EB | leg | head | +X": {
     "min": [
-      6311.0,
+      6336.0,
       -18.0,
       0.0
     ],
     "max": [
       6380.0,
-      26.0,
+      51.0,
       191.0
     ]
   },
   "EB_RetGnd_Back / EB | leg | head | -X | inset": {
     "min": [
-      5653.0,
+      5628.0,
       -18.0,
       0.0
     ],
     "max": [
-      5722.0,
-      26.0,
-      122.0
+      5672.0,
+      51.0,
+      147.0
     ]
   },
   "EB_RetGnd_Back / EB | leg | head | +X | inset": {
     "min": [
-      6242.0,
+      6292.0,
       -18.0,
       0.0
     ],
     "max": [
-      6311.0,
-      26.0,
-      122.0
+      6336.0,
+      51.0,
+      147.0
     ]
   },
   "EB_RetGnd_Back / EB | leg | mid run | -X": {
@@ -10902,45 +9510,45 @@
       0.0
     ],
     "max": [
-      5628.0,
-      1106.0,
-      122.0
+      5653.0,
+      1081.0,
+      147.0
     ]
   },
   "EB_RetGnd_Back / EB | leg | mid run | +X": {
     "min": [
-      6336.0,
+      6311.0,
       1037.0,
       0.0
     ],
     "max": [
       6380.0,
-      1106.0,
-      122.0
+      1081.0,
+      147.0
     ]
   },
   "EB_RetGnd_Back / EB | leg | post | behind head | -X": {
     "min": [
       5584.0,
-      26.0,
+      51.0,
       0.0
     ],
     "max": [
-      5628.0,
+      5653.0,
       95.0,
-      122.0
+      147.0
     ]
   },
   "EB_RetGnd_Back / EB | leg | post | behind head | +X": {
     "min": [
-      6336.0,
-      26.0,
+      6311.0,
+      51.0,
       0.0
     ],
     "max": [
       6380.0,
       95.0,
-      122.0
+      147.0
     ]
   },
   "EB_RetGnd_Back / EB | leg | post | behind mid | -X | headward": {
@@ -10952,7 +9560,7 @@
     "max": [
       5628.0,
       1037.0,
-      122.0
+      147.0
     ]
   },
   "EB_RetGnd_Back / EB | leg | post | behind mid | +X | headward": {
@@ -10964,18 +9572,18 @@
     "max": [
       6380.0,
       1037.0,
-      122.0
+      147.0
     ]
   },
   "EB_RetGnd_Back / EB | beam | head | cap": {
     "min": [
-      5653.0,
+      5628.0,
       -18.0,
-      122.0
+      147.0
     ],
     "max": [
-      6311.0,
-      26.0,
+      6336.0,
+      51.0,
       191.0
     ]
   },
@@ -11114,73 +9722,37 @@
   "EB_RetGnd_Back / EB | beam | sister | outer -X": {
     "min": [
       5584.0,
-      26.0,
-      122.0
+      51.0,
+      147.0
     ],
     "max": [
-      5628.0,
-      1106.0,
+      5653.0,
+      1081.0,
       191.0
     ]
   },
   "EB_RetGnd_Back / EB | beam | sister | outer +X": {
     "min": [
-      6336.0,
-      26.0,
-      122.0
+      6311.0,
+      51.0,
+      147.0
     ],
     "max": [
       6380.0,
-      1106.0,
-      191.0
-    ]
-  },
-  "EB_RetGnd_Back / EB | beam | head tie | between sisters": {
-    "min": [
-      5628.0,
-      26.0,
-      122.0
-    ],
-    "max": [
-      6336.0,
-      70.0,
+      1081.0,
       191.0
     ]
   },
   "EB_RetGnd_Back / EB | beam | mid tie | between sisters": {
     "min": [
-      5628.0,
-      982.0,
-      122.0
+      5653.0,
+      1001.0,
+      147.0
     ],
     "max": [
-      6336.0,
-      1026.0,
+      6311.0,
+      1070.0,
       191.0
-    ]
-  },
-  "EB_RetGnd_Back / EB | leg | post | mid tie filler | -X": {
-    "min": [
-      5628.0,
-      982.0,
-      0.0
-    ],
-    "max": [
-      5697.0,
-      1026.0,
-      122.0
-    ]
-  },
-  "EB_RetGnd_Back / EB | leg | post | mid tie filler | +X": {
-    "min": [
-      6267.0,
-      982.0,
-      0.0
-    ],
-    "max": [
-      6336.0,
-      1026.0,
-      122.0
     ]
   },
   "EB_RetGnd_Back / EB | screw | demo | head ledge": {
@@ -11411,102 +9983,6 @@
       241.0
     ]
   },
-  "EB_RetGnd_Back / EB | screw | sister -X | head tie | lower": {
-    "min": [
-      5584.0,
-      44.0,
-      141.0
-    ],
-    "max": [
-      5672.0,
-      52.0,
-      149.0
-    ]
-  },
-  "EB_RetGnd_Back / EB | screw | sister -X | head tie | upper": {
-    "min": [
-      5584.0,
-      44.0,
-      164.0
-    ],
-    "max": [
-      5672.0,
-      52.0,
-      172.0
-    ]
-  },
-  "EB_RetGnd_Back / EB | screw | sister -X | mid tie | lower": {
-    "min": [
-      5584.0,
-      1000.0,
-      141.0
-    ],
-    "max": [
-      5672.0,
-      1008.0,
-      149.0
-    ]
-  },
-  "EB_RetGnd_Back / EB | screw | sister -X | mid tie | upper": {
-    "min": [
-      5584.0,
-      1000.0,
-      164.0
-    ],
-    "max": [
-      5672.0,
-      1008.0,
-      172.0
-    ]
-  },
-  "EB_RetGnd_Back / EB | screw | sister +X | head tie | lower": {
-    "min": [
-      6292.0,
-      44.0,
-      141.0
-    ],
-    "max": [
-      6380.0,
-      52.0,
-      149.0
-    ]
-  },
-  "EB_RetGnd_Back / EB | screw | sister +X | head tie | upper": {
-    "min": [
-      6292.0,
-      44.0,
-      164.0
-    ],
-    "max": [
-      6380.0,
-      52.0,
-      172.0
-    ]
-  },
-  "EB_RetGnd_Back / EB | screw | sister +X | mid tie | lower": {
-    "min": [
-      6292.0,
-      1000.0,
-      141.0
-    ],
-    "max": [
-      6380.0,
-      1008.0,
-      149.0
-    ]
-  },
-  "EB_RetGnd_Back / EB | screw | sister +X | mid tie | upper": {
-    "min": [
-      6292.0,
-      1000.0,
-      164.0
-    ],
-    "max": [
-      6380.0,
-      1008.0,
-      172.0
-    ]
-  },
   "EB_RetGnd_Back / EB | pillow | big": {
     "min": [
       5584.0,
@@ -11521,56 +9997,56 @@
   },
   "EB_RetGnd_Back / EB | pillow | small | 1": {
     "min": [
-      5584.0,
-      676.167,
+      5653.0,
+      678.167,
       0.0
     ],
     "max": [
-      6380.0,
-      965.5,
+      6311.0,
+      967.5,
       120.0
     ]
   },
   "EB_RetGnd_Back / EB | pillow | small | 2": {
     "min": [
-      5584.0,
-      386.833,
+      5653.0,
+      388.833,
       0.0
     ],
     "max": [
-      6380.0,
-      676.167,
+      6311.0,
+      678.167,
       120.0
     ]
   },
   "EB_RetGnd_Back / EB | pillow | small | 3": {
     "min": [
-      5584.0,
-      97.5,
+      5653.0,
+      99.5,
       0.0
     ],
     "max": [
-      6380.0,
-      386.833,
+      6311.0,
+      388.833,
       120.0
     ]
   },
   "EB_RetGnd_Front / EB | leg | foot | -X": {
     "min": [
       5584.0,
-      1106.0,
+      1081.0,
       0.0
     ],
     "max": [
-      5653.0,
+      5628.0,
       1150.0,
       191.0
     ]
   },
   "EB_RetGnd_Front / EB | leg | foot | +X": {
     "min": [
-      6311.0,
-      1106.0,
+      6336.0,
+      1081.0,
       0.0
     ],
     "max": [
@@ -11581,36 +10057,36 @@
   },
   "EB_RetGnd_Front / EB | leg | foot | -X | inset": {
     "min": [
-      5653.0,
-      1106.0,
+      5628.0,
+      1081.0,
       0.0
     ],
     "max": [
-      5722.0,
+      5672.0,
       1150.0,
-      122.0
+      147.0
     ]
   },
   "EB_RetGnd_Front / EB | leg | foot | +X | inset": {
     "min": [
-      6242.0,
-      1106.0,
+      6292.0,
+      1081.0,
       0.0
     ],
     "max": [
-      6311.0,
+      6336.0,
       1150.0,
-      122.0
+      147.0
     ]
   },
   "EB_RetGnd_Front / EB | beam | foot | cap": {
     "min": [
-      5653.0,
-      1106.0,
-      122.0
+      5628.0,
+      1081.0,
+      147.0
     ],
     "max": [
-      6311.0,
+      6336.0,
       1150.0,
       191.0
     ]
@@ -11737,25 +10213,13 @@
   },
   "EB_RetGnd_Front / EB | beam | front | under slats | foot end": {
     "min": [
-      5631.0,
-      70.0,
-      122.0
+      5653.0,
+      64.0,
+      147.0
     ],
     "max": [
-      6333.0,
-      114.0,
-      191.0
-    ]
-  },
-  "EB_RetGnd_Front / EB | beam | front | rigidity | below foot cap": {
-    "min": [
-      5631.0,
-      1062.0,
-      122.0
-    ],
-    "max": [
-      6333.0,
-      1106.0,
+      6311.0,
+      133.0,
       191.0
     ]
   },

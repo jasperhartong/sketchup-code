@@ -18,7 +18,7 @@ module Timmerman
                   :back_highlight_part_names, :front_highlight_part_names,
                   :omit_under_slat_foot_end_beam, :omit_head_ledge_plank, :omit_foot_ledge_plank,
                   :omit_head_cap_beam, :omit_foot_cap_beam,
-                  :omit_back_outer_sisters_and_ties, :omit_front_rigidity_below_foot_cap_beam,
+                  :omit_back_outer_sisters_and_ties,
                   :omit_legs, :upside_down
 
       # Construction-step row: +variant+ selects `omit_*` flags (see `BedPairCatalog::VARIANT_OMITS`).
@@ -41,7 +41,6 @@ module Timmerman
                      omit_head_cap_beam: false,
                      omit_foot_cap_beam: false,
                      omit_back_outer_sisters_and_ties: false,
-                     omit_front_rigidity_below_foot_cap_beam: false,
                      omit_legs: false,
                      back_highlight_part_names: [],
                      front_highlight_part_names: [],
@@ -60,7 +59,6 @@ module Timmerman
         @omit_head_cap_beam           = omit_head_cap_beam
         @omit_foot_cap_beam           = omit_foot_cap_beam
         @omit_back_outer_sisters_and_ties = omit_back_outer_sisters_and_ties
-        @omit_front_rigidity_below_foot_cap_beam = omit_front_rigidity_below_foot_cap_beam
         @omit_legs                    = omit_legs
         @back_highlight_part_names    = back_highlight_part_names
         @front_highlight_part_names   = front_highlight_part_names
@@ -76,8 +74,6 @@ module Timmerman
                                          omit_under_slat_foot_end_beam: @omit_under_slat_foot_end_beam,
                                          omit_foot_ledge_plank: @omit_foot_ledge_plank,
                                          omit_foot_cap_beam: @omit_foot_cap_beam,
-                                         omit_front_rigidity_below_foot_cap_beam:
-                                           @omit_front_rigidity_below_foot_cap_beam,
                                          omit_legs: @omit_legs)
 
       # Returns { back: [Pillow, ...], front: [Pillow, ...] }.
@@ -256,11 +252,14 @@ module Timmerman
 
         if sm > 0
           # Three smalls laid flat on the floor (Z=0), centred in the corridor
-          # between head legs and mid-run legs.
+          # between head legs and mid-run legs — inset in X and +Y so they miss
+          # `EB | leg | post | behind head | ±X` (same x footprint as leg_x, stacked at y_head + beam_wide).
           y_head        = -c.plank_thickness
-          mid_y0_val    = (c.length_retracted - c.leg_x) + c.plank_thickness
+          mid_y0_val    = (c.length_retracted - c.leg_x) + c.plank_thickness + c.mid_layout_y_shift
           pad           = c.slat_gap
-          y_corridor_lo = y_head + c.leg_y + pad
+          y_post_head   = y_head + c.beam_wide + c.leg_y + pad
+          y_inset_legs  = y_head + c.leg_y + pad
+          y_corridor_lo = [y_inset_legs, y_post_head].max
           y_corridor_hi = mid_y0_val - pad
           total_sm      = c.small_pillow_count * sm
           avail         = y_corridor_hi - y_corridor_lo
@@ -270,14 +269,18 @@ module Timmerman
                             y_corridor_lo
                           end
 
+          px0 = c.leg_x
+          pdx = c.outer_width - (2 * c.leg_x)
+          y_under_shift = 20.mm
+
           3.times do |i|
-            y = y_cluster + ((c.small_pillow_count - 1 - i) * sm)
+            y = y_cluster + ((c.small_pillow_count - 1 - i) * sm) - y_under_shift
             back_pillows << Pillow.new(
               "EB | pillow | small | #{i + 1}",
-              at:   [0, y, 0],
-              size: [c.outer_width, sm, c.pillow_thickness],
+              at:   [px0, y, 0],
+              size: [pdx, sm, c.pillow_thickness],
               config: c,
-              note: "Retracted+stored; small #{i + 1}/#{c.small_pillow_count} on floor (Z=0); Y between head and mid legs."
+              note: "Retracted+stored; small #{i + 1}/#{c.small_pillow_count} on floor; X inset leg_x; Y clears posts; shifted −Y 20 mm."
             )
           end
         end

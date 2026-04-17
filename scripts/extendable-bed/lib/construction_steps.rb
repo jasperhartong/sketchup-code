@@ -18,7 +18,6 @@ module Timmerman
           omit_head_cap_beam: false,
           omit_foot_cap_beam: false,
           omit_back_outer_sisters_and_ties: false,
-          omit_front_rigidity_below_foot_cap_beam: false,
           omit_legs: false
         },
         construction_no_under_slat_foot: {
@@ -28,7 +27,6 @@ module Timmerman
           omit_head_cap_beam: false,
           omit_foot_cap_beam: false,
           omit_back_outer_sisters_and_ties: false,
-          omit_front_rigidity_below_foot_cap_beam: false,
           omit_legs: false
         },
         construction_no_ledges: {
@@ -38,7 +36,6 @@ module Timmerman
           omit_head_cap_beam: false,
           omit_foot_cap_beam: false,
           omit_back_outer_sisters_and_ties: false,
-          omit_front_rigidity_below_foot_cap_beam: false,
           omit_legs: false
         },
         flip_no_legs: {
@@ -48,7 +45,6 @@ module Timmerman
           omit_head_cap_beam: false,
           omit_foot_cap_beam: false,
           omit_back_outer_sisters_and_ties: false,
-          omit_front_rigidity_below_foot_cap_beam: false,
           omit_legs: true
         },
         flip_no_caps: {
@@ -58,7 +54,6 @@ module Timmerman
           omit_head_cap_beam: true,
           omit_foot_cap_beam: true,
           omit_back_outer_sisters_and_ties: false,
-          omit_front_rigidity_below_foot_cap_beam: false,
           omit_legs: true
         },
         flip_no_brace: {
@@ -68,7 +63,6 @@ module Timmerman
           omit_head_cap_beam: true,
           omit_foot_cap_beam: true,
           omit_back_outer_sisters_and_ties: true,
-          omit_front_rigidity_below_foot_cap_beam: true,
           omit_legs: true
         }
       }.freeze
