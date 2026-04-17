@@ -3563,6 +3563,102 @@
       27.0
     ]
   },
+  "EB_StepFlipNoLegs_Back / EB | leg | head | -X | inset": {
+    "min": [
+      6292.0,
+      -2618.0,
+      113.0
+    ],
+    "max": [
+      6336.0,
+      -2549.0,
+      260.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | leg | head | +X | inset": {
+    "min": [
+      5628.0,
+      -2618.0,
+      113.0
+    ],
+    "max": [
+      5672.0,
+      -2549.0,
+      260.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | leg | mid run | -X": {
+    "min": [
+      6311.0,
+      -1563.0,
+      113.0
+    ],
+    "max": [
+      6380.0,
+      -1519.0,
+      260.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | leg | mid run | +X": {
+    "min": [
+      5584.0,
+      -1563.0,
+      113.0
+    ],
+    "max": [
+      5653.0,
+      -1519.0,
+      260.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | leg | post | behind head | -X": {
+    "min": [
+      6311.0,
+      -2549.0,
+      113.0
+    ],
+    "max": [
+      6380.0,
+      -2505.0,
+      260.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | leg | post | behind head | +X": {
+    "min": [
+      5584.0,
+      -2549.0,
+      113.0
+    ],
+    "max": [
+      5653.0,
+      -2505.0,
+      260.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | leg | post | behind mid | -X | headward": {
+    "min": [
+      6336.0,
+      -1632.0,
+      113.0
+    ],
+    "max": [
+      6380.0,
+      -1563.0,
+      260.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | leg | post | behind mid | +X | headward": {
+    "min": [
+      5584.0,
+      -1632.0,
+      113.0
+    ],
+    "max": [
+      5628.0,
+      -1563.0,
+      260.0
+    ]
+  },
   "EB_StepFlipNoLegs_Back / EB | beam | head | cap": {
     "min": [
       5628.0,
@@ -3945,6 +4041,30 @@
       5610.0,
       -2512.0,
       27.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | leg | foot | -X | inset": {
+    "min": [
+      6292.0,
+      -361.667,
+      113.0
+    ],
+    "max": [
+      6336.0,
+      -292.667,
+      260.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | leg | foot | +X | inset": {
+    "min": [
+      5628.0,
+      -361.667,
+      113.0
+    ],
+    "max": [
+      5672.0,
+      -292.667,
+      260.0
     ]
   },
   "EB_StepFlipNoLegs_Front / EB | beam | foot | cap": {
@@ -4377,42 +4497,6 @@
       7024.0,
       -1512.0,
       69.0
-    ]
-  },
-  "EB_StepFlipNoCaps_Back / EB | beam | sister | outer -X": {
-    "min": [
-      7707.0,
-      -2549.0,
-      69.0
-    ],
-    "max": [
-      7776.0,
-      -1519.0,
-      113.0
-    ]
-  },
-  "EB_StepFlipNoCaps_Back / EB | beam | sister | outer +X": {
-    "min": [
-      6980.0,
-      -2549.0,
-      69.0
-    ],
-    "max": [
-      7049.0,
-      -1519.0,
-      113.0
-    ]
-  },
-  "EB_StepFlipNoCaps_Back / EB | beam | mid tie | between sisters": {
-    "min": [
-      7049.0,
-      -1599.0,
-      69.0
-    ],
-    "max": [
-      7707.0,
-      -1530.0,
-      113.0
     ]
   },
   "EB_StepFlipNoCaps_Back / EB | screw | head end | 1/9 | lower": {
@@ -4931,640 +5015,172 @@
       27.0
     ]
   },
-  "EB_StepFlipNoBrace_Back / EB | beam | head | end": {
+  "EB_StepPrep_Back / EB | leg | head | -X | inset": {
     "min": [
-      8376.0,
-      -2600.0,
-      0.0
+      9084.0,
+      -2618.0,
+      44.0
+    ],
+    "max": [
+      9128.0,
+      -2549.0,
+      191.0
+    ]
+  },
+  "EB_StepPrep_Back / EB | leg | head | +X | inset": {
+    "min": [
+      8420.0,
+      -2618.0,
+      44.0
+    ],
+    "max": [
+      8464.0,
+      -2549.0,
+      191.0
+    ]
+  },
+  "EB_StepPrep_Back / EB | leg | mid run | -X": {
+    "min": [
+      9103.0,
+      -1563.0,
+      44.0
     ],
     "max": [
       9172.0,
-      -2556.0,
-      69.0
+      -1519.0,
+      191.0
     ]
   },
-  "EB_StepFlipNoBrace_Back / EB | slat | back | 1/9": {
+  "EB_StepPrep_Back / EB | leg | mid run | +X": {
+    "min": [
+      8376.0,
+      -1563.0,
+      44.0
+    ],
+    "max": [
+      8445.0,
+      -1519.0,
+      191.0
+    ]
+  },
+  "EB_StepPrep_Back / EB | leg | post | behind head | -X": {
+    "min": [
+      9103.0,
+      -2549.0,
+      44.0
+    ],
+    "max": [
+      9172.0,
+      -2505.0,
+      191.0
+    ]
+  },
+  "EB_StepPrep_Back / EB | leg | post | behind head | +X": {
+    "min": [
+      8376.0,
+      -2549.0,
+      44.0
+    ],
+    "max": [
+      8445.0,
+      -2505.0,
+      191.0
+    ]
+  },
+  "EB_StepPrep_Back / EB | leg | post | behind mid | -X | headward": {
     "min": [
       9128.0,
-      -2556.0,
-      0.0
+      -1632.0,
+      44.0
     ],
     "max": [
       9172.0,
-      -1512.0,
-      69.0
+      -1563.0,
+      191.0
     ]
   },
-  "EB_StepFlipNoBrace_Back / EB | slat | back | 2/9": {
-    "min": [
-      9034.0,
-      -2556.0,
-      0.0
-    ],
-    "max": [
-      9078.0,
-      -1512.0,
-      69.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | slat | back | 3/9": {
-    "min": [
-      8940.0,
-      -2556.0,
-      0.0
-    ],
-    "max": [
-      8984.0,
-      -1512.0,
-      69.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | slat | back | 4/9": {
-    "min": [
-      8846.0,
-      -2556.0,
-      0.0
-    ],
-    "max": [
-      8890.0,
-      -1512.0,
-      69.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | slat | back | 5/9": {
-    "min": [
-      8752.0,
-      -2556.0,
-      0.0
-    ],
-    "max": [
-      8796.0,
-      -1512.0,
-      69.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | slat | back | 6/9": {
-    "min": [
-      8658.0,
-      -2556.0,
-      0.0
-    ],
-    "max": [
-      8702.0,
-      -1512.0,
-      69.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | slat | back | 7/9": {
-    "min": [
-      8564.0,
-      -2556.0,
-      0.0
-    ],
-    "max": [
-      8608.0,
-      -1512.0,
-      69.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | slat | back | 8/9": {
-    "min": [
-      8470.0,
-      -2556.0,
-      0.0
-    ],
-    "max": [
-      8514.0,
-      -1512.0,
-      69.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | slat | back | 9/9": {
+  "EB_StepPrep_Back / EB | leg | post | behind mid | +X | headward": {
     "min": [
       8376.0,
-      -2556.0,
-      0.0
+      -1632.0,
+      44.0
     ],
     "max": [
       8420.0,
-      -1512.0,
-      69.0
+      -1563.0,
+      191.0
     ]
   },
-  "EB_StepFlipNoBrace_Back / EB | screw | head end | 1/9 | lower": {
+  "EB_StepPrep_Back / EB | beam | head | cap": {
     "min": [
-      9146.0,
-      -2600.0,
-      42.0
+      8420.0,
+      -2618.0,
+      0.0
     ],
     "max": [
-      9154.0,
-      -2512.0,
-      50.0
+      9128.0,
+      -2549.0,
+      44.0
     ]
   },
-  "EB_StepFlipNoBrace_Back / EB | screw | head end | 1/9 | upper": {
+  "EB_StepPrep_Back / EB | beam | sister | outer -X": {
     "min": [
-      9146.0,
-      -2600.0,
-      19.0
-    ],
-    "max": [
-      9154.0,
-      -2512.0,
-      27.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | screw | head end | 2/9 | lower": {
-    "min": [
-      9052.0,
-      -2600.0,
-      42.0
-    ],
-    "max": [
-      9060.0,
-      -2512.0,
-      50.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | screw | head end | 2/9 | upper": {
-    "min": [
-      9052.0,
-      -2600.0,
-      19.0
-    ],
-    "max": [
-      9060.0,
-      -2512.0,
-      27.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | screw | head end | 3/9 | lower": {
-    "min": [
-      8958.0,
-      -2600.0,
-      42.0
-    ],
-    "max": [
-      8966.0,
-      -2512.0,
-      50.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | screw | head end | 3/9 | upper": {
-    "min": [
-      8958.0,
-      -2600.0,
-      19.0
-    ],
-    "max": [
-      8966.0,
-      -2512.0,
-      27.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | screw | head end | 4/9 | lower": {
-    "min": [
-      8864.0,
-      -2600.0,
-      42.0
-    ],
-    "max": [
-      8872.0,
-      -2512.0,
-      50.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | screw | head end | 4/9 | upper": {
-    "min": [
-      8864.0,
-      -2600.0,
-      19.0
-    ],
-    "max": [
-      8872.0,
-      -2512.0,
-      27.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | screw | head end | 5/9 | lower": {
-    "min": [
-      8770.0,
-      -2600.0,
-      42.0
-    ],
-    "max": [
-      8778.0,
-      -2512.0,
-      50.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | screw | head end | 5/9 | upper": {
-    "min": [
-      8770.0,
-      -2600.0,
-      19.0
-    ],
-    "max": [
-      8778.0,
-      -2512.0,
-      27.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | screw | head end | 6/9 | lower": {
-    "min": [
-      8676.0,
-      -2600.0,
-      42.0
-    ],
-    "max": [
-      8684.0,
-      -2512.0,
-      50.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | screw | head end | 6/9 | upper": {
-    "min": [
-      8676.0,
-      -2600.0,
-      19.0
-    ],
-    "max": [
-      8684.0,
-      -2512.0,
-      27.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | screw | head end | 7/9 | lower": {
-    "min": [
-      8582.0,
-      -2600.0,
-      42.0
-    ],
-    "max": [
-      8590.0,
-      -2512.0,
-      50.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | screw | head end | 7/9 | upper": {
-    "min": [
-      8582.0,
-      -2600.0,
-      19.0
-    ],
-    "max": [
-      8590.0,
-      -2512.0,
-      27.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | screw | head end | 8/9 | lower": {
-    "min": [
-      8488.0,
-      -2600.0,
-      42.0
-    ],
-    "max": [
-      8496.0,
-      -2512.0,
-      50.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | screw | head end | 8/9 | upper": {
-    "min": [
-      8488.0,
-      -2600.0,
-      19.0
-    ],
-    "max": [
-      8496.0,
-      -2512.0,
-      27.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | screw | head end | 9/9 | lower": {
-    "min": [
-      8394.0,
-      -2600.0,
-      42.0
-    ],
-    "max": [
-      8402.0,
-      -2512.0,
-      50.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Back / EB | screw | head end | 9/9 | upper": {
-    "min": [
-      8394.0,
-      -2600.0,
-      19.0
-    ],
-    "max": [
-      8402.0,
-      -2512.0,
-      27.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | beam | foot | end": {
-    "min": [
-      8376.0,
-      -354.667,
+      9103.0,
+      -2549.0,
       0.0
     ],
     "max": [
       9172.0,
-      -310.667,
-      69.0
+      -1519.0,
+      44.0
     ]
   },
-  "EB_StepFlipNoBrace_Front / EB | slat | front | 1/8": {
+  "EB_StepPrep_Back / EB | beam | sister | outer +X": {
     "min": [
-      9081.0,
-      -1398.667,
+      8376.0,
+      -2549.0,
       0.0
     ],
     "max": [
-      9125.0,
-      -354.667,
-      69.0
+      8445.0,
+      -1519.0,
+      44.0
     ]
   },
-  "EB_StepFlipNoBrace_Front / EB | slat | front | 2/8": {
+  "EB_StepPrep_Front / EB | leg | foot | -X | inset": {
     "min": [
-      8987.0,
-      -1398.667,
+      9084.0,
+      -361.667,
+      44.0
+    ],
+    "max": [
+      9128.0,
+      -292.667,
+      191.0
+    ]
+  },
+  "EB_StepPrep_Front / EB | leg | foot | +X | inset": {
+    "min": [
+      8420.0,
+      -361.667,
+      44.0
+    ],
+    "max": [
+      8464.0,
+      -292.667,
+      191.0
+    ]
+  },
+  "EB_StepPrep_Front / EB | beam | foot | cap": {
+    "min": [
+      8420.0,
+      -361.667,
       0.0
     ],
     "max": [
-      9031.0,
-      -354.667,
-      69.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | slat | front | 3/8": {
-    "min": [
-      8893.0,
-      -1398.667,
-      0.0
-    ],
-    "max": [
-      8937.0,
-      -354.667,
-      69.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | slat | front | 4/8": {
-    "min": [
-      8799.0,
-      -1398.667,
-      0.0
-    ],
-    "max": [
-      8843.0,
-      -354.667,
-      69.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | slat | front | 5/8": {
-    "min": [
-      8705.0,
-      -1398.667,
-      0.0
-    ],
-    "max": [
-      8749.0,
-      -354.667,
-      69.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | slat | front | 6/8": {
-    "min": [
-      8611.0,
-      -1398.667,
-      0.0
-    ],
-    "max": [
-      8655.0,
-      -354.667,
-      69.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | slat | front | 7/8": {
-    "min": [
-      8517.0,
-      -1398.667,
-      0.0
-    ],
-    "max": [
-      8561.0,
-      -354.667,
-      69.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | slat | front | 8/8": {
-    "min": [
-      8423.0,
-      -1398.667,
-      0.0
-    ],
-    "max": [
-      8467.0,
-      -354.667,
-      69.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 1/8 | lower": {
-    "min": [
-      9099.0,
-      -398.667,
-      42.0
-    ],
-    "max": [
-      9107.0,
-      -310.667,
-      50.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 1/8 | upper": {
-    "min": [
-      9099.0,
-      -398.667,
-      19.0
-    ],
-    "max": [
-      9107.0,
-      -310.667,
-      27.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 2/8 | lower": {
-    "min": [
-      9005.0,
-      -398.667,
-      42.0
-    ],
-    "max": [
-      9013.0,
-      -310.667,
-      50.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 2/8 | upper": {
-    "min": [
-      9005.0,
-      -398.667,
-      19.0
-    ],
-    "max": [
-      9013.0,
-      -310.667,
-      27.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 3/8 | lower": {
-    "min": [
-      8911.0,
-      -398.667,
-      42.0
-    ],
-    "max": [
-      8919.0,
-      -310.667,
-      50.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 3/8 | upper": {
-    "min": [
-      8911.0,
-      -398.667,
-      19.0
-    ],
-    "max": [
-      8919.0,
-      -310.667,
-      27.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 4/8 | lower": {
-    "min": [
-      8817.0,
-      -398.667,
-      42.0
-    ],
-    "max": [
-      8825.0,
-      -310.667,
-      50.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 4/8 | upper": {
-    "min": [
-      8817.0,
-      -398.667,
-      19.0
-    ],
-    "max": [
-      8825.0,
-      -310.667,
-      27.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 5/8 | lower": {
-    "min": [
-      8723.0,
-      -398.667,
-      42.0
-    ],
-    "max": [
-      8731.0,
-      -310.667,
-      50.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 5/8 | upper": {
-    "min": [
-      8723.0,
-      -398.667,
-      19.0
-    ],
-    "max": [
-      8731.0,
-      -310.667,
-      27.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 6/8 | lower": {
-    "min": [
-      8629.0,
-      -398.667,
-      42.0
-    ],
-    "max": [
-      8637.0,
-      -310.667,
-      50.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 6/8 | upper": {
-    "min": [
-      8629.0,
-      -398.667,
-      19.0
-    ],
-    "max": [
-      8637.0,
-      -310.667,
-      27.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 7/8 | lower": {
-    "min": [
-      8535.0,
-      -398.667,
-      42.0
-    ],
-    "max": [
-      8543.0,
-      -310.667,
-      50.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 7/8 | upper": {
-    "min": [
-      8535.0,
-      -398.667,
-      19.0
-    ],
-    "max": [
-      8543.0,
-      -310.667,
-      27.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 8/8 | lower": {
-    "min": [
-      8441.0,
-      -398.667,
-      42.0
-    ],
-    "max": [
-      8449.0,
-      -310.667,
-      50.0
-    ]
-  },
-  "EB_StepFlipNoBrace_Front / EB | screw | foot end | 8/8 | upper": {
-    "min": [
-      8441.0,
-      -398.667,
-      19.0
-    ],
-    "max": [
-      8449.0,
-      -310.667,
-      27.0
+      9128.0,
+      -292.667,
+      44.0
     ]
   },
   "EB_Ext1_Back / EB | leg | head | -X": {

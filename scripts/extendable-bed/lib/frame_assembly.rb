@@ -16,16 +16,30 @@ module Timmerman
 
       # +group_name+ becomes the Outliner name of the root group.
       # Subclasses may read +@frame_options+ (construction-step previews).
+      #
+      # +only_part_names+ (optional) is a whitelist of part names. When non-nil,
+      # `@parts` is filtered after `assemble` to only those names, and
+      # `@hardware` is filtered to screws whose host part is in the whitelist.
+      # Used by preview variants like `:sub_assembly_prep` that show a hand-picked
+      # subset of the full bed without introducing per-part omit flags.
       def initialize(config, group_name:, **frame_options)
-        @config        = config
-        @group_name    = group_name
-        @frame_options = frame_options
-        @parts         = []
-        @hardware      = []
+        @config           = config
+        @group_name       = group_name
+        @only_part_names  = frame_options.delete(:only_part_names)
+        @frame_options    = frame_options
+        @parts            = []
+        @hardware         = []
         assemble
+        _apply_part_whitelist if @only_part_names
       end
 
       private
+
+      def _apply_part_whitelist
+        names = @only_part_names
+        @parts    = @parts.select    { |p| names.include?(p.name) }
+        @hardware = @hardware.select { |h| names.include?(h.host_name) }
+      end
 
       # ── DSL primitives ───────────────────────────────────────────────────────
 
@@ -131,15 +145,17 @@ module Timmerman
       # Plan: BEAM_NARROW along +X (outer faces flush sisters at x=0 / x=outer_width), BEAM_WIDE along +Y
       # so the wide face meets the head cap depth (same as cap dy), not the narrow 44 mm strip.
       def _head_legs
-        leg 'EB | leg | head | -X',
-            at:   [0, y_head, 0],
-            size: [head_corner_leg_dx, head_corner_leg_dy, lh_outer],
-            note: 'Corner −X: min_x flush sister outer −X; narrow along +X, wide along +Y to match head cap.'
+        unless @frame_options[:omit_outer_corner_legs]
+          leg 'EB | leg | head | -X',
+              at:   [0, y_head, 0],
+              size: [head_corner_leg_dx, head_corner_leg_dy, lh_outer],
+              note: 'Corner −X: min_x flush sister outer −X; narrow along +X, wide along +Y to match head cap.'
 
-        leg 'EB | leg | head | +X',
-            at:   [c.outer_width - head_corner_leg_dx, y_head, 0],
-            size: [head_corner_leg_dx, head_corner_leg_dy, lh_outer],
-            note: 'Corner +X: max_x flush sister outer +X; mirror of −X corner in plan.'
+          leg 'EB | leg | head | +X',
+              at:   [c.outer_width - head_corner_leg_dx, y_head, 0],
+              size: [head_corner_leg_dx, head_corner_leg_dy, lh_outer],
+              note: 'Corner +X: max_x flush sister outer +X; mirror of −X corner in plan.'
+        end
 
         # Inset strengtheners: plan leg_y×leg_x (44×69) so **min_x** (−X inset) / **max_x** (+X inset) mates
         # corner inner **max_x** / **min_x**; **max_z** meets head cap **min_z** (debug: cap bottom ~purple, inset top +Z).
@@ -352,16 +368,18 @@ module Timmerman
       end
 
       def _foot_legs
-        # Outer corner legs: same plan as head (narrow 44 along +X at outer faces, wide 69 along +Y).
-        leg 'EB | leg | foot | -X',
-            at:   [0, y_foot, 0],
-            size: [foot_corner_leg_dx, foot_corner_leg_dy, lh_outer],
-            note: 'Foot −X corner: min_x flush outer; wide along +Y; top to foot cap.'
+        unless @frame_options[:omit_outer_corner_legs]
+          # Outer corner legs: same plan as head (narrow 44 along +X at outer faces, wide 69 along +Y).
+          leg 'EB | leg | foot | -X',
+              at:   [0, y_foot, 0],
+              size: [foot_corner_leg_dx, foot_corner_leg_dy, lh_outer],
+              note: 'Foot −X corner: min_x flush outer; wide along +Y; top to foot cap.'
 
-        leg 'EB | leg | foot | +X',
-            at:   [c.outer_width - foot_corner_leg_dx, y_foot, 0],
-            size: [foot_corner_leg_dx, foot_corner_leg_dy, lh_outer],
-            note: 'Foot +X corner: max_x flush outer; mirror −X.'
+          leg 'EB | leg | foot | +X',
+              at:   [c.outer_width - foot_corner_leg_dx, y_foot, 0],
+              size: [foot_corner_leg_dx, foot_corner_leg_dy, lh_outer],
+              note: 'Foot +X corner: max_x flush outer; mirror −X.'
+        end
 
         # Inset strengtheners (match head inset plan; Z to flat foot cap underside).
         leg 'EB | leg | foot | -X | inset',

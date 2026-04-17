@@ -16,15 +16,18 @@ module Timmerman
       attr_reader :back_name, :front_name, :offset_x, :pair_row_y, :foot_world_y,
                   :pillow_mode, :tally_stock,
                   :back_highlight_part_names, :front_highlight_part_names,
+                  :back_only_part_names, :front_only_part_names,
                   :omit_under_slat_foot_end_beam, :omit_head_ledge_plank, :omit_foot_ledge_plank,
                   :omit_head_cap_beam, :omit_foot_cap_beam,
                   :omit_back_outer_sisters_and_ties,
-                  :omit_legs, :upside_down
+                  :omit_legs, :omit_outer_corner_legs, :upside_down
 
-      # Construction-step row: +variant+ selects `omit_*` flags (see `BedPairCatalog::VARIANT_OMITS`).
+      # Construction-step row: +variant+ selects `omit_*` flags (see `BedPairCatalog::VARIANT_OMITS`)
+      # and an optional per-frame part whitelist (see `BedPairCatalog::VARIANT_ONLY_PART_NAMES`).
       def self.from_assembly_row(config, variant:, **kwargs)
-        omits = BedPairCatalog.omit_flags_for_variant(variant)
-        new(config, **omits, **kwargs)
+        omits     = BedPairCatalog.omit_flags_for_variant(variant)
+        whitelist = BedPairCatalog.only_part_names_for_variant(variant, config)
+        new(config, **omits, **whitelist, **kwargs)
       end
 
       def initialize(config,
@@ -42,8 +45,11 @@ module Timmerman
                      omit_foot_cap_beam: false,
                      omit_back_outer_sisters_and_ties: false,
                      omit_legs: false,
+                     omit_outer_corner_legs: false,
                      back_highlight_part_names: [],
                      front_highlight_part_names: [],
+                     back_only_part_names: nil,
+                     front_only_part_names: nil,
                      upside_down: false)
         @config       = config
         @back_name    = back_name
@@ -60,8 +66,11 @@ module Timmerman
         @omit_foot_cap_beam           = omit_foot_cap_beam
         @omit_back_outer_sisters_and_ties = omit_back_outer_sisters_and_ties
         @omit_legs                    = omit_legs
+        @omit_outer_corner_legs       = omit_outer_corner_legs
         @back_highlight_part_names    = back_highlight_part_names
         @front_highlight_part_names   = front_highlight_part_names
+        @back_only_part_names         = back_only_part_names
+        @front_only_part_names        = front_only_part_names
         @upside_down                  = upside_down
       end
 
@@ -69,12 +78,16 @@ module Timmerman
                                       omit_head_ledge_plank: @omit_head_ledge_plank,
                                       omit_head_cap_beam: @omit_head_cap_beam,
                                       omit_back_outer_sisters_and_ties: @omit_back_outer_sisters_and_ties,
-                                      omit_legs: @omit_legs)
+                                      omit_legs: @omit_legs,
+                                      omit_outer_corner_legs: @omit_outer_corner_legs,
+                                      only_part_names: @back_only_part_names)
       def front_frame = FrontFrame.new(@config, group_name: @front_name,
                                          omit_under_slat_foot_end_beam: @omit_under_slat_foot_end_beam,
                                          omit_foot_ledge_plank: @omit_foot_ledge_plank,
                                          omit_foot_cap_beam: @omit_foot_cap_beam,
-                                         omit_legs: @omit_legs)
+                                         omit_legs: @omit_legs,
+                                         omit_outer_corner_legs: @omit_outer_corner_legs,
+                                         only_part_names: @front_only_part_names)
 
       # Returns { back: [Pillow, ...], front: [Pillow, ...] }.
       # Keys may be absent if there are no pillows for that group.

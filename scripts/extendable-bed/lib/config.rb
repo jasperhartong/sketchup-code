@@ -207,10 +207,21 @@ module Timmerman
       # clears the previous construction column (same row_y).
       def construction_flip_extra_offset_x = outer_width
 
-      # Part names for upside-down construction step (blue leg callouts).
-      FLIP_STEP_BACK_LEG_HIGHLIGHTS = [
+      # Step 4 (flip) highlight: only the four outer corner legs — the ones that will
+      # be removed in step 5 to leave just the sub-assembly legs visible.
+      FLIP_OUTER_CORNER_BACK_HIGHLIGHTS = [
         'EB | leg | head | -X',
-        'EB | leg | head | +X',
+        'EB | leg | head | +X'
+      ].freeze
+      FLIP_OUTER_CORNER_FRONT_HIGHLIGHTS = [
+        'EB | leg | foot | -X',
+        'EB | leg | foot | +X'
+      ].freeze
+
+      # Step 5 (flip_no_legs) highlight: the sub-assembly parts that are now being
+      # attached together — all legs present in this step (outer corners are already
+      # removed by +omit_outer_corner_legs+), the two outer sisters, and the mid tie.
+      FLIP_SUB_ASSEMBLY_BACK_HIGHLIGHTS = [
         'EB | leg | head | -X | inset',
         'EB | leg | head | +X | inset',
         'EB | leg | mid run | -X',
@@ -218,36 +229,54 @@ module Timmerman
         'EB | leg | post | behind head | -X',
         'EB | leg | post | behind head | +X',
         'EB | leg | post | behind mid | -X | headward',
-        'EB | leg | post | behind mid | +X | headward'
+        'EB | leg | post | behind mid | +X | headward',
+        'EB | beam | head | cap',
+        'EB | beam | sister | outer -X',
+        'EB | beam | sister | outer +X',
+        'EB | beam | mid tie | between sisters'
       ].freeze
-      FLIP_STEP_FRONT_LEG_HIGHLIGHTS = [
-        'EB | leg | foot | -X',
-        'EB | leg | foot | +X',
+      FLIP_SUB_ASSEMBLY_FRONT_HIGHLIGHTS = [
+        'EB | leg | foot | -X | inset',
+        'EB | leg | foot | +X | inset',
+        'EB | beam | foot | cap'
+      ].freeze
+
+      # Construction-preparation sub-assemblies shown in the single :sub_assembly_prep step.
+      # Each constant is the set of part names that make up one sub-unit, used as frame-level
+      # render whitelist members (and later as scope for highlight/screw rules).
+      #
+      # The mid tie (`EB | beam | mid tie | between sisters`) is intentionally NOT part of
+      # this step — it first appears attached to the slats in a later step.
+      PREP_BACK_HEAD_CAP_SUB_ASSEMBLY = [
+        'EB | beam | head | cap',
+        'EB | leg | head | -X | inset',
+        'EB | leg | head | +X | inset'
+      ].freeze
+      PREP_BACK_MX_SISTER_SUB_ASSEMBLY = [
+        'EB | beam | sister | outer -X',
+        'EB | leg | post | behind head | -X',
+        'EB | leg | post | behind mid | -X | headward',
+        'EB | leg | mid run | -X'
+      ].freeze
+      PREP_BACK_PX_SISTER_SUB_ASSEMBLY = [
+        'EB | beam | sister | outer +X',
+        'EB | leg | post | behind head | +X',
+        'EB | leg | post | behind mid | +X | headward',
+        'EB | leg | mid run | +X'
+      ].freeze
+      PREP_FRONT_FOOT_CAP_SUB_ASSEMBLY = [
+        'EB | beam | foot | cap',
         'EB | leg | foot | -X | inset',
         'EB | leg | foot | +X | inset'
       ].freeze
 
-      # Step 6 (no caps): blue callouts for outer sisters and mid tie (front under-slat beam omitted in this variant).
-      FLIP_NOCAPS_BACK_BRACE_HIGHLIGHTS = [
-        'EB | beam | sister | outer -X',
-        'EB | beam | sister | outer +X',
-        'EB | beam | mid tie | between sisters'
-      ].freeze
-      FLIP_NOCAPS_FRONT_BRACE_HIGHLIGHTS = [].freeze
-
-      # Step 7: blue every `EB | beam |` child that exists (omitted geometry is skipped).
-      FLIP_NOBRACE_BACK_BEAM_HIGHLIGHTS = [
-        'EB | beam | head | cap',
-        'EB | beam | head | end',
-        'EB | beam | sister | outer -X',
-        'EB | beam | sister | outer +X',
-        'EB | beam | mid tie | between sisters'
-      ].freeze
-      FLIP_NOBRACE_FRONT_BEAM_HIGHLIGHTS = [
-        'EB | beam | foot | cap',
-        'EB | beam | foot | end',
-        'EB | beam | front | under slats | foot end'
-      ].freeze
+      # :sub_assembly_prep whitelist — cap sub-assemblies + both outer-sister sub-assemblies.
+      PREP_BACK_PART_NAMES = (
+        PREP_BACK_HEAD_CAP_SUB_ASSEMBLY +
+        PREP_BACK_MX_SISTER_SUB_ASSEMBLY +
+        PREP_BACK_PX_SISTER_SUB_ASSEMBLY
+      ).freeze
+      PREP_FRONT_PART_NAMES = PREP_FRONT_FOOT_CAP_SUB_ASSEMBLY.dup.freeze
 
       # Front foot position when retracted (outer face of front end beam).
       def retracted_foot_world_y = length_retracted + beam_narrow
@@ -335,11 +364,11 @@ module Timmerman
       GROUP_STEP_FLIP_NOLEGS_FRONT = 'EB_StepFlipNoLegs_Front'
       GROUP_STEP_FLIP_NOCAPS_BACK  = 'EB_StepFlipNoCaps_Back'
       GROUP_STEP_FLIP_NOCAPS_FRONT = 'EB_StepFlipNoCaps_Front'
-      GROUP_STEP_FLIP_NOBRACE_BACK   = 'EB_StepFlipNoBrace_Back'
-      GROUP_STEP_FLIP_NOBRACE_FRONT  = 'EB_StepFlipNoBrace_Front'
+      GROUP_STEP_PREP_BACK           = 'EB_StepPrep_Back'
+      GROUP_STEP_PREP_FRONT          = 'EB_StepPrep_Front'
 
       # Matches any auto-generated EB pair root group name.
-      GROUP_NAME_RE = /\AEB_(Ext|Ext1|Ret|Half|RetGnd|StepExt|StepDecoup|StepNoLedges|StepFlip|StepFlipNoLegs|StepFlipNoCaps|StepFlipNoBrace)_(Back|Front)\z/
+      GROUP_NAME_RE = /\AEB_(Ext|Ext1|Ret|Half|RetGnd|StepExt|StepDecoup|StepNoLedges|StepFlip|StepFlipNoLegs|StepFlipNoCaps|StepPrep|StepSisterPrep)_(Back|Front)\z/
 
       # Single-pair root names (cleared together with the multi-pair preview set).
       SINGLE_PAIR_ROOTS = %w[EB_Back EB_Front].freeze

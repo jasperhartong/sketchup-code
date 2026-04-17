@@ -9,7 +9,11 @@ module Timmerman
     # expands to the `omit_*` flags on `BedPair`.
     module BedPairCatalog
       # Maps assembly +variant+ symbols to the boolean flags `BedPair` forwards to
-      # `BackFrame` / `FrontFrame` (+omit_legs+ is shared).
+      # `BackFrame` / `FrontFrame` (+omit_legs+ / +omit_outer_corner_legs+ are shared).
+      # +omit_legs+ skips every leg in the frame; +omit_outer_corner_legs+ skips only
+      # the four outer corner legs (`EB | leg | head | ±X`, `EB | leg | foot | ±X`) —
+      # leaving the inset / mid-run / behind-leg posts that belong to the step 7
+      # cap + sister sub-assemblies visible.
       VARIANT_OMITS = {
         construction_full: {
           omit_under_slat_foot_end_beam: false,
@@ -18,7 +22,8 @@ module Timmerman
           omit_head_cap_beam: false,
           omit_foot_cap_beam: false,
           omit_back_outer_sisters_and_ties: false,
-          omit_legs: false
+          omit_legs: false,
+          omit_outer_corner_legs: false
         },
         construction_no_under_slat_foot: {
           omit_under_slat_foot_end_beam: true,
@@ -27,7 +32,8 @@ module Timmerman
           omit_head_cap_beam: false,
           omit_foot_cap_beam: false,
           omit_back_outer_sisters_and_ties: false,
-          omit_legs: false
+          omit_legs: false,
+          omit_outer_corner_legs: false
         },
         construction_no_ledges: {
           omit_under_slat_foot_end_beam: true,
@@ -36,8 +42,12 @@ module Timmerman
           omit_head_cap_beam: false,
           omit_foot_cap_beam: false,
           omit_back_outer_sisters_and_ties: false,
-          omit_legs: false
+          omit_legs: false,
+          omit_outer_corner_legs: false
         },
+        # Step 5: keep the sub-assembly legs (inset, mid-run, behind-leg posts) so they
+        # can be seen attached to the caps / sisters; remove only the four outer corner
+        # legs that are NOT part of any step 7 sub-assembly.
         flip_no_legs: {
           omit_under_slat_foot_end_beam: true,
           omit_head_ledge_plank: true,
@@ -45,7 +55,8 @@ module Timmerman
           omit_head_cap_beam: false,
           omit_foot_cap_beam: false,
           omit_back_outer_sisters_and_ties: false,
-          omit_legs: true
+          omit_legs: false,
+          omit_outer_corner_legs: true
         },
         flip_no_caps: {
           omit_under_slat_foot_end_beam: true,
@@ -54,16 +65,41 @@ module Timmerman
           omit_head_cap_beam: true,
           omit_foot_cap_beam: true,
           omit_back_outer_sisters_and_ties: false,
-          omit_legs: true
+          omit_legs: true,
+          omit_outer_corner_legs: false
         },
-        flip_no_brace: {
-          omit_under_slat_foot_end_beam: true,
-          omit_head_ledge_plank: true,
-          omit_foot_ledge_plank: true,
-          omit_head_cap_beam: true,
-          omit_foot_cap_beam: true,
-          omit_back_outer_sisters_and_ties: true,
-          omit_legs: true
+        # Preparation step: every omittable part is kept in so the frame-level part
+        # whitelist (see +VARIANT_ONLY_PART_NAMES+) can pick the beam + leg
+        # sub-assemblies that get fastened before meeting the slats (cap sub-assemblies
+        # plus the outer-sister sub-assemblies with their pre-attached leg clusters).
+        sub_assembly_prep: {
+          omit_under_slat_foot_end_beam: false,
+          omit_head_ledge_plank: false,
+          omit_foot_ledge_plank: false,
+          omit_head_cap_beam: false,
+          omit_foot_cap_beam: false,
+          omit_back_outer_sisters_and_ties: false,
+          omit_legs: false,
+          omit_outer_corner_legs: false
+        }
+      }.freeze
+
+      # Variants that render a hand-picked subset of the full bed instead of
+      # using per-part omit flags. Values are procs taking the per-run +Config+
+      # (so the whitelist can depend on config-derived part names like slats).
+      # Absent variants produce the full assembly.
+      VARIANT_ONLY_PART_NAMES = {
+        sub_assembly_prep: ->(_config) {
+          { back: Config::PREP_BACK_PART_NAMES, front: Config::PREP_FRONT_PART_NAMES }
+        },
+        # Forking (back + front interlaced) slats plus the two end beams that retain them
+        # (head end on back, foot end on front) and their screws. No legs, sisters, ties,
+        # caps, ledges, or under-slat mid beams.
+        flip_no_caps: ->(config) {
+          {
+            back:  config.back_slat_group_names  + ['EB | beam | head | end'],
+            front: config.front_slat_group_names + ['EB | beam | foot | end']
+          }
         }
       }.freeze
 
@@ -107,7 +143,7 @@ module Timmerman
           foot: :decoupled,
           upside_down: true,
           variant: :construction_no_ledges,
-          highlight: :flip_all_legs
+          highlight: :flip_outer_corner_legs
         },
         {
           back_name: Config::GROUP_STEP_FLIP_NOLEGS_BACK,
@@ -116,7 +152,7 @@ module Timmerman
           foot: :decoupled,
           upside_down: true,
           variant: :flip_no_legs,
-          highlight: :flip_head_foot_caps
+          highlight: :flip_sub_assemblies
         },
         {
           back_name: Config::GROUP_STEP_FLIP_NOCAPS_BACK,
@@ -125,16 +161,16 @@ module Timmerman
           foot: :decoupled,
           upside_down: true,
           variant: :flip_no_caps,
-          highlight: :flip_braces_only
+          highlight: :none
         },
         {
-          back_name: Config::GROUP_STEP_FLIP_NOBRACE_BACK,
-          front_name: Config::GROUP_STEP_FLIP_NOBRACE_FRONT,
+          back_name: Config::GROUP_STEP_PREP_BACK,
+          front_name: Config::GROUP_STEP_PREP_FRONT,
           column: 6,
           foot: :decoupled,
           upside_down: true,
-          variant: :flip_no_brace,
-          highlight: :flip_remaining_beams_and_slats
+          variant: :sub_assembly_prep,
+          highlight: :none
         }
       ].freeze
 
@@ -192,7 +228,7 @@ module Timmerman
           col = spec[:column]
           ox = (col * step) + (col >= 3 ? flip_x : 0)
           foot_y = spec[:foot] == :decoupled ? config.decoupled_front_foot_world_y : config.extended_front_foot_world_y
-          hl = highlights(config, spec[:highlight])
+          hl = highlights(spec[:highlight])
 
           BedPair.from_assembly_row(
             config,
@@ -233,7 +269,18 @@ module Timmerman
         f.dup
       end
 
-      def highlights(config, key)
+      # Returns kwargs for `BedPair.new` (+back_only_part_names:+, +front_only_part_names:+).
+      # Defaults both to +nil+ (no whitelist) for variants without a lookup entry.
+      def only_part_names_for_variant(variant, config)
+        resolver = VARIANT_ONLY_PART_NAMES[variant]
+        spec = resolver ? resolver.call(config) : {}
+        {
+          back_only_part_names:  spec[:back],
+          front_only_part_names: spec[:front]
+        }
+      end
+
+      def highlights(key)
         case key
         when :under_slat_foot_end
           { back: [], front: ['EB | beam | front | under slats | foot end'] }
@@ -241,19 +288,17 @@ module Timmerman
           { back: [LEDGE_HEAD], front: [LEDGE_FOOT] }
         when :none
           { back: [], front: [] }
-        when :flip_all_legs
-          { back: Config::FLIP_STEP_BACK_LEG_HIGHLIGHTS, front: Config::FLIP_STEP_FRONT_LEG_HIGHLIGHTS }
+        when :flip_outer_corner_legs
+          {
+            back:  Config::FLIP_OUTER_CORNER_BACK_HIGHLIGHTS,
+            front: Config::FLIP_OUTER_CORNER_FRONT_HIGHLIGHTS
+          }
         when :flip_head_foot_caps
           { back: ['EB | beam | head | cap'], front: ['EB | beam | foot | cap'] }
-        when :flip_braces_only
+        when :flip_sub_assemblies
           {
-            back: Config::FLIP_NOCAPS_BACK_BRACE_HIGHLIGHTS,
-            front: Config::FLIP_NOCAPS_FRONT_BRACE_HIGHLIGHTS
-          }
-        when :flip_remaining_beams_and_slats
-          {
-            back: Config::FLIP_NOBRACE_BACK_BEAM_HIGHLIGHTS + config.back_slat_group_names,
-            front: Config::FLIP_NOBRACE_FRONT_BEAM_HIGHLIGHTS + config.front_slat_group_names
+            back:  Config::FLIP_SUB_ASSEMBLY_BACK_HIGHLIGHTS,
+            front: Config::FLIP_SUB_ASSEMBLY_FRONT_HIGHLIGHTS
           }
         else
           raise ArgumentError, "Unknown construction highlight key: #{key.inspect}"
