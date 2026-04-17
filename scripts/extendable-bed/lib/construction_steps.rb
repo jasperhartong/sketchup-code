@@ -26,10 +26,13 @@ module Timmerman
           omit_head_outer_corner_legs: false,
           omit_foot_outer_corner_legs: false
         },
-        construction_no_under_slat_foot: {
-          omit_under_slat_foot_end_beam: true,
-          omit_head_ledge_plank: false,
-          omit_foot_ledge_plank: false,
+        # Step 3: ledges removed but under-slat foot-end beam kept (and highlighted blue
+        # in +CONSTRUCTION_SPECS+ to signal it's the next piece to come off when the
+        # assembly is flipped in step 4).
+        construction_no_ledges_with_beam: {
+          omit_under_slat_foot_end_beam: false,
+          omit_head_ledge_plank: true,
+          omit_foot_ledge_plank: true,
           omit_head_cap_beam: false,
           omit_foot_cap_beam: false,
           omit_back_outer_sisters_and_ties: false,
@@ -113,7 +116,7 @@ module Timmerman
       LEDGE_HEAD = 'EB | plank | head | ledge'
       LEDGE_FOOT = 'EB | plank | foot | ledge'
 
-      # Seven construction steps: column 0–2 upright at full extension Y; 3–6 upside-down
+      # Seven construction steps: columns 0–1 upright at full extension Y; 2–6 upside-down
       # at decoupled foot Y, with extra +X from construction_flip_extra_offset_x.
       CONSTRUCTION_SPECS = [
         {
@@ -123,7 +126,7 @@ module Timmerman
           foot: :extended,
           upside_down: false,
           variant: :construction_full,
-          highlight: :under_slat_foot_end
+          highlight: :head_and_foot_ledges
         },
         {
           back_name: Config::GROUP_STEP_DECOUP_BACK,
@@ -131,17 +134,17 @@ module Timmerman
           column: 1,
           foot: :extended,
           upside_down: false,
-          variant: :construction_no_under_slat_foot,
-          highlight: :head_and_foot_ledges
+          variant: :construction_no_ledges_with_beam,
+          highlight: :none
         },
         {
           back_name: Config::GROUP_STEP_NOLEDGES_BACK,
           front_name: Config::GROUP_STEP_NOLEDGES_FRONT,
           column: 2,
           foot: :extended,
-          upside_down: false,
-          variant: :construction_no_ledges,
-          highlight: :none
+          upside_down: true,
+          variant: :construction_no_ledges_with_beam,
+          highlight: :under_slat_foot_end
         },
         {
           back_name: Config::GROUP_STEP_FLIP_BACK,
@@ -233,7 +236,7 @@ module Timmerman
 
         CONSTRUCTION_SPECS.map do |spec|
           col = spec[:column]
-          ox = (col * step) + (col >= 3 ? flip_x : 0)
+          ox = (col * step) + (spec[:upside_down] ? flip_x : 0)
           foot_y = spec[:foot] == :decoupled ? config.decoupled_front_foot_world_y : config.extended_front_foot_world_y
           hl = highlights(spec[:highlight])
 
