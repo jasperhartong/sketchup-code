@@ -296,14 +296,11 @@ module Timmerman
         x1_tie, span_tie = sister_tie_x
         return if span_tie <= 0
 
-        # Footward +Y by beam_wide vs older anchor (was length_retracted − beam_wide − beam_y − …).
-        y_mid_tie = c.length_retracted - c.beam_y - c.plank_thickness + c.mid_layout_y_shift
-
         unless @frame_options[:omit_back_outer_sisters_and_ties]
           beam 'EB | beam | mid tie | between sisters',
-               at:   [x1_tie, y_mid_tie, lh_mid],
+               at:   [x1_tie, c.mid_tie_y0, lh_mid],
                size: [span_tie, c.beam_wide, c.beam_narrow],
-               note: 'Mid run; wide face horizontal in Y (69 mm); Y shifts with mid_layout_y_shift; footward +beam_wide vs legacy mid-tie line.'
+               note: 'Mid run; wide face horizontal in Y (69 mm); max_y = length_retracted − plank_thickness (mirrors foot cap plank offset).'
         end
       end
 
@@ -455,17 +452,15 @@ module Timmerman
         z_flat = c.z_slat_bottom - c.beam_narrow
 
         # Beam under the foot end of the front slats: wide stock face (beam_wide along +Y) to slat bottoms;
-        # X span matches inner faces of outer sisters (same as mid tie).
+        # X span matches inner faces of outer sisters (same as mid tie); when the bed is fully extended,
+        # its max_y is flush with mid_tie.min_y (continuous brace across the slat-interlock zone).
         unless @frame_options[:omit_under_slat_foot_end_beam]
           x1_under, span_under = sister_tie_x
           if span_under.positive?
-            y_slat_foot  = -c.beam_y - c.front_slat_run_y
-            y_under_slat = y_slat_foot + c.foot_under_slat_beam_y_gap + c.foot_under_slat_beam_y_nudge_toward_foot - c.beam_wide
-
             beam 'EB | beam | front | under slats | foot end',
-                 at:   [x1_under, y_under_slat, z_flat],
+                 at:   [x1_under, c.under_slat_foot_beam_y0, z_flat],
                  size: [span_under, c.beam_wide, c.beam_narrow],
-                 note: 'Under front slats; max_z flush slat bottom; 69 mm along +Y against slats; X between sister inners; Y = slat min_y + gap + nudge toward foot − beam_wide (−Y).'
+                 note: 'Under front slats; max_z flush slat bottom; 69 mm along +Y against slats; X between sister inners; max_y flush with mid_tie_y0 when extended.'
           end
         end
       end

@@ -144,12 +144,6 @@ module Timmerman
       def back_slat_run_y = slat_length + beam_y
       def front_slat_run_y = back_slat_run_y
 
-      # +Y from front comb min_y to `EB | beam | front | under slats | foot end` min_y before nudge and −beam_wide headward offset in frame_assembly.
-      def foot_under_slat_beam_y_gap = 76.mm
-
-      # Extra +Y (toward foot / bed front) after foot_under_slat_beam_y_gap for that beam only.
-      def foot_under_slat_beam_y_nudge_toward_foot = 13.mm
-
       # Fully retracted: both slat runs overlapping + one beam depth at each end.
       def length_retracted = back_slat_run_y + beam_y
 
@@ -181,9 +175,20 @@ module Timmerman
       # Leg max_y (debug :max_y = dark green) then matches cap max_y at plank_thickness toward the ledge/slats.
       def foot_corner_leg_y0 = plank_thickness - beam_wide
 
-      # Foot corners moved from the old −beam_y+plank anchor to foot_corner_leg_y0; shift mid-run legs,
-      # mid tie and behind-mid posts headward (−Y) by the same delta.
+      # Foot corners moved from the old −beam_y+plank anchor to foot_corner_leg_y0; shift mid-run legs
+      # and behind-mid posts headward (−Y) by the same delta.
       def mid_layout_y_shift = beam_y - beam_wide
+
+      # Mid-tie Y anchor on the back frame: one plank_thickness + beam_wide headward of the
+      # back-slat footward end (length_retracted). max_y lands at length_retracted − plank_thickness,
+      # mirroring how foot_corner_leg_y0 offsets the foot cap band by plank_thickness.
+      def mid_tie_y0 = length_retracted - plank_thickness - beam_wide
+
+      # Under-slat foot-end beam Y anchor on the front frame. Positioned so that in the fully-extended
+      # state (front frame translated by length_extended) its max_y is flush with mid_tie_y0 on the
+      # back frame, forming a continuous brace across the slat-interlock zone:
+      #   foot_world_y + under_slat_foot_beam_y0 + beam_wide  ==  mid_tie_y0  (when foot_world_y = length_extended)
+      def under_slat_foot_beam_y0 = mid_tie_y0 - length_extended - beam_wide
 
       # ── World Y positions for the front frame (sliding half) ──────────────────
 
