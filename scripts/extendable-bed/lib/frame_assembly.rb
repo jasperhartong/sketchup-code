@@ -145,7 +145,7 @@ module Timmerman
       # Plan: BEAM_NARROW along +X (outer faces flush sisters at x=0 / x=outer_width), BEAM_WIDE along +Y
       # so the wide face meets the head cap depth (same as cap dy), not the narrow 44 mm strip.
       def _head_legs
-        unless @frame_options[:omit_outer_corner_legs]
+        unless @frame_options[:omit_head_outer_corner_legs]
           leg 'EB | leg | head | -X',
               at:   [0, y_head, 0],
               size: [head_corner_leg_dx, head_corner_leg_dy, lh_outer],
@@ -171,16 +171,18 @@ module Timmerman
       end
 
       # Mid-run legs: **beam_wide** along X (same as outer sisters) so outer min_x/max_x (debug red) lines up
-      # with sisters’ outer column; **beam_y** along Y with Y0 shifted so max_y stays flush with sister max_y.
+      # with sisters' outer column; **beam_y** along Y. Leg extends up **through** the sister's Z band to
+      # z_slat_bottom (top flush with slat bottom); outer sister is shortened by beam_narrow along +Y at
+      # its foot end so sister max_y meets leg min_y (no overlap).
       def _mid_run_legs
         leg 'EB | leg | mid run | -X',
             at:   [0, mid_leg_y0, 0],
-            size: [c.beam_wide, c.beam_y, lh_mid],
-            note: 'Outer −X = min_x red flush sister outer −X; narrow 44 along +Y; top flush sister bottom.'
+            size: [c.beam_wide, c.beam_y, c.z_slat_bottom],
+            note: 'Outer −X = min_x red flush sister outer −X; narrow 44 along +Y; extends up through sister band to slat bottom.'
 
         leg 'EB | leg | mid run | +X',
             at:   [c.outer_width - c.beam_wide, mid_leg_y0, 0],
-            size: [c.beam_wide, c.beam_y, lh_mid],
+            size: [c.beam_wide, c.beam_y, c.z_slat_bottom],
             note: 'Outer +X = max_x red flush sister outer +X; mirror −X.'
       end
 
@@ -326,8 +328,10 @@ module Timmerman
       def outer_sister_head_y0 = (c.beam_y - c.plank_thickness) + (c.beam_wide - c.beam_narrow)
 
       # Sister length along +Y: full back run + ledge margin, shortened by cap wide-face Y gain, then by
-      # (beam_wide − beam_y) so the footward +Y end is flush with mid-run legs (same delta as mid_layout_y_shift).
-      def outer_sister_run_dy = (c.back_slat_run_y + (2 * c.plank_thickness)) - (c.beam_wide - c.beam_narrow) + c.mid_layout_y_shift
+      # (beam_wide − beam_y) so the footward +Y end is flush with mid-run legs (same delta as
+      # mid_layout_y_shift), and finally shortened by one more beam_narrow so the sister max_y meets the
+      # mid-run leg min_y (leg now extends up through the sister's Z band).
+      def outer_sister_run_dy = (c.back_slat_run_y + (2 * c.plank_thickness)) - (c.beam_wide - c.beam_narrow) + c.mid_layout_y_shift - c.beam_narrow
 
       # Head corner legs run through the cap band to z_slat_bottom.
       def lh_outer = c.outer_corner_leg_height
@@ -368,7 +372,7 @@ module Timmerman
       end
 
       def _foot_legs
-        unless @frame_options[:omit_outer_corner_legs]
+        unless @frame_options[:omit_foot_outer_corner_legs]
           # Outer corner legs: same plan as head (narrow 44 along +X at outer faces, wide 69 along +Y).
           leg 'EB | leg | foot | -X',
               at:   [0, y_foot, 0],

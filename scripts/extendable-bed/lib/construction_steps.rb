@@ -9,9 +9,9 @@ module Timmerman
     # expands to the `omit_*` flags on `BedPair`.
     module BedPairCatalog
       # Maps assembly +variant+ symbols to the boolean flags `BedPair` forwards to
-      # `BackFrame` / `FrontFrame` (+omit_legs+ / +omit_outer_corner_legs+ are shared).
-      # +omit_legs+ skips every leg in the frame; +omit_outer_corner_legs+ skips only
-      # the four outer corner legs (`EB | leg | head | ±X`, `EB | leg | foot | ±X`) —
+      # `BackFrame` / `FrontFrame`. +omit_legs+ is shared and skips every leg in the
+      # frame; +omit_head_outer_corner_legs+ / +omit_foot_outer_corner_legs+ each skip
+      # a single pair of outer corner legs (`EB | leg | head | ±X` / `EB | leg | foot | ±X`),
       # leaving the inset / mid-run / behind-leg posts that belong to the step 7
       # cap + sister sub-assemblies visible.
       VARIANT_OMITS = {
@@ -23,7 +23,8 @@ module Timmerman
           omit_foot_cap_beam: false,
           omit_back_outer_sisters_and_ties: false,
           omit_legs: false,
-          omit_outer_corner_legs: false
+          omit_head_outer_corner_legs: false,
+          omit_foot_outer_corner_legs: false
         },
         construction_no_under_slat_foot: {
           omit_under_slat_foot_end_beam: true,
@@ -33,7 +34,8 @@ module Timmerman
           omit_foot_cap_beam: false,
           omit_back_outer_sisters_and_ties: false,
           omit_legs: false,
-          omit_outer_corner_legs: false
+          omit_head_outer_corner_legs: false,
+          omit_foot_outer_corner_legs: false
         },
         construction_no_ledges: {
           omit_under_slat_foot_end_beam: true,
@@ -43,11 +45,13 @@ module Timmerman
           omit_foot_cap_beam: false,
           omit_back_outer_sisters_and_ties: false,
           omit_legs: false,
-          omit_outer_corner_legs: false
+          omit_head_outer_corner_legs: false,
+          omit_foot_outer_corner_legs: false
         },
         # Step 5: keep the sub-assembly legs (inset, mid-run, behind-leg posts) so they
-        # can be seen attached to the caps / sisters; remove only the four outer corner
-        # legs that are NOT part of any step 7 sub-assembly.
+        # can be seen attached to the caps / sisters. The head outer corners are retained
+        # (they belong to the head cap sub-assembly); only the foot outer corners — which
+        # are NOT part of any step 7 sub-assembly — are removed.
         flip_no_legs: {
           omit_under_slat_foot_end_beam: true,
           omit_head_ledge_plank: true,
@@ -56,7 +60,8 @@ module Timmerman
           omit_foot_cap_beam: false,
           omit_back_outer_sisters_and_ties: false,
           omit_legs: false,
-          omit_outer_corner_legs: true
+          omit_head_outer_corner_legs: false,
+          omit_foot_outer_corner_legs: true
         },
         flip_no_caps: {
           omit_under_slat_foot_end_beam: true,
@@ -66,7 +71,8 @@ module Timmerman
           omit_foot_cap_beam: true,
           omit_back_outer_sisters_and_ties: false,
           omit_legs: true,
-          omit_outer_corner_legs: false
+          omit_head_outer_corner_legs: false,
+          omit_foot_outer_corner_legs: false
         },
         # Preparation step: every omittable part is kept in so the frame-level part
         # whitelist (see +VARIANT_ONLY_PART_NAMES+) can pick the beam + leg
@@ -80,7 +86,8 @@ module Timmerman
           omit_foot_cap_beam: false,
           omit_back_outer_sisters_and_ties: false,
           omit_legs: false,
-          omit_outer_corner_legs: false
+          omit_head_outer_corner_legs: false,
+          omit_foot_outer_corner_legs: false
         }
       }.freeze
 

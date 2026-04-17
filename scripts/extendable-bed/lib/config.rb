@@ -207,21 +207,23 @@ module Timmerman
       # clears the previous construction column (same row_y).
       def construction_flip_extra_offset_x = outer_width
 
-      # Step 4 (flip) highlight: only the four outer corner legs — the ones that will
-      # be removed in step 5 to leave just the sub-assembly legs visible.
-      FLIP_OUTER_CORNER_BACK_HIGHLIGHTS = [
-        'EB | leg | head | -X',
-        'EB | leg | head | +X'
-      ].freeze
+      # Step 4 (flip) highlight: only the foot outer corner legs — the ones that will
+      # be removed in step 5. The head outer corner legs stay (they belong to the head
+      # cap sub-assembly) so they are not highlighted here.
+      FLIP_OUTER_CORNER_BACK_HIGHLIGHTS = [].freeze
       FLIP_OUTER_CORNER_FRONT_HIGHLIGHTS = [
         'EB | leg | foot | -X',
         'EB | leg | foot | +X'
       ].freeze
 
       # Step 5 (flip_no_legs) highlight: the sub-assembly parts that are now being
-      # attached together — all legs present in this step (outer corners are already
-      # removed by +omit_outer_corner_legs+), the two outer sisters, and the mid tie.
+      # attached together — all legs present in this step (foot outer corners are
+      # already removed by +omit_foot_outer_corner_legs+; head outer corners remain
+      # because they belong to the head cap sub-assembly), the two outer sisters,
+      # and the mid tie.
       FLIP_SUB_ASSEMBLY_BACK_HIGHLIGHTS = [
+        'EB | leg | head | -X',
+        'EB | leg | head | +X',
         'EB | leg | head | -X | inset',
         'EB | leg | head | +X | inset',
         'EB | leg | mid run | -X',
@@ -245,10 +247,12 @@ module Timmerman
       # Each constant is the set of part names that make up one sub-unit, used as frame-level
       # render whitelist members (and later as scope for highlight/screw rules).
       #
-      # The mid tie (`EB | beam | mid tie | between sisters`) is intentionally NOT part of
-      # this step — it first appears attached to the slats in a later step.
+      # The mid tie (`EB | beam | mid tie | between sisters`) bridges the two outer-sister
+      # sub-assemblies so the sister cluster is preassembled as one unit before meeting the slats.
       PREP_BACK_HEAD_CAP_SUB_ASSEMBLY = [
         'EB | beam | head | cap',
+        'EB | leg | head | -X',
+        'EB | leg | head | +X',
         'EB | leg | head | -X | inset',
         'EB | leg | head | +X | inset'
       ].freeze
@@ -264,17 +268,22 @@ module Timmerman
         'EB | leg | post | behind mid | +X | headward',
         'EB | leg | mid run | +X'
       ].freeze
+      PREP_BACK_MID_TIE_SUB_ASSEMBLY = [
+        'EB | beam | mid tie | between sisters'
+      ].freeze
       PREP_FRONT_FOOT_CAP_SUB_ASSEMBLY = [
         'EB | beam | foot | cap',
         'EB | leg | foot | -X | inset',
         'EB | leg | foot | +X | inset'
       ].freeze
 
-      # :sub_assembly_prep whitelist — cap sub-assemblies + both outer-sister sub-assemblies.
+      # :sub_assembly_prep whitelist — cap sub-assemblies + both outer-sister sub-assemblies
+      # joined by the mid tie.
       PREP_BACK_PART_NAMES = (
         PREP_BACK_HEAD_CAP_SUB_ASSEMBLY +
         PREP_BACK_MX_SISTER_SUB_ASSEMBLY +
-        PREP_BACK_PX_SISTER_SUB_ASSEMBLY
+        PREP_BACK_PX_SISTER_SUB_ASSEMBLY +
+        PREP_BACK_MID_TIE_SUB_ASSEMBLY
       ).freeze
       PREP_FRONT_PART_NAMES = PREP_FRONT_FOOT_CAP_SUB_ASSEMBLY.dup.freeze
 
