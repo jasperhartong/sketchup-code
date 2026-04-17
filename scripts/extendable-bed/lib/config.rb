@@ -180,9 +180,11 @@ module Timmerman
       def mid_layout_y_shift = beam_y - beam_wide
 
       # Mid-tie Y anchor on the back frame: one plank_thickness + beam_wide headward of the
-      # back-slat footward end (length_retracted). max_y lands at length_retracted − plank_thickness,
-      # mirroring how foot_corner_leg_y0 offsets the foot cap band by plank_thickness.
-      def mid_tie_y0 = length_retracted - plank_thickness - beam_wide
+      # back-slat footward end (length_retracted), shifted +Y by MID_TIE_OUTWARD_SHIFT so
+      # the mid tie sits flush with the outside of the structure (the under-slat foot-end
+      # beam shifts with it via +under_slat_foot_beam_y0+).
+      MID_TIE_OUTWARD_SHIFT = 11.mm
+      def mid_tie_y0 = length_retracted - plank_thickness - beam_wide + MID_TIE_OUTWARD_SHIFT
 
       # Under-slat foot-end beam Y anchor on the front frame. Positioned so that in the fully-extended
       # state (front frame translated by length_extended) its max_y is flush with mid_tie_y0 on the

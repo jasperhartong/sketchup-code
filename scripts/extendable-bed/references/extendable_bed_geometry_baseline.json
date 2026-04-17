@@ -290,12 +290,12 @@
   "EB_StepExt_Back / EB | beam | mid tie | between sisters": {
     "min": [
       69.0,
-      -1599.0,
+      -1588.0,
       147.0
     ],
     "max": [
       727.0,
-      -1530.0,
+      -1519.0,
       191.0
     ]
   },
@@ -710,12 +710,12 @@
   "EB_StepExt_Front / EB | beam | front | under slats | foot end": {
     "min": [
       69.0,
-      -1668.0,
+      -1657.0,
       147.0
     ],
     "max": [
       727.0,
-      -1599.0,
+      -1588.0,
       191.0
     ]
   },
@@ -1214,12 +1214,12 @@
   "EB_StepDecoup_Back / EB | beam | mid tie | between sisters": {
     "min": [
       1465.0,
-      -1599.0,
+      -1588.0,
       147.0
     ],
     "max": [
       2123.0,
-      -1530.0,
+      -1519.0,
       191.0
     ]
   },
@@ -2114,12 +2114,12 @@
   "EB_StepNoLedges_Back / EB | beam | mid tie | between sisters": {
     "min": [
       2861.0,
-      -1599.0,
+      -1588.0,
       147.0
     ],
     "max": [
       3519.0,
-      -1530.0,
+      -1519.0,
       191.0
     ]
   },
@@ -2978,12 +2978,12 @@
   "EB_StepFlip_Back / EB | beam | mid tie | between sisters": {
     "min": [
       4257.0,
-      -1599.0,
+      -1588.0,
       69.0
     ],
     "max": [
       4915.0,
-      -1530.0,
+      -1519.0,
       113.0
     ]
   },
@@ -3842,12 +3842,12 @@
   "EB_StepFlipNoLegs_Back / EB | beam | mid tie | between sisters": {
     "min": [
       5653.0,
-      -1599.0,
+      -1588.0,
       69.0
     ],
     "max": [
       6311.0,
-      -1530.0,
+      -1519.0,
       113.0
     ]
   },
@@ -5198,12 +5198,12 @@
   "EB_StepPrep_Back / EB | beam | mid tie | between sisters": {
     "min": [
       8445.0,
-      -1599.0,
+      -1588.0,
       0.0
     ],
     "max": [
       9103.0,
-      -1530.0,
+      -1519.0,
       44.0
     ]
   },
@@ -5534,12 +5534,12 @@
   "EB_Ext1_Back / EB | beam | mid tie | between sisters": {
     "min": [
       69.0,
-      1001.0,
+      1012.0,
       147.0
     ],
     "max": [
       727.0,
-      1070.0,
+      1081.0,
       191.0
     ]
   },
@@ -5990,12 +5990,12 @@
   "EB_Ext1_Front / EB | beam | front | under slats | foot end": {
     "min": [
       69.0,
-      353.333,
+      364.333,
       147.0
     ],
     "max": [
       727.0,
-      422.333,
+      433.333,
       191.0
     ]
   },
@@ -6506,12 +6506,12 @@
   "EB_Half_Back / EB | beam | mid tie | between sisters": {
     "min": [
       1465.0,
-      1001.0,
+      1012.0,
       147.0
     ],
     "max": [
       2123.0,
-      1070.0,
+      1081.0,
       191.0
     ]
   },
@@ -6950,12 +6950,12 @@
   "EB_Half_Front / EB | beam | front | under slats | foot end": {
     "min": [
       1465.0,
-      642.667,
+      653.667,
       147.0
     ],
     "max": [
       2123.0,
-      711.667,
+      722.667,
       191.0
     ]
   },
@@ -7478,12 +7478,12 @@
   "EB_Ext_Back / EB | beam | mid tie | between sisters": {
     "min": [
       2861.0,
-      1001.0,
+      1012.0,
       147.0
     ],
     "max": [
       3519.0,
-      1070.0,
+      1081.0,
       191.0
     ]
   },
@@ -7910,12 +7910,12 @@
   "EB_Ext_Front / EB | beam | front | under slats | foot end": {
     "min": [
       2861.0,
-      932.0,
+      943.0,
       147.0
     ],
     "max": [
       3519.0,
-      1001.0,
+      1012.0,
       191.0
     ]
   },
@@ -8450,12 +8450,12 @@
   "EB_Ret_Back / EB | beam | mid tie | between sisters": {
     "min": [
       4257.0,
-      1001.0,
+      1012.0,
       147.0
     ],
     "max": [
       4915.0,
-      1070.0,
+      1081.0,
       191.0
     ]
   },
@@ -8918,12 +8918,12 @@
   "EB_Ret_Front / EB | beam | front | under slats | foot end": {
     "min": [
       4257.0,
-      64.0,
+      75.0,
       147.0
     ],
     "max": [
       4915.0,
-      133.0,
+      144.0,
       191.0
     ]
   },
@@ -9422,12 +9422,12 @@
   "EB_RetGnd_Back / EB | beam | mid tie | between sisters": {
     "min": [
       5653.0,
-      1001.0,
+      1012.0,
       147.0
     ],
     "max": [
       6311.0,
-      1070.0,
+      1081.0,
       191.0
     ]
   },
@@ -9673,36 +9673,36 @@
   },
   "EB_RetGnd_Back / EB | pillow | small | 1": {
     "min": [
-      5653.0,
+      5584.0,
       678.167,
       0.0
     ],
     "max": [
-      6311.0,
+      6380.0,
       967.5,
       120.0
     ]
   },
   "EB_RetGnd_Back / EB | pillow | small | 2": {
     "min": [
-      5653.0,
+      5584.0,
       388.833,
       0.0
     ],
     "max": [
-      6311.0,
+      6380.0,
       678.167,
       120.0
     ]
   },
   "EB_RetGnd_Back / EB | pillow | small | 3": {
     "min": [
-      5653.0,
+      5584.0,
       99.5,
       0.0
     ],
     "max": [
-      6311.0,
+      6380.0,
       388.833,
       120.0
     ]
@@ -9890,12 +9890,12 @@
   "EB_RetGnd_Front / EB | beam | front | under slats | foot end": {
     "min": [
       5653.0,
-      64.0,
+      75.0,
       147.0
     ],
     "max": [
       6311.0,
-      133.0,
+      144.0,
       191.0
     ]
   },

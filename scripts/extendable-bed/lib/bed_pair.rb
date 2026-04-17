@@ -268,8 +268,8 @@ module Timmerman
 
         if sm > 0
           # Three smalls laid flat on the floor (Z=0), centred in the corridor
-          # between head legs and mid-run legs — inset in X and +Y so they miss
-          # `EB | leg | post | behind head | ±X` (same x footprint as leg_x, stacked at y_head + beam_wide).
+          # between head legs and mid-run legs. Full outer_width in X (same footprint
+          # as the other small pillows) so they sit flush with the frame sides.
           y_head        = -c.plank_thickness
           mid_y0_val    = (c.length_retracted - c.leg_x) + c.plank_thickness + c.mid_layout_y_shift
           pad           = c.slat_gap
@@ -285,18 +285,16 @@ module Timmerman
                             y_corridor_lo
                           end
 
-          px0 = c.leg_x
-          pdx = c.outer_width - (2 * c.leg_x)
           y_under_shift = 20.mm
 
           3.times do |i|
             y = y_cluster + ((c.small_pillow_count - 1 - i) * sm) - y_under_shift
             back_pillows << Pillow.new(
               "EB | pillow | small | #{i + 1}",
-              at:   [px0, y, 0],
-              size: [pdx, sm, c.pillow_thickness],
+              at:   [0, y, 0],
+              size: [c.outer_width, sm, c.pillow_thickness],
               config: c,
-              note: "Retracted+stored; small #{i + 1}/#{c.small_pillow_count} on floor; X inset leg_x; Y clears posts; shifted −Y 20 mm."
+              note: "Retracted+stored; small #{i + 1}/#{c.small_pillow_count} on floor; flush with frame sides; Y clears posts; shifted −Y 20 mm."
             )
           end
         end
