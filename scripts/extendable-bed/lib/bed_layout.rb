@@ -2,102 +2,57 @@
 
 module Timmerman
   module ExtendableBed
-    # Orchestrates the side-by-side preview pairs, rendering each one into
-    # SketchUp and wiring up the stock planner, validator, and dimensions.
-    #
-    # Only the full extended pair (EB_Ext_*) is counted in the stock/cut-list tally;
-    # the other pairs are visual previews (extension 1 → 2 → 3, then retracted), plus
-    # construction-step previews on a headward row (−Y).
+    # Orchestrates all preview pairs. Responsibilities:
+    #   — Build the two shared frame catalogs (one BackFrame + one FrontFrame per
+    #     Config) and feed them to every preview BedPair.
+    #   — Drive rendering through the backend-agnostic SketchupUtils::PartRendering
+    #     driver + a concrete Renderer (SketchUpRenderer by default).
+    #   — Run the validator, stock / hardware reports, and baseline snapshot
+    #     save, using a SketchUp-specific tail (so backends without an active
+    #     model can skip those safely).
     class BedLayout
       def initialize(config = nil)
         @config = config || Config.new
       end
 
-      # ── Preview pairs ──────────────────────────────────────────────────────
+      # ── Render ────────────────────────────────────────────────────────────
 
-      # Ordered list of pairs to build (see `BedPairCatalog` in construction_steps.rb):
-      # seven construction-assembly previews, then five extension / retract previews.
-      def pairs
-        c = @config
-        BedPairCatalog.construction_bed_pairs(c) + BedPairCatalog.extension_degree_bed_pairs(c)
-      end
+      # @param renderer [Object, nil] any SketchupUtils::Renderer implementation.
+      #   Defaults to a fresh SketchUpRenderer. Pass your own (e.g. an OBJ
+      #   exporter, a test double) to produce non-SketchUp output.
+      # @param model [Sketchup::Model, nil] only used by the default renderer,
+      #   validator, and baseline save — optional otherwise.
+      # @param save_baseline [Boolean] when true (default), writes a named-group
+      #   geometry snapshot to +Config::GEOMETRY_BASELINE_JSON+. Refactor
+      #   validators that compare the current render against the on-disk
+      #   baseline set +false+ to avoid self-contaminating the comparison.
+      def create(model = nil, renderer: nil, save_baseline: true)
+        model ||= Sketchup.active_model if defined?(Sketchup)
+        renderer ||= SketchupUtils::SketchUpRenderer.new(
+          model, attr_dict: Config::ATTR_DICT,
+                 debug_paint_faces: @config.debug_paint_faces
+        )
+        layer = renderer.ensure_layer(Config::LAYER_NAME)
 
-      # ── Main operations ────────────────────────────────────────────────────
+        renderer.commit('Extendable bed: clear') { clear(model) }
 
-      def create(model = Sketchup.active_model)
-        layer = _ensure_layer(model)
-        model.start_operation('Extendable bed: clear', true)
-        clear(model)
-        model.commit_operation
+        back_frame  = BackFrame.new(@config)
+        front_frame = FrontFrame.new(@config)
+        stock       = StockPlanner.new(@config)
 
-        stock    = StockPlanner.new(@config)
-        renderer = SketchUpRenderer.new(@config, model)
-
-        pairs.each do |pair|
-          op_label = "#{pair.back_name} + #{pair.front_name}"
-          model.start_operation("Extendable bed: #{op_label}", true)
-          begin
-            planner = pair.tally_stock ? stock : nil
-
-            # Back frame: placed at [offset_x, 0, 0] in world space.
-            back_frame = pair.back_frame
-            back_g     = renderer.render_frame(
-              back_frame, model.entities,
-              layer:        layer,
-              stock_planner: planner,
-              preview_rgb:  Config::PREVIEW_RGB_BACK
-            )
-            ry = pair.pair_row_y
-            ox = pair.offset_x
-
-            # Front frame: default [ox, ry + foot_world_y, 0]; same row logic as back.
-            front_frame = pair.front_frame
-            front_g     = renderer.render_frame(
-              front_frame, model.entities,
-              layer:         layer,
-              stock_planner: planner,
-              preview_rgb:   Config::PREVIEW_RGB_FRONT
-            )
-
-            if pair.upside_down
-              _place_root_upside_down!(back_g, ox, ry)
-              _place_root_upside_down!(front_g, ox, ry + pair.foot_world_y)
-            else
-              back_g.transformation = Geom::Transformation.translation([ox, ry, 0])
-              front_g.transformation = Geom::Transformation.translation([ox, ry + pair.foot_world_y, 0])
-            end
-
-            renderer.repaint_named_children(back_g, pair.back_highlight_part_names,
-                                            Config::PREVIEW_RGB_ACTIVE)
-            renderer.repaint_named_children(front_g, pair.front_highlight_part_names,
-                                            Config::PREVIEW_RGB_ACTIVE)
-
-            if @config.debug_paint_faces
-              renderer.paint_axis_aligned_faces_for_debug(back_g)
-              renderer.paint_axis_aligned_faces_for_debug(front_g)
-            end
-
-            # Pillows are added into their respective root groups.
-            pillows = pair.pillows
-            (pillows[:back]  || []).each { |p| renderer.add_part(back_g.entities,  p, layer: layer) }
-            (pillows[:front] || []).each { |p| renderer.add_part(front_g.entities, p, layer: layer) }
-
-            model.commit_operation
-          rescue StandardError
-            model.abort_operation
-            raise
-          end
+        pairs_for(back_frame, front_frame).each do |pair|
+          _render_pair(pair, renderer: renderer, layer: layer, stock: stock)
         end
 
-        model.active_view.invalidate
+        renderer.invalidate_view
 
-        Validator.new(@config).validate(model)
+        Validator.new(@config).validate(model) if model
         stock_label = format('(one bed = %s + %s) ——',
                              Config::GROUP_EXT_BACK, Config::GROUP_EXT_FRONT)
-        stock.print_report(label: "[EB stock] #{stock_label}")
-        stock.print_hardware_report(label: "[EB hardware] #{stock_label}")
+        stock.print_report(label:           "[EB stock] #{stock_label}")
+        stock.print_hardware_report(label:  "[EB hardware] #{stock_label}")
 
-        _save_geometry_baseline(model)
+        _save_geometry_baseline(model) if model && save_baseline
       end
 
       def clear(model = Sketchup.active_model)
@@ -114,21 +69,89 @@ module Timmerman
         Validator.new(@config).validate(model)
       end
 
+      # The ordered pair list, shared frames threaded through.
+      def pairs_for(back_frame, front_frame)
+        BedPairCatalog.construction_bed_pairs(@config, back_frame: back_frame, front_frame: front_frame) +
+          BedPairCatalog.extension_degree_bed_pairs(@config, back_frame: back_frame, front_frame: front_frame)
+      end
+
       private
 
-      # Rotate 180° about bed length (+Y) so +Z points down while preserving local Y
-      # (same back/front spacing as upright). About +X would flip Y and pull the
-      # halves apart along the bed. Then lift in world +Z until min.z → 0.
-      def _place_root_upside_down!(group, world_x, world_y)
-        base = Geom::Transformation.translation([world_x, world_y, 0])
-        flip = Geom::Transformation.rotation(
-          Geom::Point3d.new(0, 0, 0),
-          Geom::Vector3d.new(0, 1, 0),
-          Math::PI
-        )
-        group.transformation = base * flip
-        lift_z = -group.bounds.min.z
-        group.transformation = Geom::Transformation.translation([0, 0, lift_z]) * group.transformation
+      def _render_pair(pair, renderer:, layer:, stock:)
+        op_label = "#{pair.back_name} + #{pair.front_name}"
+
+        renderer.commit("Extendable bed: #{op_label}") do
+          planner = pair.tally_stock ? stock : nil
+
+          back_root = SketchupUtils::PartRendering.render_view(
+            pair.back_view, parent: :root, renderer: renderer, layer: layer,
+            attr_dict: Config::ATTR_DICT,
+            cut_hosts: @config.hardware_cut_hosts,
+            countersink_first: @config.hardware_countersink_first,
+            through_hole: @config.hardware_through_hole,
+            on_beam:  planner ? ->(b) { planner.record(b) } : nil,
+            on_screw: planner ? ->(s) { planner.record_screw(s) } : nil
+          )
+          front_root = SketchupUtils::PartRendering.render_view(
+            pair.front_view, parent: :root, renderer: renderer, layer: layer,
+            attr_dict: Config::ATTR_DICT,
+            cut_hosts: @config.hardware_cut_hosts,
+            countersink_first: @config.hardware_countersink_first,
+            through_hole: @config.hardware_through_hole,
+            on_beam:  planner ? ->(b) { planner.record(b) } : nil,
+            on_screw: planner ? ->(s) { planner.record_screw(s) } : nil
+          )
+
+          _place_root(renderer, back_root,  pair.offset_x, pair.pair_row_y,                    pair.upside_down)
+          _place_root(renderer, front_root, pair.offset_x, pair.pair_row_y + pair.foot_world_y, pair.upside_down)
+
+          renderer.paint_group(back_root,  Config::PREVIEW_RGB_BACK)
+          renderer.paint_group(front_root, Config::PREVIEW_RGB_FRONT)
+
+          renderer.paint_named_children(back_root,  pair.back_highlight_part_names,  Config::PREVIEW_RGB_ACTIVE)
+          renderer.paint_named_children(front_root, pair.front_highlight_part_names, Config::PREVIEW_RGB_ACTIVE)
+
+          renderer.debug_paint_axis_faces(back_root,  skip_name_re: Config::SCREW_NAME_RE)
+          renderer.debug_paint_axis_faces(front_root, skip_name_re: Config::SCREW_NAME_RE)
+
+          # Pillows into their respective roots.
+          back_pillow_view  = pair.back_pillow_set.view(group_name: "#{pair.back_name}__pillows")
+          front_pillow_view = pair.front_pillow_set.view(group_name: "#{pair.front_name}__pillows")
+          _render_pillow_view_into(back_pillow_view,  back_root,  renderer: renderer, layer: layer)
+          _render_pillow_view_into(front_pillow_view, front_root, renderer: renderer, layer: layer)
+        end
+      end
+
+      # Pillows are rendered directly as child groups of the frame root (no
+      # intermediate "__pillows" group — matches the pre-refactor SketchUp
+      # outliner). We inline the PartRendering loop with parent = the frame
+      # root so each pillow is a direct child.
+      def _render_pillow_view_into(view, parent_group, renderer:, layer:)
+        view.parts.each do |part|
+          g = renderer.create_group(part.name, parent: parent_group, layer: layer)
+          if part.note && !part.note.empty?
+            renderer.set_group_attribute(g, Config::ATTR_DICT, 'note', part.note)
+          end
+          renderer.add_box(g, at: [0, 0, 0], size: [part.dx, part.dy, part.dz])
+          renderer.set_group_transform(g, SketchupUtils::Transform.translation([part.x, part.y, part.z]))
+        end
+      end
+
+      # Rotates 180° about +Y (preserves Y, flips +X / +Z) when +upside_down+,
+      # then lifts in world +Z until min.z → 0. Otherwise a plain translation.
+      def _place_root(renderer, root, world_x, world_y, upside_down)
+        if upside_down
+          base = SketchupUtils::Transform.translation([world_x, world_y, 0])
+          flip = SketchupUtils::Transform.rotation_y_180
+          renderer.set_group_transform(root, base * flip)
+          lift_z = -renderer.group_min_z(root)
+          renderer.set_group_transform(
+            root,
+            SketchupUtils::Transform.translation([0, 0, lift_z]) * base * flip
+          )
+        else
+          renderer.set_group_transform(root, SketchupUtils::Transform.translation([world_x, world_y, 0]))
+        end
       end
 
       def _save_geometry_baseline(model)
@@ -145,17 +168,10 @@ module Timmerman
         )
       end
 
-      def _ensure_layer(model)
-        model.layers[Config::LAYER_NAME] || model.layers.add(Config::LAYER_NAME)
-      end
-
-      # Pops all nested edit contexts before erasing root groups.
       def _exit_edit_context!(model)
         while model.close_active; end
       end
 
-      # Recursively erases groups whose name is in +names+ (exact match).
-      # With +skip_ref: true+, skips subtrees rooted at Config::REFERENCE_ROOT_RE names.
       def _purge_named_recursive(entities, names, skip_ref: false)
         entities.to_a.each do |e|
           next unless e.valid? && e.is_a?(Sketchup::Group)

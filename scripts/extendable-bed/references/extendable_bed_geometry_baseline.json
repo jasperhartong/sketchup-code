@@ -95,7 +95,7 @@
       147.0
     ]
   },
-  "EB_StepExt_Back / EB | leg | post | behind mid | -X | headward": {
+  "EB_StepExt_Back / EB | leg | post | behind mid | -X": {
     "min": [
       0.0,
       -1632.0,
@@ -107,7 +107,7 @@
       147.0
     ]
   },
-  "EB_StepExt_Back / EB | leg | post | behind mid | +X | headward": {
+  "EB_StepExt_Back / EB | leg | post | behind mid | +X": {
     "min": [
       752.0,
       -1632.0,
@@ -263,7 +263,7 @@
       260.0
     ]
   },
-  "EB_StepExt_Back / EB | beam | sister | outer -X": {
+  "EB_StepExt_Back / EB | beam | back | sister | -X": {
     "min": [
       0.0,
       -2549.0,
@@ -275,7 +275,7 @@
       191.0
     ]
   },
-  "EB_StepExt_Back / EB | beam | sister | outer +X": {
+  "EB_StepExt_Back / EB | beam | back | sister | +X": {
     "min": [
       727.0,
       -2549.0,
@@ -287,7 +287,7 @@
       191.0
     ]
   },
-  "EB_StepExt_Back / EB | beam | mid tie | between sisters": {
+  "EB_StepExt_Back / EB | beam | back | sister tie": {
     "min": [
       69.0,
       -1588.0,
@@ -707,7 +707,7 @@
       260.0
     ]
   },
-  "EB_StepExt_Front / EB | beam | front | under slats | foot end": {
+  "EB_StepExt_Front / EB | beam | front | under slat foot": {
     "min": [
       69.0,
       -1657.0,
@@ -1019,7 +1019,7 @@
       147.0
     ]
   },
-  "EB_StepDecoup_Back / EB | leg | post | behind mid | -X | headward": {
+  "EB_StepDecoup_Back / EB | leg | post | behind mid | -X": {
     "min": [
       1396.0,
       -1632.0,
@@ -1031,7 +1031,7 @@
       147.0
     ]
   },
-  "EB_StepDecoup_Back / EB | leg | post | behind mid | +X | headward": {
+  "EB_StepDecoup_Back / EB | leg | post | behind mid | +X": {
     "min": [
       2148.0,
       -1632.0,
@@ -1175,7 +1175,7 @@
       260.0
     ]
   },
-  "EB_StepDecoup_Back / EB | beam | sister | outer -X": {
+  "EB_StepDecoup_Back / EB | beam | back | sister | -X": {
     "min": [
       1396.0,
       -2549.0,
@@ -1187,7 +1187,7 @@
       191.0
     ]
   },
-  "EB_StepDecoup_Back / EB | beam | sister | outer +X": {
+  "EB_StepDecoup_Back / EB | beam | back | sister | +X": {
     "min": [
       2123.0,
       -2549.0,
@@ -1199,7 +1199,7 @@
       191.0
     ]
   },
-  "EB_StepDecoup_Back / EB | beam | mid tie | between sisters": {
+  "EB_StepDecoup_Back / EB | beam | back | sister tie": {
     "min": [
       1465.0,
       -1588.0,
@@ -1595,7 +1595,7 @@
       260.0
     ]
   },
-  "EB_StepDecoup_Front / EB | beam | front | under slats | foot end": {
+  "EB_StepDecoup_Front / EB | beam | front | under slat foot": {
     "min": [
       1465.0,
       -1657.0,
@@ -1895,7 +1895,7 @@
       260.0
     ]
   },
-  "EB_StepNoLedges_Back / EB | leg | post | behind mid | -X | headward": {
+  "EB_StepNoLedges_Back / EB | leg | post | behind mid | -X": {
     "min": [
       3544.0,
       -1632.0,
@@ -1907,7 +1907,7 @@
       260.0
     ]
   },
-  "EB_StepNoLedges_Back / EB | leg | post | behind mid | +X | headward": {
+  "EB_StepNoLedges_Back / EB | leg | post | behind mid | +X": {
     "min": [
       2792.0,
       -1632.0,
@@ -2051,7 +2051,7 @@
       69.0
     ]
   },
-  "EB_StepNoLedges_Back / EB | beam | sister | outer -X": {
+  "EB_StepNoLedges_Back / EB | beam | back | sister | -X": {
     "min": [
       3519.0,
       -2549.0,
@@ -2063,7 +2063,7 @@
       113.0
     ]
   },
-  "EB_StepNoLedges_Back / EB | beam | sister | outer +X": {
+  "EB_StepNoLedges_Back / EB | beam | back | sister | +X": {
     "min": [
       2792.0,
       -2549.0,
@@ -2075,7 +2075,7 @@
       113.0
     ]
   },
-  "EB_StepNoLedges_Back / EB | beam | mid tie | between sisters": {
+  "EB_StepNoLedges_Back / EB | beam | back | sister tie": {
     "min": [
       2861.0,
       -1588.0,
@@ -2471,7 +2471,7 @@
       69.0
     ]
   },
-  "EB_StepNoLedges_Front / EB | beam | front | under slats | foot end": {
+  "EB_StepNoLedges_Front / EB | beam | front | under slat foot": {
     "min": [
       2861.0,
       -1657.0,
@@ -2771,7 +2771,7 @@
       260.0
     ]
   },
-  "EB_StepFlip_Back / EB | leg | post | behind mid | -X | headward": {
+  "EB_StepFlip_Back / EB | leg | post | behind mid | -X": {
     "min": [
       4940.0,
       -1632.0,
@@ -2783,7 +2783,7 @@
       260.0
     ]
   },
-  "EB_StepFlip_Back / EB | leg | post | behind mid | +X | headward": {
+  "EB_StepFlip_Back / EB | leg | post | behind mid | +X": {
     "min": [
       4188.0,
       -1632.0,
@@ -2927,7 +2927,7 @@
       69.0
     ]
   },
-  "EB_StepFlip_Back / EB | beam | sister | outer -X": {
+  "EB_StepFlip_Back / EB | beam | back | sister | -X": {
     "min": [
       4915.0,
       -2549.0,
@@ -2939,7 +2939,7 @@
       113.0
     ]
   },
-  "EB_StepFlip_Back / EB | beam | sister | outer +X": {
+  "EB_StepFlip_Back / EB | beam | back | sister | +X": {
     "min": [
       4188.0,
       -2549.0,
@@ -2951,7 +2951,7 @@
       113.0
     ]
   },
-  "EB_StepFlip_Back / EB | beam | mid tie | between sisters": {
+  "EB_StepFlip_Back / EB | beam | back | sister tie": {
     "min": [
       4257.0,
       -1588.0,
@@ -3635,7 +3635,7 @@
       260.0
     ]
   },
-  "EB_StepFlipNoLegs_Back / EB | leg | post | behind mid | -X | headward": {
+  "EB_StepFlipNoLegs_Back / EB | leg | post | behind mid | -X": {
     "min": [
       6336.0,
       -1632.0,
@@ -3647,7 +3647,7 @@
       260.0
     ]
   },
-  "EB_StepFlipNoLegs_Back / EB | leg | post | behind mid | +X | headward": {
+  "EB_StepFlipNoLegs_Back / EB | leg | post | behind mid | +X": {
     "min": [
       5584.0,
       -1632.0,
@@ -3791,7 +3791,7 @@
       69.0
     ]
   },
-  "EB_StepFlipNoLegs_Back / EB | beam | sister | outer -X": {
+  "EB_StepFlipNoLegs_Back / EB | beam | back | sister | -X": {
     "min": [
       6311.0,
       -2549.0,
@@ -3803,7 +3803,7 @@
       113.0
     ]
   },
-  "EB_StepFlipNoLegs_Back / EB | beam | sister | outer +X": {
+  "EB_StepFlipNoLegs_Back / EB | beam | back | sister | +X": {
     "min": [
       5584.0,
       -2549.0,
@@ -3815,7 +3815,7 @@
       113.0
     ]
   },
-  "EB_StepFlipNoLegs_Back / EB | beam | mid tie | between sisters": {
+  "EB_StepFlipNoLegs_Back / EB | beam | back | sister tie": {
     "min": [
       5653.0,
       -1588.0,
@@ -5111,7 +5111,7 @@
       191.0
     ]
   },
-  "EB_StepPrep_Back / EB | leg | post | behind mid | -X | headward": {
+  "EB_StepPrep_Back / EB | leg | post | behind mid | -X": {
     "min": [
       9128.0,
       -1632.0,
@@ -5123,7 +5123,7 @@
       191.0
     ]
   },
-  "EB_StepPrep_Back / EB | leg | post | behind mid | +X | headward": {
+  "EB_StepPrep_Back / EB | leg | post | behind mid | +X": {
     "min": [
       8376.0,
       -1632.0,
@@ -5147,7 +5147,7 @@
       44.0
     ]
   },
-  "EB_StepPrep_Back / EB | beam | sister | outer -X": {
+  "EB_StepPrep_Back / EB | beam | back | sister | -X": {
     "min": [
       9103.0,
       -2549.0,
@@ -5159,7 +5159,7 @@
       44.0
     ]
   },
-  "EB_StepPrep_Back / EB | beam | sister | outer +X": {
+  "EB_StepPrep_Back / EB | beam | back | sister | +X": {
     "min": [
       8376.0,
       -2549.0,
@@ -5171,7 +5171,7 @@
       44.0
     ]
   },
-  "EB_StepPrep_Back / EB | beam | mid tie | between sisters": {
+  "EB_StepPrep_Back / EB | beam | back | sister tie": {
     "min": [
       8445.0,
       -1588.0,
@@ -5315,7 +5315,7 @@
       147.0
     ]
   },
-  "EB_Ext1_Back / EB | leg | post | behind mid | -X | headward": {
+  "EB_Ext1_Back / EB | leg | post | behind mid | -X": {
     "min": [
       0.0,
       968.0,
@@ -5327,7 +5327,7 @@
       147.0
     ]
   },
-  "EB_Ext1_Back / EB | leg | post | behind mid | +X | headward": {
+  "EB_Ext1_Back / EB | leg | post | behind mid | +X": {
     "min": [
       752.0,
       968.0,
@@ -5483,7 +5483,7 @@
       260.0
     ]
   },
-  "EB_Ext1_Back / EB | beam | sister | outer -X": {
+  "EB_Ext1_Back / EB | beam | back | sister | -X": {
     "min": [
       0.0,
       51.0,
@@ -5495,7 +5495,7 @@
       191.0
     ]
   },
-  "EB_Ext1_Back / EB | beam | sister | outer +X": {
+  "EB_Ext1_Back / EB | beam | back | sister | +X": {
     "min": [
       727.0,
       51.0,
@@ -5507,7 +5507,7 @@
       191.0
     ]
   },
-  "EB_Ext1_Back / EB | beam | mid tie | between sisters": {
+  "EB_Ext1_Back / EB | beam | back | sister tie": {
     "min": [
       69.0,
       1012.0,
@@ -5963,7 +5963,7 @@
       260.0
     ]
   },
-  "EB_Ext1_Front / EB | beam | front | under slats | foot end": {
+  "EB_Ext1_Front / EB | beam | front | under slat foot": {
     "min": [
       69.0,
       364.333,
@@ -6287,7 +6287,7 @@
       147.0
     ]
   },
-  "EB_Half_Back / EB | leg | post | behind mid | -X | headward": {
+  "EB_Half_Back / EB | leg | post | behind mid | -X": {
     "min": [
       1396.0,
       968.0,
@@ -6299,7 +6299,7 @@
       147.0
     ]
   },
-  "EB_Half_Back / EB | leg | post | behind mid | +X | headward": {
+  "EB_Half_Back / EB | leg | post | behind mid | +X": {
     "min": [
       2148.0,
       968.0,
@@ -6455,7 +6455,7 @@
       260.0
     ]
   },
-  "EB_Half_Back / EB | beam | sister | outer -X": {
+  "EB_Half_Back / EB | beam | back | sister | -X": {
     "min": [
       1396.0,
       51.0,
@@ -6467,7 +6467,7 @@
       191.0
     ]
   },
-  "EB_Half_Back / EB | beam | sister | outer +X": {
+  "EB_Half_Back / EB | beam | back | sister | +X": {
     "min": [
       2123.0,
       51.0,
@@ -6479,7 +6479,7 @@
       191.0
     ]
   },
-  "EB_Half_Back / EB | beam | mid tie | between sisters": {
+  "EB_Half_Back / EB | beam | back | sister tie": {
     "min": [
       1465.0,
       1012.0,
@@ -6923,7 +6923,7 @@
       260.0
     ]
   },
-  "EB_Half_Front / EB | beam | front | under slats | foot end": {
+  "EB_Half_Front / EB | beam | front | under slat foot": {
     "min": [
       1465.0,
       653.667,
@@ -7259,7 +7259,7 @@
       147.0
     ]
   },
-  "EB_Ext_Back / EB | leg | post | behind mid | -X | headward": {
+  "EB_Ext_Back / EB | leg | post | behind mid | -X": {
     "min": [
       2792.0,
       968.0,
@@ -7271,7 +7271,7 @@
       147.0
     ]
   },
-  "EB_Ext_Back / EB | leg | post | behind mid | +X | headward": {
+  "EB_Ext_Back / EB | leg | post | behind mid | +X": {
     "min": [
       3544.0,
       968.0,
@@ -7427,7 +7427,7 @@
       260.0
     ]
   },
-  "EB_Ext_Back / EB | beam | sister | outer -X": {
+  "EB_Ext_Back / EB | beam | back | sister | -X": {
     "min": [
       2792.0,
       51.0,
@@ -7439,7 +7439,7 @@
       191.0
     ]
   },
-  "EB_Ext_Back / EB | beam | sister | outer +X": {
+  "EB_Ext_Back / EB | beam | back | sister | +X": {
     "min": [
       3519.0,
       51.0,
@@ -7451,7 +7451,7 @@
       191.0
     ]
   },
-  "EB_Ext_Back / EB | beam | mid tie | between sisters": {
+  "EB_Ext_Back / EB | beam | back | sister tie": {
     "min": [
       2861.0,
       1012.0,
@@ -7883,7 +7883,7 @@
       260.0
     ]
   },
-  "EB_Ext_Front / EB | beam | front | under slats | foot end": {
+  "EB_Ext_Front / EB | beam | front | under slat foot": {
     "min": [
       2861.0,
       943.0,
@@ -8231,7 +8231,7 @@
       147.0
     ]
   },
-  "EB_Ret_Back / EB | leg | post | behind mid | -X | headward": {
+  "EB_Ret_Back / EB | leg | post | behind mid | -X": {
     "min": [
       4188.0,
       968.0,
@@ -8243,7 +8243,7 @@
       147.0
     ]
   },
-  "EB_Ret_Back / EB | leg | post | behind mid | +X | headward": {
+  "EB_Ret_Back / EB | leg | post | behind mid | +X": {
     "min": [
       4940.0,
       968.0,
@@ -8399,7 +8399,7 @@
       260.0
     ]
   },
-  "EB_Ret_Back / EB | beam | sister | outer -X": {
+  "EB_Ret_Back / EB | beam | back | sister | -X": {
     "min": [
       4188.0,
       51.0,
@@ -8411,7 +8411,7 @@
       191.0
     ]
   },
-  "EB_Ret_Back / EB | beam | sister | outer +X": {
+  "EB_Ret_Back / EB | beam | back | sister | +X": {
     "min": [
       4915.0,
       51.0,
@@ -8423,7 +8423,7 @@
       191.0
     ]
   },
-  "EB_Ret_Back / EB | beam | mid tie | between sisters": {
+  "EB_Ret_Back / EB | beam | back | sister tie": {
     "min": [
       4257.0,
       1012.0,
@@ -8891,7 +8891,7 @@
       260.0
     ]
   },
-  "EB_Ret_Front / EB | beam | front | under slats | foot end": {
+  "EB_Ret_Front / EB | beam | front | under slat foot": {
     "min": [
       4257.0,
       75.0,
@@ -9203,7 +9203,7 @@
       147.0
     ]
   },
-  "EB_RetGnd_Back / EB | leg | post | behind mid | -X | headward": {
+  "EB_RetGnd_Back / EB | leg | post | behind mid | -X": {
     "min": [
       5584.0,
       968.0,
@@ -9215,7 +9215,7 @@
       147.0
     ]
   },
-  "EB_RetGnd_Back / EB | leg | post | behind mid | +X | headward": {
+  "EB_RetGnd_Back / EB | leg | post | behind mid | +X": {
     "min": [
       6336.0,
       968.0,
@@ -9371,7 +9371,7 @@
       260.0
     ]
   },
-  "EB_RetGnd_Back / EB | beam | sister | outer -X": {
+  "EB_RetGnd_Back / EB | beam | back | sister | -X": {
     "min": [
       5584.0,
       51.0,
@@ -9383,7 +9383,7 @@
       191.0
     ]
   },
-  "EB_RetGnd_Back / EB | beam | sister | outer +X": {
+  "EB_RetGnd_Back / EB | beam | back | sister | +X": {
     "min": [
       6311.0,
       51.0,
@@ -9395,7 +9395,7 @@
       191.0
     ]
   },
-  "EB_RetGnd_Back / EB | beam | mid tie | between sisters": {
+  "EB_RetGnd_Back / EB | beam | back | sister tie": {
     "min": [
       5653.0,
       1012.0,
@@ -9863,7 +9863,7 @@
       260.0
     ]
   },
-  "EB_RetGnd_Front / EB | beam | front | under slats | foot end": {
+  "EB_RetGnd_Front / EB | beam | front | under slat foot": {
     "min": [
       5653.0,
       75.0,

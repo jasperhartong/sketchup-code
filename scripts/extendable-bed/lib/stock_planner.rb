@@ -22,6 +22,7 @@ module Timmerman
         @piece_count     = 0
         @cuts            = []   # [{ name:, mm: }, ...]
         @screw_counts    = Hash.new(0) # [[spec_id, shaft_length_index], count]
+        @specs_by_id     = {}          # remembered from placements (decouples from Config)
         @active          = true
       end
 
@@ -41,11 +42,13 @@ module Timmerman
       end
 
       # Register one screw placement (same +@active+ / tally scope as #record).
+      # Remembers +placement.spec+ so the hardware report doesn't need +Config+.
       def record_screw(placement)
         return unless @active
 
         key = [placement.spec_id, placement.shaft_length_index]
         @screw_counts[key] += 1
+        @specs_by_id[placement.spec_id] ||= placement.spec
       end
 
       # Prints screw BOM lines for the tallied pair (after #print_report is fine).
@@ -55,7 +58,8 @@ module Timmerman
 
         puts label
         @screw_counts.sort_by { |(spec_id, idx), _| [spec_id.to_s, idx] }.each do |(spec_id, idx), n|
-          spec = @config.screw_spec(spec_id)
+          spec = @specs_by_id[spec_id] ||
+                 raise(KeyError, "unknown screw spec #{spec_id.inspect} (no placement was recorded)")
           mm   = spec.shaft_length_at(idx).to_mm.round(1)
           dia  = spec.shaft_diameter.to_mm.round(1)
           puts format('  %d × %s  Ø%.1f mm  shaft %.1f mm', n, spec_id, dia, mm)
@@ -101,7 +105,7 @@ module Timmerman
       # Returns { ok: true, bars: [{used_mm:, waste_mm:, parts: [{name:, mm:}]}] }
       # or      { ok: false, oversize: [{name:, mm:}] }
       def pack(cuts, stock_mm, kerf_mm: 0.0)
-        tol      = Config::SECTION_TOL_MM
+        tol      = SketchupUtils::Parts::Beam::SECTION_TOL_MM
         list     = cuts.map { |c| { name: c[:name], mm: c[:mm].to_f } }
         oversize = list.select { |c| c[:mm] > stock_mm + tol }
         return { ok: false, oversize: oversize } unless oversize.empty?

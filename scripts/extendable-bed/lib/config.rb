@@ -84,11 +84,11 @@ module Timmerman
 
       # Catalog of screw families for hardware rendering (visual / design intent).
       # Shaft length for :eb_pocket_4mm is **2 × beam_narrow** (same stock as narrow face).
-      # @return [Hash{Symbol=>ScrewSpec}]
+      # @return [Hash{Symbol=>SketchupUtils::Hardware::ScrewSpec}]
       def screw_specs
         shaft = 2 * beam_narrow
         @screw_specs ||= {
-          :eb_pocket_4mm => ScrewSpec.new(
+          :eb_pocket_4mm => SketchupUtils::Hardware::ScrewSpec.new(
             :eb_pocket_4mm,
             shaft_diameter:       4.2.mm,
             shaft_lengths:        [shaft],
@@ -98,10 +98,6 @@ module Timmerman
             countersink_depth:   2.5.mm
           )
         }.freeze
-      end
-
-      def screw_spec(id)
-        screw_specs.fetch(id) { raise KeyError, "unknown screw spec #{id.inspect}" }
       end
 
       # ── Slat geometry ─────────────────────────────────────────────────────────
@@ -209,86 +205,6 @@ module Timmerman
       # clears the previous construction column (same row_y).
       def construction_flip_extra_offset_x = outer_width
 
-      # Step 4 (flip) highlight: only the foot outer corner legs — the ones that will
-      # be removed in step 5. The head outer corner legs stay (they belong to the head
-      # cap sub-assembly) so they are not highlighted here.
-      FLIP_OUTER_CORNER_BACK_HIGHLIGHTS = [].freeze
-      FLIP_OUTER_CORNER_FRONT_HIGHLIGHTS = [
-        'EB | leg | foot | -X',
-        'EB | leg | foot | +X'
-      ].freeze
-
-      # Step 5 (flip_no_legs) highlight: the sub-assembly parts that are now being
-      # attached together — all legs present in this step (foot outer corners are
-      # already removed by +omit_foot_outer_corner_legs+; head outer corners remain
-      # because they belong to the head cap sub-assembly), the two outer sisters,
-      # and the mid tie.
-      FLIP_SUB_ASSEMBLY_BACK_HIGHLIGHTS = [
-        'EB | leg | head | -X',
-        'EB | leg | head | +X',
-        'EB | leg | head | -X | inset',
-        'EB | leg | head | +X | inset',
-        'EB | leg | mid run | -X',
-        'EB | leg | mid run | +X',
-        'EB | leg | post | behind head | -X',
-        'EB | leg | post | behind head | +X',
-        'EB | leg | post | behind mid | -X | headward',
-        'EB | leg | post | behind mid | +X | headward',
-        'EB | beam | head | cap',
-        'EB | beam | sister | outer -X',
-        'EB | beam | sister | outer +X',
-        'EB | beam | mid tie | between sisters'
-      ].freeze
-      FLIP_SUB_ASSEMBLY_FRONT_HIGHLIGHTS = [
-        'EB | leg | foot | -X | inset',
-        'EB | leg | foot | +X | inset',
-        'EB | beam | foot | cap'
-      ].freeze
-
-      # Construction-preparation sub-assemblies shown in the single :sub_assembly_prep step.
-      # Each constant is the set of part names that make up one sub-unit, used as frame-level
-      # render whitelist members (and later as scope for highlight/screw rules).
-      #
-      # The mid tie (`EB | beam | mid tie | between sisters`) bridges the two outer-sister
-      # sub-assemblies so the sister cluster is preassembled as one unit before meeting the slats.
-      PREP_BACK_HEAD_CAP_SUB_ASSEMBLY = [
-        'EB | beam | head | cap',
-        'EB | leg | head | -X',
-        'EB | leg | head | +X',
-        'EB | leg | head | -X | inset',
-        'EB | leg | head | +X | inset'
-      ].freeze
-      PREP_BACK_MX_SISTER_SUB_ASSEMBLY = [
-        'EB | beam | sister | outer -X',
-        'EB | leg | post | behind head | -X',
-        'EB | leg | post | behind mid | -X | headward',
-        'EB | leg | mid run | -X'
-      ].freeze
-      PREP_BACK_PX_SISTER_SUB_ASSEMBLY = [
-        'EB | beam | sister | outer +X',
-        'EB | leg | post | behind head | +X',
-        'EB | leg | post | behind mid | +X | headward',
-        'EB | leg | mid run | +X'
-      ].freeze
-      PREP_BACK_MID_TIE_SUB_ASSEMBLY = [
-        'EB | beam | mid tie | between sisters'
-      ].freeze
-      PREP_FRONT_FOOT_CAP_SUB_ASSEMBLY = [
-        'EB | beam | foot | cap',
-        'EB | leg | foot | -X | inset',
-        'EB | leg | foot | +X | inset'
-      ].freeze
-
-      # :sub_assembly_prep whitelist — cap sub-assemblies + both outer-sister sub-assemblies
-      # joined by the mid tie.
-      PREP_BACK_PART_NAMES = (
-        PREP_BACK_HEAD_CAP_SUB_ASSEMBLY +
-        PREP_BACK_MX_SISTER_SUB_ASSEMBLY +
-        PREP_BACK_PX_SISTER_SUB_ASSEMBLY +
-        PREP_BACK_MID_TIE_SUB_ASSEMBLY
-      ).freeze
-      PREP_FRONT_PART_NAMES = PREP_FRONT_FOOT_CAP_SUB_ASSEMBLY.dup.freeze
-
       # Front foot position when retracted (outer face of front end beam).
       def retracted_foot_world_y = length_retracted + beam_narrow
 
@@ -311,34 +227,6 @@ module Timmerman
       # Head/foot cap: starts at inner face of outer corner leg, spans to the other.
       def cap_x0 = leg_x
       def cap_dx = outer_width - (2 * leg_x)
-
-      # ── Section tolerance (mm) ────────────────────────────────────────────────
-
-      SECTION_TOL_MM = 0.01
-
-      # Returns true if +len+ matches either section side (narrow or wide).
-      def section_match?(len)
-        v = len.to_mm.abs
-        (v - beam_narrow.to_mm).abs < SECTION_TOL_MM ||
-          (v - beam_wide.to_mm).abs  < SECTION_TOL_MM
-      end
-
-      # Returns the extrusion length in mm (the one dimension that is NOT a section side).
-      # Raises if the three dimensions don't describe a valid 44×69 prism.
-      def extrusion_length_mm(dx, dy, dz)
-        dims = [dx, dy, dz]
-        unless dims.count { |d| section_match?(d) } == 2
-          got = dims.map { |d| format('%.2f mm', d.to_mm) }.join(', ')
-          raise ArgumentError,
-                "Stock beam: need two section sides (#{beam_narrow.to_mm.round(2)} × #{beam_wide.to_mm.round(2)} mm), got (#{got})"
-        end
-
-        long = dims.find { |d| !section_match?(d) }
-        mm   = long.to_mm.abs
-        raise ArgumentError, 'Stock beam: extrusion length must be > 0' if mm <= SECTION_TOL_MM
-
-        mm
-      end
 
       # ── SketchUp layer / material names (stable, used across classes) ─────────
 
@@ -401,15 +289,23 @@ module Timmerman
       SOLID_NAME_RE  = /\AEB \| (beam|leg) \|/
 
       # Nested part-group names to erase on clear (previous labels after part renames).
-      PURGE_NESTED_PART_GROUP_NAMES = %w[
-        EB | beam | behind leg | mid -X
-        EB | beam | behind leg | mid +X
-        EB | beam | behind leg | head -X
-        EB | beam | behind leg | head +X
-        EB | beam | behind leg | mid -X | headward
-        EB | beam | behind leg | mid +X | headward
-        EB | beam | mid tie | vertical filler | -X
-        EB | beam | mid tie | vertical filler | +X
+      # Each entry is an exact Outliner group name; both are cleared before re-rendering.
+      PURGE_NESTED_PART_GROUP_NAMES = [
+        'EB | beam | behind leg | mid -X',
+        'EB | beam | behind leg | mid +X',
+        'EB | beam | behind leg | head -X',
+        'EB | beam | behind leg | head +X',
+        'EB | beam | behind leg | mid -X | headward',
+        'EB | beam | behind leg | mid +X | headward',
+        'EB | beam | mid tie | vertical filler | -X',
+        'EB | beam | mid tie | vertical filler | +X',
+        # Renamed in the PartCatalog refactor; list old names so old renders clear cleanly.
+        'EB | beam | sister | outer -X',
+        'EB | beam | sister | outer +X',
+        'EB | beam | mid tie | between sisters',
+        'EB | leg | post | behind mid | -X | headward',
+        'EB | leg | post | behind mid | +X | headward',
+        'EB | beam | front | under slats | foot end'
       ].freeze
     end
   end

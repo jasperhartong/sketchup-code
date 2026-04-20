@@ -2,86 +2,43 @@
 
 module Timmerman
   module ExtendableBed
-    # ── FrameAssembly — DSL base class ────────────────────────────────────────
+    # Before the catalog refactor, BackFrame / FrontFrame were plain classes;
+    # on a SketchUp session that already loaded the old code a `load` of this
+    # file would raise "superclass mismatch". Undefine first so reloads work
+    # cleanly across sessions.
+    %i[FrameCatalog BackFrame FrontFrame].each do |c|
+      remove_const(c) if const_defined?(c, false)
+    end
+
+    # ── BackFrame / FrontFrame — Part catalogs ────────────────────────────
     #
-    # Subclasses call the geometry DSL methods (`beam`, `leg`, `slat`, `plank`,
-    # `pillow`) inside `assemble` to build up a list of Part value objects.
-    # The SketchUpRenderer walks that list to create actual SketchUp groups.
+    # Both frames subclass SketchupUtils::PartCatalog. They are pure data:
+    # given a Config they produce a fixed set of Part value objects and
+    # ScrewPlacement hardware entries — built ONCE per Config, shared
+    # across every preview. Per-preview selection happens at render time
+    # via +PartCatalog#view(exclude: ...)+.
     #
-    # All position/size arguments are SketchUp length values (inches internally,
-    # use `.mm` literals).  Named keyword args (`at:`, `size:`) eliminate the
-    # classic x/y/z/dx/dy/dz positional-argument soup.
-    class FrameAssembly
-      attr_reader :group_name, :parts, :hardware
+    # All position/size arguments are SketchUp Length values (inches
+    # internally; use `.mm` literals).
 
-      # +group_name+ becomes the Outliner name of the root group.
-      # Subclasses may read +@frame_options+ (construction-step previews).
-      #
-      # +only_part_names+ (optional) is a whitelist of part names. When non-nil,
-      # `@parts` is filtered after `assemble` to only those names, and
-      # `@hardware` is filtered to screws whose host part is in the whitelist.
-      # Used by preview variants like `:sub_assembly_prep` that show a hand-picked
-      # subset of the full bed without introducing per-part omit flags.
-      def initialize(config, group_name:, **frame_options)
-        @config           = config
-        @group_name       = group_name
-        @only_part_names  = frame_options.delete(:only_part_names)
-        @frame_options    = frame_options
-        @parts            = []
-        @hardware         = []
-        assemble
-        _apply_part_whitelist if @only_part_names
-      end
-
-      private
-
-      def _apply_part_whitelist
-        names = @only_part_names
-        @parts    = @parts.select    { |p| names.include?(p.name) }
-        @hardware = @hardware.select { |h| names.include?(h.host_name) }
-      end
-
-      # ── DSL primitives ───────────────────────────────────────────────────────
-
-      def beam(name, at:, size:, note: nil)
-        @parts << Beam.new(name, at: at, size: size, config: @config, note: note)
-      end
-
-      def leg(name, at:, size:, note: nil)
-        @parts << Leg.new(name, at: at, size: size, config: @config, note: note)
-      end
-
-      def slat(name, at:, size:, note: nil)
-        @parts << Slat.new(name, at: at, size: size, config: @config, note: note)
-      end
-
-      def plank(name, at:, size:, note: nil)
-        @parts << Plank.new(name, at: at, size: size, config: @config, note: note)
-      end
-
-      def pillow(name, at:, size:, note: nil)
-        @parts << Pillow.new(name, at: at, size: size, config: @config, note: note)
-      end
-
-      # Hardware: screws relative to a named part face (see `ScrewPlacement`).
-      def screw(name, host_name:, face:, u:, v:, spec_id:, shaft_length_index: 0,
-                pocket_tilt_from_normal_deg: 0, pocket_tilt_toward: :pos_v,
-                pocket_away_from_host: false)
-        @hardware << ScrewPlacement.new(
-          name,
-          host_name: host_name, face: face, u: u, v: v,
-          spec_id: spec_id, shaft_length_index: shaft_length_index,
-          pocket_tilt_from_normal_deg: pocket_tilt_from_normal_deg,
-          pocket_tilt_toward: pocket_tilt_toward,
-          pocket_away_from_host: pocket_away_from_host
+    # Common base: threads the config through and exposes the geometry
+    # helpers used by both frame subclasses.
+    class FrameCatalog < SketchupUtils::PartCatalog
+      def initialize(config)
+        @config = config
+        super(
+          section_sides:    [config.beam_narrow, config.beam_wide],
+          plank_thickness:  config.plank_thickness,
+          pillow_thickness: config.pillow_thickness,
+          screw_specs:      config.screw_specs
         )
       end
 
-      # ── Shared geometry helpers (used by both frames) ─────────────────────
+      protected
 
       def c = @config
 
-      # Returns [back_x_starts, front_x_starts] — X origin of each comb tooth.
+      # [back_x_starts, front_x_starts] — X origin of each comb tooth.
       def slat_x_starts
         step  = 2 * (c.slat_dx + c.slat_gap)
         back  = (0...c.back_slat_count).map  { |k| k * step }
@@ -96,69 +53,47 @@ module Timmerman
         [merged.min, merged.max]
       end
 
-      # [inner_x_start, span_x] for tie beams between the **inner faces** of the outer sisters.
+      # [inner_x_start, span_x] for tie beams between **inner faces** of the outer sisters.
       # Sisters lie on the wide face (69 mm along X): inner −X at lo_x+beam_wide, inner +X at hi_x+slat_dx−beam_wide.
-      # Span is 2×(beam_wide − slat_dx) shorter than the old narrow-on-edge sisters.
       def sister_tie_x
         lo_x, hi_x = outermost_comb_x_starts
         inner_lo   = lo_x + c.beam_wide
         inner_hi   = hi_x + c.slat_dx - c.beam_wide
         [inner_lo, inner_hi - inner_lo]
       end
-
-      # [lo_x, span_x] for beams spanning the full front comb width.
-      def front_comb_x
-        _, front_xs = slat_x_starts
-        lo = front_xs.min
-        hi = front_xs.max
-        [lo, (hi + c.slat_dx) - lo]
-      end
-
-      # Subclasses must implement this; it is called from initialize.
-      def assemble
-        raise NotImplementedError, "#{self.class}#assemble is not implemented"
-      end
     end
 
-    # ── BackFrame ─────────────────────────────────────────────────────────────
-    #
-    # The fixed (head) half of the bed.  Slats run toward +Y (foot direction).
+    # ── BackFrame ─────────────────────────────────────────────────────────
+    # The fixed (head) half of the bed. Slats run toward +Y (foot direction).
     # Everything is in back-frame local space; BedPair applies the world offset.
-    class BackFrame < FrameAssembly
-      private
-
+    class BackFrame < FrameCatalog
       def assemble
-        unless @frame_options[:omit_legs]
-          _head_legs
-          _mid_run_legs
-          _behind_leg_posts
-        end
-        _head_cap_and_ledge
+        _head_legs
+        _mid_run_legs
+        _behind_leg_posts
+        _head_cap_beam
+        _head_ledge_plank
+        _head_end_beam
         _back_slats
-        _sister_beams
-        _tie_beams
+        _outer_sisters
+        _sister_tie
       end
 
-      # ── private helpers ──────────────────────────────────────────────────
+      private
 
-      # Head: outer ±X corner legs run through the cap band (lh_outer = z_slat_bottom).
-      # Plan: BEAM_NARROW along +X (outer faces flush sisters at x=0 / x=outer_width), BEAM_WIDE along +Y
-      # so the wide face meets the head cap depth (same as cap dy), not the narrow 44 mm strip.
+      # Head corner legs (through cap band to z_slat_bottom): BEAM_NARROW along +X
+      # (outer faces flush sisters at x=0 / x=outer_width), BEAM_WIDE along +Y.
       def _head_legs
-        unless @frame_options[:omit_head_outer_corner_legs]
-          leg 'EB | leg | head | -X',
-              at:   [0, y_head, 0],
-              size: [head_corner_leg_dx, head_corner_leg_dy, lh_outer],
-              note: 'Corner −X: min_x flush sister outer −X; narrow along +X, wide along +Y to match head cap.'
+        leg 'EB | leg | head | -X',
+            at:   [0, y_head, 0],
+            size: [head_corner_leg_dx, head_corner_leg_dy, lh_outer],
+            note: 'Corner −X: min_x flush sister outer −X; narrow along +X, wide along +Y to match head cap.'
 
-          leg 'EB | leg | head | +X',
-              at:   [c.outer_width - head_corner_leg_dx, y_head, 0],
-              size: [head_corner_leg_dx, head_corner_leg_dy, lh_outer],
-              note: 'Corner +X: max_x flush sister outer +X; mirror of −X corner in plan.'
-        end
+        leg 'EB | leg | head | +X',
+            at:   [c.outer_width - head_corner_leg_dx, y_head, 0],
+            size: [head_corner_leg_dx, head_corner_leg_dy, lh_outer],
+            note: 'Corner +X: max_x flush sister outer +X; mirror of −X corner in plan.'
 
-        # Inset strengtheners: plan leg_y×leg_x (44×69) so **min_x** (−X inset) / **max_x** (+X inset) mates
-        # corner inner **max_x** / **min_x**; **max_z** meets head cap **min_z** (debug: cap bottom ~purple, inset top +Z).
         leg 'EB | leg | head | -X | inset',
             at:   [head_corner_leg_dx, y_head, 0],
             size: [c.leg_y, c.leg_x, head_inset_dz],
@@ -170,90 +105,79 @@ module Timmerman
             note: 'Mirror −X: max_x flush corner +X inner min_x; Z to cap underside.'
       end
 
-      # Mid-run legs: **beam_wide** along X (same as outer sisters) so outer min_x/max_x (debug red) lines up
-      # with sisters' outer column; **beam_y** along Y. Leg extends up **through** the sister's Z band to
-      # z_slat_bottom (top flush with slat bottom); outer sister is shortened by beam_narrow along +Y at
-      # its foot end so sister max_y meets leg min_y (no overlap).
+      # Mid-run legs: beam_wide along X (flush with outer sisters), beam_y along Y.
+      # Extends through sister's Z band to z_slat_bottom.
       def _mid_run_legs
         leg 'EB | leg | mid run | -X',
             at:   [0, mid_leg_y0, 0],
             size: [c.beam_wide, c.beam_y, c.z_slat_bottom],
-            note: 'Outer −X = min_x red flush sister outer −X; narrow 44 along +Y; extends up through sister band to slat bottom.'
+            note: 'Outer −X flush sister outer −X; narrow 44 along +Y; extends up through sister band to slat bottom.'
 
         leg 'EB | leg | mid run | +X',
             at:   [c.outer_width - c.beam_wide, mid_leg_y0, 0],
             size: [c.beam_wide, c.beam_y, c.z_slat_bottom],
-            note: 'Outer +X = max_x red flush sister outer +X; mirror −X.'
+            note: 'Outer +X flush sister outer +X; mirror −X.'
       end
 
-      # Four 44×69 stock posts — one behind each outer leg in head and mid Y bands
-      # (same section as legs; named under EB | leg | for clarity).
+      # Four 44×69 stock posts — one behind each outer leg in head and mid Y bands.
       def _behind_leg_posts
-        # Stack +Y of head corner legs (their plan depth is BEAM_WIDE along +Y, not leg_y).
         y_head_b = y_head + head_corner_leg_dy
         y_mid_b  = mid_leg_y0 - c.leg_x
 
         beam 'EB | leg | post | behind head | -X',
              at:   [0, y_head_b, 0],
              size: [c.leg_x, c.leg_y, head_inset_dz],
-             note: 'Rotated 69×44 in plan vs mid posts; min_x flush head −X leg; Z to cap underside like head insets.'
+             note: 'Rotated 69×44 in plan vs mid posts; min_x flush head −X leg; Z to cap underside.'
 
         beam 'EB | leg | post | behind head | +X',
              at:   [c.outer_width - c.leg_x, y_head_b, 0],
              size: [c.leg_x, c.leg_y, head_inset_dz],
              note: 'Rotated; max_x flush head +X leg outer; Z to cap underside.'
 
-        beam 'EB | leg | post | behind mid | -X | headward',
+        beam 'EB | leg | post | behind mid | -X',
              at:   [0, y_mid_b, 0],
              size: [c.leg_y, c.leg_x, lh_mid],
-             note: '44x69 plan (leg_y×leg_x); headward of mid leg; 69 mm along Y on outer -X face.'
+             note: '44x69 plan (leg_y×leg_x); headward of mid leg; 69 mm along Y on outer −X face.'
 
-        beam 'EB | leg | post | behind mid | +X | headward',
+        beam 'EB | leg | post | behind mid | +X',
              at:   [c.outer_width - c.leg_y, y_mid_b, 0],
              size: [c.leg_y, c.leg_x, lh_mid],
              note: '44x69 plan (leg_y×leg_x); headward of mid leg; 69 mm along Y on outer +X face.'
       end
 
-      def _head_cap_and_ledge
-        # Cap between inner corner-leg faces; wide face in Y×Z (69 along +Y, 44 up); min_y = y_head
-        # keeps only plank_thickness headward of y=0; top flush z_slat_bottom (ledge / slat plane).
-        unless @frame_options[:omit_head_cap_beam]
-          beam 'EB | beam | head | cap',
-               at:   [head_cap_x0, y_head, c.z_slat_bottom - c.beam_narrow],
-               size: [head_cap_dx, c.beam_wide, c.beam_narrow],
-               note: 'Head cap: BEAM_WIDE along +Y, BEAM_NARROW up; between inner faces of rotated head corner legs.'
-        end
+      def _head_cap_beam
+        beam 'EB | beam | head | cap',
+             at:   [head_cap_x0, y_head, c.z_slat_bottom - c.beam_narrow],
+             size: [head_cap_dx, c.beam_wide, c.beam_narrow],
+             note: 'Head cap: BEAM_WIDE along +Y, BEAM_NARROW up; between inner faces of rotated head corner legs.'
+      end
 
-        # Head ledge plank: sits on top of cap + corner legs; full bed width; 2×69 mm tall.
-        unless @frame_options[:omit_head_ledge_plank]
-          plank 'EB | plank | head | ledge',
-                at:   [0, y_head, c.z_slat_bottom],
-                size: [c.outer_width, c.plank_thickness, 2 * c.beam_wide],
-                note: 'On cap and corner legs; headward face flush bed end; top 2×BEAM_WIDE above z_slat_bottom.'
+      def _head_ledge_plank
+        plank 'EB | plank | head | ledge',
+              at:   [0, y_head, c.z_slat_bottom],
+              size: [c.outer_width, c.plank_thickness, 2 * c.beam_wide],
+              note: 'On cap and corner legs; full bed width; top 2×BEAM_WIDE above z_slat_bottom.'
 
-          # Demo hardware: validates screw transform + hole path on the head ledge top face.
-          screw 'EB | screw | demo | head ledge',
-                host_name: 'EB | plank | head | ledge',
-                face:      :max_z,
-                u:         c.outer_width / 2,
-                v:         c.plank_thickness / 2,
-                spec_id:   :eb_pocket_4mm,
-                shaft_length_index: 0
-        end
+        screw 'EB | screw | demo | head ledge',
+              host_name: 'EB | plank | head | ledge',
+              face:      :max_z,
+              u:         c.outer_width / 2,
+              v:         c.plank_thickness / 2,
+              spec_id:   :eb_pocket_4mm,
+              shaft_length_index: 0
+      end
 
-        # Full-width end beam at y=0 (headward face of slat run); sits under slat bottoms.
+      def _head_end_beam
         beam 'EB | beam | head | end',
              at:   [0, 0, c.z_slat_bottom],
              size: [c.outer_width, c.beam_y, c.beam_z],
              note: 'Head end beam 44x69 mm (beam_y × beam_z); under cap.'
 
-        # Two screws per back slat: from headward face (:min_y, debug bright green) inward +Y
-        # toward the slats; X at slat centre; Z slightly staggered on the narrow face.
         _head_end_beam_into_slats_screws
       end
 
-      # Screws on `EB | beam | head | end`: :min_y is the headward narrow face (u +X, v +Z in part local).
-      # Vertical positions at one-third and two-thirds of beam height (69 mm stock).
+      # :min_y is the headward narrow face (u +X, v +Z in part local).
+      # Vertical positions at one-third and two-thirds of beam height.
       def _head_end_beam_into_slats_screws
         back_xs, = slat_x_starts
         v_lower = c.beam_z / 3.0
@@ -264,17 +188,13 @@ module Timmerman
           screw "EB | screw | head end | #{n}/#{c.back_slat_count} | lower",
                 host_name: 'EB | beam | head | end',
                 face:      :min_y,
-                u:         u,
-                v:         v_lower,
-                spec_id:   :eb_pocket_4mm,
-                shaft_length_index: 0
+                u:         u, v: v_lower,
+                spec_id:   :eb_pocket_4mm
           screw "EB | screw | head end | #{n}/#{c.back_slat_count} | upper",
                 host_name: 'EB | beam | head | end',
                 face:      :min_y,
-                u:         u,
-                v:         v_upper,
-                spec_id:   :eb_pocket_4mm,
-                shaft_length_index: 0
+                u:         u, v: v_upper,
+                spec_id:   :eb_pocket_4mm
         end
       end
 
@@ -288,104 +208,79 @@ module Timmerman
         end
       end
 
-      def _sister_beams
-        return if @frame_options[:omit_back_outer_sisters_and_ties]
-
+      def _outer_sisters
         lo_x, hi_x = outermost_comb_x_starts
-        y_sister    = outer_sister_head_y0
-        sister_dy   = outer_sister_run_dy
-        z_sister    = lh_mid
+        y_sister   = outer_sister_head_y0
+        sister_dy  = outer_sister_run_dy
+        z_sister   = lh_mid
 
-        note = 'Sister under outermost slat; stock on **wide** face (69 mm along X, 44 mm up); outer −X face at lo_x, ' \
-               'outer +X face at hi_x+slat_dx; top flush slat bottom.'
+        note = 'Sister under outermost slat; stock on wide face (69 mm along X, 44 mm up); outer face flush slat outer; top flush slat bottom.'
 
-        beam 'EB | beam | sister | outer -X',
+        beam 'EB | beam | back | sister | -X',
              at:   [lo_x, y_sister, z_sister],
              size: [c.beam_wide, sister_dy, c.beam_narrow],
              note: note
 
-        beam 'EB | beam | sister | outer +X',
+        beam 'EB | beam | back | sister | +X',
              at:   [hi_x + c.slat_dx - c.beam_wide, y_sister, z_sister],
              size: [c.beam_wide, sister_dy, c.beam_narrow],
              note: note
       end
 
-      def _tie_beams
+      def _sister_tie
         x1_tie, span_tie = sister_tie_x
         return if span_tie <= 0
 
-        unless @frame_options[:omit_back_outer_sisters_and_ties]
-          beam 'EB | beam | mid tie | between sisters',
-               at:   [x1_tie, c.mid_tie_y0, lh_mid],
-               size: [span_tie, c.beam_wide, c.beam_narrow],
-               note: 'Mid run; wide face horizontal in Y (69 mm); max_y = length_retracted − plank_thickness (mirrors foot cap plank offset).'
-        end
+        beam 'EB | beam | back | sister tie',
+             at:   [x1_tie, c.mid_tie_y0, lh_mid],
+             size: [span_tie, c.beam_wide, c.beam_narrow],
+             note: 'Mid run; wide face horizontal in Y (69 mm); max_y = length_retracted − plank_thickness (mirrors foot cap plank offset).'
       end
 
-      # ── Z and Y constants (methods keep them readable at call sites) ────────
+      # ── Z / Y / plan helpers ─────────────────────────────────────────────
 
-      # +Y origin of outer sisters (same as footward face of head cap when cap is wide-on-Y).
       def outer_sister_head_y0 = (c.beam_y - c.plank_thickness) + (c.beam_wide - c.beam_narrow)
+      def outer_sister_run_dy  = (c.back_slat_run_y + (2 * c.plank_thickness)) - (c.beam_wide - c.beam_narrow) + c.mid_layout_y_shift - c.beam_narrow
 
-      # Sister length along +Y: full back run + ledge margin, shortened by cap wide-face Y gain, then by
-      # (beam_wide − beam_y) so the footward +Y end is flush with mid-run legs (same delta as
-      # mid_layout_y_shift), and finally shortened by one more beam_narrow so the sister max_y meets the
-      # mid-run leg min_y (leg now extends up through the sister's Z band).
-      def outer_sister_run_dy = (c.back_slat_run_y + (2 * c.plank_thickness)) - (c.beam_wide - c.beam_narrow) + c.mid_layout_y_shift - c.beam_narrow
-
-      # Head corner legs run through the cap band to z_slat_bottom.
       def lh_outer = c.outer_corner_leg_height
-      # Mid-run and inset legs stop at flat sister / tie underside.
       def lh_mid   = c.mid_run_leg_height
-      # Headward face of corner legs; plank_thickness before origin so ledge is flush.
       def y_head   = -c.plank_thickness
-      # Mid-run leg origin Y: footward from the retracted outer face minus one leg width, then same −Y shift as foot cap alignment.
-      def mid_y0 = (c.length_retracted - c.leg_x) + c.plank_thickness + c.mid_layout_y_shift
-
-      # Rotated mid leg (beam_wide×beam_y in plan): shift +Y so max_y still matches sister foot (was leg_x along Y).
+      def mid_y0   = (c.length_retracted - c.leg_x) + c.plank_thickness + c.mid_layout_y_shift
       def mid_leg_y0 = mid_y0 + (c.beam_wide - c.beam_y)
 
-      # Head corner leg plan (wide along +Y against head cap): narrow along +X, wide along +Y.
       def head_corner_leg_dx = c.beam_narrow
       def head_corner_leg_dy = c.beam_wide
-
-      # Head cap spans inner faces of rotated head corner legs (foot cap still uses Config#cap_x0).
       def head_cap_x0 = head_corner_leg_dx
       def head_cap_dx = c.outer_width - (2 * head_corner_leg_dx)
-
-      # Head insets run to head cap underside (same Z as flat cap bottom = z_slat_bottom − beam_narrow).
       def head_inset_dz = c.z_slat_bottom - c.beam_narrow
     end
 
-    # ── FrontFrame ────────────────────────────────────────────────────────────
-    #
-    # The sliding (foot) half of the bed.  All parts are in front-frame local
-    # space.  BedPair translates the whole group by foot_world_y along +Y.
-    class FrontFrame < FrameAssembly
-      private
-
+    # ── FrontFrame ────────────────────────────────────────────────────────
+    # The sliding (foot) half of the bed. All parts are in front-frame local
+    # space; BedPair translates the whole group by foot_world_y along +Y.
+    class FrontFrame < FrameCatalog
       def assemble
-        _foot_legs unless @frame_options[:omit_legs]
-        _foot_cap_and_ledge
+        _foot_legs
+        _foot_cap_beam
+        _foot_ledge_plank
+        _foot_end_beam
         _front_slats
-        _under_slat_beams
+        _under_slat_foot_beam
       end
 
+      private
+
       def _foot_legs
-        unless @frame_options[:omit_foot_outer_corner_legs]
-          # Outer corner legs: same plan as head (narrow 44 along +X at outer faces, wide 69 along +Y).
-          leg 'EB | leg | foot | -X',
-              at:   [0, y_foot, 0],
-              size: [foot_corner_leg_dx, foot_corner_leg_dy, lh_outer],
-              note: 'Foot −X corner: min_x flush outer; wide along +Y; top to foot cap.'
+        leg 'EB | leg | foot | -X',
+            at:   [0, y_foot, 0],
+            size: [foot_corner_leg_dx, foot_corner_leg_dy, lh_outer],
+            note: 'Foot −X corner: min_x flush outer; wide along +Y; top to foot cap.'
 
-          leg 'EB | leg | foot | +X',
-              at:   [c.outer_width - foot_corner_leg_dx, y_foot, 0],
-              size: [foot_corner_leg_dx, foot_corner_leg_dy, lh_outer],
-              note: 'Foot +X corner: max_x flush outer; mirror −X.'
-        end
+        leg 'EB | leg | foot | +X',
+            at:   [c.outer_width - foot_corner_leg_dx, y_foot, 0],
+            size: [foot_corner_leg_dx, foot_corner_leg_dy, lh_outer],
+            note: 'Foot +X corner: max_x flush outer; mirror −X.'
 
-        # Inset strengtheners (match head inset plan; Z to flat foot cap underside).
         leg 'EB | leg | foot | -X | inset',
             at:   [foot_corner_leg_dx, y_foot, 0],
             size: [c.leg_y, c.leg_x, foot_inset_dz],
@@ -397,39 +292,33 @@ module Timmerman
             note: 'Inset −X of foot +X corner inner; mirror −X foot inset.'
       end
 
-      def _foot_cap_and_ledge
-        unless @frame_options[:omit_foot_cap_beam]
-          # Wide face in X×Y (69 along Y); max_y = +plank keeps only 18 mm past y=0 toward slats (+Y).
-          beam 'EB | beam | foot | cap',
-               at:   [foot_cap_x0, foot_cap_y0, c.z_slat_bottom - c.beam_narrow],
-               size: [foot_cap_dx, c.beam_wide, c.beam_narrow],
-               note: 'Foot cap: longer X between inner faces of rotated foot corners (same logic as head cap).'
-        end
+      def _foot_cap_beam
+        beam 'EB | beam | foot | cap',
+             at:   [foot_cap_x0, foot_cap_y0, c.z_slat_bottom - c.beam_narrow],
+             size: [foot_cap_dx, c.beam_wide, c.beam_narrow],
+             note: 'Foot cap: longer X between inner faces of rotated foot corners (same logic as head cap).'
+      end
 
-        # Foot ledge plank at y=0 (footward face of slat run).
-        unless @frame_options[:omit_foot_ledge_plank]
-          plank 'EB | plank | foot | ledge',
-                at:   [0, 0, c.z_slat_bottom],
-                size: [c.outer_width, c.plank_thickness, 2 * c.beam_wide],
-                note: 'On cap and corner legs; full bed width; top 2×BEAM_WIDE above z_slat_bottom.'
+      def _foot_ledge_plank
+        plank 'EB | plank | foot | ledge',
+              at:   [0, 0, c.z_slat_bottom],
+              size: [c.outer_width, c.plank_thickness, 2 * c.beam_wide],
+              note: 'On cap and corner legs; full bed width; top 2×BEAM_WIDE above z_slat_bottom.'
 
-          screw 'EB | screw | demo | foot ledge',
-                host_name: 'EB | plank | foot | ledge',
-                face:      :max_z,
-                u:         c.outer_width / 2,
-                v:         c.plank_thickness / 2,
-                spec_id:   :eb_pocket_4mm,
-                shaft_length_index: 0
-        end
+        screw 'EB | screw | demo | foot ledge',
+              host_name: 'EB | plank | foot | ledge',
+              face:      :max_z,
+              u:         c.outer_width / 2,
+              v:         c.plank_thickness / 2,
+              spec_id:   :eb_pocket_4mm
+      end
 
-        # Full-width foot end beam; footward of all slats.
+      def _foot_end_beam
         beam 'EB | beam | foot | end',
              at:   [0, -c.beam_y, c.z_slat_bottom],
              size: [c.outer_width, c.beam_y, c.beam_z],
              note: 'Foot end beam 44x69 mm (beam_y × beam_z); under cap.'
 
-        # Two screws per front slat (one fewer than back): from footward narrow face (:max_y,
-        # opposite of head end :min_y) inward −Y toward the slats; X at slat centre; Z at thirds.
         _foot_end_beam_into_slats_screws
       end
 
@@ -444,17 +333,13 @@ module Timmerman
           screw "EB | screw | foot end | #{n}/#{fc} | lower",
                 host_name: 'EB | beam | foot | end',
                 face:      :max_y,
-                u:         u,
-                v:         v_lower,
-                spec_id:   :eb_pocket_4mm,
-                shaft_length_index: 0
+                u:         u, v: v_lower,
+                spec_id:   :eb_pocket_4mm
           screw "EB | screw | foot end | #{n}/#{fc} | upper",
                 host_name: 'EB | beam | foot | end',
                 face:      :max_y,
-                u:         u,
-                v:         v_upper,
-                spec_id:   :eb_pocket_4mm,
-                shaft_length_index: 0
+                u:         u, v: v_upper,
+                spec_id:   :eb_pocket_4mm
         end
       end
 
@@ -469,43 +354,28 @@ module Timmerman
         end
       end
 
-      # Optional beam under the foot end of the front slats (sister inner span).
-      def _under_slat_beams
-        z_flat = c.z_slat_bottom - c.beam_narrow
+      # Beam under the foot end of the front slats (sister inner span).
+      def _under_slat_foot_beam
+        x1_under, span_under = sister_tie_x
+        return unless span_under.positive?
 
-        # Beam under the foot end of the front slats: wide stock face (beam_wide along +Y) to slat bottoms;
-        # X span matches inner faces of outer sisters (same as mid tie); when the bed is fully extended,
-        # its max_y is flush with mid_tie.min_y (continuous brace across the slat-interlock zone).
-        unless @frame_options[:omit_under_slat_foot_end_beam]
-          x1_under, span_under = sister_tie_x
-          if span_under.positive?
-            beam 'EB | beam | front | under slats | foot end',
-                 at:   [x1_under, c.under_slat_foot_beam_y0, z_flat],
-                 size: [span_under, c.beam_wide, c.beam_narrow],
-                 note: 'Under front slats; max_z flush slat bottom; 69 mm along +Y against slats; X between sister inners; max_y flush with mid_tie_y0 when extended.'
-          end
-        end
+        z_flat = c.z_slat_bottom - c.beam_narrow
+        beam 'EB | beam | front | under slat foot',
+             at:   [x1_under, c.under_slat_foot_beam_y0, z_flat],
+             size: [span_under, c.beam_wide, c.beam_narrow],
+             note: 'Under front slats; max_z flush slat bottom; 69 mm along +Y against slats; X between sister inners; max_y flush with back sister tie min_y when extended.'
       end
 
-      # ── Z and Y helpers ────────────────────────────────────────────────────
+      # ── Z / Y / plan helpers ─────────────────────────────────────────────
 
-      # Foot corner legs run through the cap to z_slat_bottom.
       def lh_outer = c.outer_corner_leg_height
-      # Foot corner/inset legs share Y span with foot cap (dy = beam_wide); max_y flush cap max_y (debug :max_y dark green).
-      def y_foot = c.foot_corner_leg_y0
+      def y_foot   = c.foot_corner_leg_y0
 
-      # Foot cap (wide on Y): same min_y as foot legs; only plank_thickness past y=0 toward +Y at max_y.
       def foot_cap_y0 = c.foot_corner_leg_y0
-
-      # Rotated foot corner legs (same section numbers as head corners).
       def foot_corner_leg_dx = c.beam_narrow
       def foot_corner_leg_dy = c.beam_wide
-
-      # Foot cap spans inner faces of rotated foot corners (wider in X than Config#cap_dx / 69 mm legs).
       def foot_cap_x0 = foot_corner_leg_dx
       def foot_cap_dx = c.outer_width - (2 * foot_corner_leg_dx)
-
-      # Foot insets meet flat foot cap underside (same Z as head insets).
       def foot_inset_dz = c.z_slat_bottom - c.beam_narrow
     end
   end

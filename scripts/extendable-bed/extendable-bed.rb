@@ -26,16 +26,30 @@
 #   hardware_countersink_first: true — pocket then through hole; false — single clearance bore.
 #   hardware_through_hole: false — skip the through step when countersink_first is true.
 
-_eb_lib = File.expand_path('lib', __dir__)
+_eb_lib    = File.expand_path('lib', __dir__)
+_su_utils  = File.expand_path('../sketchup_utils', __dir__)
 
+# Generic, bed-agnostic part-modelling utilities (Parts, Hardware, PartCatalog,
+# Transform, PocketGeometry, Renderer interface + SketchUp impl, PartRendering).
 %w[
-  screw_placement
-  config
   parts
+  hardware
+  transform
+  pocket_geometry
   renderer
+  sketchup_renderer
+  part_catalog
+  part_rendering
+].each { |f| load File.join(_su_utils, "#{f}.rb") }
+
+# Extendable-bed-specific code.
+%w[
+  config
+  bed_part_groups
   stock_planner
   validator
   frame_assembly
+  pillow_sets
   bed_pair
   construction_steps
   bed_layout
