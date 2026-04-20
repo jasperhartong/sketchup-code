@@ -80,6 +80,7 @@ module Timmerman
         _head_corner_leg_screws
         _head_cap_into_inset_leg_screws
         _head_cap_between_head_end_screws
+        _sister_tie_into_back_slat_hearts_screws
         _sister_into_behind_head_post_screws
         _behind_head_post_into_head_leg_screws
         _head_inset_leg_into_corner_leg_screws
@@ -301,6 +302,27 @@ module Timmerman
                 host_name: 'EB | beam | head | cap',
                 face:      :min_z,
                 u:         mid_world_x - head_cap_x0,
+                v:         c.beam_wide / 2.0,
+                spec_id:   :eb_pocket_4mm
+        end
+      end
+
+      # Screw up from under the sister tie into each of the 7 inner back slats
+      # (2..8) centered on each slat's heart. Tie :min_z face u runs along +X
+      # (world-X minus x1_tie); v along +Y across beam_wide.
+      SISTER_TIE_INTO_BACK_SLAT_HEART_INDICES = (2..8).freeze
+
+      def _sister_tie_into_back_slat_hearts_screws
+        x1_tie, span_tie = sister_tie_x
+        return if span_tie <= 0
+
+        back_xs, = slat_x_starts
+        SISTER_TIE_INTO_BACK_SLAT_HEART_INDICES.each do |n|
+          world_x = back_xs[n - 1] + c.slat_dx / 2.0
+          screw "EB | screw | sister tie | #{n}/#{c.back_slat_count} | heart",
+                host_name: 'EB | beam | back | sister tie',
+                face:      :min_z,
+                u:         world_x - x1_tie,
                 v:         c.beam_wide / 2.0,
                 spec_id:   :eb_pocket_4mm
         end

@@ -647,6 +647,90 @@
       235.0
     ]
   },
+  "EB_StepExt_Back / EB | screw | sister tie | 2/9 | heart": {
+    "min": [
+      112.0,
+      -1557.5,
+      147.0
+    ],
+    "max": [
+      120.0,
+      -1549.5,
+      235.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | sister tie | 3/9 | heart": {
+    "min": [
+      206.0,
+      -1557.5,
+      147.0
+    ],
+    "max": [
+      214.0,
+      -1549.5,
+      235.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | sister tie | 4/9 | heart": {
+    "min": [
+      300.0,
+      -1557.5,
+      147.0
+    ],
+    "max": [
+      308.0,
+      -1549.5,
+      235.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | sister tie | 5/9 | heart": {
+    "min": [
+      394.0,
+      -1557.5,
+      147.0
+    ],
+    "max": [
+      402.0,
+      -1549.5,
+      235.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | sister tie | 6/9 | heart": {
+    "min": [
+      488.0,
+      -1557.5,
+      147.0
+    ],
+    "max": [
+      496.0,
+      -1549.5,
+      235.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | sister tie | 7/9 | heart": {
+    "min": [
+      582.0,
+      -1557.5,
+      147.0
+    ],
+    "max": [
+      590.0,
+      -1549.5,
+      235.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | sister tie | 8/9 | heart": {
+    "min": [
+      676.0,
+      -1557.5,
+      147.0
+    ],
+    "max": [
+      684.0,
+      -1549.5,
+      235.0
+    ]
+  },
   "EB_StepExt_Back / EB | screw | back sister +X | into behind-head post": {
     "min": [
       757.5,
@@ -1955,6 +2039,90 @@
       235.0
     ]
   },
+  "EB_StepDecoup_Back / EB | screw | sister tie | 2/9 | heart": {
+    "min": [
+      1508.0,
+      -1557.5,
+      147.0
+    ],
+    "max": [
+      1516.0,
+      -1549.5,
+      235.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | sister tie | 3/9 | heart": {
+    "min": [
+      1602.0,
+      -1557.5,
+      147.0
+    ],
+    "max": [
+      1610.0,
+      -1549.5,
+      235.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | sister tie | 4/9 | heart": {
+    "min": [
+      1696.0,
+      -1557.5,
+      147.0
+    ],
+    "max": [
+      1704.0,
+      -1549.5,
+      235.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | sister tie | 5/9 | heart": {
+    "min": [
+      1790.0,
+      -1557.5,
+      147.0
+    ],
+    "max": [
+      1798.0,
+      -1549.5,
+      235.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | sister tie | 6/9 | heart": {
+    "min": [
+      1884.0,
+      -1557.5,
+      147.0
+    ],
+    "max": [
+      1892.0,
+      -1549.5,
+      235.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | sister tie | 7/9 | heart": {
+    "min": [
+      1978.0,
+      -1557.5,
+      147.0
+    ],
+    "max": [
+      1986.0,
+      -1549.5,
+      235.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | sister tie | 8/9 | heart": {
+    "min": [
+      2072.0,
+      -1557.5,
+      147.0
+    ],
+    "max": [
+      2080.0,
+      -1549.5,
+      235.0
+    ]
+  },
   "EB_StepDecoup_Back / EB | screw | back sister +X | into behind-head post": {
     "min": [
       2153.5,
@@ -3236,6 +3404,90 @@
     "max": [
       2959.0,
       -2579.5,
+      113.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | sister tie | 2/9 | heart": {
+    "min": [
+      3468.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      3476.0,
+      -1549.5,
+      113.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | sister tie | 3/9 | heart": {
+    "min": [
+      3374.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      3382.0,
+      -1549.5,
+      113.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | sister tie | 4/9 | heart": {
+    "min": [
+      3280.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      3288.0,
+      -1549.5,
+      113.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | sister tie | 5/9 | heart": {
+    "min": [
+      3186.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      3194.0,
+      -1549.5,
+      113.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | sister tie | 6/9 | heart": {
+    "min": [
+      3092.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      3100.0,
+      -1549.5,
+      113.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | sister tie | 7/9 | heart": {
+    "min": [
+      2998.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      3006.0,
+      -1549.5,
+      113.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | sister tie | 8/9 | heart": {
+    "min": [
+      2904.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      2912.0,
+      -1549.5,
       113.0
     ]
   },
@@ -4523,6 +4775,90 @@
       113.0
     ]
   },
+  "EB_StepFlip_Back / EB | screw | sister tie | 2/9 | heart": {
+    "min": [
+      4864.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      4872.0,
+      -1549.5,
+      113.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | sister tie | 3/9 | heart": {
+    "min": [
+      4770.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      4778.0,
+      -1549.5,
+      113.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | sister tie | 4/9 | heart": {
+    "min": [
+      4676.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      4684.0,
+      -1549.5,
+      113.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | sister tie | 5/9 | heart": {
+    "min": [
+      4582.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      4590.0,
+      -1549.5,
+      113.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | sister tie | 6/9 | heart": {
+    "min": [
+      4488.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      4496.0,
+      -1549.5,
+      113.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | sister tie | 7/9 | heart": {
+    "min": [
+      4394.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      4402.0,
+      -1549.5,
+      113.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | sister tie | 8/9 | heart": {
+    "min": [
+      4300.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      4308.0,
+      -1549.5,
+      113.0
+    ]
+  },
   "EB_StepFlip_Back / EB | screw | back sister +X | into behind-head post": {
     "min": [
       4218.5,
@@ -5792,6 +6128,90 @@
     "max": [
       5751.0,
       -2579.5,
+      113.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | sister tie | 2/9 | heart": {
+    "min": [
+      6260.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      6268.0,
+      -1549.5,
+      113.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | sister tie | 3/9 | heart": {
+    "min": [
+      6166.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      6174.0,
+      -1549.5,
+      113.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | sister tie | 4/9 | heart": {
+    "min": [
+      6072.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      6080.0,
+      -1549.5,
+      113.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | sister tie | 5/9 | heart": {
+    "min": [
+      5978.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      5986.0,
+      -1549.5,
+      113.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | sister tie | 6/9 | heart": {
+    "min": [
+      5884.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      5892.0,
+      -1549.5,
+      113.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | sister tie | 7/9 | heart": {
+    "min": [
+      5790.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      5798.0,
+      -1549.5,
+      113.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | sister tie | 8/9 | heart": {
+    "min": [
+      5696.0,
+      -1557.5,
+      25.0
+    ],
+    "max": [
+      5704.0,
+      -1549.5,
       113.0
     ]
   },
@@ -7343,6 +7763,90 @@
       88.0
     ]
   },
+  "EB_StepPrep_Back / EB | screw | sister tie | 2/9 | heart": {
+    "min": [
+      9052.0,
+      -1557.5,
+      0.0
+    ],
+    "max": [
+      9060.0,
+      -1549.5,
+      88.0
+    ]
+  },
+  "EB_StepPrep_Back / EB | screw | sister tie | 3/9 | heart": {
+    "min": [
+      8958.0,
+      -1557.5,
+      0.0
+    ],
+    "max": [
+      8966.0,
+      -1549.5,
+      88.0
+    ]
+  },
+  "EB_StepPrep_Back / EB | screw | sister tie | 4/9 | heart": {
+    "min": [
+      8864.0,
+      -1557.5,
+      0.0
+    ],
+    "max": [
+      8872.0,
+      -1549.5,
+      88.0
+    ]
+  },
+  "EB_StepPrep_Back / EB | screw | sister tie | 5/9 | heart": {
+    "min": [
+      8770.0,
+      -1557.5,
+      0.0
+    ],
+    "max": [
+      8778.0,
+      -1549.5,
+      88.0
+    ]
+  },
+  "EB_StepPrep_Back / EB | screw | sister tie | 6/9 | heart": {
+    "min": [
+      8676.0,
+      -1557.5,
+      0.0
+    ],
+    "max": [
+      8684.0,
+      -1549.5,
+      88.0
+    ]
+  },
+  "EB_StepPrep_Back / EB | screw | sister tie | 7/9 | heart": {
+    "min": [
+      8582.0,
+      -1557.5,
+      0.0
+    ],
+    "max": [
+      8590.0,
+      -1549.5,
+      88.0
+    ]
+  },
+  "EB_StepPrep_Back / EB | screw | sister tie | 8/9 | heart": {
+    "min": [
+      8488.0,
+      -1557.5,
+      0.0
+    ],
+    "max": [
+      8496.0,
+      -1549.5,
+      88.0
+    ]
+  },
   "EB_StepPrep_Back / EB | screw | back sister +X | into behind-head post": {
     "min": [
       8406.5,
@@ -8312,6 +8816,90 @@
     "max": [
       637.0,
       20.5,
+      235.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | sister tie | 2/9 | heart": {
+    "min": [
+      112.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      120.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | sister tie | 3/9 | heart": {
+    "min": [
+      206.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      214.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | sister tie | 4/9 | heart": {
+    "min": [
+      300.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      308.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | sister tie | 5/9 | heart": {
+    "min": [
+      394.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      402.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | sister tie | 6/9 | heart": {
+    "min": [
+      488.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      496.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | sister tie | 7/9 | heart": {
+    "min": [
+      582.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      590.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | sister tie | 8/9 | heart": {
+    "min": [
+      676.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      684.0,
+      1050.5,
       235.0
     ]
   },
@@ -9695,6 +10283,90 @@
       235.0
     ]
   },
+  "EB_Half_Back / EB | screw | sister tie | 2/9 | heart": {
+    "min": [
+      1508.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      1516.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | sister tie | 3/9 | heart": {
+    "min": [
+      1602.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      1610.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | sister tie | 4/9 | heart": {
+    "min": [
+      1696.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      1704.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | sister tie | 5/9 | heart": {
+    "min": [
+      1790.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      1798.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | sister tie | 6/9 | heart": {
+    "min": [
+      1884.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      1892.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | sister tie | 7/9 | heart": {
+    "min": [
+      1978.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      1986.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | sister tie | 8/9 | heart": {
+    "min": [
+      2072.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      2080.0,
+      1050.5,
+      235.0
+    ]
+  },
   "EB_Half_Back / EB | screw | back sister +X | into behind-head post": {
     "min": [
       2153.5,
@@ -11072,6 +11744,90 @@
     "max": [
       3429.0,
       20.5,
+      235.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | sister tie | 2/9 | heart": {
+    "min": [
+      2904.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      2912.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | sister tie | 3/9 | heart": {
+    "min": [
+      2998.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      3006.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | sister tie | 4/9 | heart": {
+    "min": [
+      3092.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      3100.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | sister tie | 5/9 | heart": {
+    "min": [
+      3186.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      3194.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | sister tie | 6/9 | heart": {
+    "min": [
+      3280.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      3288.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | sister tie | 7/9 | heart": {
+    "min": [
+      3374.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      3382.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | sister tie | 8/9 | heart": {
+    "min": [
+      3468.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      3476.0,
+      1050.5,
       235.0
     ]
   },
@@ -12455,6 +13211,90 @@
       235.0
     ]
   },
+  "EB_Ret_Back / EB | screw | sister tie | 2/9 | heart": {
+    "min": [
+      4300.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      4308.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | sister tie | 3/9 | heart": {
+    "min": [
+      4394.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      4402.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | sister tie | 4/9 | heart": {
+    "min": [
+      4488.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      4496.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | sister tie | 5/9 | heart": {
+    "min": [
+      4582.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      4590.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | sister tie | 6/9 | heart": {
+    "min": [
+      4676.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      4684.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | sister tie | 7/9 | heart": {
+    "min": [
+      4770.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      4778.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | sister tie | 8/9 | heart": {
+    "min": [
+      4864.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      4872.0,
+      1050.5,
+      235.0
+    ]
+  },
   "EB_Ret_Back / EB | screw | back sister +X | into behind-head post": {
     "min": [
       4945.5,
@@ -13832,6 +14672,90 @@
     "max": [
       6221.0,
       20.5,
+      235.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | sister tie | 2/9 | heart": {
+    "min": [
+      5696.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      5704.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | sister tie | 3/9 | heart": {
+    "min": [
+      5790.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      5798.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | sister tie | 4/9 | heart": {
+    "min": [
+      5884.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      5892.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | sister tie | 5/9 | heart": {
+    "min": [
+      5978.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      5986.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | sister tie | 6/9 | heart": {
+    "min": [
+      6072.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      6080.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | sister tie | 7/9 | heart": {
+    "min": [
+      6166.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      6174.0,
+      1050.5,
+      235.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | sister tie | 8/9 | heart": {
+    "min": [
+      6260.0,
+      1042.5,
+      147.0
+    ],
+    "max": [
+      6268.0,
+      1050.5,
       235.0
     ]
   },
