@@ -1,29 +1,31 @@
 # frozen_string_literal: true
 #
-# Read user-drawn circles (rough indicators) from the active model and propose
-# fully-specified `screw` declarations for the extendable bed catalog.
+# Read user-drawn circles (rough indicators) from the active model and emit
+# ready-to-paste `screw` declarations for the extendable bed catalog.
 #
-# What it does per circle (center point only — diameter is ignored, the screw
-# spec drives the visual diameter):
+# Per circle (center point only — diameter is ignored):
 #   1. Identify the HOST EB leaf part + face the center sits on.
-#   2. Identify the MATE EB leaf part on the opposite side of the host face
-#      (the part the screw fastens into).
-#   3. Snap u, v to values built ONLY from 1/3 of `beam_narrow` or `beam_wide`,
-#      measured from whichever face edge the circle is closer to. No hardcoded
-#      millimetre numbers. If the face's extent along an axis equals
-#      beam_narrow or beam_wide (a "section" axis), the candidates are
-#      (1/3, 2/3) × that section. For the long axis of a face, candidates are
-#      (beam_narrow/3, 2·beam_narrow/3, beam_wide/3, 2·beam_wide/3) measured
-#      from whichever end of that axis is nearer to the circle.
-#   4. Recommend a shaft_length_index from the spec's shaft_lengths so that
-#      the screw tip ends at the END OF THE INDICATED SURFACE — i.e. the
-#      far face of the host part along the screw axis. Mate info is printed
-#      for context only (to confirm the screw would actually fasten into
-#      something) — mate is restricted to the SAME preview root as the host
-#      so different previews don't pollute the match.
+#   2. Identify the MATE EB leaf part past the host's far face (same preview
+#      root only) — printed for context.
+#   3. Snap u/v to 1/3 or 1/2 of `beam_narrow` or `beam_wide`, measured from
+#      whichever face edge the circle is closer to, emitted as a Config
+#      expression (no hardcoded mm).
+#
+# Heuristics the command applies so the agent can just paste:
+#   - Circles with the same (host_name, face) are grouped into ONE cluster.
+#   - Within a cluster, when u-snaps (or v-snaps) form a symmetric pair that
+#     sums to the face span, an iteration block is emitted (u-only, v-only,
+#     or nested u×v for 4-corner layouts).
+#   - Target `FrameCatalog` subclass is guessed from host name tokens.
+#   - A method name and `assemble` call are suggested.
+#   - Circles whose host is already an `EB | screw | …` group are reported
+#     as "already implemented" and skipped (happens on re-runs after a
+#     rebuild snaps the circle to the new screw's face).
 #
 # Load from sketchup_bridge/command.rb:
 #   load File.expand_path('commands/propose_screws_from_circles.rb', __dir__)
+
+$VERBOSE = nil
 
 sketchup_bridge_dir = File.dirname(__dir__)
 repo_root = File.expand_path('..', sketchup_bridge_dir)
@@ -64,27 +66,15 @@ circles =
     puts '[propose-screws] using selection'
     full_circles_from(sel.grep(Sketchup::Edge))
   else
-    puts '[propose-screws] scanning model ROOT only (no recursion into EB groups)'
     full_circles_from(model.entities)
   end
 
-puts "[propose-screws] found #{circles.size} circle(s)"
 if circles.empty?
-  puts 'Draw circles on the faces of EB parts (at the model root), then re-run. Tip: select them first to override the root scan.'
+  puts '[propose-screws] no circles found. Draw full circles on EB part faces at the model root, then re-run.'
   return 'OK'
 end
 
 # ── 2. Collect EB leaf parts with both part-LOCAL box and world AABB ──────
-# Each leaf carries:
-#   :local_min/:local_max — axis-aligned bounding box in the part's LOCAL
-#     (pre-transform) frame; this is what the catalog's `face:` symbols and
-#     `u`,`v` refer to.
-#   :world_min/:world_max — AABB of the transformed corners in world space;
-#     used only to find which world part a circle was drawn on and to scope
-#     mate search.
-#   :world_to_local — inverse of the accumulated transform; lets us turn a
-#     world-space circle center/normal back into part-local coordinates.
-#   :root — name of the enclosing top-level EB_* group.
 def collect_eb_leaves(ents, path_transform, results, root_name)
   ents.each do |e|
     next unless e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance)
@@ -123,20 +113,8 @@ end
 
 parts = []
 collect_eb_leaves(model.entities, Geom::Transformation.new, parts, nil)
-puts "[propose-screws] EB leaf parts: #{parts.size} across #{parts.map { |p| p[:root] }.uniq.size} preview roots"
 
-# ── 3. Helpers ─────────────────────────────────────────────────────────────
-
-# Find the host part + face in PART-LOCAL space.
-# Strategy:
-#   1. Pick the part whose world AABB the circle's world point lies inside
-#      (with a small tolerance), preferring the one whose boundary the circle
-#      touches along the circle's normal direction. If the point lies on
-#      several parts, take the one whose closest face plane (in local frame)
-#      is closest to the circle.
-#   2. For the chosen part, transform the circle center to local coords and
-#      pick the face (one of the 6 local faces) whose plane is closest AND
-#      the circle center projects inside the face rectangle.
+# ── 3. Host/face/mate/snap helpers ────────────────────────────────────────
 def match_host_face_local(world_pt, world_normal, parts)
   candidates = parts.select do |p|
     (0..2).all? { |a| world_pt[a] >= p[:world_min][a] - 2.mm && world_pt[a] <= p[:world_max][a] + 2.mm }
@@ -171,10 +149,6 @@ def match_host_face_local(world_pt, world_normal, parts)
   best
 end
 
-# Find the mate part using a WORLD-space probe just past the host's face on
-# the screw axis. The screw axis is local +/- axis direction depending on
-# `side`; we transform that local axis direction to world using the host's
-# inverse-inverse (i.e. the forward transform derived from world_to_local).
 def find_mate(host, axis, side, world_pt, parts)
   local_to_world = host[:world_to_local].inverse
   local_dir = [0.0, 0.0, 0.0]
@@ -182,7 +156,6 @@ def find_mate(host, axis, side, world_pt, parts)
   world_dir = Geom::Vector3d.new(*local_dir).transform(local_to_world)
   world_dir.length.zero? ? (return nil) : world_dir.normalize!
 
-  # March from the circle center along world_dir past the host's far face.
   host_thick = host[:local_max][axis] - host[:local_min][axis]
   probe = Geom::Point3d.new(
     world_pt.x + world_dir.x * (host_thick + 0.2.mm),
@@ -202,42 +175,35 @@ def find_mate(host, axis, side, world_pt, parts)
   nil
 end
 
-# Return {value:, expr:, label:} for the snapped position along one axis of a
-# face. `span` = length of the axis within the face (e.g. 44, 69, or 191 mm).
-# `circle_v` = circle's coordinate along the axis in part-local space (0..span).
-#
-# Rule: position at 1/3 or 1/2 of BEAM_NARROW or BEAM_WIDE measured from the
-# face end nearest to the circle. Pick the candidate closest to the circle.
+# Snap to 1/3 or 1/2 of beam_narrow or beam_wide, from the nearer face end.
+# Returns nil if the face is too small to host any snap value.
 def snap_axis(circle_v, span, beam_narrow, beam_wide)
   near_min = circle_v <= span - circle_v
   offsets = [
-    { value: beam_narrow / 3.0, expr: 'c.beam_narrow / 3.0', label: 'beam_narrow/3' },
-    { value: beam_narrow / 2.0, expr: 'c.beam_narrow / 2.0', label: 'beam_narrow/2' },
-    { value: beam_wide   / 3.0, expr: 'c.beam_wide / 3.0',   label: 'beam_wide/3' },
-    { value: beam_wide   / 2.0, expr: 'c.beam_wide / 2.0',   label: 'beam_wide/2' }
+    { value: beam_narrow / 3.0, expr: 'c.beam_narrow / 3.0' },
+    { value: beam_narrow / 2.0, expr: 'c.beam_narrow / 2.0' },
+    { value: beam_wide   / 3.0, expr: 'c.beam_wide / 3.0' },
+    { value: beam_wide   / 2.0, expr: 'c.beam_wide / 2.0' }
   ]
 
   candidates =
     if near_min
-      offsets.map { |o| { value: o[:value], expr: o[:expr], label: "#{o[:label]} from min" } }
+      offsets.map { |o| { value: o[:value], expr: o[:expr] } }
     else
       span_expr = format_span_expr(span)
       offsets.map do |o|
         value = span - o[:value]
-        # span - span/2 = span/2: prefer the simpler expression.
         expr = value.between?(o[:value] - 1e-6, o[:value] + 1e-6) ? o[:expr] : "#{span_expr} - #{o[:expr]}"
-        label = value.between?(o[:value] - 1e-6, o[:value] + 1e-6) ? "#{o[:label]} (center)" : "#{o[:label]} from max"
-        { value: value, expr: expr, label: label }
+        { value: value, expr: expr }
       end
     end
 
   candidates.reject! { |k| k[:value].negative? || k[:value] > span }
+  return nil if candidates.empty?
+
   candidates.min_by { |k| (k[:value] - circle_v).abs }
 end
 
-# Best-effort mapping of a span (in inches) back to a Config expression.
-# Probes the Config class for every zero-arg numeric method and returns the
-# first whose value matches the span. Falls back to a commented mm literal.
 def format_span_expr(span_inches)
   c = Timmerman::ExtendableBed::Config.new
   preferred = %i[beam_narrow beam_wide plank_thickness outer_corner_leg_height]
@@ -255,18 +221,57 @@ def format_span_expr(span_inches)
   "(#{(span_inches * 25.4).round(1)}.mm /* replace with a Config expression */)"
 end
 
-# ── 4. Process each circle ─────────────────────────────────────────────────
-spec = c.screw_specs[:eb_pocket_4mm]
+# ── 4. Heuristics for the output ──────────────────────────────────────────
+def frame_for(host_name)
+  tokens = host_name.split(' | ').map(&:downcase)
+  return 'BackFrame'  if tokens.any? { |t| %w[head back sister mid behind].include?(t) }
+  return 'FrontFrame' if tokens.any? { |t| %w[foot front under].include?(t) }
+
+  'FrameCatalog (pick subclass manually)'
+end
+
+# "EB | beam | foot | cap"         → "foot_cap"
+# "EB | leg | head | -X | inset"   → "head_mx_inset"
+def host_slug(name)
+  tokens = name.split(' | ')
+  tokens = tokens[1..] || []
+  tokens = tokens.drop(1) if %w[beam leg plank pillow slat screw].include?(tokens.first&.downcase)
+  tokens
+    .join('_')
+    .downcase
+    .gsub('+', 'p')
+    .gsub('-', 'm')
+    .gsub(/[^a-z0-9]+/, '_')
+    .squeeze('_')
+    .sub(/^_|_$/, '')
+end
+
+def symmetric_pair?(values, span, tol = 0.5.mm)
+  return false unless values.size == 2
+
+  (values.sum - span).abs < tol
+end
+
+# ── 5. Group circles into clusters ────────────────────────────────────────
+clusters = {} # key = [host_name, face_key]
+already = []
+skipped = []
 
 circles.each_with_index do |circle, i|
   world_pt = circle[:center]
   best = match_host_face_local(world_pt, circle[:normal], parts)
+
   if best.nil?
-    puts "\n  circle #{i}: NO host face match (center=#{world_pt.to_a.map { |v| (v * 25.4).round(1) }} mm)"
+    skipped << "circle #{i}: no host face match — draw it on an EB face"
     next
   end
 
   host = best[:part]
+  if host[:name].start_with?('EB | screw | ')
+    already << host[:name]
+    next
+  end
+
   axis = best[:axis]
   side = best[:side]
   face_key = %i[min_x max_x min_y max_y min_z max_z][axis * 2 + (side == :max ? 1 : 0)]
@@ -274,13 +279,12 @@ circles.each_with_index do |circle, i|
   dx = host[:local_max][0] - host[:local_min][0]
   dy = host[:local_max][1] - host[:local_min][1]
   dz = host[:local_max][2] - host[:local_min][2]
-
   lc = best[:local_center]
   lx = lc[0] - host[:local_min][0]
   ly = lc[1] - host[:local_min][1]
   lz = lc[2] - host[:local_min][2]
 
-  u_axis_name, v_axis_name, u_span, v_span, u_local, v_local =
+  u_axis, v_axis, u_span, v_span, u_local, v_local =
     case face_key
     when :min_x, :max_x then ['Y', 'Z', dy, dz, ly, lz]
     when :min_y, :max_y then ['X', 'Z', dx, dz, lx, lz]
@@ -289,28 +293,105 @@ circles.each_with_index do |circle, i|
 
   u_snap = snap_axis(u_local, u_span, BEAM_N, BEAM_W)
   v_snap = snap_axis(v_local, v_span, BEAM_N, BEAM_W)
+  if u_snap.nil? || v_snap.nil?
+    skipped << "circle #{i}: face too small to host a snap (host #{host[:name]}, face :#{face_key})"
+    next
+  end
 
-  mate = find_mate(host, axis, side, world_pt, parts)
-  host_thick = [dx, dy, dz][axis]
+  key = [host[:name], face_key]
+  clusters[key] ||= {
+    u_axis: u_axis, v_axis: v_axis, u_span: u_span, v_span: v_span,
+    mate: find_mate(host, axis, side, world_pt, parts), entries: []
+  }
+  clusters[key][:entries] << { u_snap: u_snap, v_snap: v_snap }
+end
 
-  puts "\n  ── circle #{i} ──"
-  puts "    host:       #{host[:name]}  (in #{host[:root] || '<root>'})"
-  puts "    face:       #{face_key}   (screw head at this face; screw axis perpendicular into host, in part-local frame)"
-  puts "    face u/v:   u(#{u_axis_name})=#{(u_span * 25.4).round(1)} mm   v(#{v_axis_name})=#{(v_span * 25.4).round(1)} mm"
-  puts "    circle u/v: u=#{(u_local * 25.4).round(1)} mm   v=#{(v_local * 25.4).round(1)} mm"
-  puts "    → u snap:   #{(u_snap[:value] * 25.4).round(1)} mm  (#{u_snap[:label]})"
-  puts "    → v snap:   #{(v_snap[:value] * 25.4).round(1)} mm  (#{v_snap[:label]})"
-  puts "    host thickness along screw axis: #{(host_thick * 25.4).round(1)} mm"
-  puts "    mate through host: #{mate ? mate[:name] : '(none — screw stops at host far face)'}"
-  puts "    shaft length (only available): #{(spec.shaft_lengths[0].to_f * 25.4).round(1)} mm"
+# ── 6. Emit one compact block per cluster ─────────────────────────────────
+def emit_cluster(host, face_key, info)
+  entries = info[:entries]
+  u_axis  = info[:u_axis]
+  v_axis  = info[:v_axis]
+  slug    = host_slug(host)
+  method  = "_#{slug}_#{face_key}_screws"
+  frame   = frame_for(host)
+
+  us = entries.map { |e| e[:u_snap] }.uniq { |s| s[:value].round(3) }.sort_by { |s| s[:value] }
+  vs = entries.map { |e| e[:v_snap] }.uniq { |s| s[:value].round(3) }.sort_by { |s| s[:value] }
+
+  u_mirror = symmetric_pair?(us.map { |s| s[:value] }, info[:u_span])
+  v_mirror = symmetric_pair?(vs.map { |s| s[:value] }, info[:v_span])
+
   puts ''
-  puts '    # paste inside the appropriate FrameCatalog subclass:'
-  puts "    screw 'EB | screw | TODO name | #{i}',"
-  puts "          host_name: '#{host[:name]}',"
-  puts "          face:      :#{face_key},"
-  puts "          u:         #{u_snap[:expr]},"
-  puts "          v:         #{v_snap[:expr]},"
-  puts "          spec_id:   :eb_pocket_4mm"
+  puts "── #{host} @ :#{face_key}   (#{entries.size} circle#{'s' unless entries.size == 1})"
+  puts "   target: #{frame}    suggested method: #{method}"
+  puts "   mate:   #{info[:mate] ? info[:mate][:name] : '(none — screw exits into open air)'}"
+  puts '   ready to paste:'
+  puts ''
+  puts "      # add to #{frame}#assemble:"
+  puts "      #{method}"
+  puts ''
+  puts "      # private method:"
+  puts "      def #{method}"
+
+  name_tpl = "EB | screw | #{slug.tr('_', ' ')} | #{face_key}"
+
+  if u_mirror && v_mirror && entries.size == 4
+    puts "        { '-#{u_axis}' => #{us[0][:expr]}, '+#{u_axis}' => #{us[1][:expr]} }.each do |u_side, u|"
+    puts "          { '-#{v_axis}' => #{vs[0][:expr]}, '+#{v_axis}' => #{vs[1][:expr]} }.each do |v_side, v|"
+    puts "            screw \"#{name_tpl} | \#{u_side}\#{v_side}\","
+    puts "                  host_name: '#{host}',"
+    puts "                  face:      :#{face_key},"
+    puts "                  u:         u,"
+    puts "                  v:         v,"
+    puts '                  spec_id:   :eb_pocket_4mm'
+    puts '          end'
+    puts '        end'
+  elsif u_mirror && vs.size == 1
+    puts "        { '-#{u_axis}' => #{us[0][:expr]}, '+#{u_axis}' => #{us[1][:expr]} }.each do |side, u|"
+    puts "          screw \"#{name_tpl} | \#{side}\","
+    puts "                host_name: '#{host}',"
+    puts "                face:      :#{face_key},"
+    puts '                u:         u,'
+    puts "                v:         #{vs[0][:expr]},"
+    puts '                spec_id:   :eb_pocket_4mm'
+    puts '        end'
+  elsif v_mirror && us.size == 1
+    puts "        { '-#{v_axis}' => #{vs[0][:expr]}, '+#{v_axis}' => #{vs[1][:expr]} }.each do |side, v|"
+    puts "          screw \"#{name_tpl} | \#{side}\","
+    puts "                host_name: '#{host}',"
+    puts "                face:      :#{face_key},"
+    puts "                u:         #{us[0][:expr]},"
+    puts '                v:         v,'
+    puts '                spec_id:   :eb_pocket_4mm'
+    puts '        end'
+  else
+    entries.each_with_index do |e, i|
+      puts "        screw '#{name_tpl} | #{i}',"
+      puts "              host_name: '#{host}',"
+      puts "              face:      :#{face_key},"
+      puts "              u:         #{e[:u_snap][:expr]},"
+      puts "              v:         #{e[:v_snap][:expr]},"
+      puts '              spec_id:   :eb_pocket_4mm'
+    end
+  end
+
+  puts '      end'
+end
+
+clusters.each { |(host, face_key), info| emit_cluster(host, face_key, info) }
+
+unless already.empty?
+  puts ''
+  puts "[propose-screws] #{already.size} circle(s) already implemented — host was an EB | screw | … group. Snap the rebuild and draw fresh circles if you want changes."
+end
+
+skipped.each { |s| puts "[propose-screws] skipped: #{s}" }
+
+puts ''
+if clusters.empty? && already.any?
+  puts '[propose-screws] nothing to propose (all circles already backed by screws).'
+elsif clusters.empty?
+  puts '[propose-screws] nothing to propose.'
 end
 
 'OK'
