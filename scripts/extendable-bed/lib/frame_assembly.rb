@@ -323,6 +323,7 @@ module Timmerman
         _foot_end_beam
         _front_slats
         _under_slat_foot_beam
+        _foot_cap_into_inset_leg_screws
       end
 
       private
@@ -408,6 +409,23 @@ module Timmerman
                at:   [x0, y_slat_start, c.z_slat_bottom],
                size: [c.slat_dx, c.front_slat_run_y, c.slat_dz],
                note: 'Front (sliding) comb tooth; sits in gaps of back slats; Y run = front_slat_run_y.'
+        end
+      end
+
+      # Pin the foot cap down onto each inset leg below it. On the cap's top
+      # face, u runs along +X (span = foot_cap_dx), v along +Y (span = beam_wide).
+      # Two screws per inset leg, one near each Y edge, straddling the leg
+      # footprint. Mirrored across the X-centerline of the bed.
+      def _foot_cap_into_inset_leg_screws
+        { '-X' => c.beam_narrow / 2.0, '+X' => foot_cap_dx - c.beam_narrow / 2.0 }.each do |x_side, u|
+          { '-Y' => c.beam_narrow / 2.0, '+Y' => c.beam_wide - c.beam_narrow / 2.0 }.each do |y_side, v|
+            screw "EB | screw | foot cap | #{x_side} end into inset leg | #{y_side}",
+                  host_name: 'EB | beam | foot | cap',
+                  face:      :max_z,
+                  u:         u,
+                  v:         v,
+                  spec_id:   :eb_pocket_4mm
+          end
         end
       end
 
