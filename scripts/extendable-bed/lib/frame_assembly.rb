@@ -79,6 +79,7 @@ module Timmerman
         _sister_tie
         _head_corner_leg_screws
         _head_cap_into_inset_leg_screws
+        _head_cap_between_head_end_screws
         _sister_into_behind_head_post_screws
         _behind_head_post_into_head_leg_screws
         _head_inset_leg_into_corner_leg_screws
@@ -281,6 +282,25 @@ module Timmerman
                 host_name: 'EB | beam | head | cap',
                 face:      :max_z,
                 u:         u,
+                v:         c.beam_wide / 2.0,
+                spec_id:   :eb_pocket_4mm
+        end
+      end
+
+      # Screws up from under the head cap into the head end beam above, each
+      # centered in X between a pair of adjacent lower head-end screws (i.e.
+      # over the front-slat gap between them). Cap :min_z face u runs along
+      # +X (world-X minus head_cap_x0); v runs along +Y across beam_wide.
+      HEAD_CAP_BETWEEN_HEAD_END_PAIRS = [[2, 3], [4, 5], [5, 6], [7, 8]].freeze
+
+      def _head_cap_between_head_end_screws
+        back_xs, = slat_x_starts
+        HEAD_CAP_BETWEEN_HEAD_END_PAIRS.each do |n1, n2|
+          mid_world_x = (back_xs[n1 - 1] + back_xs[n2 - 1]) / 2.0 + c.slat_dx / 2.0
+          screw "EB | screw | head cap | mid #{n1}-#{n2} | into head end",
+                host_name: 'EB | beam | head | cap',
+                face:      :min_z,
+                u:         mid_world_x - head_cap_x0,
                 v:         c.beam_wide / 2.0,
                 spec_id:   :eb_pocket_4mm
         end
