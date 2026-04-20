@@ -77,6 +77,7 @@ module Timmerman
         _back_slats
         _outer_sisters
         _sister_tie
+        _head_corner_leg_screws
       end
 
       private
@@ -235,6 +236,31 @@ module Timmerman
              at:   [x1_tie, c.mid_tie_y0, lh_mid],
              size: [span_tie, c.beam_wide, c.beam_narrow],
              note: 'Mid run; wide face horizontal in Y (69 mm); max_y = length_retracted − plank_thickness (mirrors foot cap plank offset).'
+      end
+
+      # Head corner leg screws, mirrored across the X-centerline of the bed.
+      # Each leg box is 44×69×191 in its own local frame, so `u` and `v` are
+      # identical on both sides; only the outer-face key flips (`:max_x` on +X
+      # leg, `:min_x` on −X leg) since "outer" means a different local face in
+      # each leg's frame. The headward face `:min_y` is the same on both.
+      def _head_corner_leg_screws
+        { '+X' => :max_x, '-X' => :min_x }.each do |side, outer_face|
+          host = "EB | leg | head | #{side}"
+
+          screw "EB | screw | head leg #{side} | outer-top",
+                host_name: host,
+                face:      outer_face,
+                u:         c.beam_wide / 2.0,
+                v:         c.outer_corner_leg_height - c.beam_wide / 2.0,
+                spec_id:   :eb_pocket_4mm
+
+          screw "EB | screw | head leg #{side} | front-top",
+                host_name: host,
+                face:      :min_y,
+                u:         c.beam_narrow / 2.0,
+                v:         c.outer_corner_leg_height - c.beam_narrow / 2.0,
+                spec_id:   :eb_pocket_4mm
+        end
       end
 
       # ── Z / Y / plan helpers ─────────────────────────────────────────────
