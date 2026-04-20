@@ -88,6 +88,7 @@ module Timmerman
         _mid_run_leg_outer_x_screws
         _sister_into_behind_mid_post_screws
         _mid_run_leg_outboard_into_behind_mid_post_screws
+        _back_sister_middle_screws
       end
 
       private
@@ -461,6 +462,19 @@ module Timmerman
                 face:      :max_z,
                 u:         c.beam_wide / 2.0,
                 v:         outer_sister_run_dy - c.beam_wide / 2.0,
+                spec_id:   :eb_pocket_4mm
+        end
+      end
+
+      # Screw up from under each back sister at its mid-Y point. Sister :min_z
+      # face u runs along +X (span = beam_wide), v along +Y (span = sister_dy).
+      def _back_sister_middle_screws
+        %w[+X -X].each do |side|
+          screw "EB | screw | back sister #{side} | middle",
+                host_name: "EB | beam | back | sister | #{side}",
+                face:      :min_z,
+                u:         c.beam_wide / 2.0,
+                v:         outer_sister_run_dy / 2.0,
                 spec_id:   :eb_pocket_4mm
         end
       end

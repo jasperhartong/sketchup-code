@@ -971,6 +971,30 @@
       116.5
     ]
   },
+  "EB_StepExt_Back / EB | screw | back sister +X | middle": {
+    "min": [
+      757.5,
+      -2060.0,
+      147.0
+    ],
+    "max": [
+      765.5,
+      -2052.0,
+      235.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | back sister -X | middle": {
+    "min": [
+      30.5,
+      -2060.0,
+      147.0
+    ],
+    "max": [
+      38.5,
+      -2052.0,
+      235.0
+    ]
+  },
   "EB_StepExt_Front / EB | leg | foot | -X": {
     "min": [
       0.0,
@@ -2363,6 +2387,30 @@
       116.5
     ]
   },
+  "EB_StepDecoup_Back / EB | screw | back sister +X | middle": {
+    "min": [
+      2153.5,
+      -2060.0,
+      147.0
+    ],
+    "max": [
+      2161.5,
+      -2052.0,
+      235.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | back sister -X | middle": {
+    "min": [
+      1426.5,
+      -2060.0,
+      147.0
+    ],
+    "max": [
+      1434.5,
+      -2052.0,
+      235.0
+    ]
+  },
   "EB_StepDecoup_Front / EB | leg | foot | -X": {
     "min": [
       1396.0,
@@ -3729,6 +3777,30 @@
       3577.333,
       -1519.0,
       151.5
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | back sister +X | middle": {
+    "min": [
+      2822.5,
+      -2060.0,
+      25.0
+    ],
+    "max": [
+      2830.5,
+      -2052.0,
+      113.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | back sister -X | middle": {
+    "min": [
+      3549.5,
+      -2060.0,
+      25.0
+    ],
+    "max": [
+      3557.5,
+      -2052.0,
+      113.0
     ]
   },
   "EB_StepNoLedges_Front / EB | leg | foot | -X": {
@@ -5099,6 +5171,30 @@
       151.5
     ]
   },
+  "EB_StepFlip_Back / EB | screw | back sister +X | middle": {
+    "min": [
+      4218.5,
+      -2060.0,
+      25.0
+    ],
+    "max": [
+      4226.5,
+      -2052.0,
+      113.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | back sister -X | middle": {
+    "min": [
+      4945.5,
+      -2060.0,
+      25.0
+    ],
+    "max": [
+      4953.5,
+      -2052.0,
+      113.0
+    ]
+  },
   "EB_StepFlip_Front / EB | leg | foot | -X": {
     "min": [
       4940.0,
@@ -6453,6 +6549,30 @@
       6369.333,
       -1519.0,
       151.5
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | back sister +X | middle": {
+    "min": [
+      5614.5,
+      -2060.0,
+      25.0
+    ],
+    "max": [
+      5622.5,
+      -2052.0,
+      113.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | back sister -X | middle": {
+    "min": [
+      6341.5,
+      -2060.0,
+      25.0
+    ],
+    "max": [
+      6349.5,
+      -2052.0,
+      113.0
     ]
   },
   "EB_StepFlipNoLegs_Front / EB | leg | foot | -X | inset": {
@@ -8087,6 +8207,30 @@
       126.5
     ]
   },
+  "EB_StepPrep_Back / EB | screw | back sister +X | middle": {
+    "min": [
+      8406.5,
+      -2060.0,
+      0.0
+    ],
+    "max": [
+      8414.5,
+      -2052.0,
+      88.0
+    ]
+  },
+  "EB_StepPrep_Back / EB | screw | back sister -X | middle": {
+    "min": [
+      9133.5,
+      -2060.0,
+      0.0
+    ],
+    "max": [
+      9141.5,
+      -2052.0,
+      88.0
+    ]
+  },
   "EB_StepPrep_Front / EB | leg | foot | -X | inset": {
     "min": [
       9084.0,
@@ -9141,6 +9285,30 @@
       18.667,
       1081.0,
       116.5
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | back sister +X | middle": {
+    "min": [
+      757.5,
+      540.0,
+      147.0
+    ],
+    "max": [
+      765.5,
+      548.0,
+      235.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | back sister -X | middle": {
+    "min": [
+      30.5,
+      540.0,
+      147.0
+    ],
+    "max": [
+      38.5,
+      548.0,
+      235.0
     ]
   },
   "EB_Ext1_Back / EB | pillow | big": {
@@ -10607,6 +10775,30 @@
       116.5
     ]
   },
+  "EB_Half_Back / EB | screw | back sister +X | middle": {
+    "min": [
+      2153.5,
+      540.0,
+      147.0
+    ],
+    "max": [
+      2161.5,
+      548.0,
+      235.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | back sister -X | middle": {
+    "min": [
+      1426.5,
+      540.0,
+      147.0
+    ],
+    "max": [
+      1434.5,
+      548.0,
+      235.0
+    ]
+  },
   "EB_Half_Back / EB | pillow | big": {
     "min": [
       1396.0,
@@ -12069,6 +12261,30 @@
       2810.667,
       1081.0,
       116.5
+    ]
+  },
+  "EB_Ext_Back / EB | screw | back sister +X | middle": {
+    "min": [
+      3549.5,
+      540.0,
+      147.0
+    ],
+    "max": [
+      3557.5,
+      548.0,
+      235.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | back sister -X | middle": {
+    "min": [
+      2822.5,
+      540.0,
+      147.0
+    ],
+    "max": [
+      2830.5,
+      548.0,
+      235.0
     ]
   },
   "EB_Ext_Back / EB | pillow | big": {
@@ -13535,6 +13751,30 @@
       116.5
     ]
   },
+  "EB_Ret_Back / EB | screw | back sister +X | middle": {
+    "min": [
+      4945.5,
+      540.0,
+      147.0
+    ],
+    "max": [
+      4953.5,
+      548.0,
+      235.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | back sister -X | middle": {
+    "min": [
+      4218.5,
+      540.0,
+      147.0
+    ],
+    "max": [
+      4226.5,
+      548.0,
+      235.0
+    ]
+  },
   "EB_Ret_Back / EB | pillow | big": {
     "min": [
       4188.0,
@@ -14997,6 +15237,30 @@
       5602.667,
       1081.0,
       116.5
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | back sister +X | middle": {
+    "min": [
+      6341.5,
+      540.0,
+      147.0
+    ],
+    "max": [
+      6349.5,
+      548.0,
+      235.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | back sister -X | middle": {
+    "min": [
+      5614.5,
+      540.0,
+      147.0
+    ],
+    "max": [
+      5622.5,
+      548.0,
+      235.0
     ]
   },
   "EB_RetGnd_Back / EB | pillow | big": {
