@@ -82,6 +82,10 @@ module Timmerman
         _sister_into_behind_head_post_screws
         _behind_head_post_into_head_leg_screws
         _head_inset_leg_into_corner_leg_screws
+        _mid_run_leg_max_y_screws
+        _mid_run_leg_outer_x_screws
+        _sister_into_behind_mid_post_screws
+        _mid_run_leg_outboard_into_behind_mid_post_screws
       end
 
       private
@@ -335,6 +339,59 @@ module Timmerman
         end
       end
 
+      # One screw on each mid-run leg's footward face (:max_y), centered in X,
+      # at ~mid-height of the leg. Mid-run leg local frame on :max_y: u along
+      # +X (span = beam_wide), v along +Z. u is symmetric about the leg's X
+      # centerline so it's the same expression on both sides.
+      def _mid_run_leg_max_y_screws
+        %w[+X -X].each do |side|
+          screw "EB | screw | mid run leg #{side} | max_y mid",
+                host_name: "EB | leg | mid run | #{side}",
+                face:      :max_y,
+                u:         c.beam_wide / 2.0,
+                v:         c.outer_corner_leg_height - c.beam_wide / 2.0,
+                spec_id:   :eb_pocket_4mm
+        end
+      end
+
+      # Two screws stacked vertically on each mid-run leg's :max_y face, at
+      # the outboard side (u = beam_narrow/3 from the outboard edge), pinning
+      # the leg into the behind-mid post behind it. The post only extends up
+      # to mid_run_leg_height, so both screws must sit at v ≤ mid_run_leg_height.
+      # v-pair matches +_behind_head_post_into_head_leg_screws+ exactly — low
+      # at v = beam_wide/3, high at v = mid_run_leg_height − beam_wide/2 — so
+      # the stacked screws line up in world-Z across the head and mid bands.
+      # u flips between sides so the screws stay near the bed's outboard edge.
+      def _mid_run_leg_outboard_into_behind_mid_post_screws
+        { '+X' => c.beam_wide - c.beam_narrow / 3.0,
+          '-X' => c.beam_narrow / 3.0 }.each do |side, u|
+          { '-Z' => c.beam_wide / 3.0,
+            '+Z' => c.mid_run_leg_height - c.beam_wide / 2.0 }.each do |z_side, v|
+            screw "EB | screw | mid run leg #{side} | into behind-mid post | #{z_side}",
+                  host_name: "EB | leg | mid run | #{side}",
+                  face:      :max_y,
+                  u:         u,
+                  v:         v,
+                  spec_id:   :eb_pocket_4mm
+          end
+        end
+      end
+
+      # One screw on each mid-run leg's outboard face, centered in Y, near
+      # the top of the leg's lower band. Outboard is :min_x on the −X leg
+      # and :max_x on the +X leg; u runs along +Y on both (span = beam_y),
+      # so the u/v expressions stay identical across sides.
+      def _mid_run_leg_outer_x_screws
+        { '+X' => :max_x, '-X' => :min_x }.each do |side, outer_face|
+          screw "EB | screw | mid run leg #{side} | outer upper",
+                host_name: "EB | leg | mid run | #{side}",
+                face:      outer_face,
+                u:         c.beam_narrow / 2.0,
+                v:         c.outer_corner_leg_height - c.beam_narrow / 3.0,
+                spec_id:   :eb_pocket_4mm
+        end
+      end
+
       # Pin each outer back sister down onto the behind-head post at its head end.
       # Sister local frame: u along +X (span = beam_wide), v along +Y; head end
       # is at v=0, so v = beam_narrow/3 sits ~one-third into the head band.
@@ -345,6 +402,23 @@ module Timmerman
                 face:      :max_z,
                 u:         c.beam_wide / 2.0,
                 v:         c.beam_narrow / 3.0,
+                spec_id:   :eb_pocket_4mm
+        end
+      end
+
+      # Foot-end mirror of +_sister_into_behind_head_post_screws+: pin each
+      # outer back sister down onto the behind-mid post near its footward end.
+      # The sister's foot end sits at v = outer_sister_run_dy; offset back by
+      # beam_wide/2 places the screw centered over the behind-mid post
+      # footprint (post runs from mid_leg_y0 − leg_x to mid_leg_y0, and the
+      # sister's max_y is flush with mid_leg_y0).
+      def _sister_into_behind_mid_post_screws
+        %w[+X -X].each do |side|
+          screw "EB | screw | back sister #{side} | into behind-mid post",
+                host_name: "EB | beam | back | sister | #{side}",
+                face:      :max_z,
+                u:         c.beam_wide / 2.0,
+                v:         outer_sister_run_dy - c.beam_wide / 2.0,
                 spec_id:   :eb_pocket_4mm
         end
       end
