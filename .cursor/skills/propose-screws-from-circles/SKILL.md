@@ -168,6 +168,12 @@ full-circle edge ring at the model root (same scope the proposal script
 scans) and reports how many it removed. Restore `command.rb` to the default
 rebuild afterwards.
 
+**Observed behaviour:** in practice, circles drawn on inference planes that
+coincide with an EB group's face often get cleared automatically by a
+`clear` + `create` rebuild cycle — so after Step 3 the cleanup command
+often reports "nothing to do". That's fine; the delete command is still
+the safe explicit way to wipe any leftover markers and it's idempotent.
+
 ## Pitfalls
 
 - **Multiple circles stacked at the same center** (e.g. two concentric

@@ -78,6 +78,8 @@ module Timmerman
         _outer_sisters
         _sister_tie
         _head_corner_leg_screws
+        _head_cap_into_inset_leg_screws
+        _sister_into_behind_head_post_screws
       end
 
       private
@@ -259,6 +261,35 @@ module Timmerman
                 face:      :min_y,
                 u:         c.beam_narrow / 2.0,
                 v:         c.outer_corner_leg_height - c.beam_narrow / 2.0,
+                spec_id:   :eb_pocket_4mm
+        end
+      end
+
+      # Pin the head cap down onto each inset leg below it.
+      # On the cap's top face, u runs along +X (span = head_cap_dx), v along +Y
+      # (span = beam_wide). Screw heads sit centered in Y, offset by
+      # beam_narrow/2 from the near end in X (one at each end, mirrored).
+      def _head_cap_into_inset_leg_screws
+        { '+X' => head_cap_dx - c.beam_narrow / 2.0, '-X' => c.beam_narrow / 2.0 }.each do |side, u|
+          screw "EB | screw | head cap | #{side} end into inset leg",
+                host_name: 'EB | beam | head | cap',
+                face:      :max_z,
+                u:         u,
+                v:         c.beam_wide / 2.0,
+                spec_id:   :eb_pocket_4mm
+        end
+      end
+
+      # Pin each outer back sister down onto the behind-head post at its head end.
+      # Sister local frame: u along +X (span = beam_wide), v along +Y; head end
+      # is at v=0, so v = beam_narrow/3 sits ~one-third into the head band.
+      def _sister_into_behind_head_post_screws
+        %w[+X -X].each do |side|
+          screw "EB | screw | back sister #{side} | into behind-head post",
+                host_name: "EB | beam | back | sister | #{side}",
+                face:      :max_z,
+                u:         c.beam_wide / 2.0,
+                v:         c.beam_narrow / 3.0,
                 spec_id:   :eb_pocket_4mm
         end
       end
