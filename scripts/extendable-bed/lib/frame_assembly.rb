@@ -80,6 +80,8 @@ module Timmerman
         _head_corner_leg_screws
         _head_cap_into_inset_leg_screws
         _sister_into_behind_head_post_screws
+        _behind_head_post_into_head_leg_screws
+        _head_inset_leg_into_corner_leg_screws
       end
 
       private
@@ -276,6 +278,59 @@ module Timmerman
                 face:      :max_z,
                 u:         u,
                 v:         c.beam_wide / 2.0,
+                spec_id:   :eb_pocket_4mm
+        end
+      end
+
+      # Pin each behind-head post into the head corner leg behind it
+      # (shaft runs −Y from the post's max_y face into the head leg).
+      # Post local frame on :max_y face: u along +X (span = beam_wide = 69),
+      # v along +Z (span = mid_run_leg_height). u flips between sides so the
+      # screws land 22 mm inboard of the bed's outboard edge on each side:
+      # on +X, local +X is outboard (u = beam_wide − beam_narrow/2);
+      # on −X, local +X is inboard (u = beam_narrow/2). One screw high
+      # (into the head leg body), one low (~beam_wide/3).
+      def _behind_head_post_into_head_leg_screws
+        { '+X' => c.beam_wide - c.beam_narrow / 2.0,
+          '-X' => c.beam_narrow / 2.0 }.each do |side, u|
+          host = "EB | leg | post | behind head | #{side}"
+          screw "EB | screw | behind head post #{side} | upper into head leg",
+                host_name: host,
+                face:      :max_y,
+                u:         u,
+                v:         c.mid_run_leg_height - c.beam_wide / 2.0,
+                spec_id:   :eb_pocket_4mm
+          screw "EB | screw | behind head post #{side} | lower into head leg",
+                host_name: host,
+                face:      :max_y,
+                u:         u,
+                v:         c.beam_wide / 3.0,
+                spec_id:   :eb_pocket_4mm
+        end
+      end
+
+      # Pin the head inset leg sideways into the head corner leg beside it.
+      # Inset leg part frame: 44 (X) × 69 (Y) × head_inset_dz (Z). The face
+      # abutting the corner leg is :min_x on the +X side and :max_x on the
+      # −X side (they share that plane). Screws enter from the accessible
+      # opposite face — the inboard face — and the shaft runs through the
+      # 44 mm inset leg into the corner leg. On that accessible face u runs
+      # along +Y (span = beam_wide), v along +Z. One screw low
+      # (v ≈ beam_narrow/3), one high (v ≈ mid_run_leg_height − beam_wide/2).
+      def _head_inset_leg_into_corner_leg_screws
+        { '+X' => :min_x, '-X' => :max_x }.each do |side, accessible_face|
+          host = "EB | leg | head | #{side} | inset"
+          screw "EB | screw | head inset leg #{side} | lower into corner leg",
+                host_name: host,
+                face:      accessible_face,
+                u:         c.beam_wide / 2.0,
+                v:         c.beam_narrow / 3.0,
+                spec_id:   :eb_pocket_4mm
+          screw "EB | screw | head inset leg #{side} | upper into corner leg",
+                host_name: host,
+                face:      accessible_face,
+                u:         c.beam_wide / 2.0,
+                v:         c.mid_run_leg_height - c.beam_wide / 2.0,
                 spec_id:   :eb_pocket_4mm
         end
       end

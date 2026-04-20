@@ -623,6 +623,102 @@
       191.0
     ]
   },
+  "EB_StepExt_Back / EB | screw | behind head post +X | upper into head leg": {
+    "min": [
+      770.0,
+      -2593.0,
+      108.5
+    ],
+    "max": [
+      778.0,
+      -2505.0,
+      116.5
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | behind head post +X | lower into head leg": {
+    "min": [
+      770.0,
+      -2593.0,
+      19.0
+    ],
+    "max": [
+      778.0,
+      -2505.0,
+      27.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | behind head post -X | upper into head leg": {
+    "min": [
+      18.0,
+      -2593.0,
+      108.5
+    ],
+    "max": [
+      26.0,
+      -2505.0,
+      116.5
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | behind head post -X | lower into head leg": {
+    "min": [
+      18.0,
+      -2593.0,
+      19.0
+    ],
+    "max": [
+      26.0,
+      -2505.0,
+      27.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head inset leg +X | lower into corner leg": {
+    "min": [
+      708.0,
+      -2587.5,
+      10.667
+    ],
+    "max": [
+      796.0,
+      -2579.5,
+      18.667
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head inset leg +X | upper into corner leg": {
+    "min": [
+      708.0,
+      -2587.5,
+      108.5
+    ],
+    "max": [
+      796.0,
+      -2579.5,
+      116.5
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head inset leg -X | lower into corner leg": {
+    "min": [
+      0.0,
+      -2587.5,
+      10.667
+    ],
+    "max": [
+      88.0,
+      -2579.5,
+      18.667
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head inset leg -X | upper into corner leg": {
+    "min": [
+      0.0,
+      -2587.5,
+      108.5
+    ],
+    "max": [
+      88.0,
+      -2579.5,
+      116.5
+    ]
+  },
   "EB_StepExt_Front / EB | leg | foot | -X": {
     "min": [
       0.0,
@@ -1667,6 +1763,102 @@
       191.0
     ]
   },
+  "EB_StepDecoup_Back / EB | screw | behind head post +X | upper into head leg": {
+    "min": [
+      2166.0,
+      -2593.0,
+      108.5
+    ],
+    "max": [
+      2174.0,
+      -2505.0,
+      116.5
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | behind head post +X | lower into head leg": {
+    "min": [
+      2166.0,
+      -2593.0,
+      19.0
+    ],
+    "max": [
+      2174.0,
+      -2505.0,
+      27.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | behind head post -X | upper into head leg": {
+    "min": [
+      1414.0,
+      -2593.0,
+      108.5
+    ],
+    "max": [
+      1422.0,
+      -2505.0,
+      116.5
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | behind head post -X | lower into head leg": {
+    "min": [
+      1414.0,
+      -2593.0,
+      19.0
+    ],
+    "max": [
+      1422.0,
+      -2505.0,
+      27.0
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head inset leg +X | lower into corner leg": {
+    "min": [
+      2104.0,
+      -2587.5,
+      10.667
+    ],
+    "max": [
+      2192.0,
+      -2579.5,
+      18.667
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head inset leg +X | upper into corner leg": {
+    "min": [
+      2104.0,
+      -2587.5,
+      108.5
+    ],
+    "max": [
+      2192.0,
+      -2579.5,
+      116.5
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head inset leg -X | lower into corner leg": {
+    "min": [
+      1396.0,
+      -2587.5,
+      10.667
+    ],
+    "max": [
+      1484.0,
+      -2579.5,
+      18.667
+    ]
+  },
+  "EB_StepDecoup_Back / EB | screw | head inset leg -X | upper into corner leg": {
+    "min": [
+      1396.0,
+      -2587.5,
+      108.5
+    ],
+    "max": [
+      1484.0,
+      -2579.5,
+      116.5
+    ]
+  },
   "EB_StepDecoup_Front / EB | leg | foot | -X": {
     "min": [
       1396.0,
@@ -2685,6 +2877,102 @@
       3557.5,
       -2530.333,
       157.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | behind head post +X | upper into head leg": {
+    "min": [
+      2810.0,
+      -2593.0,
+      143.5
+    ],
+    "max": [
+      2818.0,
+      -2505.0,
+      151.5
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | behind head post +X | lower into head leg": {
+    "min": [
+      2810.0,
+      -2593.0,
+      233.0
+    ],
+    "max": [
+      2818.0,
+      -2505.0,
+      241.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | behind head post -X | upper into head leg": {
+    "min": [
+      3562.0,
+      -2593.0,
+      143.5
+    ],
+    "max": [
+      3570.0,
+      -2505.0,
+      151.5
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | behind head post -X | lower into head leg": {
+    "min": [
+      3562.0,
+      -2593.0,
+      233.0
+    ],
+    "max": [
+      3570.0,
+      -2505.0,
+      241.0
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head inset leg +X | lower into corner leg": {
+    "min": [
+      2792.0,
+      -2587.5,
+      241.333
+    ],
+    "max": [
+      2880.0,
+      -2579.5,
+      249.333
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head inset leg +X | upper into corner leg": {
+    "min": [
+      2792.0,
+      -2587.5,
+      143.5
+    ],
+    "max": [
+      2880.0,
+      -2579.5,
+      151.5
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head inset leg -X | lower into corner leg": {
+    "min": [
+      3500.0,
+      -2587.5,
+      241.333
+    ],
+    "max": [
+      3588.0,
+      -2579.5,
+      249.333
+    ]
+  },
+  "EB_StepNoLedges_Back / EB | screw | head inset leg -X | upper into corner leg": {
+    "min": [
+      3500.0,
+      -2587.5,
+      143.5
+    ],
+    "max": [
+      3588.0,
+      -2579.5,
+      151.5
     ]
   },
   "EB_StepNoLedges_Front / EB | leg | foot | -X": {
@@ -3707,6 +3995,102 @@
       157.0
     ]
   },
+  "EB_StepFlip_Back / EB | screw | behind head post +X | upper into head leg": {
+    "min": [
+      4206.0,
+      -2593.0,
+      143.5
+    ],
+    "max": [
+      4214.0,
+      -2505.0,
+      151.5
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | behind head post +X | lower into head leg": {
+    "min": [
+      4206.0,
+      -2593.0,
+      233.0
+    ],
+    "max": [
+      4214.0,
+      -2505.0,
+      241.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | behind head post -X | upper into head leg": {
+    "min": [
+      4958.0,
+      -2593.0,
+      143.5
+    ],
+    "max": [
+      4966.0,
+      -2505.0,
+      151.5
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | behind head post -X | lower into head leg": {
+    "min": [
+      4958.0,
+      -2593.0,
+      233.0
+    ],
+    "max": [
+      4966.0,
+      -2505.0,
+      241.0
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head inset leg +X | lower into corner leg": {
+    "min": [
+      4188.0,
+      -2587.5,
+      241.333
+    ],
+    "max": [
+      4276.0,
+      -2579.5,
+      249.333
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head inset leg +X | upper into corner leg": {
+    "min": [
+      4188.0,
+      -2587.5,
+      143.5
+    ],
+    "max": [
+      4276.0,
+      -2579.5,
+      151.5
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head inset leg -X | lower into corner leg": {
+    "min": [
+      4896.0,
+      -2587.5,
+      241.333
+    ],
+    "max": [
+      4984.0,
+      -2579.5,
+      249.333
+    ]
+  },
+  "EB_StepFlip_Back / EB | screw | head inset leg -X | upper into corner leg": {
+    "min": [
+      4896.0,
+      -2587.5,
+      143.5
+    ],
+    "max": [
+      4984.0,
+      -2579.5,
+      151.5
+    ]
+  },
   "EB_StepFlip_Front / EB | leg | foot | -X": {
     "min": [
       4940.0,
@@ -4713,6 +5097,102 @@
       6349.5,
       -2530.333,
       157.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | behind head post +X | upper into head leg": {
+    "min": [
+      5602.0,
+      -2593.0,
+      143.5
+    ],
+    "max": [
+      5610.0,
+      -2505.0,
+      151.5
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | behind head post +X | lower into head leg": {
+    "min": [
+      5602.0,
+      -2593.0,
+      233.0
+    ],
+    "max": [
+      5610.0,
+      -2505.0,
+      241.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | behind head post -X | upper into head leg": {
+    "min": [
+      6354.0,
+      -2593.0,
+      143.5
+    ],
+    "max": [
+      6362.0,
+      -2505.0,
+      151.5
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | behind head post -X | lower into head leg": {
+    "min": [
+      6354.0,
+      -2593.0,
+      233.0
+    ],
+    "max": [
+      6362.0,
+      -2505.0,
+      241.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head inset leg +X | lower into corner leg": {
+    "min": [
+      5584.0,
+      -2587.5,
+      241.333
+    ],
+    "max": [
+      5672.0,
+      -2579.5,
+      249.333
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head inset leg +X | upper into corner leg": {
+    "min": [
+      5584.0,
+      -2587.5,
+      143.5
+    ],
+    "max": [
+      5672.0,
+      -2579.5,
+      151.5
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head inset leg -X | lower into corner leg": {
+    "min": [
+      6292.0,
+      -2587.5,
+      241.333
+    ],
+    "max": [
+      6380.0,
+      -2579.5,
+      249.333
+    ]
+  },
+  "EB_StepFlipNoLegs_Back / EB | screw | head inset leg -X | upper into corner leg": {
+    "min": [
+      6292.0,
+      -2587.5,
+      143.5
+    ],
+    "max": [
+      6380.0,
+      -2579.5,
+      151.5
     ]
   },
   "EB_StepFlipNoLegs_Front / EB | leg | foot | -X | inset": {
@@ -5999,6 +6479,102 @@
       88.0
     ]
   },
+  "EB_StepPrep_Back / EB | screw | behind head post +X | upper into head leg": {
+    "min": [
+      8394.0,
+      -2593.0,
+      74.5
+    ],
+    "max": [
+      8402.0,
+      -2505.0,
+      82.5
+    ]
+  },
+  "EB_StepPrep_Back / EB | screw | behind head post +X | lower into head leg": {
+    "min": [
+      8394.0,
+      -2593.0,
+      164.0
+    ],
+    "max": [
+      8402.0,
+      -2505.0,
+      172.0
+    ]
+  },
+  "EB_StepPrep_Back / EB | screw | behind head post -X | upper into head leg": {
+    "min": [
+      9146.0,
+      -2593.0,
+      74.5
+    ],
+    "max": [
+      9154.0,
+      -2505.0,
+      82.5
+    ]
+  },
+  "EB_StepPrep_Back / EB | screw | behind head post -X | lower into head leg": {
+    "min": [
+      9146.0,
+      -2593.0,
+      164.0
+    ],
+    "max": [
+      9154.0,
+      -2505.0,
+      172.0
+    ]
+  },
+  "EB_StepPrep_Back / EB | screw | head inset leg +X | lower into corner leg": {
+    "min": [
+      8376.0,
+      -2587.5,
+      172.333
+    ],
+    "max": [
+      8464.0,
+      -2579.5,
+      180.333
+    ]
+  },
+  "EB_StepPrep_Back / EB | screw | head inset leg +X | upper into corner leg": {
+    "min": [
+      8376.0,
+      -2587.5,
+      74.5
+    ],
+    "max": [
+      8464.0,
+      -2579.5,
+      82.5
+    ]
+  },
+  "EB_StepPrep_Back / EB | screw | head inset leg -X | lower into corner leg": {
+    "min": [
+      9084.0,
+      -2587.5,
+      172.333
+    ],
+    "max": [
+      9172.0,
+      -2579.5,
+      180.333
+    ]
+  },
+  "EB_StepPrep_Back / EB | screw | head inset leg -X | upper into corner leg": {
+    "min": [
+      9084.0,
+      -2587.5,
+      74.5
+    ],
+    "max": [
+      9172.0,
+      -2579.5,
+      82.5
+    ]
+  },
   "EB_StepPrep_Front / EB | leg | foot | -X | inset": {
     "min": [
       9084.0,
@@ -6705,6 +7281,102 @@
       38.5,
       69.667,
       191.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | behind head post +X | upper into head leg": {
+    "min": [
+      770.0,
+      7.0,
+      108.5
+    ],
+    "max": [
+      778.0,
+      95.0,
+      116.5
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | behind head post +X | lower into head leg": {
+    "min": [
+      770.0,
+      7.0,
+      19.0
+    ],
+    "max": [
+      778.0,
+      95.0,
+      27.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | behind head post -X | upper into head leg": {
+    "min": [
+      18.0,
+      7.0,
+      108.5
+    ],
+    "max": [
+      26.0,
+      95.0,
+      116.5
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | behind head post -X | lower into head leg": {
+    "min": [
+      18.0,
+      7.0,
+      19.0
+    ],
+    "max": [
+      26.0,
+      95.0,
+      27.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head inset leg +X | lower into corner leg": {
+    "min": [
+      708.0,
+      12.5,
+      10.667
+    ],
+    "max": [
+      796.0,
+      20.5,
+      18.667
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head inset leg +X | upper into corner leg": {
+    "min": [
+      708.0,
+      12.5,
+      108.5
+    ],
+    "max": [
+      796.0,
+      20.5,
+      116.5
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head inset leg -X | lower into corner leg": {
+    "min": [
+      0.0,
+      12.5,
+      10.667
+    ],
+    "max": [
+      88.0,
+      20.5,
+      18.667
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head inset leg -X | upper into corner leg": {
+    "min": [
+      0.0,
+      12.5,
+      108.5
+    ],
+    "max": [
+      88.0,
+      20.5,
+      116.5
     ]
   },
   "EB_Ext1_Back / EB | pillow | big": {
@@ -7823,6 +8495,102 @@
       191.0
     ]
   },
+  "EB_Half_Back / EB | screw | behind head post +X | upper into head leg": {
+    "min": [
+      2166.0,
+      7.0,
+      108.5
+    ],
+    "max": [
+      2174.0,
+      95.0,
+      116.5
+    ]
+  },
+  "EB_Half_Back / EB | screw | behind head post +X | lower into head leg": {
+    "min": [
+      2166.0,
+      7.0,
+      19.0
+    ],
+    "max": [
+      2174.0,
+      95.0,
+      27.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | behind head post -X | upper into head leg": {
+    "min": [
+      1414.0,
+      7.0,
+      108.5
+    ],
+    "max": [
+      1422.0,
+      95.0,
+      116.5
+    ]
+  },
+  "EB_Half_Back / EB | screw | behind head post -X | lower into head leg": {
+    "min": [
+      1414.0,
+      7.0,
+      19.0
+    ],
+    "max": [
+      1422.0,
+      95.0,
+      27.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | head inset leg +X | lower into corner leg": {
+    "min": [
+      2104.0,
+      12.5,
+      10.667
+    ],
+    "max": [
+      2192.0,
+      20.5,
+      18.667
+    ]
+  },
+  "EB_Half_Back / EB | screw | head inset leg +X | upper into corner leg": {
+    "min": [
+      2104.0,
+      12.5,
+      108.5
+    ],
+    "max": [
+      2192.0,
+      20.5,
+      116.5
+    ]
+  },
+  "EB_Half_Back / EB | screw | head inset leg -X | lower into corner leg": {
+    "min": [
+      1396.0,
+      12.5,
+      10.667
+    ],
+    "max": [
+      1484.0,
+      20.5,
+      18.667
+    ]
+  },
+  "EB_Half_Back / EB | screw | head inset leg -X | upper into corner leg": {
+    "min": [
+      1396.0,
+      12.5,
+      108.5
+    ],
+    "max": [
+      1484.0,
+      20.5,
+      116.5
+    ]
+  },
   "EB_Half_Back / EB | pillow | big": {
     "min": [
       1396.0,
@@ -8937,6 +9705,102 @@
       2830.5,
       69.667,
       191.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | behind head post +X | upper into head leg": {
+    "min": [
+      3562.0,
+      7.0,
+      108.5
+    ],
+    "max": [
+      3570.0,
+      95.0,
+      116.5
+    ]
+  },
+  "EB_Ext_Back / EB | screw | behind head post +X | lower into head leg": {
+    "min": [
+      3562.0,
+      7.0,
+      19.0
+    ],
+    "max": [
+      3570.0,
+      95.0,
+      27.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | behind head post -X | upper into head leg": {
+    "min": [
+      2810.0,
+      7.0,
+      108.5
+    ],
+    "max": [
+      2818.0,
+      95.0,
+      116.5
+    ]
+  },
+  "EB_Ext_Back / EB | screw | behind head post -X | lower into head leg": {
+    "min": [
+      2810.0,
+      7.0,
+      19.0
+    ],
+    "max": [
+      2818.0,
+      95.0,
+      27.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head inset leg +X | lower into corner leg": {
+    "min": [
+      3500.0,
+      12.5,
+      10.667
+    ],
+    "max": [
+      3588.0,
+      20.5,
+      18.667
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head inset leg +X | upper into corner leg": {
+    "min": [
+      3500.0,
+      12.5,
+      108.5
+    ],
+    "max": [
+      3588.0,
+      20.5,
+      116.5
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head inset leg -X | lower into corner leg": {
+    "min": [
+      2792.0,
+      12.5,
+      10.667
+    ],
+    "max": [
+      2880.0,
+      20.5,
+      18.667
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head inset leg -X | upper into corner leg": {
+    "min": [
+      2792.0,
+      12.5,
+      108.5
+    ],
+    "max": [
+      2880.0,
+      20.5,
+      116.5
     ]
   },
   "EB_Ext_Back / EB | pillow | big": {
@@ -10055,6 +10919,102 @@
       191.0
     ]
   },
+  "EB_Ret_Back / EB | screw | behind head post +X | upper into head leg": {
+    "min": [
+      4958.0,
+      7.0,
+      108.5
+    ],
+    "max": [
+      4966.0,
+      95.0,
+      116.5
+    ]
+  },
+  "EB_Ret_Back / EB | screw | behind head post +X | lower into head leg": {
+    "min": [
+      4958.0,
+      7.0,
+      19.0
+    ],
+    "max": [
+      4966.0,
+      95.0,
+      27.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | behind head post -X | upper into head leg": {
+    "min": [
+      4206.0,
+      7.0,
+      108.5
+    ],
+    "max": [
+      4214.0,
+      95.0,
+      116.5
+    ]
+  },
+  "EB_Ret_Back / EB | screw | behind head post -X | lower into head leg": {
+    "min": [
+      4206.0,
+      7.0,
+      19.0
+    ],
+    "max": [
+      4214.0,
+      95.0,
+      27.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head inset leg +X | lower into corner leg": {
+    "min": [
+      4896.0,
+      12.5,
+      10.667
+    ],
+    "max": [
+      4984.0,
+      20.5,
+      18.667
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head inset leg +X | upper into corner leg": {
+    "min": [
+      4896.0,
+      12.5,
+      108.5
+    ],
+    "max": [
+      4984.0,
+      20.5,
+      116.5
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head inset leg -X | lower into corner leg": {
+    "min": [
+      4188.0,
+      12.5,
+      10.667
+    ],
+    "max": [
+      4276.0,
+      20.5,
+      18.667
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head inset leg -X | upper into corner leg": {
+    "min": [
+      4188.0,
+      12.5,
+      108.5
+    ],
+    "max": [
+      4276.0,
+      20.5,
+      116.5
+    ]
+  },
   "EB_Ret_Back / EB | pillow | big": {
     "min": [
       4188.0,
@@ -11169,6 +12129,102 @@
       5622.5,
       69.667,
       191.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | behind head post +X | upper into head leg": {
+    "min": [
+      6354.0,
+      7.0,
+      108.5
+    ],
+    "max": [
+      6362.0,
+      95.0,
+      116.5
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | behind head post +X | lower into head leg": {
+    "min": [
+      6354.0,
+      7.0,
+      19.0
+    ],
+    "max": [
+      6362.0,
+      95.0,
+      27.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | behind head post -X | upper into head leg": {
+    "min": [
+      5602.0,
+      7.0,
+      108.5
+    ],
+    "max": [
+      5610.0,
+      95.0,
+      116.5
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | behind head post -X | lower into head leg": {
+    "min": [
+      5602.0,
+      7.0,
+      19.0
+    ],
+    "max": [
+      5610.0,
+      95.0,
+      27.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head inset leg +X | lower into corner leg": {
+    "min": [
+      6292.0,
+      12.5,
+      10.667
+    ],
+    "max": [
+      6380.0,
+      20.5,
+      18.667
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head inset leg +X | upper into corner leg": {
+    "min": [
+      6292.0,
+      12.5,
+      108.5
+    ],
+    "max": [
+      6380.0,
+      20.5,
+      116.5
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head inset leg -X | lower into corner leg": {
+    "min": [
+      5584.0,
+      12.5,
+      10.667
+    ],
+    "max": [
+      5672.0,
+      20.5,
+      18.667
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head inset leg -X | upper into corner leg": {
+    "min": [
+      5584.0,
+      12.5,
+      108.5
+    ],
+    "max": [
+      5672.0,
+      20.5,
+      116.5
     ]
   },
   "EB_RetGnd_Back / EB | pillow | big": {
