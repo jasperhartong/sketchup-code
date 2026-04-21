@@ -80,6 +80,7 @@ module Timmerman
         _head_corner_leg_screws
         _head_cap_into_inset_leg_screws
         _head_cap_between_head_end_screws
+        _head_ledge_between_back_slat_screws
         _sister_tie_into_back_slat_hearts_screws
         _sister_into_behind_head_post_screws
         _behind_head_post_into_head_leg_screws
@@ -169,14 +170,6 @@ module Timmerman
               at:   [0, y_head, c.z_slat_bottom],
               size: [c.outer_width, c.plank_thickness, 2 * c.beam_wide],
               note: 'On cap and corner legs; full bed width; top 2×BEAM_WIDE above z_slat_bottom.'
-
-        screw 'EB | screw | demo | head ledge',
-              host_name: 'EB | plank | head | ledge',
-              face:      :max_z,
-              u:         c.outer_width / 2,
-              v:         c.plank_thickness / 2,
-              spec_id:   :eb_pocket_4mm,
-              shaft_length_index: 0
       end
 
       def _head_end_beam
@@ -303,6 +296,25 @@ module Timmerman
                 host_name: 'EB | beam | head | cap',
                 face:      :min_z,
                 u:         mid_world_x - head_cap_x0,
+                v:         c.beam_wide / 2.0,
+                spec_id:   :eb_pocket_4mm
+        end
+      end
+
+      # Headward-facing screws on the head ledge plank between adjacent back
+      # slats, piercing into the head end beam. Plank `at: [0, y_head, …]` so
+      # plank-local u equals world X; v = beam_wide/2 lands in the middle of
+      # the head end beam's Z band (0..beam_wide from plank-local z=0).
+      HEAD_LEDGE_BETWEEN_BACK_SLAT_PAIRS = [[1, 2], [8,9]].freeze
+
+      def _head_ledge_between_back_slat_screws
+        back_xs, = slat_x_starts
+        HEAD_LEDGE_BETWEEN_BACK_SLAT_PAIRS.each do |n1, n2|
+          mid_world_x = (back_xs[n1 - 1] + back_xs[n2 - 1]) / 2.0 + c.slat_dx / 2.0
+          screw "EB | screw | head ledge | mid #{n1}-#{n2} | into head end",
+                host_name: 'EB | plank | head | ledge',
+                face:      :min_y,
+                u:         mid_world_x,
                 v:         c.beam_wide / 2.0,
                 spec_id:   :eb_pocket_4mm
         end
@@ -550,13 +562,6 @@ module Timmerman
               at:   [0, 0, c.z_slat_bottom],
               size: [c.outer_width, c.plank_thickness, 2 * c.beam_wide],
               note: 'On cap and corner legs; full bed width; top 2×BEAM_WIDE above z_slat_bottom.'
-
-        screw 'EB | screw | demo | foot ledge',
-              host_name: 'EB | plank | foot | ledge',
-              face:      :max_z,
-              u:         c.outer_width / 2,
-              v:         c.plank_thickness / 2,
-              spec_id:   :eb_pocket_4mm
       end
 
       def _foot_end_beam

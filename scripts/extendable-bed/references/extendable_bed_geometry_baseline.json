@@ -299,18 +299,6 @@
       191.0
     ]
   },
-  "EB_StepExt_Back / EB | screw | demo | head ledge": {
-    "min": [
-      394.0,
-      -2613.0,
-      241.0
-    ],
-    "max": [
-      402.0,
-      -2605.0,
-      329.0
-    ]
-  },
   "EB_StepExt_Back / EB | screw | head end | 1/9 | lower": {
     "min": [
       18.0,
@@ -645,6 +633,30 @@
       637.0,
       -2579.5,
       235.0
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head ledge | mid 1-2 | into head end": {
+    "min": [
+      65.0,
+      -2618.0,
+      221.5
+    ],
+    "max": [
+      73.0,
+      -2530.0,
+      229.5
+    ]
+  },
+  "EB_StepExt_Back / EB | screw | head ledge | mid 8-9 | into head end": {
+    "min": [
+      723.0,
+      -2618.0,
+      221.5
+    ],
+    "max": [
+      731.0,
+      -2530.0,
+      229.5
     ]
   },
   "EB_StepExt_Back / EB | screw | sister tie | 2/9 | heart": {
@@ -1185,18 +1197,6 @@
       727.0,
       -1588.0,
       191.0
-    ]
-  },
-  "EB_StepExt_Front / EB | screw | demo | foot ledge": {
-    "min": [
-      394.0,
-      -595.0,
-      241.0
-    ],
-    "max": [
-      402.0,
-      -587.0,
-      329.0
     ]
   },
   "EB_StepExt_Front / EB | screw | foot end | 1/8 | lower": {
@@ -9407,18 +9407,6 @@
       191.0
     ]
   },
-  "EB_Ext1_Back / EB | screw | demo | head ledge": {
-    "min": [
-      394.0,
-      -13.0,
-      241.0
-    ],
-    "max": [
-      402.0,
-      -5.0,
-      329.0
-    ]
-  },
   "EB_Ext1_Back / EB | screw | head end | 1/9 | lower": {
     "min": [
       18.0,
@@ -9753,6 +9741,30 @@
       637.0,
       20.5,
       235.0
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head ledge | mid 1-2 | into head end": {
+    "min": [
+      65.0,
+      -18.0,
+      221.5
+    ],
+    "max": [
+      73.0,
+      70.0,
+      229.5
+    ]
+  },
+  "EB_Ext1_Back / EB | screw | head ledge | mid 8-9 | into head end": {
+    "min": [
+      723.0,
+      -18.0,
+      221.5
+    ],
+    "max": [
+      731.0,
+      70.0,
+      229.5
     ]
   },
   "EB_Ext1_Back / EB | screw | sister tie | 2/9 | heart": {
@@ -10329,18 +10341,6 @@
       727.0,
       433.333,
       191.0
-    ]
-  },
-  "EB_Ext1_Front / EB | screw | demo | foot ledge": {
-    "min": [
-      394.0,
-      1426.333,
-      241.0
-    ],
-    "max": [
-      402.0,
-      1434.333,
-      329.0
     ]
   },
   "EB_Ext1_Front / EB | screw | foot end | 1/8 | lower": {
@@ -11087,18 +11087,6 @@
       191.0
     ]
   },
-  "EB_Half_Back / EB | screw | demo | head ledge": {
-    "min": [
-      1790.0,
-      -13.0,
-      241.0
-    ],
-    "max": [
-      1798.0,
-      -5.0,
-      329.0
-    ]
-  },
   "EB_Half_Back / EB | screw | head end | 1/9 | lower": {
     "min": [
       1414.0,
@@ -11433,6 +11421,30 @@
       2033.0,
       20.5,
       235.0
+    ]
+  },
+  "EB_Half_Back / EB | screw | head ledge | mid 1-2 | into head end": {
+    "min": [
+      1461.0,
+      -18.0,
+      221.5
+    ],
+    "max": [
+      1469.0,
+      70.0,
+      229.5
+    ]
+  },
+  "EB_Half_Back / EB | screw | head ledge | mid 8-9 | into head end": {
+    "min": [
+      2119.0,
+      -18.0,
+      221.5
+    ],
+    "max": [
+      2127.0,
+      70.0,
+      229.5
     ]
   },
   "EB_Half_Back / EB | screw | sister tie | 2/9 | heart": {
@@ -11997,18 +12009,6 @@
       2123.0,
       722.667,
       191.0
-    ]
-  },
-  "EB_Half_Front / EB | screw | demo | foot ledge": {
-    "min": [
-      1790.0,
-      1715.667,
-      241.0
-    ],
-    "max": [
-      1798.0,
-      1723.667,
-      329.0
     ]
   },
   "EB_Half_Front / EB | screw | foot end | 1/8 | lower": {
@@ -12767,18 +12767,6 @@
       191.0
     ]
   },
-  "EB_Ext_Back / EB | screw | demo | head ledge": {
-    "min": [
-      3186.0,
-      -13.0,
-      241.0
-    ],
-    "max": [
-      3194.0,
-      -5.0,
-      329.0
-    ]
-  },
   "EB_Ext_Back / EB | screw | head end | 1/9 | lower": {
     "min": [
       2810.0,
@@ -13113,6 +13101,30 @@
       3429.0,
       20.5,
       235.0
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head ledge | mid 1-2 | into head end": {
+    "min": [
+      2857.0,
+      -18.0,
+      221.5
+    ],
+    "max": [
+      2865.0,
+      70.0,
+      229.5
+    ]
+  },
+  "EB_Ext_Back / EB | screw | head ledge | mid 8-9 | into head end": {
+    "min": [
+      3515.0,
+      -18.0,
+      221.5
+    ],
+    "max": [
+      3523.0,
+      70.0,
+      229.5
     ]
   },
   "EB_Ext_Back / EB | screw | sister tie | 2/9 | heart": {
@@ -13665,18 +13677,6 @@
       3519.0,
       1012.0,
       191.0
-    ]
-  },
-  "EB_Ext_Front / EB | screw | demo | foot ledge": {
-    "min": [
-      3186.0,
-      2005.0,
-      241.0
-    ],
-    "max": [
-      3194.0,
-      2013.0,
-      329.0
     ]
   },
   "EB_Ext_Front / EB | screw | foot end | 1/8 | lower": {
@@ -14447,18 +14447,6 @@
       191.0
     ]
   },
-  "EB_Ret_Back / EB | screw | demo | head ledge": {
-    "min": [
-      4582.0,
-      -13.0,
-      241.0
-    ],
-    "max": [
-      4590.0,
-      -5.0,
-      329.0
-    ]
-  },
   "EB_Ret_Back / EB | screw | head end | 1/9 | lower": {
     "min": [
       4206.0,
@@ -14793,6 +14781,30 @@
       4825.0,
       20.5,
       235.0
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head ledge | mid 1-2 | into head end": {
+    "min": [
+      4253.0,
+      -18.0,
+      221.5
+    ],
+    "max": [
+      4261.0,
+      70.0,
+      229.5
+    ]
+  },
+  "EB_Ret_Back / EB | screw | head ledge | mid 8-9 | into head end": {
+    "min": [
+      4911.0,
+      -18.0,
+      221.5
+    ],
+    "max": [
+      4919.0,
+      70.0,
+      229.5
     ]
   },
   "EB_Ret_Back / EB | screw | sister tie | 2/9 | heart": {
@@ -15381,18 +15393,6 @@
       4915.0,
       144.0,
       191.0
-    ]
-  },
-  "EB_Ret_Front / EB | screw | demo | foot ledge": {
-    "min": [
-      4582.0,
-      1137.0,
-      241.0
-    ],
-    "max": [
-      4590.0,
-      1145.0,
-      329.0
     ]
   },
   "EB_Ret_Front / EB | screw | foot end | 1/8 | lower": {
@@ -16127,18 +16127,6 @@
       191.0
     ]
   },
-  "EB_RetGnd_Back / EB | screw | demo | head ledge": {
-    "min": [
-      5978.0,
-      -13.0,
-      241.0
-    ],
-    "max": [
-      5986.0,
-      -5.0,
-      329.0
-    ]
-  },
   "EB_RetGnd_Back / EB | screw | head end | 1/9 | lower": {
     "min": [
       5602.0,
@@ -16473,6 +16461,30 @@
       6221.0,
       20.5,
       235.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head ledge | mid 1-2 | into head end": {
+    "min": [
+      5649.0,
+      -18.0,
+      221.5
+    ],
+    "max": [
+      5657.0,
+      70.0,
+      229.5
+    ]
+  },
+  "EB_RetGnd_Back / EB | screw | head ledge | mid 8-9 | into head end": {
+    "min": [
+      6307.0,
+      -18.0,
+      221.5
+    ],
+    "max": [
+      6315.0,
+      70.0,
+      229.5
     ]
   },
   "EB_RetGnd_Back / EB | screw | sister tie | 2/9 | heart": {
@@ -17061,18 +17073,6 @@
       6311.0,
       144.0,
       191.0
-    ]
-  },
-  "EB_RetGnd_Front / EB | screw | demo | foot ledge": {
-    "min": [
-      5978.0,
-      1137.0,
-      241.0
-    ],
-    "max": [
-      5986.0,
-      1145.0,
-      329.0
     ]
   },
   "EB_RetGnd_Front / EB | screw | foot end | 1/8 | lower": {
