@@ -1487,6 +1487,78 @@
       235.0
     ]
   },
+  "EB_StepExt_Front / EB | screw | foot leg +X | upper -y | into inset leg": {
+    "min": [
+      708.0,
+      -640.333,
+      164.0
+    ],
+    "max": [
+      796.0,
+      -632.333,
+      172.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot leg +X | upper +y | into inset leg": {
+    "min": [
+      708.0,
+      -608.0,
+      164.0
+    ],
+    "max": [
+      796.0,
+      -600.0,
+      172.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot leg +X | lower | into inset leg": {
+    "min": [
+      708.0,
+      -620.5,
+      18.0
+    ],
+    "max": [
+      796.0,
+      -612.5,
+      26.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot leg -X | upper -y | into inset leg": {
+    "min": [
+      0.0,
+      -640.333,
+      164.0
+    ],
+    "max": [
+      88.0,
+      -632.333,
+      172.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot leg -X | upper +y | into inset leg": {
+    "min": [
+      0.0,
+      -608.0,
+      164.0
+    ],
+    "max": [
+      88.0,
+      -600.0,
+      172.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot leg -X | lower | into inset leg": {
+    "min": [
+      0.0,
+      -620.5,
+      18.0
+    ],
+    "max": [
+      88.0,
+      -612.5,
+      26.0
+    ]
+  },
   "EB_StepDecoup_Back / EB | leg | head | -X": {
     "min": [
       1396.0,
@@ -2925,6 +2997,78 @@
       1986.0,
       -612.5,
       235.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot leg +X | upper -y | into inset leg": {
+    "min": [
+      2104.0,
+      -640.333,
+      164.0
+    ],
+    "max": [
+      2192.0,
+      -632.333,
+      172.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot leg +X | upper +y | into inset leg": {
+    "min": [
+      2104.0,
+      -608.0,
+      164.0
+    ],
+    "max": [
+      2192.0,
+      -600.0,
+      172.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot leg +X | lower | into inset leg": {
+    "min": [
+      2104.0,
+      -620.5,
+      18.0
+    ],
+    "max": [
+      2192.0,
+      -612.5,
+      26.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot leg -X | upper -y | into inset leg": {
+    "min": [
+      1396.0,
+      -640.333,
+      164.0
+    ],
+    "max": [
+      1484.0,
+      -632.333,
+      172.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot leg -X | upper +y | into inset leg": {
+    "min": [
+      1396.0,
+      -608.0,
+      164.0
+    ],
+    "max": [
+      1484.0,
+      -600.0,
+      172.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot leg -X | lower | into inset leg": {
+    "min": [
+      1396.0,
+      -620.5,
+      18.0
+    ],
+    "max": [
+      1484.0,
+      -612.5,
+      26.0
     ]
   },
   "EB_StepNoLedges_Back / EB | leg | head | -X": {
@@ -4367,6 +4511,78 @@
       113.0
     ]
   },
+  "EB_StepNoLedges_Front / EB | screw | foot leg +X | upper -y | into inset leg": {
+    "min": [
+      2792.0,
+      -640.333,
+      88.0
+    ],
+    "max": [
+      2880.0,
+      -632.333,
+      96.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot leg +X | upper +y | into inset leg": {
+    "min": [
+      2792.0,
+      -608.0,
+      88.0
+    ],
+    "max": [
+      2880.0,
+      -600.0,
+      96.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot leg +X | lower | into inset leg": {
+    "min": [
+      2792.0,
+      -620.5,
+      234.0
+    ],
+    "max": [
+      2880.0,
+      -612.5,
+      242.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot leg -X | upper -y | into inset leg": {
+    "min": [
+      3500.0,
+      -640.333,
+      88.0
+    ],
+    "max": [
+      3588.0,
+      -632.333,
+      96.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot leg -X | upper +y | into inset leg": {
+    "min": [
+      3500.0,
+      -608.0,
+      88.0
+    ],
+    "max": [
+      3588.0,
+      -600.0,
+      96.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot leg -X | lower | into inset leg": {
+    "min": [
+      3500.0,
+      -620.5,
+      234.0
+    ],
+    "max": [
+      3588.0,
+      -612.5,
+      242.0
+    ]
+  },
   "EB_StepFlip_Back / EB | leg | head | -X": {
     "min": [
       4940.0,
@@ -5793,6 +6009,78 @@
       4402.0,
       -323.167,
       113.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot leg +X | upper -y | into inset leg": {
+    "min": [
+      4188.0,
+      -351.0,
+      88.0
+    ],
+    "max": [
+      4276.0,
+      -343.0,
+      96.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot leg +X | upper +y | into inset leg": {
+    "min": [
+      4188.0,
+      -318.667,
+      88.0
+    ],
+    "max": [
+      4276.0,
+      -310.667,
+      96.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot leg +X | lower | into inset leg": {
+    "min": [
+      4188.0,
+      -331.167,
+      234.0
+    ],
+    "max": [
+      4276.0,
+      -323.167,
+      242.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot leg -X | upper -y | into inset leg": {
+    "min": [
+      4896.0,
+      -351.0,
+      88.0
+    ],
+    "max": [
+      4984.0,
+      -343.0,
+      96.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot leg -X | upper +y | into inset leg": {
+    "min": [
+      4896.0,
+      -318.667,
+      88.0
+    ],
+    "max": [
+      4984.0,
+      -310.667,
+      96.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot leg -X | lower | into inset leg": {
+    "min": [
+      4896.0,
+      -331.167,
+      234.0
+    ],
+    "max": [
+      4984.0,
+      -323.167,
+      242.0
     ]
   },
   "EB_StepFlipNoLegs_Back / EB | leg | head | -X": {
@@ -10127,6 +10415,78 @@
       235.0
     ]
   },
+  "EB_Ext1_Front / EB | screw | foot leg +X | upper -y | into inset leg": {
+    "min": [
+      708.0,
+      1381.0,
+      164.0
+    ],
+    "max": [
+      796.0,
+      1389.0,
+      172.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot leg +X | upper +y | into inset leg": {
+    "min": [
+      708.0,
+      1413.333,
+      164.0
+    ],
+    "max": [
+      796.0,
+      1421.333,
+      172.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot leg +X | lower | into inset leg": {
+    "min": [
+      708.0,
+      1400.833,
+      18.0
+    ],
+    "max": [
+      796.0,
+      1408.833,
+      26.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot leg -X | upper -y | into inset leg": {
+    "min": [
+      0.0,
+      1381.0,
+      164.0
+    ],
+    "max": [
+      88.0,
+      1389.0,
+      172.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot leg -X | upper +y | into inset leg": {
+    "min": [
+      0.0,
+      1413.333,
+      164.0
+    ],
+    "max": [
+      88.0,
+      1421.333,
+      172.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot leg -X | lower | into inset leg": {
+    "min": [
+      0.0,
+      1400.833,
+      18.0
+    ],
+    "max": [
+      88.0,
+      1408.833,
+      26.0
+    ]
+  },
   "EB_Ext1_Front / EB | pillow | small | 1": {
     "min": [
       0.0,
@@ -11651,6 +12011,78 @@
       235.0
     ]
   },
+  "EB_Half_Front / EB | screw | foot leg +X | upper -y | into inset leg": {
+    "min": [
+      2104.0,
+      1670.333,
+      164.0
+    ],
+    "max": [
+      2192.0,
+      1678.333,
+      172.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot leg +X | upper +y | into inset leg": {
+    "min": [
+      2104.0,
+      1702.667,
+      164.0
+    ],
+    "max": [
+      2192.0,
+      1710.667,
+      172.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot leg +X | lower | into inset leg": {
+    "min": [
+      2104.0,
+      1690.167,
+      18.0
+    ],
+    "max": [
+      2192.0,
+      1698.167,
+      26.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot leg -X | upper -y | into inset leg": {
+    "min": [
+      1396.0,
+      1670.333,
+      164.0
+    ],
+    "max": [
+      1484.0,
+      1678.333,
+      172.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot leg -X | upper +y | into inset leg": {
+    "min": [
+      1396.0,
+      1702.667,
+      164.0
+    ],
+    "max": [
+      1484.0,
+      1710.667,
+      172.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot leg -X | lower | into inset leg": {
+    "min": [
+      1396.0,
+      1690.167,
+      18.0
+    ],
+    "max": [
+      1484.0,
+      1698.167,
+      26.0
+    ]
+  },
   "EB_Half_Front / EB | pillow | small | 3": {
     "min": [
       1396.0,
@@ -13173,6 +13605,78 @@
       3382.0,
       1987.5,
       235.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot leg +X | upper -y | into inset leg": {
+    "min": [
+      3500.0,
+      1959.667,
+      164.0
+    ],
+    "max": [
+      3588.0,
+      1967.667,
+      172.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot leg +X | upper +y | into inset leg": {
+    "min": [
+      3500.0,
+      1992.0,
+      164.0
+    ],
+    "max": [
+      3588.0,
+      2000.0,
+      172.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot leg +X | lower | into inset leg": {
+    "min": [
+      3500.0,
+      1979.5,
+      18.0
+    ],
+    "max": [
+      3588.0,
+      1987.5,
+      26.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot leg -X | upper -y | into inset leg": {
+    "min": [
+      2792.0,
+      1959.667,
+      164.0
+    ],
+    "max": [
+      2880.0,
+      1967.667,
+      172.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot leg -X | upper +y | into inset leg": {
+    "min": [
+      2792.0,
+      1992.0,
+      164.0
+    ],
+    "max": [
+      2880.0,
+      2000.0,
+      172.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot leg -X | lower | into inset leg": {
+    "min": [
+      2792.0,
+      1979.5,
+      18.0
+    ],
+    "max": [
+      2880.0,
+      1987.5,
+      26.0
     ]
   },
   "EB_Ext_Front / EB | pillow | small | 1": {
@@ -14747,6 +15251,78 @@
       235.0
     ]
   },
+  "EB_Ret_Front / EB | screw | foot leg +X | upper -y | into inset leg": {
+    "min": [
+      4896.0,
+      1091.667,
+      164.0
+    ],
+    "max": [
+      4984.0,
+      1099.667,
+      172.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot leg +X | upper +y | into inset leg": {
+    "min": [
+      4896.0,
+      1124.0,
+      164.0
+    ],
+    "max": [
+      4984.0,
+      1132.0,
+      172.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot leg +X | lower | into inset leg": {
+    "min": [
+      4896.0,
+      1111.5,
+      18.0
+    ],
+    "max": [
+      4984.0,
+      1119.5,
+      26.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot leg -X | upper -y | into inset leg": {
+    "min": [
+      4188.0,
+      1091.667,
+      164.0
+    ],
+    "max": [
+      4276.0,
+      1099.667,
+      172.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot leg -X | upper +y | into inset leg": {
+    "min": [
+      4188.0,
+      1124.0,
+      164.0
+    ],
+    "max": [
+      4276.0,
+      1132.0,
+      172.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot leg -X | lower | into inset leg": {
+    "min": [
+      4188.0,
+      1111.5,
+      18.0
+    ],
+    "max": [
+      4276.0,
+      1119.5,
+      26.0
+    ]
+  },
   "EB_RetGnd_Back / EB | leg | head | -X": {
     "min": [
       5584.0,
@@ -16281,6 +16857,78 @@
       6174.0,
       1119.5,
       235.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot leg +X | upper -y | into inset leg": {
+    "min": [
+      6292.0,
+      1091.667,
+      164.0
+    ],
+    "max": [
+      6380.0,
+      1099.667,
+      172.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot leg +X | upper +y | into inset leg": {
+    "min": [
+      6292.0,
+      1124.0,
+      164.0
+    ],
+    "max": [
+      6380.0,
+      1132.0,
+      172.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot leg +X | lower | into inset leg": {
+    "min": [
+      6292.0,
+      1111.5,
+      18.0
+    ],
+    "max": [
+      6380.0,
+      1119.5,
+      26.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot leg -X | upper -y | into inset leg": {
+    "min": [
+      5584.0,
+      1091.667,
+      164.0
+    ],
+    "max": [
+      5672.0,
+      1099.667,
+      172.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot leg -X | upper +y | into inset leg": {
+    "min": [
+      5584.0,
+      1124.0,
+      164.0
+    ],
+    "max": [
+      5672.0,
+      1132.0,
+      172.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot leg -X | lower | into inset leg": {
+    "min": [
+      5584.0,
+      1111.5,
+      18.0
+    ],
+    "max": [
+      5672.0,
+      1119.5,
+      26.0
     ]
   }
 }

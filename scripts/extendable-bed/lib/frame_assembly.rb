@@ -510,6 +510,7 @@ module Timmerman
         _under_slat_foot_beam
         _foot_cap_into_inset_leg_screws
         _foot_cap_between_foot_end_screws
+        _foot_corner_leg_into_inset_leg_screws
       end
 
       private
@@ -630,6 +631,36 @@ module Timmerman
                 face:      :min_z,
                 u:         mid_world_x - foot_cap_x0,
                 v:         c.beam_wide / 2.0,
+                spec_id:   :eb_pocket_4mm
+        end
+      end
+
+      # Three lateral screws per foot corner leg, going through the corner leg
+      # outer face into the inset leg behind it. Two near the top (at v =
+      # lh_outer − beam_wide/3, one near each Y edge) and one near the bottom
+      # (centered in Y). On +X/−X the outer face flips to :max_x/:min_x; u/v
+      # stay in each leg's part-local frame (both corner legs have identical
+      # axis alignment).
+      def _foot_corner_leg_into_inset_leg_screws
+        { '+X' => :max_x, '-X' => :min_x }.each do |side, outer_face|
+          host = "EB | leg | foot | #{side}"
+          screw "EB | screw | foot leg #{side} | upper -y | into inset leg",
+                host_name: host,
+                face:      outer_face,
+                u:         c.beam_narrow / 3.0,
+                v:         c.outer_corner_leg_height - c.beam_wide / 3.0,
+                spec_id:   :eb_pocket_4mm
+          screw "EB | screw | foot leg #{side} | upper +y | into inset leg",
+                host_name: host,
+                face:      outer_face,
+                u:         c.beam_wide - c.beam_narrow / 2.0,
+                v:         c.outer_corner_leg_height - c.beam_wide / 3.0,
+                spec_id:   :eb_pocket_4mm
+          screw "EB | screw | foot leg #{side} | lower | into inset leg",
+                host_name: host,
+                face:      outer_face,
+                u:         c.beam_wide / 2.0,
+                v:         c.beam_narrow / 2.0,
                 spec_id:   :eb_pocket_4mm
         end
       end
