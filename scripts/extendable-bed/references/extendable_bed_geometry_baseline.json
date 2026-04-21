@@ -1439,6 +1439,54 @@
       191.0
     ]
   },
+  "EB_StepExt_Front / EB | screw | foot cap | mid 2-3 | into foot end": {
+    "min": [
+      206.0,
+      -620.5,
+      147.0
+    ],
+    "max": [
+      214.0,
+      -612.5,
+      235.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot cap | mid 3-4 | into foot end": {
+    "min": [
+      300.0,
+      -620.5,
+      147.0
+    ],
+    "max": [
+      308.0,
+      -612.5,
+      235.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot cap | mid 5-6 | into foot end": {
+    "min": [
+      488.0,
+      -620.5,
+      147.0
+    ],
+    "max": [
+      496.0,
+      -612.5,
+      235.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | foot cap | mid 6-7 | into foot end": {
+    "min": [
+      582.0,
+      -620.5,
+      147.0
+    ],
+    "max": [
+      590.0,
+      -612.5,
+      235.0
+    ]
+  },
   "EB_StepDecoup_Back / EB | leg | head | -X": {
     "min": [
       1396.0,
@@ -2829,6 +2877,54 @@
       2130.0,
       -600.0,
       191.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot cap | mid 2-3 | into foot end": {
+    "min": [
+      1602.0,
+      -620.5,
+      147.0
+    ],
+    "max": [
+      1610.0,
+      -612.5,
+      235.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot cap | mid 3-4 | into foot end": {
+    "min": [
+      1696.0,
+      -620.5,
+      147.0
+    ],
+    "max": [
+      1704.0,
+      -612.5,
+      235.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot cap | mid 5-6 | into foot end": {
+    "min": [
+      1884.0,
+      -620.5,
+      147.0
+    ],
+    "max": [
+      1892.0,
+      -612.5,
+      235.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | foot cap | mid 6-7 | into foot end": {
+    "min": [
+      1978.0,
+      -620.5,
+      147.0
+    ],
+    "max": [
+      1986.0,
+      -612.5,
+      235.0
     ]
   },
   "EB_StepNoLedges_Back / EB | leg | head | -X": {
@@ -4223,6 +4319,54 @@
       157.0
     ]
   },
+  "EB_StepNoLedges_Front / EB | screw | foot cap | mid 2-3 | into foot end": {
+    "min": [
+      3374.0,
+      -620.5,
+      25.0
+    ],
+    "max": [
+      3382.0,
+      -612.5,
+      113.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot cap | mid 3-4 | into foot end": {
+    "min": [
+      3280.0,
+      -620.5,
+      25.0
+    ],
+    "max": [
+      3288.0,
+      -612.5,
+      113.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot cap | mid 5-6 | into foot end": {
+    "min": [
+      3092.0,
+      -620.5,
+      25.0
+    ],
+    "max": [
+      3100.0,
+      -612.5,
+      113.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | foot cap | mid 6-7 | into foot end": {
+    "min": [
+      2998.0,
+      -620.5,
+      25.0
+    ],
+    "max": [
+      3006.0,
+      -612.5,
+      113.0
+    ]
+  },
   "EB_StepFlip_Back / EB | leg | head | -X": {
     "min": [
       4940.0,
@@ -5603,6 +5747,54 @@
       157.0
     ]
   },
+  "EB_StepFlip_Front / EB | screw | foot cap | mid 2-3 | into foot end": {
+    "min": [
+      4770.0,
+      -331.167,
+      25.0
+    ],
+    "max": [
+      4778.0,
+      -323.167,
+      113.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot cap | mid 3-4 | into foot end": {
+    "min": [
+      4676.0,
+      -331.167,
+      25.0
+    ],
+    "max": [
+      4684.0,
+      -323.167,
+      113.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot cap | mid 5-6 | into foot end": {
+    "min": [
+      4488.0,
+      -331.167,
+      25.0
+    ],
+    "max": [
+      4496.0,
+      -323.167,
+      113.0
+    ]
+  },
+  "EB_StepFlip_Front / EB | screw | foot cap | mid 6-7 | into foot end": {
+    "min": [
+      4394.0,
+      -331.167,
+      25.0
+    ],
+    "max": [
+      4402.0,
+      -323.167,
+      113.0
+    ]
+  },
   "EB_StepFlipNoLegs_Back / EB | leg | head | -X": {
     "min": [
       6336.0,
@@ -6959,6 +7151,54 @@
       157.0
     ]
   },
+  "EB_StepFlipNoLegs_Front / EB | screw | foot cap | mid 2-3 | into foot end": {
+    "min": [
+      6166.0,
+      -331.167,
+      25.0
+    ],
+    "max": [
+      6174.0,
+      -323.167,
+      113.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | screw | foot cap | mid 3-4 | into foot end": {
+    "min": [
+      6072.0,
+      -331.167,
+      25.0
+    ],
+    "max": [
+      6080.0,
+      -323.167,
+      113.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | screw | foot cap | mid 5-6 | into foot end": {
+    "min": [
+      5884.0,
+      -331.167,
+      25.0
+    ],
+    "max": [
+      5892.0,
+      -323.167,
+      113.0
+    ]
+  },
+  "EB_StepFlipNoLegs_Front / EB | screw | foot cap | mid 6-7 | into foot end": {
+    "min": [
+      5790.0,
+      -331.167,
+      25.0
+    ],
+    "max": [
+      5798.0,
+      -323.167,
+      113.0
+    ]
+  },
   "EB_StepFlipNoCaps_Back / EB | beam | head | end": {
     "min": [
       6980.0,
@@ -8235,83 +8475,131 @@
     "min": [
       9084.0,
       -361.667,
-      44.0
+      88.0
     ],
     "max": [
       9128.0,
       -292.667,
-      191.0
+      235.0
     ]
   },
   "EB_StepPrep_Front / EB | leg | foot | +X | inset": {
     "min": [
       8420.0,
       -361.667,
-      44.0
+      88.0
     ],
     "max": [
       8464.0,
       -292.667,
-      191.0
+      235.0
     ]
   },
   "EB_StepPrep_Front / EB | beam | foot | cap": {
     "min": [
       8420.0,
       -361.667,
-      0.0
+      44.0
     ],
     "max": [
       9128.0,
       -292.667,
-      44.0
+      88.0
     ]
   },
   "EB_StepPrep_Front / EB | screw | foot cap | -X end into inset leg | -Y": {
     "min": [
       9102.0,
       -343.667,
-      0.0
+      44.0
     ],
     "max": [
       9110.0,
       -335.667,
-      88.0
+      132.0
     ]
   },
   "EB_StepPrep_Front / EB | screw | foot cap | -X end into inset leg | +Y": {
     "min": [
       9102.0,
       -318.667,
-      0.0
+      44.0
     ],
     "max": [
       9110.0,
       -310.667,
-      88.0
+      132.0
     ]
   },
   "EB_StepPrep_Front / EB | screw | foot cap | +X end into inset leg | -Y": {
     "min": [
       8438.0,
       -343.667,
-      0.0
+      44.0
     ],
     "max": [
       8446.0,
       -335.667,
-      88.0
+      132.0
     ]
   },
   "EB_StepPrep_Front / EB | screw | foot cap | +X end into inset leg | +Y": {
     "min": [
       8438.0,
       -318.667,
-      0.0
+      44.0
     ],
     "max": [
       8446.0,
       -310.667,
+      132.0
+    ]
+  },
+  "EB_StepPrep_Front / EB | screw | foot cap | mid 2-3 | into foot end": {
+    "min": [
+      8958.0,
+      -331.167,
+      0.0
+    ],
+    "max": [
+      8966.0,
+      -323.167,
+      88.0
+    ]
+  },
+  "EB_StepPrep_Front / EB | screw | foot cap | mid 3-4 | into foot end": {
+    "min": [
+      8864.0,
+      -331.167,
+      0.0
+    ],
+    "max": [
+      8872.0,
+      -323.167,
+      88.0
+    ]
+  },
+  "EB_StepPrep_Front / EB | screw | foot cap | mid 5-6 | into foot end": {
+    "min": [
+      8676.0,
+      -331.167,
+      0.0
+    ],
+    "max": [
+      8684.0,
+      -323.167,
+      88.0
+    ]
+  },
+  "EB_StepPrep_Front / EB | screw | foot cap | mid 6-7 | into foot end": {
+    "min": [
+      8582.0,
+      -331.167,
+      0.0
+    ],
+    "max": [
+      8590.0,
+      -323.167,
       88.0
     ]
   },
@@ -9791,6 +10079,54 @@
       191.0
     ]
   },
+  "EB_Ext1_Front / EB | screw | foot cap | mid 2-3 | into foot end": {
+    "min": [
+      206.0,
+      1400.833,
+      147.0
+    ],
+    "max": [
+      214.0,
+      1408.833,
+      235.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot cap | mid 3-4 | into foot end": {
+    "min": [
+      300.0,
+      1400.833,
+      147.0
+    ],
+    "max": [
+      308.0,
+      1408.833,
+      235.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot cap | mid 5-6 | into foot end": {
+    "min": [
+      488.0,
+      1400.833,
+      147.0
+    ],
+    "max": [
+      496.0,
+      1408.833,
+      235.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | foot cap | mid 6-7 | into foot end": {
+    "min": [
+      582.0,
+      1400.833,
+      147.0
+    ],
+    "max": [
+      590.0,
+      1408.833,
+      235.0
+    ]
+  },
   "EB_Ext1_Front / EB | pillow | small | 1": {
     "min": [
       0.0,
@@ -11267,6 +11603,54 @@
       191.0
     ]
   },
+  "EB_Half_Front / EB | screw | foot cap | mid 2-3 | into foot end": {
+    "min": [
+      1602.0,
+      1690.167,
+      147.0
+    ],
+    "max": [
+      1610.0,
+      1698.167,
+      235.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot cap | mid 3-4 | into foot end": {
+    "min": [
+      1696.0,
+      1690.167,
+      147.0
+    ],
+    "max": [
+      1704.0,
+      1698.167,
+      235.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot cap | mid 5-6 | into foot end": {
+    "min": [
+      1884.0,
+      1690.167,
+      147.0
+    ],
+    "max": [
+      1892.0,
+      1698.167,
+      235.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | foot cap | mid 6-7 | into foot end": {
+    "min": [
+      1978.0,
+      1690.167,
+      147.0
+    ],
+    "max": [
+      1986.0,
+      1698.167,
+      235.0
+    ]
+  },
   "EB_Half_Front / EB | pillow | small | 3": {
     "min": [
       1396.0,
@@ -12741,6 +13125,54 @@
       3526.0,
       2000.0,
       191.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot cap | mid 2-3 | into foot end": {
+    "min": [
+      2998.0,
+      1979.5,
+      147.0
+    ],
+    "max": [
+      3006.0,
+      1987.5,
+      235.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot cap | mid 3-4 | into foot end": {
+    "min": [
+      3092.0,
+      1979.5,
+      147.0
+    ],
+    "max": [
+      3100.0,
+      1987.5,
+      235.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot cap | mid 5-6 | into foot end": {
+    "min": [
+      3280.0,
+      1979.5,
+      147.0
+    ],
+    "max": [
+      3288.0,
+      1987.5,
+      235.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | foot cap | mid 6-7 | into foot end": {
+    "min": [
+      3374.0,
+      1979.5,
+      147.0
+    ],
+    "max": [
+      3382.0,
+      1987.5,
+      235.0
     ]
   },
   "EB_Ext_Front / EB | pillow | small | 1": {
@@ -14267,6 +14699,54 @@
       191.0
     ]
   },
+  "EB_Ret_Front / EB | screw | foot cap | mid 2-3 | into foot end": {
+    "min": [
+      4394.0,
+      1111.5,
+      147.0
+    ],
+    "max": [
+      4402.0,
+      1119.5,
+      235.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot cap | mid 3-4 | into foot end": {
+    "min": [
+      4488.0,
+      1111.5,
+      147.0
+    ],
+    "max": [
+      4496.0,
+      1119.5,
+      235.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot cap | mid 5-6 | into foot end": {
+    "min": [
+      4676.0,
+      1111.5,
+      147.0
+    ],
+    "max": [
+      4684.0,
+      1119.5,
+      235.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | foot cap | mid 6-7 | into foot end": {
+    "min": [
+      4770.0,
+      1111.5,
+      147.0
+    ],
+    "max": [
+      4778.0,
+      1119.5,
+      235.0
+    ]
+  },
   "EB_RetGnd_Back / EB | leg | head | -X": {
     "min": [
       5584.0,
@@ -15753,6 +16233,54 @@
       6318.0,
       1132.0,
       191.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot cap | mid 2-3 | into foot end": {
+    "min": [
+      5790.0,
+      1111.5,
+      147.0
+    ],
+    "max": [
+      5798.0,
+      1119.5,
+      235.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot cap | mid 3-4 | into foot end": {
+    "min": [
+      5884.0,
+      1111.5,
+      147.0
+    ],
+    "max": [
+      5892.0,
+      1119.5,
+      235.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot cap | mid 5-6 | into foot end": {
+    "min": [
+      6072.0,
+      1111.5,
+      147.0
+    ],
+    "max": [
+      6080.0,
+      1119.5,
+      235.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | foot cap | mid 6-7 | into foot end": {
+    "min": [
+      6166.0,
+      1111.5,
+      147.0
+    ],
+    "max": [
+      6174.0,
+      1119.5,
+      235.0
     ]
   }
 }

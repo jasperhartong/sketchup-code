@@ -509,6 +509,7 @@ module Timmerman
         _front_slats
         _under_slat_foot_beam
         _foot_cap_into_inset_leg_screws
+        _foot_cap_between_foot_end_screws
       end
 
       private
@@ -611,6 +612,25 @@ module Timmerman
                   v:         v,
                   spec_id:   :eb_pocket_4mm
           end
+        end
+      end
+
+      # Screws up from under the foot cap into the foot end beam above, each
+      # centered in X between a pair of adjacent lower foot-end screws (foot-side
+      # mirror of +BackFrame#_head_cap_between_head_end_screws+; the gap between
+      # foot-end screws n1/fc and n2/fc sits over back slat n2).
+      FOOT_CAP_BETWEEN_FOOT_END_PAIRS = [[2, 3], [3, 4], [5, 6], [6, 7]].freeze
+
+      def _foot_cap_between_foot_end_screws
+        _, front_xs = slat_x_starts
+        FOOT_CAP_BETWEEN_FOOT_END_PAIRS.each do |n1, n2|
+          mid_world_x = (front_xs[n1 - 1] + front_xs[n2 - 1]) / 2.0 + c.slat_dx / 2.0
+          screw "EB | screw | foot cap | mid #{n1}-#{n2} | into foot end",
+                host_name: 'EB | beam | foot | cap',
+                face:      :min_z,
+                u:         mid_world_x - foot_cap_x0,
+                v:         c.beam_wide / 2.0,
+                spec_id:   :eb_pocket_4mm
         end
       end
 
