@@ -866,7 +866,7 @@
   "EB_StepExt_Back / EB | screw | mid run leg +X | max_y mid": {
     "min": [
       757.5,
-      -1599.0,
+      -1569.0,
       152.5
     ],
     "max": [
@@ -878,7 +878,7 @@
   "EB_StepExt_Back / EB | screw | mid run leg -X | max_y mid": {
     "min": [
       30.5,
-      -1599.0,
+      -1569.0,
       152.5
     ],
     "max": [
@@ -938,7 +938,7 @@
   "EB_StepExt_Back / EB | screw | mid run leg +X | into behind-mid post | -Z": {
     "min": [
       777.333,
-      -1599.0,
+      -1569.0,
       19.0
     ],
     "max": [
@@ -950,7 +950,7 @@
   "EB_StepExt_Back / EB | screw | mid run leg +X | into behind-mid post | +Z": {
     "min": [
       777.333,
-      -1599.0,
+      -1569.0,
       108.5
     ],
     "max": [
@@ -962,7 +962,7 @@
   "EB_StepExt_Back / EB | screw | mid run leg -X | into behind-mid post | -Z": {
     "min": [
       10.667,
-      -1599.0,
+      -1569.0,
       19.0
     ],
     "max": [
@@ -974,7 +974,7 @@
   "EB_StepExt_Back / EB | screw | mid run leg -X | into behind-mid post | +Z": {
     "min": [
       10.667,
-      -1599.0,
+      -1569.0,
       108.5
     ],
     "max": [
@@ -2462,7 +2462,7 @@
   "EB_StepDecoup_Back / EB | screw | mid run leg +X | max_y mid": {
     "min": [
       2153.5,
-      -1599.0,
+      -1569.0,
       152.5
     ],
     "max": [
@@ -2474,7 +2474,7 @@
   "EB_StepDecoup_Back / EB | screw | mid run leg -X | max_y mid": {
     "min": [
       1426.5,
-      -1599.0,
+      -1569.0,
       152.5
     ],
     "max": [
@@ -2534,7 +2534,7 @@
   "EB_StepDecoup_Back / EB | screw | mid run leg +X | into behind-mid post | -Z": {
     "min": [
       2173.333,
-      -1599.0,
+      -1569.0,
       19.0
     ],
     "max": [
@@ -2546,7 +2546,7 @@
   "EB_StepDecoup_Back / EB | screw | mid run leg +X | into behind-mid post | +Z": {
     "min": [
       2173.333,
-      -1599.0,
+      -1569.0,
       108.5
     ],
     "max": [
@@ -2558,7 +2558,7 @@
   "EB_StepDecoup_Back / EB | screw | mid run leg -X | into behind-mid post | -Z": {
     "min": [
       1406.667,
-      -1599.0,
+      -1569.0,
       19.0
     ],
     "max": [
@@ -2570,7 +2570,7 @@
   "EB_StepDecoup_Back / EB | screw | mid run leg -X | into behind-mid post | +Z": {
     "min": [
       1406.667,
-      -1599.0,
+      -1569.0,
       108.5
     ],
     "max": [
@@ -4022,7 +4022,7 @@
   "EB_StepNoLedges_Back / EB | screw | mid run leg +X | max_y mid": {
     "min": [
       2822.5,
-      -1599.0,
+      -1569.0,
       99.5
     ],
     "max": [
@@ -4034,7 +4034,7 @@
   "EB_StepNoLedges_Back / EB | screw | mid run leg -X | max_y mid": {
     "min": [
       3549.5,
-      -1599.0,
+      -1569.0,
       99.5
     ],
     "max": [
@@ -4094,7 +4094,7 @@
   "EB_StepNoLedges_Back / EB | screw | mid run leg +X | into behind-mid post | -Z": {
     "min": [
       2802.667,
-      -1599.0,
+      -1569.0,
       233.0
     ],
     "max": [
@@ -4106,7 +4106,7 @@
   "EB_StepNoLedges_Back / EB | screw | mid run leg +X | into behind-mid post | +Z": {
     "min": [
       2802.667,
-      -1599.0,
+      -1569.0,
       143.5
     ],
     "max": [
@@ -4118,7 +4118,7 @@
   "EB_StepNoLedges_Back / EB | screw | mid run leg -X | into behind-mid post | -Z": {
     "min": [
       3569.333,
-      -1599.0,
+      -1569.0,
       233.0
     ],
     "max": [
@@ -4130,7 +4130,7 @@
   "EB_StepNoLedges_Back / EB | screw | mid run leg -X | into behind-mid post | +Z": {
     "min": [
       3569.333,
-      -1599.0,
+      -1569.0,
       143.5
     ],
     "max": [
@@ -5582,7 +5582,7 @@
   "EB_StepFlip_Back / EB | screw | mid run leg +X | max_y mid": {
     "min": [
       4218.5,
-      -1599.0,
+      -1569.0,
       99.5
     ],
     "max": [
@@ -5594,7 +5594,7 @@
   "EB_StepFlip_Back / EB | screw | mid run leg -X | max_y mid": {
     "min": [
       4945.5,
-      -1599.0,
+      -1569.0,
       99.5
     ],
     "max": [
@@ -5654,7 +5654,7 @@
   "EB_StepFlip_Back / EB | screw | mid run leg +X | into behind-mid post | -Z": {
     "min": [
       4198.667,
-      -1599.0,
+      -1569.0,
       233.0
     ],
     "max": [
@@ -5666,7 +5666,7 @@
   "EB_StepFlip_Back / EB | screw | mid run leg +X | into behind-mid post | +Z": {
     "min": [
       4198.667,
-      -1599.0,
+      -1569.0,
       143.5
     ],
     "max": [
@@ -5678,7 +5678,7 @@
   "EB_StepFlip_Back / EB | screw | mid run leg -X | into behind-mid post | -Z": {
     "min": [
       4965.333,
-      -1599.0,
+      -1569.0,
       233.0
     ],
     "max": [
@@ -5690,7 +5690,7 @@
   "EB_StepFlip_Back / EB | screw | mid run leg -X | into behind-mid post | +Z": {
     "min": [
       4965.333,
-      -1599.0,
+      -1569.0,
       143.5
     ],
     "max": [
@@ -7058,7 +7058,7 @@
   "EB_StepFlipNoLegs_Back / EB | screw | mid run leg +X | max_y mid": {
     "min": [
       5614.5,
-      -1599.0,
+      -1569.0,
       99.5
     ],
     "max": [
@@ -7070,7 +7070,7 @@
   "EB_StepFlipNoLegs_Back / EB | screw | mid run leg -X | max_y mid": {
     "min": [
       6341.5,
-      -1599.0,
+      -1569.0,
       99.5
     ],
     "max": [
@@ -7130,7 +7130,7 @@
   "EB_StepFlipNoLegs_Back / EB | screw | mid run leg +X | into behind-mid post | -Z": {
     "min": [
       5594.667,
-      -1599.0,
+      -1569.0,
       233.0
     ],
     "max": [
@@ -7142,7 +7142,7 @@
   "EB_StepFlipNoLegs_Back / EB | screw | mid run leg +X | into behind-mid post | +Z": {
     "min": [
       5594.667,
-      -1599.0,
+      -1569.0,
       143.5
     ],
     "max": [
@@ -7154,7 +7154,7 @@
   "EB_StepFlipNoLegs_Back / EB | screw | mid run leg -X | into behind-mid post | -Z": {
     "min": [
       6361.333,
-      -1599.0,
+      -1569.0,
       233.0
     ],
     "max": [
@@ -7166,7 +7166,7 @@
   "EB_StepFlipNoLegs_Back / EB | screw | mid run leg -X | into behind-mid post | +Z": {
     "min": [
       6361.333,
-      -1599.0,
+      -1569.0,
       143.5
     ],
     "max": [
@@ -8738,7 +8738,7 @@
   "EB_StepPrep_Back / EB | screw | mid run leg +X | max_y mid": {
     "min": [
       8406.5,
-      -1599.0,
+      -1569.0,
       66.5
     ],
     "max": [
@@ -8750,7 +8750,7 @@
   "EB_StepPrep_Back / EB | screw | mid run leg -X | max_y mid": {
     "min": [
       9133.5,
-      -1599.0,
+      -1569.0,
       66.5
     ],
     "max": [
@@ -8810,7 +8810,7 @@
   "EB_StepPrep_Back / EB | screw | mid run leg +X | into behind-mid post | -Z": {
     "min": [
       8386.667,
-      -1599.0,
+      -1569.0,
       200.0
     ],
     "max": [
@@ -8822,7 +8822,7 @@
   "EB_StepPrep_Back / EB | screw | mid run leg +X | into behind-mid post | +Z": {
     "min": [
       8386.667,
-      -1599.0,
+      -1569.0,
       110.5
     ],
     "max": [
@@ -8834,7 +8834,7 @@
   "EB_StepPrep_Back / EB | screw | mid run leg -X | into behind-mid post | -Z": {
     "min": [
       9153.333,
-      -1599.0,
+      -1569.0,
       200.0
     ],
     "max": [
@@ -8846,7 +8846,7 @@
   "EB_StepPrep_Back / EB | screw | mid run leg -X | into behind-mid post | +Z": {
     "min": [
       9153.333,
-      -1599.0,
+      -1569.0,
       110.5
     ],
     "max": [
@@ -9854,7 +9854,7 @@
   "EB_Ext1_Back / EB | screw | mid run leg +X | max_y mid": {
     "min": [
       757.5,
-      1001.0,
+      1031.0,
       152.5
     ],
     "max": [
@@ -9866,7 +9866,7 @@
   "EB_Ext1_Back / EB | screw | mid run leg -X | max_y mid": {
     "min": [
       30.5,
-      1001.0,
+      1031.0,
       152.5
     ],
     "max": [
@@ -9926,7 +9926,7 @@
   "EB_Ext1_Back / EB | screw | mid run leg +X | into behind-mid post | -Z": {
     "min": [
       777.333,
-      1001.0,
+      1031.0,
       19.0
     ],
     "max": [
@@ -9938,7 +9938,7 @@
   "EB_Ext1_Back / EB | screw | mid run leg +X | into behind-mid post | +Z": {
     "min": [
       777.333,
-      1001.0,
+      1031.0,
       108.5
     ],
     "max": [
@@ -9950,7 +9950,7 @@
   "EB_Ext1_Back / EB | screw | mid run leg -X | into behind-mid post | -Z": {
     "min": [
       10.667,
-      1001.0,
+      1031.0,
       19.0
     ],
     "max": [
@@ -9962,7 +9962,7 @@
   "EB_Ext1_Back / EB | screw | mid run leg -X | into behind-mid post | +Z": {
     "min": [
       10.667,
-      1001.0,
+      1031.0,
       108.5
     ],
     "max": [
@@ -11534,7 +11534,7 @@
   "EB_Half_Back / EB | screw | mid run leg +X | max_y mid": {
     "min": [
       2153.5,
-      1001.0,
+      1031.0,
       152.5
     ],
     "max": [
@@ -11546,7 +11546,7 @@
   "EB_Half_Back / EB | screw | mid run leg -X | max_y mid": {
     "min": [
       1426.5,
-      1001.0,
+      1031.0,
       152.5
     ],
     "max": [
@@ -11606,7 +11606,7 @@
   "EB_Half_Back / EB | screw | mid run leg +X | into behind-mid post | -Z": {
     "min": [
       2173.333,
-      1001.0,
+      1031.0,
       19.0
     ],
     "max": [
@@ -11618,7 +11618,7 @@
   "EB_Half_Back / EB | screw | mid run leg +X | into behind-mid post | +Z": {
     "min": [
       2173.333,
-      1001.0,
+      1031.0,
       108.5
     ],
     "max": [
@@ -11630,7 +11630,7 @@
   "EB_Half_Back / EB | screw | mid run leg -X | into behind-mid post | -Z": {
     "min": [
       1406.667,
-      1001.0,
+      1031.0,
       19.0
     ],
     "max": [
@@ -11642,7 +11642,7 @@
   "EB_Half_Back / EB | screw | mid run leg -X | into behind-mid post | +Z": {
     "min": [
       1406.667,
-      1001.0,
+      1031.0,
       108.5
     ],
     "max": [
@@ -13214,7 +13214,7 @@
   "EB_Ext_Back / EB | screw | mid run leg +X | max_y mid": {
     "min": [
       3549.5,
-      1001.0,
+      1031.0,
       152.5
     ],
     "max": [
@@ -13226,7 +13226,7 @@
   "EB_Ext_Back / EB | screw | mid run leg -X | max_y mid": {
     "min": [
       2822.5,
-      1001.0,
+      1031.0,
       152.5
     ],
     "max": [
@@ -13286,7 +13286,7 @@
   "EB_Ext_Back / EB | screw | mid run leg +X | into behind-mid post | -Z": {
     "min": [
       3569.333,
-      1001.0,
+      1031.0,
       19.0
     ],
     "max": [
@@ -13298,7 +13298,7 @@
   "EB_Ext_Back / EB | screw | mid run leg +X | into behind-mid post | +Z": {
     "min": [
       3569.333,
-      1001.0,
+      1031.0,
       108.5
     ],
     "max": [
@@ -13310,7 +13310,7 @@
   "EB_Ext_Back / EB | screw | mid run leg -X | into behind-mid post | -Z": {
     "min": [
       2802.667,
-      1001.0,
+      1031.0,
       19.0
     ],
     "max": [
@@ -13322,7 +13322,7 @@
   "EB_Ext_Back / EB | screw | mid run leg -X | into behind-mid post | +Z": {
     "min": [
       2802.667,
-      1001.0,
+      1031.0,
       108.5
     ],
     "max": [
@@ -14894,7 +14894,7 @@
   "EB_Ret_Back / EB | screw | mid run leg +X | max_y mid": {
     "min": [
       4945.5,
-      1001.0,
+      1031.0,
       152.5
     ],
     "max": [
@@ -14906,7 +14906,7 @@
   "EB_Ret_Back / EB | screw | mid run leg -X | max_y mid": {
     "min": [
       4218.5,
-      1001.0,
+      1031.0,
       152.5
     ],
     "max": [
@@ -14966,7 +14966,7 @@
   "EB_Ret_Back / EB | screw | mid run leg +X | into behind-mid post | -Z": {
     "min": [
       4965.333,
-      1001.0,
+      1031.0,
       19.0
     ],
     "max": [
@@ -14978,7 +14978,7 @@
   "EB_Ret_Back / EB | screw | mid run leg +X | into behind-mid post | +Z": {
     "min": [
       4965.333,
-      1001.0,
+      1031.0,
       108.5
     ],
     "max": [
@@ -14990,7 +14990,7 @@
   "EB_Ret_Back / EB | screw | mid run leg -X | into behind-mid post | -Z": {
     "min": [
       4198.667,
-      1001.0,
+      1031.0,
       19.0
     ],
     "max": [
@@ -15002,7 +15002,7 @@
   "EB_Ret_Back / EB | screw | mid run leg -X | into behind-mid post | +Z": {
     "min": [
       4198.667,
-      1001.0,
+      1031.0,
       108.5
     ],
     "max": [
@@ -16574,7 +16574,7 @@
   "EB_RetGnd_Back / EB | screw | mid run leg +X | max_y mid": {
     "min": [
       6341.5,
-      1001.0,
+      1031.0,
       152.5
     ],
     "max": [
@@ -16586,7 +16586,7 @@
   "EB_RetGnd_Back / EB | screw | mid run leg -X | max_y mid": {
     "min": [
       5614.5,
-      1001.0,
+      1031.0,
       152.5
     ],
     "max": [
@@ -16646,7 +16646,7 @@
   "EB_RetGnd_Back / EB | screw | mid run leg +X | into behind-mid post | -Z": {
     "min": [
       6361.333,
-      1001.0,
+      1031.0,
       19.0
     ],
     "max": [
@@ -16658,7 +16658,7 @@
   "EB_RetGnd_Back / EB | screw | mid run leg +X | into behind-mid post | +Z": {
     "min": [
       6361.333,
-      1001.0,
+      1031.0,
       108.5
     ],
     "max": [
@@ -16670,7 +16670,7 @@
   "EB_RetGnd_Back / EB | screw | mid run leg -X | into behind-mid post | -Z": {
     "min": [
       5594.667,
-      1001.0,
+      1031.0,
       19.0
     ],
     "max": [
@@ -16682,7 +16682,7 @@
   "EB_RetGnd_Back / EB | screw | mid run leg -X | into behind-mid post | +Z": {
     "min": [
       5594.667,
-      1001.0,
+      1031.0,
       108.5
     ],
     "max": [
@@ -18254,7 +18254,7 @@
   "EB_RetScrews_Back / EB | screw | mid run leg +X | max_y mid": {
     "min": [
       7737.5,
-      1001.0,
+      1031.0,
       152.5
     ],
     "max": [
@@ -18266,7 +18266,7 @@
   "EB_RetScrews_Back / EB | screw | mid run leg -X | max_y mid": {
     "min": [
       7010.5,
-      1001.0,
+      1031.0,
       152.5
     ],
     "max": [
@@ -18326,7 +18326,7 @@
   "EB_RetScrews_Back / EB | screw | mid run leg +X | into behind-mid post | -Z": {
     "min": [
       7757.333,
-      1001.0,
+      1031.0,
       19.0
     ],
     "max": [
@@ -18338,7 +18338,7 @@
   "EB_RetScrews_Back / EB | screw | mid run leg +X | into behind-mid post | +Z": {
     "min": [
       7757.333,
-      1001.0,
+      1031.0,
       108.5
     ],
     "max": [
@@ -18350,7 +18350,7 @@
   "EB_RetScrews_Back / EB | screw | mid run leg -X | into behind-mid post | -Z": {
     "min": [
       6990.667,
-      1001.0,
+      1031.0,
       19.0
     ],
     "max": [
@@ -18362,7 +18362,7 @@
   "EB_RetScrews_Back / EB | screw | mid run leg -X | into behind-mid post | +Z": {
     "min": [
       6990.667,
-      1001.0,
+      1031.0,
       108.5
     ],
     "max": [

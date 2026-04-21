@@ -411,7 +411,8 @@ module Timmerman
                 face:      :max_y,
                 u:         c.beam_wide / 2.0,
                 v:         c.outer_corner_leg_height - c.beam_wide / 2.0,
-                spec_id:   :eb_pocket_4mm
+                spec_id:   :eb_pocket_4mm,
+                shaft_length_index: 1
         end
       end
 
@@ -433,7 +434,8 @@ module Timmerman
                   face:      :max_y,
                   u:         u,
                   v:         v,
-                  spec_id:   :eb_pocket_4mm
+                  spec_id:   :eb_pocket_4mm,
+                  shaft_length_index: 1
           end
         end
       end

@@ -60,6 +60,34 @@ module Timmerman
       }.freeze
 
       VARIANT_HIDDEN = {
+        # Step 7 cleanup: hide selected mirrored screw pairs to keep the
+        # sub-assembly prep view uncluttered.
+        step_prep_hide_conflicting_screws: ->(_b, _f, c) {
+          {
+            back: [
+              'EB | screw | back sister -X | middle',
+              'EB | screw | back sister +X | middle',
+              'EB | screw | head cap | mid 7-8 | into head end',
+              'EB | screw | head cap | mid 2-3 | into head end',
+              'EB | screw | head cap | mid 5-6 | into head end',
+              'EB | screw | head cap | mid 4-5 | into head end',
+              "EB | screw | sister tie | 8/#{c.back_slat_count} | heart",
+              "EB | screw | sister tie | 2/#{c.back_slat_count} | heart",
+              "EB | screw | sister tie | 7/#{c.back_slat_count} | heart",
+              "EB | screw | sister tie | 3/#{c.back_slat_count} | heart",
+              "EB | screw | sister tie | 6/#{c.back_slat_count} | heart",
+              "EB | screw | sister tie | 4/#{c.back_slat_count} | heart",
+              "EB | screw | sister tie | 5/#{c.back_slat_count} | heart"
+            ],
+            front: [
+              'EB | screw | foot cap | mid 6-7 | into foot end',
+              'EB | screw | foot cap | mid 2-3 | into foot end',
+              'EB | screw | foot cap | mid 5-6 | into foot end',
+              'EB | screw | foot cap | mid 3-4 | into foot end'
+            ]
+          }
+        },
+
         # Keep all hosts for screw placement, then hide all part groups so only
         # screw hardware remains visible.
         screws_only: ->(b, f, _c) {
@@ -77,7 +105,7 @@ module Timmerman
         { back_name: Config::GROUP_STEP_FLIP_BACK,       front_name: Config::GROUP_STEP_FLIP_FRONT,       column: 3, foot: :decoupled, upside_down: true,  variant: :construction_no_ledges,         highlight: :flip_outer_corner_legs },
         { back_name: Config::GROUP_STEP_FLIP_NOLEGS_BACK, front_name: Config::GROUP_STEP_FLIP_NOLEGS_FRONT, column: 4, foot: :decoupled, upside_down: true,  variant: :flip_no_legs,                    highlight: :flip_sub_assemblies },
         { back_name: Config::GROUP_STEP_FLIP_NOCAPS_BACK, front_name: Config::GROUP_STEP_FLIP_NOCAPS_FRONT, column: 5, foot: :decoupled, upside_down: true,  variant: :flip_no_caps,                    highlight: :none },
-        { back_name: Config::GROUP_STEP_PREP_BACK,        front_name: Config::GROUP_STEP_PREP_FRONT,        column: 6, foot: :decoupled, upside_down: true,  variant: :sub_assembly_prep,               highlight: :none }
+        { back_name: Config::GROUP_STEP_PREP_BACK,        front_name: Config::GROUP_STEP_PREP_FRONT,        column: 6, foot: :decoupled, upside_down: true,  variant: :sub_assembly_prep,               highlight: :none, hidden_variant: :step_prep_hide_conflicting_screws }
       ].freeze
 
       EXTENSION_SPECS = [
@@ -103,6 +131,7 @@ module Timmerman
           foot_y  = spec[:foot] == :decoupled ? config.decoupled_front_foot_world_y : config.extended_front_foot_world_y
           hl      = highlights(spec[:highlight])
           excludes = resolve_excludes(spec[:variant], back_frame, front_frame, config)
+          hidden = resolve_hidden(spec[:hidden_variant], back_frame, front_frame, config)
 
           BedPair.new(
             config,
@@ -119,7 +148,9 @@ module Timmerman
             back_exclude:  excludes[:back],
             front_exclude: excludes[:front],
             back_highlight_part_names:  hl[:back],
-            front_highlight_part_names: hl[:front]
+            front_highlight_part_names: hl[:front],
+            back_hidden_part_names:  hidden[:back],
+            front_hidden_part_names: hidden[:front]
           )
         end
       end
