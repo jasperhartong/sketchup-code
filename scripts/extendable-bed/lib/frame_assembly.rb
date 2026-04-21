@@ -316,7 +316,8 @@ module Timmerman
                 face:      :min_y,
                 u:         mid_world_x,
                 v:         c.beam_wide / 2.0,
-                spec_id:   :eb_pocket_4mm
+                spec_id:   :eb_pocket_4mm,
+                shaft_length_index: 1
         end
       end
 
