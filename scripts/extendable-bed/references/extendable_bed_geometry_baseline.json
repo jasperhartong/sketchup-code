@@ -1559,6 +1559,78 @@
       26.0
     ]
   },
+  "EB_StepExt_Front / EB | screw | under slat foot | 2/8 | heart": {
+    "min": [
+      159.0,
+      -1626.5,
+      147.0
+    ],
+    "max": [
+      167.0,
+      -1618.5,
+      235.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | under slat foot | 3/8 | heart": {
+    "min": [
+      253.0,
+      -1626.5,
+      147.0
+    ],
+    "max": [
+      261.0,
+      -1618.5,
+      235.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | under slat foot | 4/8 | heart": {
+    "min": [
+      347.0,
+      -1626.5,
+      147.0
+    ],
+    "max": [
+      355.0,
+      -1618.5,
+      235.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | under slat foot | 5/8 | heart": {
+    "min": [
+      441.0,
+      -1626.5,
+      147.0
+    ],
+    "max": [
+      449.0,
+      -1618.5,
+      235.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | under slat foot | 6/8 | heart": {
+    "min": [
+      535.0,
+      -1626.5,
+      147.0
+    ],
+    "max": [
+      543.0,
+      -1618.5,
+      235.0
+    ]
+  },
+  "EB_StepExt_Front / EB | screw | under slat foot | 7/8 | heart": {
+    "min": [
+      629.0,
+      -1626.5,
+      147.0
+    ],
+    "max": [
+      637.0,
+      -1618.5,
+      235.0
+    ]
+  },
   "EB_StepDecoup_Back / EB | leg | head | -X": {
     "min": [
       1396.0,
@@ -3071,6 +3143,78 @@
       26.0
     ]
   },
+  "EB_StepDecoup_Front / EB | screw | under slat foot | 2/8 | heart": {
+    "min": [
+      1555.0,
+      -1626.5,
+      147.0
+    ],
+    "max": [
+      1563.0,
+      -1618.5,
+      235.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | under slat foot | 3/8 | heart": {
+    "min": [
+      1649.0,
+      -1626.5,
+      147.0
+    ],
+    "max": [
+      1657.0,
+      -1618.5,
+      235.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | under slat foot | 4/8 | heart": {
+    "min": [
+      1743.0,
+      -1626.5,
+      147.0
+    ],
+    "max": [
+      1751.0,
+      -1618.5,
+      235.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | under slat foot | 5/8 | heart": {
+    "min": [
+      1837.0,
+      -1626.5,
+      147.0
+    ],
+    "max": [
+      1845.0,
+      -1618.5,
+      235.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | under slat foot | 6/8 | heart": {
+    "min": [
+      1931.0,
+      -1626.5,
+      147.0
+    ],
+    "max": [
+      1939.0,
+      -1618.5,
+      235.0
+    ]
+  },
+  "EB_StepDecoup_Front / EB | screw | under slat foot | 7/8 | heart": {
+    "min": [
+      2025.0,
+      -1626.5,
+      147.0
+    ],
+    "max": [
+      2033.0,
+      -1618.5,
+      235.0
+    ]
+  },
   "EB_StepNoLedges_Back / EB | leg | head | -X": {
     "min": [
       3544.0,
@@ -4581,6 +4725,78 @@
       3588.0,
       -612.5,
       242.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | under slat foot | 2/8 | heart": {
+    "min": [
+      3421.0,
+      -1626.5,
+      25.0
+    ],
+    "max": [
+      3429.0,
+      -1618.5,
+      113.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | under slat foot | 3/8 | heart": {
+    "min": [
+      3327.0,
+      -1626.5,
+      25.0
+    ],
+    "max": [
+      3335.0,
+      -1618.5,
+      113.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | under slat foot | 4/8 | heart": {
+    "min": [
+      3233.0,
+      -1626.5,
+      25.0
+    ],
+    "max": [
+      3241.0,
+      -1618.5,
+      113.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | under slat foot | 5/8 | heart": {
+    "min": [
+      3139.0,
+      -1626.5,
+      25.0
+    ],
+    "max": [
+      3147.0,
+      -1618.5,
+      113.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | under slat foot | 6/8 | heart": {
+    "min": [
+      3045.0,
+      -1626.5,
+      25.0
+    ],
+    "max": [
+      3053.0,
+      -1618.5,
+      113.0
+    ]
+  },
+  "EB_StepNoLedges_Front / EB | screw | under slat foot | 7/8 | heart": {
+    "min": [
+      2951.0,
+      -1626.5,
+      25.0
+    ],
+    "max": [
+      2959.0,
+      -1618.5,
+      113.0
     ]
   },
   "EB_StepFlip_Back / EB | leg | head | -X": {
@@ -10487,6 +10703,78 @@
       26.0
     ]
   },
+  "EB_Ext1_Front / EB | screw | under slat foot | 2/8 | heart": {
+    "min": [
+      159.0,
+      394.833,
+      147.0
+    ],
+    "max": [
+      167.0,
+      402.833,
+      235.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | under slat foot | 3/8 | heart": {
+    "min": [
+      253.0,
+      394.833,
+      147.0
+    ],
+    "max": [
+      261.0,
+      402.833,
+      235.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | under slat foot | 4/8 | heart": {
+    "min": [
+      347.0,
+      394.833,
+      147.0
+    ],
+    "max": [
+      355.0,
+      402.833,
+      235.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | under slat foot | 5/8 | heart": {
+    "min": [
+      441.0,
+      394.833,
+      147.0
+    ],
+    "max": [
+      449.0,
+      402.833,
+      235.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | under slat foot | 6/8 | heart": {
+    "min": [
+      535.0,
+      394.833,
+      147.0
+    ],
+    "max": [
+      543.0,
+      402.833,
+      235.0
+    ]
+  },
+  "EB_Ext1_Front / EB | screw | under slat foot | 7/8 | heart": {
+    "min": [
+      629.0,
+      394.833,
+      147.0
+    ],
+    "max": [
+      637.0,
+      402.833,
+      235.0
+    ]
+  },
   "EB_Ext1_Front / EB | pillow | small | 1": {
     "min": [
       0.0,
@@ -12083,6 +12371,78 @@
       26.0
     ]
   },
+  "EB_Half_Front / EB | screw | under slat foot | 2/8 | heart": {
+    "min": [
+      1555.0,
+      684.167,
+      147.0
+    ],
+    "max": [
+      1563.0,
+      692.167,
+      235.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | under slat foot | 3/8 | heart": {
+    "min": [
+      1649.0,
+      684.167,
+      147.0
+    ],
+    "max": [
+      1657.0,
+      692.167,
+      235.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | under slat foot | 4/8 | heart": {
+    "min": [
+      1743.0,
+      684.167,
+      147.0
+    ],
+    "max": [
+      1751.0,
+      692.167,
+      235.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | under slat foot | 5/8 | heart": {
+    "min": [
+      1837.0,
+      684.167,
+      147.0
+    ],
+    "max": [
+      1845.0,
+      692.167,
+      235.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | under slat foot | 6/8 | heart": {
+    "min": [
+      1931.0,
+      684.167,
+      147.0
+    ],
+    "max": [
+      1939.0,
+      692.167,
+      235.0
+    ]
+  },
+  "EB_Half_Front / EB | screw | under slat foot | 7/8 | heart": {
+    "min": [
+      2025.0,
+      684.167,
+      147.0
+    ],
+    "max": [
+      2033.0,
+      692.167,
+      235.0
+    ]
+  },
   "EB_Half_Front / EB | pillow | small | 3": {
     "min": [
       1396.0,
@@ -13677,6 +14037,78 @@
       2880.0,
       1987.5,
       26.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | under slat foot | 2/8 | heart": {
+    "min": [
+      2951.0,
+      973.5,
+      147.0
+    ],
+    "max": [
+      2959.0,
+      981.5,
+      235.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | under slat foot | 3/8 | heart": {
+    "min": [
+      3045.0,
+      973.5,
+      147.0
+    ],
+    "max": [
+      3053.0,
+      981.5,
+      235.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | under slat foot | 4/8 | heart": {
+    "min": [
+      3139.0,
+      973.5,
+      147.0
+    ],
+    "max": [
+      3147.0,
+      981.5,
+      235.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | under slat foot | 5/8 | heart": {
+    "min": [
+      3233.0,
+      973.5,
+      147.0
+    ],
+    "max": [
+      3241.0,
+      981.5,
+      235.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | under slat foot | 6/8 | heart": {
+    "min": [
+      3327.0,
+      973.5,
+      147.0
+    ],
+    "max": [
+      3335.0,
+      981.5,
+      235.0
+    ]
+  },
+  "EB_Ext_Front / EB | screw | under slat foot | 7/8 | heart": {
+    "min": [
+      3421.0,
+      973.5,
+      147.0
+    ],
+    "max": [
+      3429.0,
+      981.5,
+      235.0
     ]
   },
   "EB_Ext_Front / EB | pillow | small | 1": {
@@ -15323,6 +15755,78 @@
       26.0
     ]
   },
+  "EB_Ret_Front / EB | screw | under slat foot | 2/8 | heart": {
+    "min": [
+      4347.0,
+      105.5,
+      147.0
+    ],
+    "max": [
+      4355.0,
+      113.5,
+      235.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | under slat foot | 3/8 | heart": {
+    "min": [
+      4441.0,
+      105.5,
+      147.0
+    ],
+    "max": [
+      4449.0,
+      113.5,
+      235.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | under slat foot | 4/8 | heart": {
+    "min": [
+      4535.0,
+      105.5,
+      147.0
+    ],
+    "max": [
+      4543.0,
+      113.5,
+      235.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | under slat foot | 5/8 | heart": {
+    "min": [
+      4629.0,
+      105.5,
+      147.0
+    ],
+    "max": [
+      4637.0,
+      113.5,
+      235.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | under slat foot | 6/8 | heart": {
+    "min": [
+      4723.0,
+      105.5,
+      147.0
+    ],
+    "max": [
+      4731.0,
+      113.5,
+      235.0
+    ]
+  },
+  "EB_Ret_Front / EB | screw | under slat foot | 7/8 | heart": {
+    "min": [
+      4817.0,
+      105.5,
+      147.0
+    ],
+    "max": [
+      4825.0,
+      113.5,
+      235.0
+    ]
+  },
   "EB_RetGnd_Back / EB | leg | head | -X": {
     "min": [
       5584.0,
@@ -16929,6 +17433,78 @@
       5672.0,
       1119.5,
       26.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | under slat foot | 2/8 | heart": {
+    "min": [
+      5743.0,
+      105.5,
+      147.0
+    ],
+    "max": [
+      5751.0,
+      113.5,
+      235.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | under slat foot | 3/8 | heart": {
+    "min": [
+      5837.0,
+      105.5,
+      147.0
+    ],
+    "max": [
+      5845.0,
+      113.5,
+      235.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | under slat foot | 4/8 | heart": {
+    "min": [
+      5931.0,
+      105.5,
+      147.0
+    ],
+    "max": [
+      5939.0,
+      113.5,
+      235.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | under slat foot | 5/8 | heart": {
+    "min": [
+      6025.0,
+      105.5,
+      147.0
+    ],
+    "max": [
+      6033.0,
+      113.5,
+      235.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | under slat foot | 6/8 | heart": {
+    "min": [
+      6119.0,
+      105.5,
+      147.0
+    ],
+    "max": [
+      6127.0,
+      113.5,
+      235.0
+    ]
+  },
+  "EB_RetGnd_Front / EB | screw | under slat foot | 7/8 | heart": {
+    "min": [
+      6213.0,
+      105.5,
+      147.0
+    ],
+    "max": [
+      6221.0,
+      113.5,
+      235.0
     ]
   }
 }

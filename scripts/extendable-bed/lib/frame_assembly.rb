@@ -511,6 +511,7 @@ module Timmerman
         _foot_cap_into_inset_leg_screws
         _foot_cap_between_foot_end_screws
         _foot_corner_leg_into_inset_leg_screws
+        _under_slat_foot_into_front_slat_hearts_screws
       end
 
       private
@@ -661,6 +662,28 @@ module Timmerman
                 face:      outer_face,
                 u:         c.beam_wide / 2.0,
                 v:         c.beam_narrow / 2.0,
+                spec_id:   :eb_pocket_4mm
+        end
+      end
+
+      # Foot-side mirror of +BackFrame#_sister_tie_into_back_slat_hearts_screws+:
+      # screw up from under the front under-slat-foot beam into each of the 6
+      # inner front slats (2..7) centered on each slat's heart. Beam :min_z face
+      # u runs along +X (world-X minus x1_under); v along +Y across beam_wide.
+      UNDER_SLAT_FOOT_INTO_FRONT_SLAT_HEART_INDICES = (2..7).freeze
+
+      def _under_slat_foot_into_front_slat_hearts_screws
+        x1_under, span_under = sister_tie_x
+        return unless span_under.positive?
+
+        _, front_xs = slat_x_starts
+        UNDER_SLAT_FOOT_INTO_FRONT_SLAT_HEART_INDICES.each do |n|
+          world_x = front_xs[n - 1] + c.slat_dx / 2.0
+          screw "EB | screw | under slat foot | #{n}/#{c.front_slat_count} | heart",
+                host_name: 'EB | beam | front | under slat foot',
+                face:      :min_z,
+                u:         world_x - x1_under,
+                v:         c.beam_wide / 2.0,
                 spec_id:   :eb_pocket_4mm
         end
       end
