@@ -174,6 +174,15 @@ module Timmerman
         end
       end
 
+      def hide_named_children(root, names, hidden: true)
+        return if names.nil? || names.empty?
+
+        Array(names).each do |name|
+          g = root.entities.grep(Sketchup::Group).find { |c| c.name == name }
+          g.hidden = hidden if g
+        end
+      end
+
       def debug_paint_axis_faces(root, skip_name_re:)
         return unless @debug_paint_faces
 

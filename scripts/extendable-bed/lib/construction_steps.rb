@@ -4,7 +4,7 @@ module Timmerman
   module ExtendableBed
     # Declarative tables for preview BedPair instances:
     #   — 7 construction-assembly steps (headward row, progressive omissions + highlights)
-    #   — 5 extension-degree previews (the usage row)
+    #   — extension-degree previews (the usage row)
     #
     # Each step maps to a +variant+ symbol in +VARIANT_EXCLUDES+, which lists
     # the part names to HIDE on the back and front frames (single mechanism —
@@ -53,9 +53,17 @@ module Timmerman
         },
 
         # Step 7: cap sub-assemblies + both sister sub-assemblies joined by the mid tie.
-        sub_assembly_prep: ->(b, f, c) {
+        sub_assembly_prep: ->(b, f, _c) {
           { back:  b.names - G::PREP_BACK_WHITELIST,
             front: f.names - G::PREP_FRONT_WHITELIST }
+        }
+      }.freeze
+
+      VARIANT_HIDDEN = {
+        # Keep all hosts for screw placement, then hide all part groups so only
+        # screw hardware remains visible.
+        screws_only: ->(b, f, _c) {
+          { back: b.names, front: f.names }
         }
       }.freeze
 
@@ -77,7 +85,9 @@ module Timmerman
         { back_name: Config::GROUP_HALF_BACK,    front_name: Config::GROUP_HALF_FRONT,    column: 1, foot: :halfway,   pillow_mode: :halfway,           tally_stock: false },
         { back_name: Config::GROUP_EXT_BACK,     front_name: Config::GROUP_EXT_FRONT,     column: 2, foot: :extended,  pillow_mode: :extended,          tally_stock: true  },
         { back_name: Config::GROUP_RET_BACK,     front_name: Config::GROUP_RET_FRONT,     column: 3, foot: :retracted, pillow_mode: :retracted,         tally_stock: false },
-        { back_name: Config::GROUP_RETGND_BACK,  front_name: Config::GROUP_RETGND_FRONT,  column: 4, foot: :retracted, pillow_mode: :retracted_gnd,     tally_stock: false }
+        { back_name: Config::GROUP_RETGND_BACK,  front_name: Config::GROUP_RETGND_FRONT,  column: 4, foot: :retracted, pillow_mode: :retracted_gnd,     tally_stock: false },
+        { back_name: Config::GROUP_RETSCREWS_BACK, front_name: Config::GROUP_RETSCREWS_FRONT,
+          column: 5, foot: :retracted, pillow_mode: nil, tally_stock: false, variant: :screws_only }
       ].freeze
 
       module_function
@@ -118,6 +128,7 @@ module Timmerman
         step = config.outer_width + config.pair_gap_x
         EXTENSION_SPECS.map do |spec|
           foot_y = foot_world_y_for(config, spec[:foot])
+          hidden = resolve_hidden(spec[:variant], back_frame, front_frame, config)
           BedPair.new(
             config,
             back_frame:   back_frame,
@@ -127,7 +138,9 @@ module Timmerman
             offset_x:     spec[:column] * step,
             foot_world_y: foot_y,
             pillow_mode:  spec[:pillow_mode],
-            tally_stock:  spec[:tally_stock]
+            tally_stock:  spec[:tally_stock],
+            back_hidden_part_names:  hidden[:back],
+            front_hidden_part_names: hidden[:front]
           )
         end
       end
@@ -157,6 +170,14 @@ module Timmerman
         else
           raise ArgumentError, "Unknown construction highlight key: #{key.inspect}"
         end
+      end
+
+      def resolve_hidden(variant, back_frame, front_frame, config)
+        return { back: [], front: [] } unless variant
+
+        resolver = VARIANT_HIDDEN[variant] ||
+                   raise(ArgumentError, "Unknown hidden variant: #{variant.inspect}")
+        resolver.call(back_frame, front_frame, config)
       end
 
       def foot_world_y_for(config, key)

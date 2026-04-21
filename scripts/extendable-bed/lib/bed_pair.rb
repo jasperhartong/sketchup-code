@@ -13,7 +13,8 @@ module Timmerman
       attr_reader :back_name, :front_name, :offset_x, :pair_row_y, :foot_world_y,
                   :pillow_mode, :tally_stock, :upside_down,
                   :back_highlight_part_names, :front_highlight_part_names,
-                  :back_exclude, :front_exclude
+                  :back_exclude, :front_exclude,
+                  :back_hidden_part_names, :front_hidden_part_names
 
       # @param back_frame  [BackFrame]    shared catalog instance (one per Config)
       # @param front_frame [FrontFrame]   shared catalog instance (one per Config)
@@ -21,6 +22,8 @@ module Timmerman
       # @param front_exclude [Array<String>] part names to hide in the front view for this preview
       # @param back_highlight_part_names  [Array<String>] painted with PREVIEW_RGB_ACTIVE after render
       # @param front_highlight_part_names [Array<String>]
+      # @param back_hidden_part_names  [Array<String>] direct children hidden after render
+      # @param front_hidden_part_names [Array<String>] direct children hidden after render
       # @param pillow_mode [Symbol, nil]  see +PillowSets+ for allowed values
       # @param tally_stock [Boolean]     when true, this pair's beams count toward the cut list
       # @param upside_down [Boolean]     when true, root is rotated 180° about +Y (construction flip row)
@@ -38,7 +41,9 @@ module Timmerman
                      back_exclude: [],
                      front_exclude: [],
                      back_highlight_part_names: [],
-                     front_highlight_part_names: [])
+                    front_highlight_part_names: [],
+                    back_hidden_part_names: [],
+                    front_hidden_part_names: [])
         @config       = config
         @back_frame_catalog  = back_frame
         @front_frame_catalog = front_frame
@@ -54,6 +59,8 @@ module Timmerman
         @front_exclude = front_exclude.dup.freeze
         @back_highlight_part_names  = back_highlight_part_names.dup.freeze
         @front_highlight_part_names = front_highlight_part_names.dup.freeze
+        @back_hidden_part_names  = back_hidden_part_names.dup.freeze
+        @front_hidden_part_names = front_hidden_part_names.dup.freeze
       end
 
       # ── Render-time views over the shared frame catalogs ─────────────────

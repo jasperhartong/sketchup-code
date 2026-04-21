@@ -79,6 +79,11 @@ module Timmerman
         raise NotImplementedError
       end
 
+      # Toggle visibility on named direct children of +root+.
+      def hide_named_children(root, names, hidden: true)
+        raise NotImplementedError
+      end
+
       # Per-axis-aligned-face debug painting (six colours on the box faces of
       # every direct child not matching +skip_name_re+).
       def debug_paint_axis_faces(root, skip_name_re:)

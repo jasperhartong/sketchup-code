@@ -256,7 +256,8 @@ module Timmerman
                 face:      outer_face,
                 u:         c.beam_wide / 2.0,
                 v:         c.outer_corner_leg_height - c.beam_wide / 2.0,
-                spec_id:   :eb_pocket_4mm
+                spec_id:   :eb_pocket_4mm,
+                shaft_length_index: 1
 
           screw "EB | screw | head leg #{side} | front-top",
                 host_name: host,
@@ -359,13 +360,15 @@ module Timmerman
                 face:      :max_y,
                 u:         u,
                 v:         c.mid_run_leg_height - c.beam_wide / 2.0,
-                spec_id:   :eb_pocket_4mm
+                spec_id:   :eb_pocket_4mm,
+                shaft_length_index: 1
           screw "EB | screw | behind head post #{side} | lower into head leg",
                 host_name: host,
                 face:      :max_y,
                 u:         u,
                 v:         c.beam_wide / 3.0,
-                spec_id:   :eb_pocket_4mm
+                spec_id:   :eb_pocket_4mm,
+                shaft_length_index: 1
         end
       end
 
@@ -378,20 +381,22 @@ module Timmerman
       # along +Y (span = beam_wide), v along +Z. One screw low
       # (v ≈ beam_narrow/3), one high (v ≈ mid_run_leg_height − beam_wide/2).
       def _head_inset_leg_into_corner_leg_screws
-        { '+X' => :min_x, '-X' => :max_x }.each do |side, accessible_face|
+        { '+X' => [:min_x, c.beam_wide / 3.0], '-X' => [:max_x, c.beam_wide / 3.0] }.each do |side, (accessible_face, u)|
           host = "EB | leg | head | #{side} | inset"
           screw "EB | screw | head inset leg #{side} | lower into corner leg",
                 host_name: host,
                 face:      accessible_face,
-                u:         c.beam_wide / 2.0,
+                u:         u,
                 v:         c.beam_narrow / 3.0,
-                spec_id:   :eb_pocket_4mm
+                spec_id:   :eb_pocket_4mm,
+                shaft_length_index: 1
           screw "EB | screw | head inset leg #{side} | upper into corner leg",
                 host_name: host,
                 face:      accessible_face,
-                u:         c.beam_wide / 2.0,
+                u:         u,
                 v:         c.mid_run_leg_height - c.beam_wide / 2.0,
-                spec_id:   :eb_pocket_4mm
+                spec_id:   :eb_pocket_4mm,
+                shaft_length_index: 1
         end
       end
 
@@ -609,18 +614,16 @@ module Timmerman
 
       # Pin the foot cap down onto each inset leg below it. On the cap's top
       # face, u runs along +X (span = foot_cap_dx), v along +Y (span = beam_wide).
-      # Two screws per inset leg, one near each Y edge, straddling the leg
-      # footprint. Mirrored across the X-centerline of the bed.
+      # One screw per inset leg, centered in Y (between the prior ±Y pair),
+      # mirrored across the X-centerline of the bed.
       def _foot_cap_into_inset_leg_screws
         { '-X' => c.beam_narrow / 2.0, '+X' => foot_cap_dx - c.beam_narrow / 2.0 }.each do |x_side, u|
-          { '-Y' => c.beam_narrow / 2.0, '+Y' => c.beam_wide - c.beam_narrow / 2.0 }.each do |y_side, v|
-            screw "EB | screw | foot cap | #{x_side} end into inset leg | #{y_side}",
-                  host_name: 'EB | beam | foot | cap',
-                  face:      :max_z,
-                  u:         u,
-                  v:         v,
-                  spec_id:   :eb_pocket_4mm
-          end
+          screw "EB | screw | foot cap | #{x_side} end into inset leg | mid",
+                host_name: 'EB | beam | foot | cap',
+                face:      :max_z,
+                u:         u,
+                v:         c.beam_wide / 2.0,
+                spec_id:   :eb_pocket_4mm
         end
       end
 

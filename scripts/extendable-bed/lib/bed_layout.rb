@@ -110,6 +110,8 @@ module Timmerman
 
           renderer.paint_named_children(back_root,  pair.back_highlight_part_names,  Config::PREVIEW_RGB_ACTIVE)
           renderer.paint_named_children(front_root, pair.front_highlight_part_names, Config::PREVIEW_RGB_ACTIVE)
+          renderer.hide_named_children(back_root,  pair.back_hidden_part_names,  hidden: true)
+          renderer.hide_named_children(front_root, pair.front_hidden_part_names, hidden: true)
 
           renderer.debug_paint_axis_faces(back_root,  skip_name_re: Config::SCREW_NAME_RE)
           renderer.debug_paint_axis_faces(front_root, skip_name_re: Config::SCREW_NAME_RE)

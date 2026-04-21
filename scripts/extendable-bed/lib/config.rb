@@ -250,6 +250,8 @@ module Timmerman
       GROUP_HALF_FRONT   = 'EB_Half_Front'
       GROUP_RET_BACK     = 'EB_Ret_Back'
       GROUP_RET_FRONT    = 'EB_Ret_Front'
+      GROUP_RETSCREWS_BACK  = 'EB_RetScrews_Back'
+      GROUP_RETSCREWS_FRONT = 'EB_RetScrews_Front'
       GROUP_RETGND_BACK  = 'EB_RetGnd_Back'
       GROUP_RETGND_FRONT = 'EB_RetGnd_Front'
 
@@ -269,7 +271,7 @@ module Timmerman
       GROUP_STEP_PREP_FRONT          = 'EB_StepPrep_Front'
 
       # Matches any auto-generated EB pair root group name.
-      GROUP_NAME_RE = /\AEB_(Ext|Ext1|Ret|Half|RetGnd|StepExt|StepDecoup|StepNoLedges|StepFlip|StepFlipNoLegs|StepFlipNoCaps|StepPrep|StepSisterPrep)_(Back|Front)\z/
+      GROUP_NAME_RE = /\AEB_(Ext|Ext1|Ret|RetScrews|Half|RetGnd|StepExt|StepDecoup|StepNoLedges|StepFlip|StepFlipNoLegs|StepFlipNoCaps|StepPrep|StepSisterPrep)_(Back|Front)\z/
 
       # Single-pair root names (cleared together with the multi-pair preview set).
       SINGLE_PAIR_ROOTS = %w[EB_Back EB_Front].freeze
