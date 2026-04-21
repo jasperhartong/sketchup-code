@@ -83,15 +83,17 @@ module Timmerman
       end
 
       # Catalog of screw families for hardware rendering (visual / design intent).
-      # Shaft length for :eb_pocket_4mm is **2 × beam_narrow** (same stock as narrow face).
+      # :eb_pocket_4mm supports multiple shaft lengths so specific placements can
+      # opt into shorter screws via `shaft_length_index` (default index 0).
       # @return [Hash{Symbol=>SketchupUtils::Hardware::ScrewSpec}]
       def screw_specs
-        shaft = 2 * beam_narrow
+        shaft = 80.mm
+        short_shaft = 50.mm
         @screw_specs ||= {
           :eb_pocket_4mm => SketchupUtils::Hardware::ScrewSpec.new(
             :eb_pocket_4mm,
             shaft_diameter:       4.2.mm,
-            shaft_lengths:        [shaft],
+            shaft_lengths:        [shaft, short_shaft],
             head_diameter:        8.mm,
             head_height:          2.2.mm,
             countersink_diameter: 8.5.mm,

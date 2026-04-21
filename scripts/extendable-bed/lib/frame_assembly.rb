@@ -522,6 +522,7 @@ module Timmerman
         _under_slat_foot_beam
         _foot_cap_into_inset_leg_screws
         _foot_cap_between_foot_end_screws
+        _foot_ledge_between_front_slat_screws
         _foot_corner_leg_into_inset_leg_screws
         _under_slat_foot_into_front_slat_hearts_screws
       end
@@ -638,6 +639,32 @@ module Timmerman
                 u:         mid_world_x - foot_cap_x0,
                 v:         c.beam_wide / 2.0,
                 spec_id:   :eb_pocket_4mm
+        end
+      end
+
+      # Footward-facing screws on the foot ledge plank between adjacent front
+      # slats, piercing headward (−Y) into the foot end beam. The foot ledge
+      # plank spans y ∈ [0, plank_thickness] while the foot end beam sits at
+      # y ∈ [−beam_y, 0], so we drive from the outer face `:max_y` through the
+      # plank into the foot end beam. Plank `at: [0, 0, …]` ⇒ plank-local u
+      # equals world X; v = beam_wide/2 lands in the middle of the foot end
+      # beam's Z band (0..beam_wide from plank-local z=0).
+      # (Foot-side mirror of +BackFrame#_head_ledge_between_back_slat_screws+;
+      # the face flips from :min_y ↔ :max_y because the ledge plank sits on
+      # the opposite side of the end beam compared to the head side.)
+      FOOT_LEDGE_BETWEEN_FRONT_SLAT_PAIRS = [[1, 2], [7, 8]].freeze
+
+      def _foot_ledge_between_front_slat_screws
+        _, front_xs = slat_x_starts
+        FOOT_LEDGE_BETWEEN_FRONT_SLAT_PAIRS.each do |n1, n2|
+          mid_world_x = (front_xs[n1 - 1] + front_xs[n2 - 1]) / 2.0 + c.slat_dx / 2.0
+          screw "EB | screw | foot ledge | mid #{n1}-#{n2} | into foot end",
+                host_name: 'EB | plank | foot | ledge',
+                face:      :max_y,
+                u:         mid_world_x,
+                v:         c.beam_wide / 2.0,
+                spec_id:   :eb_pocket_4mm,
+                shaft_length_index: 1
         end
       end
 
