@@ -20,4 +20,7 @@ puts "[rebuild] cleared #{cleared} proposal circle(s)." if cleared.positive?
 config = Timmerman::ExtendableBed::Config.new(debug_paint_faces: false)
 Timmerman::ExtendableBed.clear
 Timmerman::ExtendableBed::BedLayout.new(config).create
+
+# Keep construction-step labels visible after every rebuild.
+load File.expand_path('commands/annotate_construction_steps.rb', __dir__)
 'OK'

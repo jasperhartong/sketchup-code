@@ -58,6 +58,8 @@ module Timmerman
       def clear(model = Sketchup.active_model)
         _exit_edit_context!(model)
         roots = model.entities
+        # Step labels are standalone Text entities, not inside EB roots.
+        _purge_step_annotations!(model, roots)
         _purge_named_recursive(roots, Config::PURGE_NESTED_PART_GROUP_NAMES, skip_ref: true)
         to_erase = roots.grep(Sketchup::Group).select do |g|
           Config::GROUP_NAME_RE.match?(g.name) || Config::SINGLE_PAIR_ROOTS.include?(g.name)
@@ -182,6 +184,14 @@ module Timmerman
           _purge_named_recursive(e.entities, names, skip_ref: skip_ref)
           e.erase! if names.include?(e.name)
         end
+      end
+
+      def _purge_step_annotations!(model, root_entities)
+        ann_layer = model.layers[Config::STEP_ANNOTATIONS_LAYER]
+        return unless ann_layer
+
+        labels = root_entities.grep(Sketchup::Text).select { |t| t.layer == ann_layer }
+        root_entities.erase_entities(labels) unless labels.empty?
       end
     end
   end

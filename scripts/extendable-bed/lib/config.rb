@@ -239,6 +239,7 @@ module Timmerman
       PREVIEW_RGB_BACK    = [188, 152, 106].freeze
       PREVIEW_RGB_FRONT   = [168, 130,  90].freeze
       PREVIEW_RGB_ACTIVE  = [56, 119, 234].freeze
+      STEP_ANNOTATIONS_LAYER = 'EB_Step_Annotations'
 
       # ── Outliner group names for the four preview pairs ───────────────────────
 
@@ -255,23 +256,25 @@ module Timmerman
       GROUP_RETGND_BACK  = 'EB_RetGnd_Back'
       GROUP_RETGND_FRONT = 'EB_RetGnd_Front'
 
-      GROUP_STEP_EXT_BACK        = 'EB_StepExt_Back'
-      GROUP_STEP_EXT_FRONT       = 'EB_StepExt_Front'
-      GROUP_STEP_DECOUP_BACK     = 'EB_StepDecoup_Back'
-      GROUP_STEP_DECOUP_FRONT    = 'EB_StepDecoup_Front'
-      GROUP_STEP_NOLEDGES_BACK   = 'EB_StepNoLedges_Back'
-      GROUP_STEP_NOLEDGES_FRONT  = 'EB_StepNoLedges_Front'
-      GROUP_STEP_FLIP_BACK       = 'EB_StepFlip_Back'
-      GROUP_STEP_FLIP_FRONT      = 'EB_StepFlip_Front'
-      GROUP_STEP_FLIP_NOLEGS_BACK  = 'EB_StepFlipNoLegs_Back'
-      GROUP_STEP_FLIP_NOLEGS_FRONT = 'EB_StepFlipNoLegs_Front'
-      GROUP_STEP_FLIP_NOCAPS_BACK  = 'EB_StepFlipNoCaps_Back'
-      GROUP_STEP_FLIP_NOCAPS_FRONT = 'EB_StepFlipNoCaps_Front'
-      GROUP_STEP_PREP_BACK           = 'EB_StepPrep_Back'
-      GROUP_STEP_PREP_FRONT          = 'EB_StepPrep_Front'
+      # Construction sequence labels (reversed from original build-order draft):
+      # Step 1 = old prep, ... Step 7 = old full assembly.
+      GROUP_STEP1_BACK = 'EB_Step1_Back'
+      GROUP_STEP1_FRONT = 'EB_Step1_Front'
+      GROUP_STEP2_BACK = 'EB_Step2_Back'
+      GROUP_STEP2_FRONT = 'EB_Step2_Front'
+      GROUP_STEP3_BACK = 'EB_Step3_Back'
+      GROUP_STEP3_FRONT = 'EB_Step3_Front'
+      GROUP_STEP4_BACK = 'EB_Step4_Back'
+      GROUP_STEP4_FRONT = 'EB_Step4_Front'
+      GROUP_STEP5_BACK = 'EB_Step5_Back'
+      GROUP_STEP5_FRONT = 'EB_Step5_Front'
+      GROUP_STEP6_BACK = 'EB_Step6_Back'
+      GROUP_STEP6_FRONT = 'EB_Step6_Front'
+      GROUP_STEP7_BACK = 'EB_Step7_Back'
+      GROUP_STEP7_FRONT = 'EB_Step7_Front'
 
       # Matches any auto-generated EB pair root group name.
-      GROUP_NAME_RE = /\AEB_(Ext|Ext1|Ret|RetScrews|Half|RetGnd|StepExt|StepDecoup|StepNoLedges|StepFlip|StepFlipNoLegs|StepFlipNoCaps|StepPrep|StepSisterPrep)_(Back|Front)\z/
+      GROUP_NAME_RE = /\AEB_(Ext|Ext1|Ret|RetScrews|Half|RetGnd|Step[1-7]|StepExt|StepDecoup|StepNoLedges|StepFlip|StepFlipNoLegs|StepFlipNoCaps|StepPrep|StepSisterPrep)_(Back|Front)\z/
 
       # Single-pair root names (cleared together with the multi-pair preview set).
       SINGLE_PAIR_ROOTS = %w[EB_Back EB_Front].freeze

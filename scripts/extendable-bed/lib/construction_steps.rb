@@ -21,10 +21,10 @@ module Timmerman
       # config) and returning { back: [...], front: [...] }. Lambdas let
       # whitelists compose against the full catalog name set at render time.
       VARIANT_EXCLUDES = {
-        # Step 1: full bed, nothing hidden.
+        # Step 7: full bed, nothing hidden.
         construction_full: ->(_b, _f, _c) { { back: [], front: [] } },
 
-        # Step 3: ledges removed, under-slat-foot beam retained (then highlighted).
+        # Step 6: ledges removed, under-slat-foot beam retained (then highlighted).
         construction_no_ledges_with_beam: ->(_b, _f, _c) {
           { back:  G::BACK_HEAD_LEDGE,
             front: G::FRONT_FOOT_LEDGE }
@@ -36,15 +36,15 @@ module Timmerman
             front: G::FRONT_FOOT_LEDGE + G::FRONT_UNDER_SLAT_FOOT_BEAM }
         },
 
-        # Step 5: also remove foot outer corners (they aren't part of any
-        # step-7 sub-assembly, unlike the head outer corners).
+        # Step 3: also remove foot outer corners (they aren't part of the
+        # step-1 sub-assembly, unlike the head outer corners).
         flip_no_legs: ->(_b, _f, _c) {
           { back:  G::BACK_HEAD_LEDGE,
             front: G::FRONT_FOOT_LEDGE + G::FRONT_UNDER_SLAT_FOOT_BEAM +
                    G::FRONT_FOOT_OUTER_CORNERS }
         },
 
-        # Step 6: keep only slats + end beams (forking preview). Exclude = full − whitelist.
+        # Step 2: keep only slats + end beams (forking preview). Exclude = full − whitelist.
         flip_no_caps: ->(b, f, c) {
           back_keep  = G.fork_back_whitelist(c)
           front_keep = G.fork_front_whitelist(c)
@@ -52,7 +52,7 @@ module Timmerman
             front: f.names - front_keep }
         },
 
-        # Step 7: cap sub-assemblies + both sister sub-assemblies joined by the mid tie.
+        # Step 1: cap sub-assemblies + both sister sub-assemblies joined by the mid tie.
         sub_assembly_prep: ->(b, f, _c) {
           { back:  b.names - G::PREP_BACK_WHITELIST,
             front: f.names - G::PREP_FRONT_WHITELIST }
@@ -60,7 +60,7 @@ module Timmerman
       }.freeze
 
       VARIANT_HIDDEN = {
-        # Step 7 cleanup: hide selected mirrored screw pairs to keep the
+        # Step 1 cleanup: hide selected mirrored screw pairs to keep the
         # sub-assembly prep view uncluttered.
         step_prep_hide_conflicting_screws: ->(_b, _f, c) {
           {
@@ -99,13 +99,14 @@ module Timmerman
       LEDGE_FOOT = 'EB | plank | foot | ledge'
 
       CONSTRUCTION_SPECS = [
-        { back_name: Config::GROUP_STEP_EXT_BACK,        front_name: Config::GROUP_STEP_EXT_FRONT,        column: 0, foot: :extended,  upside_down: false, variant: :construction_full,              highlight: :head_and_foot_ledges },
-        { back_name: Config::GROUP_STEP_DECOUP_BACK,     front_name: Config::GROUP_STEP_DECOUP_FRONT,     column: 1, foot: :extended,  upside_down: false, variant: :construction_no_ledges_with_beam, highlight: :none },
-        { back_name: Config::GROUP_STEP_NOLEDGES_BACK,   front_name: Config::GROUP_STEP_NOLEDGES_FRONT,   column: 2, foot: :extended,  upside_down: true,  variant: :construction_no_ledges_with_beam, highlight: :under_slat_foot_end },
-        { back_name: Config::GROUP_STEP_FLIP_BACK,       front_name: Config::GROUP_STEP_FLIP_FRONT,       column: 3, foot: :decoupled, upside_down: true,  variant: :construction_no_ledges,         highlight: :flip_outer_corner_legs },
-        { back_name: Config::GROUP_STEP_FLIP_NOLEGS_BACK, front_name: Config::GROUP_STEP_FLIP_NOLEGS_FRONT, column: 4, foot: :decoupled, upside_down: true,  variant: :flip_no_legs,                    highlight: :flip_sub_assemblies },
-        { back_name: Config::GROUP_STEP_FLIP_NOCAPS_BACK, front_name: Config::GROUP_STEP_FLIP_NOCAPS_FRONT, column: 5, foot: :decoupled, upside_down: true,  variant: :flip_no_caps,                    highlight: :none },
-        { back_name: Config::GROUP_STEP_PREP_BACK,        front_name: Config::GROUP_STEP_PREP_FRONT,        column: 6, foot: :decoupled, upside_down: true,  variant: :sub_assembly_prep,               highlight: :none, hidden_variant: :step_prep_hide_conflicting_screws }
+        # Order and visual position now both follow step-number order (1..7).
+        { back_name: Config::GROUP_STEP1_BACK, front_name: Config::GROUP_STEP1_FRONT, column: 0, foot: :decoupled, upside_down: true,  variant: :sub_assembly_prep,                 highlight: :none, hidden_variant: :step_prep_hide_conflicting_screws },
+        { back_name: Config::GROUP_STEP2_BACK, front_name: Config::GROUP_STEP2_FRONT, column: 1, foot: :decoupled, upside_down: true,  variant: :flip_no_caps,                      highlight: :none },
+        { back_name: Config::GROUP_STEP3_BACK, front_name: Config::GROUP_STEP3_FRONT, column: 2, foot: :decoupled, upside_down: true,  variant: :flip_no_legs,                      highlight: :flip_sub_assemblies },
+        { back_name: Config::GROUP_STEP4_BACK, front_name: Config::GROUP_STEP4_FRONT, column: 3, foot: :decoupled, upside_down: true,  variant: :construction_no_ledges,           highlight: :flip_outer_corner_legs },
+        { back_name: Config::GROUP_STEP5_BACK, front_name: Config::GROUP_STEP5_FRONT, column: 4, foot: :extended,  upside_down: true,  variant: :construction_no_ledges_with_beam, highlight: :under_slat_foot_end },
+        { back_name: Config::GROUP_STEP6_BACK, front_name: Config::GROUP_STEP6_FRONT, column: 5, foot: :extended,  upside_down: false, variant: :construction_no_ledges_with_beam, highlight: :none },
+        { back_name: Config::GROUP_STEP7_BACK, front_name: Config::GROUP_STEP7_FRONT, column: 6, foot: :extended,  upside_down: false, variant: :construction_full,              highlight: :head_and_foot_ledges }
       ].freeze
 
       EXTENSION_SPECS = [

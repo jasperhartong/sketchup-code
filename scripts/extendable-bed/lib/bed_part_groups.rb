@@ -75,7 +75,7 @@ module Timmerman
         FRONT_FOOT_OUTER_CORNERS + FRONT_FOOT_INSETS
       ).freeze
 
-      # Sub-assembly whitelists used by the step-7 "sub-assembly prep" variant.
+      # Sub-assembly whitelists used by the step-1 "sub-assembly prep" variant.
       # The mid tie bridges the two outer-sister sub-assemblies so the sister
       # cluster is preassembled as one unit before meeting the slats.
       PREP_BACK_HEAD_CAP_SUB = (BACK_HEAD_CAP + BACK_HEAD_OUTER_CORNERS + BACK_HEAD_INSETS).freeze
@@ -102,7 +102,7 @@ module Timmerman
 
       PREP_FRONT_WHITELIST = (FRONT_FOOT_CAP + FRONT_FOOT_INSETS).freeze
 
-      # Step-6 "fork (slats + end beams only)" whitelists — depend on slat count.
+      # Step-2 "fork (slats + end beams only)" whitelists — depend on slat count.
       # Consumers call +.fork_back_whitelist(config)+ etc. to include the config's
       # slat names.
       module_function

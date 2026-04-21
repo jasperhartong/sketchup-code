@@ -17,8 +17,18 @@ STEP_PAIRS = Timmerman::ExtendableBed::BedPairCatalog::CONSTRUCTION_SPECS.map do
   [spec[:back_name], spec[:front_name], spec[:variant]]
 end
 
+STEP_TITLES = [
+  'sub-assembly prep legs (flipped)',
+  'sub-assembly pre slats (flipped)',
+  'combine sub-assemblies (flipped)',
+  'add front legs (flipped)',
+  'add front under slat (flipped)',
+  'Flip correctly',
+  'add head/ foot boards'
+].freeze
+
 model = Sketchup.active_model
-entities = model.active_entities
+entities = model.entities
 
 groups_by_name = {}
 entities.each do |e|
@@ -26,7 +36,7 @@ entities.each do |e|
   groups_by_name[e.name] = e
 end
 
-layer_name = 'EB_Step_Annotations'
+layer_name = Timmerman::ExtendableBed::Config::STEP_ANNOTATIONS_LAYER
 layer = model.layers[layer_name] || model.layers.add(layer_name)
 
 model.start_operation('Annotate construction steps', true)
@@ -52,7 +62,8 @@ STEP_PAIRS.each_with_index do |(back_name, front_name, variant), idx|
   anchor = Geom::Point3d.new(cx, cy, top_z)
   leader = Geom::Vector3d.new(0, 0, 300.mm)
 
-  label = "Step #{idx + 1} — #{variant}"
+  title = STEP_TITLES[idx] || variant.to_s
+  label = "Step #{idx + 1}: #{title}"
   txt = entities.add_text(label, anchor, leader)
   txt.layer = layer
   puts "annotated #{label}: back=#{back_name} (#{back ? 'ok' : 'MISSING'}) front=#{front_name} (#{front ? 'ok' : 'MISSING'})"
