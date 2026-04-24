@@ -49,6 +49,9 @@ module Timmerman
       # When true, clear() also purges unused component definitions after root erase.
       attr_reader :purge_unused_definitions
 
+      # When true, render the stock cut plan as 3D bars in the model.
+      attr_reader :show_cut_plan_3d
+
       def initialize(
         back_slat_count:  9,
         top_of_slats_z:   260.mm,
@@ -65,7 +68,8 @@ module Timmerman
         hardware_through_hole: true,
         hardware_cut_hosts: false,
         hardware_countersink_first: false,
-        purge_unused_definitions: false
+        purge_unused_definitions: false,
+        show_cut_plan_3d: true
       )
         unless back_slat_count.is_a?(Integer) && back_slat_count.positive? && back_slat_count.odd?
           raise ArgumentError,
@@ -88,6 +92,7 @@ module Timmerman
         @hardware_cut_hosts = hardware_cut_hosts ? true : false
         @hardware_countersink_first = hardware_countersink_first ? true : false
         @purge_unused_definitions = purge_unused_definitions ? true : false
+        @show_cut_plan_3d = show_cut_plan_3d ? true : false
       end
 
       def _resolve_debug_color(debug_color)
@@ -270,6 +275,7 @@ module Timmerman
       GROUP_RETSCREWS_FRONT = 'EB_RetScrews_Front'
       GROUP_RETGND_BACK  = 'EB_RetGnd_Back'
       GROUP_RETGND_FRONT = 'EB_RetGnd_Front'
+      GROUP_CUT_PLAN_3D  = 'EB_CutPlan_3D'
 
       # Construction sequence labels (reversed from original build-order draft):
       # Step 1 = old prep, ... Step 7 = old full assembly.

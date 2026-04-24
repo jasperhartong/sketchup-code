@@ -51,6 +51,7 @@ module Timmerman
                              Config::GROUP_EXT_BACK, Config::GROUP_EXT_FRONT)
         stock.print_report(label:           "[EB stock] #{stock_label}")
         stock.print_hardware_report(label:  "[EB hardware] #{stock_label}")
+        _render_cut_plan_3d(renderer, stock, layer) if model && @config.show_cut_plan_3d
 
         _save_geometry_baseline(model) if model && save_baseline
       end
@@ -62,7 +63,9 @@ module Timmerman
         _purge_step_annotations!(model, roots)
         _purge_named_recursive(roots, Config::PURGE_NESTED_PART_GROUP_NAMES, skip_ref: true)
         to_erase = roots.grep(Sketchup::Group).select do |g|
-          Config::GROUP_NAME_RE.match?(g.name) || Config::SINGLE_PAIR_ROOTS.include?(g.name)
+          Config::GROUP_NAME_RE.match?(g.name) ||
+            Config::SINGLE_PAIR_ROOTS.include?(g.name) ||
+            g.name == Config::GROUP_CUT_PLAN_3D
         end
         to_erase.each(&:erase!)
         model.definitions.purge_unused if @config.purge_unused_definitions
@@ -171,6 +174,62 @@ module Timmerman
           model,
           root_filter: root_filter
         )
+      end
+
+      def _render_cut_plan_3d(renderer, stock, layer)
+        result = stock.cut_plan_result
+        return unless result[:ok]
+
+        renderer.commit('Extendable bed: cut plan 3D') do
+          root = renderer.create_group(Config::GROUP_CUT_PLAN_3D, parent: :root, layer: layer)
+          bar_spacing_y = (@config.beam_wide + 20.mm)
+          side_offset_cols = 8
+          bar_x0 = side_offset_cols * (@config.outer_width + @config.pair_gap_x)
+          bar_y0 = 0
+          section_y = @config.beam_narrow
+          section_z = @config.beam_wide
+          stock_len = @config.stock_bar_length
+
+          result[:bars].each_with_index do |bar, i|
+            bar_group = renderer.create_group("bar #{i + 1}", parent: root, layer: layer)
+            renderer.add_box(bar_group, at: [0, 0, 0], size: [stock_len, section_y, section_z])
+            renderer.set_group_transform(
+              bar_group,
+              SketchupUtils::Transform.translation([bar_x0, bar_y0 + (i * bar_spacing_y), 0])
+            )
+            _paint_cut_plan_group(renderer, bar_group, [120, 120, 120])
+
+            cursor_x = 0.0.mm
+            bar[:parts].each do |part|
+              part_group = renderer.create_group(part[:name], parent: bar_group, layer: layer)
+              renderer.add_box(part_group, at: [0, 0, 0], size: [part[:mm].mm, section_y, section_z])
+              renderer.set_group_transform(
+                part_group,
+                SketchupUtils::Transform.translation([cursor_x, 0, 0.1.mm])
+              )
+              _paint_cut_plan_group(renderer, part_group, _cut_plan_color_for_piece(part[:mm], section_y, section_z))
+              cursor_x += part[:mm].mm + @config.stock_kerf_mm.mm
+            end
+          end
+        end
+      end
+
+      def _paint_cut_plan_group(renderer, group, rgb)
+        if renderer.respond_to?(:paint_group_force)
+          renderer.paint_group_force(group, rgb)
+        else
+          renderer.paint_group(group, rgb)
+        end
+      end
+
+      # Match component-reuse semantics: equal piece geometry => equal color.
+      def _cut_plan_color_for_piece(length_mm, section_y, section_z)
+        key = format(
+          'EB::PartBox::%<x>.6f|%<y>.6f|%<z>.6f',
+          x: section_y.to_f, y: length_mm.mm.to_f, z: section_z.to_f
+        )
+        seed = key.each_byte.reduce(0) { |acc, b| ((acc * 131) + b) & 0xFFFFFFFF }
+        [120 + (seed & 0x7F), 120 + ((seed >> 7) & 0x7F), 120 + ((seed >> 14) & 0x7F)]
       end
 
       def _exit_edit_context!(model)

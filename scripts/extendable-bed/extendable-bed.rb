@@ -21,6 +21,7 @@
 #   debug_color: :off | :sides | :components_reuse
 #     :sides            — six colours on axis-aligned part faces (after highlights).
 #     :components_reuse — same color for all instances sharing a component definition.
+#   show_cut_plan_3d: true|false — render stock bars and assigned cuts as 3D geometry.
 #   hardware_cut_hosts: true  — cut countersink + hole in wood (experimental; default false
 #                               because add_circle/add_face on thin planks can invalidate
 #                               the host group in SketchUp 2026 — use Face#split or manual

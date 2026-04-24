@@ -162,6 +162,12 @@ module Timmerman
         _paint_recursive(group.entities, _ensure_material(rgb))
       end
 
+      # Explicit paint path for helper geometry (e.g. cut-plan overlays) that
+      # should remain visible even when component-reuse debug mode is active.
+      def paint_group_force(group, rgb)
+        _paint_recursive(group.entities, _ensure_material(rgb))
+      end
+
       def paint_named_children(root, names, rgb)
         return if names.nil? || names.empty?
         return if @debug_color == :components_reuse

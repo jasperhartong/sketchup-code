@@ -71,8 +71,7 @@ module Timmerman
       def print_report(label: '[EB stock]')
         stock_mm = @config.stock_bar_length.to_mm
         kerf     = @config.stock_kerf_mm.to_f
-
-        result = pack(@cuts, stock_mm, kerf_mm: kerf)
+        result   = cut_plan_result
 
         unless result[:ok]
           puts "#{label} Cut plan: some pieces are longer than one stock bar " \
@@ -98,6 +97,12 @@ module Timmerman
         end
 
         result
+      end
+
+      def cut_plan_result
+        stock_mm = @config.stock_bar_length.to_mm
+        kerf     = @config.stock_kerf_mm.to_f
+        pack(@cuts, stock_mm, kerf_mm: kerf)
       end
 
       # ── Bin-packing ────────────────────────────────────────────────────────
