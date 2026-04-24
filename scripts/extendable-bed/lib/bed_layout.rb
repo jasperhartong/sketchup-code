@@ -30,7 +30,7 @@ module Timmerman
         model ||= Sketchup.active_model if defined?(Sketchup)
         renderer ||= SketchupUtils::SketchUpRenderer.new(
           model, attr_dict: Config::ATTR_DICT,
-                 debug_paint_faces: @config.debug_paint_faces
+                 debug_color: @config.debug_color
         )
         layer = renderer.ensure_layer(Config::LAYER_NAME)
 
@@ -65,6 +65,7 @@ module Timmerman
           Config::GROUP_NAME_RE.match?(g.name) || Config::SINGLE_PAIR_ROOTS.include?(g.name)
         end
         to_erase.each(&:erase!)
+        model.definitions.purge_unused if @config.purge_unused_definitions
       end
 
       def validate(model = Sketchup.active_model)
@@ -178,11 +179,18 @@ module Timmerman
 
       def _purge_named_recursive(entities, names, skip_ref: false)
         entities.to_a.each do |e|
-          next unless e.valid? && e.is_a?(Sketchup::Group)
-          next if skip_ref && Config::REFERENCE_ROOT_RE.match?(e.name)
+          next unless e.valid?
 
-          _purge_named_recursive(e.entities, names, skip_ref: skip_ref)
-          e.erase! if names.include?(e.name)
+          case e
+          when Sketchup::Group
+            next if skip_ref && Config::REFERENCE_ROOT_RE.match?(e.name)
+
+            _purge_named_recursive(e.entities, names, skip_ref: skip_ref)
+            e.erase! if names.include?(e.name)
+          when Sketchup::ComponentInstance
+            _purge_named_recursive(e.definition.entities, names, skip_ref: skip_ref)
+            e.erase! if names.include?(e.name)
+          end
         end
       end
 

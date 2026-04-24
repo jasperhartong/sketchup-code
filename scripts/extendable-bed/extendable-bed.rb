@@ -18,7 +18,9 @@
 #   Timmerman::ExtendableBed::BedLayout.new(config).create
 #
 # Hardware / debug (optional Config keyword args):
-#   debug_paint_faces: true     — six colours on axis-aligned part faces (after highlights).
+#   debug_color: :off | :sides | :components_reuse
+#     :sides            — six colours on axis-aligned part faces (after highlights).
+#     :components_reuse — same color for all instances sharing a component definition.
 #   hardware_cut_hosts: true  — cut countersink + hole in wood (experimental; default false
 #                               because add_circle/add_face on thin planks can invalidate
 #                               the host group in SketchUp 2026 — use Face#split or manual

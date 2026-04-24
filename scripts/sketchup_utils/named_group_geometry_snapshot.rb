@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Generic SketchUp geometry snapshot: world-space AABB per leaf group, keyed by
+# Generic SketchUp geometry snapshot: world-space AABB per leaf render node, keyed by
 # Outliner path. Optional +root_filter+ limits which top-level groups are walked.
 #
 #   load File.expand_path('sketchup_utils/named_group_geometry_snapshot.rb', scripts_dir)
@@ -67,13 +67,22 @@ module Timmerman
         private
 
         def _walk(entities, world_tr, path, result)
-          child_groups = entities.grep(Sketchup::Group).select(&:valid?)
-          if child_groups.empty?
+          child_nodes = entities.select do |e|
+            e.valid? && (e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance))
+          end
+          if child_nodes.empty?
             min_pt, max_pt = _world_bb(entities, world_tr)
             result[path.join(' / ')] = { min: _mm3(min_pt), max: _mm3(max_pt) }
             return
           end
-          child_groups.each { |g| _walk(g.entities, world_tr * g.transformation, path + [g.name], result) }
+          child_nodes.each do |child|
+            child_entities =
+              case child
+              when Sketchup::Group then child.entities
+              when Sketchup::ComponentInstance then child.definition.entities
+              end
+            _walk(child_entities, world_tr * child.transformation, path + [child.name], result)
+          end
         end
 
         def _world_bb(entities, world_tr)

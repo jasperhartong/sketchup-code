@@ -60,20 +60,32 @@ module Timmerman
         end
       end
 
-      # Recursively collects all beam/leg groups with their world-space AABBs.
+      # Recursively collects all beam/leg render elements with world-space AABBs.
       # +parent_world_tr+ is the accumulated transformation to world space.
       def _collect_solids(entities, parent_world_tr, out)
-        entities.grep(Sketchup::Group).each do |g|
-          next unless g.valid?
+        entities.each do |e|
+          next unless e.valid?
 
-          if Config::SOLID_NAME_RE.match?(g.name)
-            out << {
-              name: g.name,
-              bb:   _world_bb(g, parent_world_tr),
-              eid:  g.entityID
-            }
+          case e
+          when Sketchup::Group
+            if Config::SOLID_NAME_RE.match?(e.name)
+              out << {
+                name: e.name,
+                bb:   _world_bb(e, parent_world_tr),
+                eid:  e.entityID
+              }
+            end
+            _collect_solids(e.entities, parent_world_tr * e.transformation, out)
+          when Sketchup::ComponentInstance
+            if Config::SOLID_NAME_RE.match?(e.name)
+              out << {
+                name: e.name,
+                bb:   _world_bb(e, parent_world_tr),
+                eid:  e.entityID
+              }
+            end
+            _collect_solids(e.definition.entities, parent_world_tr * e.transformation, out)
           end
-          _collect_solids(g.entities, parent_world_tr * g.transformation, out)
         end
       end
 

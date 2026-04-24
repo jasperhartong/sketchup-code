@@ -41,7 +41,14 @@ module Timmerman
 
         part_groups = {}
         view.parts.each do |part|
-          g = _render_part(root, part, renderer: renderer, layer: layer, attr_dict: attr_dict)
+          g = _render_part(
+            root,
+            part,
+            renderer: renderer,
+            layer: layer,
+            attr_dict: attr_dict,
+            reusable: !cut_hosts
+          )
           part_groups[part.name] = g
           on_beam&.call(part) if part.is_a?(Parts::Beam)
         end
@@ -65,13 +72,27 @@ module Timmerman
 
       # ── internal ─────────────────────────────────────────────────────────
 
-      def _render_part(parent_group, part, renderer:, layer:, attr_dict:)
-        g = renderer.create_group(part.name, parent: parent_group, layer: layer)
+      def _render_part(parent_group, part, renderer:, layer:, attr_dict:, reusable:)
+        g = if renderer.respond_to?(:create_part_box)
+              renderer.create_part_box(
+                part.name,
+                parent: parent_group,
+                layer: layer,
+                size: [part.dx, part.dy, part.dz],
+                transform: Transform.translation([part.x, part.y, part.z]),
+                reusable: reusable
+              )
+            else
+              renderer.create_group(part.name, parent: parent_group, layer: layer)
+            end
+
         if attr_dict && part.note && !part.note.empty?
           renderer.set_group_attribute(g, attr_dict, ATTR_DICT_KEY_NOTE, part.note)
         end
-        renderer.add_box(g, at: [0, 0, 0], size: [part.dx, part.dy, part.dz])
-        renderer.set_group_transform(g, Transform.translation([part.x, part.y, part.z]))
+        unless renderer.respond_to?(:create_part_box)
+          renderer.add_box(g, at: [0, 0, 0], size: [part.dx, part.dy, part.dz])
+          renderer.set_group_transform(g, Transform.translation([part.x, part.y, part.z]))
+        end
         g
       end
 

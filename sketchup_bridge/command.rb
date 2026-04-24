@@ -17,7 +17,9 @@ load File.expand_path('../scripts/extendable-bed/extendable-bed.rb', __dir__)
 cleared = SketchupBridgeUtils.delete_root_proposal_circles
 puts "[rebuild] cleared #{cleared} proposal circle(s)." if cleared.positive?
 
-config = Timmerman::ExtendableBed::Config.new(debug_paint_faces: false)
+config = Timmerman::ExtendableBed::Config.new(
+  debug_color: :components_reuse
+)
 Timmerman::ExtendableBed.clear
 Timmerman::ExtendableBed::BedLayout.new(config).create
 

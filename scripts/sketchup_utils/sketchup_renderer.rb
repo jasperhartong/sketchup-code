@@ -21,20 +21,41 @@ module Timmerman
 
       # @param attr_dict [String] SketchUp attribute-dictionary name used for
       #   per-group notes (so parts round-trip with their provenance comment).
-      def initialize(model, attr_dict:, debug_paint_faces: false)
+      def initialize(model, attr_dict:, debug_color: :off)
         @model             = model
         @attr_dict         = attr_dict
-        @debug_paint_faces = debug_paint_faces
+        @debug_color = debug_color.to_sym
+        @box_definition_cache = {}
+        @screw_definition_cache = {}
+        @component_debug_material_cache = {}
       end
 
       # ── Scene graph ──────────────────────────────────────────────────────
 
       def create_group(name, parent:, layer: nil)
-        entities = parent == :root ? @model.entities : parent.entities
+        entities = _child_entities(parent)
         g = entities.add_group
         g.name  = name
         g.layer = layer if layer
         g
+      end
+
+      # Creates a leaf part as a reusable component instance when possible.
+      # Falls back to plain group geometry when reuse is disabled.
+      def create_part_box(name, parent:, layer:, size:, transform:, reusable: true)
+        unless reusable
+          g = create_group(name, parent: parent, layer: layer)
+          add_box(g, at: [0, 0, 0], size: size)
+          set_group_transform(g, transform)
+          return g
+        end
+
+        definition = _box_definition(size)
+        inst = _child_entities(parent).add_instance(definition, _to_geom_transformation(transform))
+        inst.name = name
+        inst.layer = layer if layer
+        _apply_component_debug_color(inst)
+        inst
       end
 
       def set_group_transform(group, transform)
@@ -64,36 +85,11 @@ module Timmerman
       end
 
       def add_screw_body(parent_group, name:, transform:, spec:, shaft_length_index:, layer: nil)
-        g = parent_group.entities.add_group
-        g.name  = name
-        g.layer = layer if layer
-        g.transformation = _to_geom_transformation(transform)
-        ents = g.entities
-
-        r_shaft = spec.shaft_diameter * 0.5
-        l_shaft = spec.shaft_length_at(shaft_length_index)
-        r_head  = spec.head_diameter * 0.5
-        h_head  = spec.head_height
-
-        # Local +Z = outward from wood. Keep everything at z <= 0 so the outer
-        # plane is flush (no head sticking past the entry face).
-        edges_h = ents.add_circle(ORIGIN, Z_AXIS, r_head, 24)
-        f_h = ents.add_face(edges_h)
-        return unless f_h
-
-        f_h.reverse! if f_h.normal.z < 0
-        f_h.pushpull(-h_head)
-
-        shaft_pull = [l_shaft - h_head, 0.1.mm].max
-        base = Geom::Point3d.new(0, 0, -l_shaft)
-        edges_s = ents.add_circle(base, Z_AXIS, r_shaft, 24)
-        f_s = ents.add_face(edges_s)
-        return unless f_s
-
-        f_s.reverse! if f_s.normal.z < 0
-        f_s.pushpull(shaft_pull)
-
-        _paint_recursive(ents, _ensure_material([168, 172, 180]))
+        definition = _screw_definition(spec, shaft_length_index)
+        inst = parent_group.entities.add_instance(definition, _to_geom_transformation(transform))
+        inst.name = name
+        inst.layer = layer if layer
+        _apply_component_debug_color(inst)
       end
 
       # geo: hash from PocketGeometry.face_geometry (after apply_pocket_tilt!).
@@ -161,16 +157,26 @@ module Timmerman
       end
 
       def paint_group(group, rgb)
+        return if @debug_color == :components_reuse
+
         _paint_recursive(group.entities, _ensure_material(rgb))
       end
 
       def paint_named_children(root, names, rgb)
         return if names.nil? || names.empty?
+        return if @debug_color == :components_reuse
 
         mat = _ensure_material(rgb)
         Array(names).each do |name|
-          g = root.entities.grep(Sketchup::Group).find { |c| c.name == name }
-          _paint_recursive(g.entities, mat) if g
+          child = _named_child(root, name)
+          next unless child
+
+          child_entities =
+            case child
+            when Sketchup::Group then child.entities
+            when Sketchup::ComponentInstance then child.definition.entities
+            end
+          _paint_recursive(child_entities, mat) if child_entities
         end
       end
 
@@ -178,18 +184,23 @@ module Timmerman
         return if names.nil? || names.empty?
 
         Array(names).each do |name|
-          g = root.entities.grep(Sketchup::Group).find { |c| c.name == name }
-          g.hidden = hidden if g
+          child = _named_child(root, name)
+          child.hidden = hidden if child
         end
       end
 
       def debug_paint_axis_faces(root, skip_name_re:)
-        return unless @debug_paint_faces
+        return unless @debug_color == :sides
 
-        root.entities.grep(Sketchup::Group).each do |child|
+        _direct_render_children(root).each do |child|
           next if skip_name_re&.match?(child.name)
 
-          _paint_box_faces_debug(child.entities)
+          target_entities =
+            case child
+            when Sketchup::Group then child.entities
+            when Sketchup::ComponentInstance then child.definition.entities
+            end
+          _paint_box_faces_debug(target_entities) if target_entities
         end
       end
 
@@ -212,6 +223,20 @@ module Timmerman
 
       private
 
+      def _child_entities(parent)
+        parent == :root ? @model.entities : parent.entities
+      end
+
+      def _direct_render_children(root)
+        root.entities.select do |e|
+          e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance)
+        end
+      end
+
+      def _named_child(root, name)
+        _direct_render_children(root).find { |c| c.name == name }
+      end
+
       def _to_geom_transformation(transform)
         m = transform.matrix
         # Geom::Transformation accepts a 16-element column-major array.
@@ -221,6 +246,92 @@ module Timmerman
                                    m[0][2], m[1][2], m[2][2], m[3][2],
                                    m[0][3], m[1][3], m[2][3], m[3][3]
                                  ])
+      end
+
+      def _box_definition(size)
+        key = size.map { |v| v.to_f.round(6) }.join('|')
+        cached = @box_definition_cache[key]
+        return cached if cached&.valid?
+
+        defn_name = "EB::PartBox::#{key}"
+        defn = @model.definitions[defn_name] || @model.definitions.add(defn_name)
+        if defn.entities.length.zero?
+          add_box(defn, at: [0, 0, 0], size: size)
+        end
+        @box_definition_cache[key] = defn
+      end
+
+      def _apply_component_debug_color(instance)
+        return unless @debug_color == :components_reuse
+
+        mat = _definition_debug_material(instance.definition)
+        _paint_recursive(instance.definition.entities, mat)
+      end
+
+      def _definition_debug_material(definition)
+        key = definition.name
+        cached = @component_debug_material_cache[key]
+        return cached if cached&.valid?
+
+        rgb = _stable_rgb_from_key(key)
+        mat_name = "SU renderer | def #{key}"
+        mat = @model.materials[mat_name] || @model.materials.add(mat_name)
+        mat.color = Sketchup::Color.new(rgb[0], rgb[1], rgb[2])
+        @component_debug_material_cache[key] = mat
+      end
+
+      def _stable_rgb_from_key(key)
+        seed = key.to_s.each_byte.reduce(0) { |acc, b| ((acc * 131) + b) & 0xFFFFFFFF }
+        r = 120 + (seed & 0x7F)
+        g = 120 + ((seed >> 7) & 0x7F)
+        b = 120 + ((seed >> 14) & 0x7F)
+        [r, g, b]
+      end
+
+      def _screw_definition(spec, shaft_length_index)
+        l_shaft = spec.shaft_length_at(shaft_length_index)
+        key = [
+          spec.respond_to?(:name) ? spec.name : 'anon',
+          spec.shaft_diameter.to_f.round(6),
+          l_shaft.to_f.round(6),
+          spec.head_diameter.to_f.round(6),
+          spec.head_height.to_f.round(6)
+        ].join('|')
+
+        cached = @screw_definition_cache[key]
+        return cached if cached&.valid?
+
+        defn_name = "EB::Screw::#{key}"
+        defn = @model.definitions[defn_name] || @model.definitions.add(defn_name)
+        if defn.entities.length.zero?
+          _build_screw_definition_geometry(defn.entities, spec, shaft_length_index)
+        end
+        @screw_definition_cache[key] = defn
+      end
+
+      def _build_screw_definition_geometry(ents, spec, shaft_length_index)
+        r_shaft = spec.shaft_diameter * 0.5
+        l_shaft = spec.shaft_length_at(shaft_length_index)
+        r_head  = spec.head_diameter * 0.5
+        h_head  = spec.head_height
+
+        edges_h = ents.add_circle(ORIGIN, Z_AXIS, r_head, 24)
+        f_h = ents.add_face(edges_h)
+        return unless f_h
+
+        f_h.reverse! if f_h.normal.z < 0
+        f_h.pushpull(-h_head)
+
+        shaft_pull = [l_shaft - h_head, 0.1.mm].max
+        base = Geom::Point3d.new(0, 0, -l_shaft)
+        edges_s = ents.add_circle(base, Z_AXIS, r_shaft, 24)
+        f_s = ents.add_face(edges_s)
+        return unless f_s
+
+        f_s.reverse! if f_s.normal.z < 0
+        f_s.pushpull(shaft_pull)
+
+        _paint_recursive(ents, _ensure_material([168, 172, 180]))
       end
 
       def _outer_face_for_box_face(entities, geo)

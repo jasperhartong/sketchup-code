@@ -30,8 +30,11 @@ module Timmerman
       attr_reader :stock_bar_length  # standard bar length for cut planning
       attr_reader :stock_kerf_mm     # blade kerf between cuts (0 = no kerf)
 
-      # When true, each axis-aligned face of every part box gets a distinct color (renderer).
-      attr_reader :debug_paint_faces
+      # Debug rendering mode:
+      #   :off              => no debug coloring
+      #   :sides            => axis-face colors
+      #   :components_reuse => shared color per component definition
+      attr_reader :debug_color
 
       # When false, only the countersink pocket is cut; the shaft through-hole step is skipped
       # (avoids SketchUp deleting the host on some pocket floor orientations).
@@ -42,6 +45,9 @@ module Timmerman
 
       # When true, cut countersink pocket then through hole; when false, a single through hole only.
       attr_reader :hardware_countersink_first
+
+      # When true, clear() also purges unused component definitions after root erase.
+      attr_reader :purge_unused_definitions
 
       def initialize(
         back_slat_count:  9,
@@ -55,10 +61,11 @@ module Timmerman
         pair_gap_x:       600.mm,
         stock_bar_length: 2100.mm,
         stock_kerf_mm:    0.0,
-        debug_paint_faces: false,
+        debug_color: :off,
         hardware_through_hole: true,
         hardware_cut_hosts: false,
-        hardware_countersink_first: false
+        hardware_countersink_first: false,
+        purge_unused_definitions: false
       )
         unless back_slat_count.is_a?(Integer) && back_slat_count.positive? && back_slat_count.odd?
           raise ArgumentError,
@@ -76,10 +83,18 @@ module Timmerman
         @pair_gap_x       = pair_gap_x
         @stock_bar_length = stock_bar_length
         @stock_kerf_mm    = stock_kerf_mm.to_f
-        @debug_paint_faces = debug_paint_faces ? true : false
+        @debug_color = _resolve_debug_color(debug_color)
         @hardware_through_hole = hardware_through_hole ? true : false
         @hardware_cut_hosts = hardware_cut_hosts ? true : false
         @hardware_countersink_first = hardware_countersink_first ? true : false
+        @purge_unused_definitions = purge_unused_definitions ? true : false
+      end
+
+      def _resolve_debug_color(debug_color)
+        mode = debug_color.to_sym
+        return mode if %i[off sides components_reuse].include?(mode)
+
+        raise ArgumentError, "Config: debug_color must be one of :off, :sides, :components_reuse (got #{debug_color.inspect})"
       end
 
       # Catalog of screw families for hardware rendering (visual / design intent).
