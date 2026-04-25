@@ -33,10 +33,13 @@ module Timmerman
       # @param cut_hosts [Boolean] if true, screws cut countersink + hole on hosts
       # @param countersink_first [Boolean] countersink pocket then through hole (vs single clearance bore)
       # @param through_hole [Boolean] when countersink_first, skip the bore step if false
+      # @param corner_radius_for_part [Proc,nil] optional proc called with +part+, returns desired corner radius
+      # @param corner_axis_for_part [Proc,nil] optional proc called with +part+, returns :long/:short/:x/:y/:z
       def render_view(view, parent:, renderer:, layer: nil,
                       attr_dict: nil,
                       cut_hosts: false, countersink_first: false, through_hole: true,
-                      on_beam: nil, on_screw: nil)
+                      on_beam: nil, on_screw: nil,
+                      corner_radius_for_part: nil, corner_axis_for_part: nil)
         root = renderer.create_group(view.group_name, parent: parent, layer: layer)
 
         part_groups = {}
@@ -47,7 +50,9 @@ module Timmerman
             renderer: renderer,
             layer: layer,
             attr_dict: attr_dict,
-            reusable: !cut_hosts
+            reusable: !cut_hosts,
+            corner_radius_for_part: corner_radius_for_part,
+            corner_axis_for_part: corner_axis_for_part
           )
           part_groups[part.name] = g
           on_beam&.call(part) if part.is_a?(Parts::Beam)
@@ -72,7 +77,9 @@ module Timmerman
 
       # ── internal ─────────────────────────────────────────────────────────
 
-      def _render_part(parent_group, part, renderer:, layer:, attr_dict:, reusable:)
+      def _render_part(parent_group, part, renderer:, layer:, attr_dict:, reusable:, corner_radius_for_part:, corner_axis_for_part:)
+        corner_radius = corner_radius_for_part ? corner_radius_for_part.call(part) : 0
+        corner_axis = corner_axis_for_part ? corner_axis_for_part.call(part) : :long
         g = if renderer.respond_to?(:create_part_box)
               renderer.create_part_box(
                 part.name,
@@ -80,7 +87,9 @@ module Timmerman
                 layer: layer,
                 size: [part.dx, part.dy, part.dz],
                 transform: Transform.translation([part.x, part.y, part.z]),
-                reusable: reusable
+                reusable: reusable,
+                corner_radius: corner_radius,
+                corner_axis: corner_axis
               )
             else
               renderer.create_group(part.name, parent: parent_group, layer: layer)
@@ -90,7 +99,10 @@ module Timmerman
           renderer.set_group_attribute(g, attr_dict, ATTR_DICT_KEY_NOTE, part.note)
         end
         unless renderer.respond_to?(:create_part_box)
-          renderer.add_box(g, at: [0, 0, 0], size: [part.dx, part.dy, part.dz])
+          renderer.add_box(
+            g, at: [0, 0, 0], size: [part.dx, part.dy, part.dz],
+            corner_radius: corner_radius, corner_axis: corner_axis
+          )
           renderer.set_group_transform(g, Transform.translation([part.x, part.y, part.z]))
         end
         g

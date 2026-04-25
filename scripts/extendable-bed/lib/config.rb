@@ -22,6 +22,14 @@ module Timmerman
       attr_reader :plank_thickness   # 18 mm — non-structural sheet panels
       attr_reader :pillow_thickness  # 100 mm — foam short edge
 
+      # XY footprint corner radius before Z push/pull on catalog beams (Beam/Leg/Slat) and pillows.
+      attr_reader :beam_box_corner_radius
+      attr_reader :plank_box_corner_radius
+      attr_reader :pillow_box_corner_radius
+      attr_reader :beam_box_corner_axis
+      attr_reader :plank_box_corner_axis
+      attr_reader :pillow_box_corner_axis
+
       # ── Layout ────────────────────────────────────────────────────────────────
       attr_reader :slat_gap          # gap between adjacent comb teeth (X)
       attr_reader :pair_gap_x        # side-by-side spacing between preview pairs
@@ -60,6 +68,12 @@ module Timmerman
         beam_wide:        69.mm,
         plank_thickness:  18.mm,
         pillow_thickness: 120.mm,
+        beam_box_corner_radius:   5.mm,
+        plank_box_corner_radius:  2.mm,
+        pillow_box_corner_radius: 20.mm,
+        beam_box_corner_axis: :long,
+        plank_box_corner_axis: :long,
+        pillow_box_corner_axis: :short,
         slat_gap:         3.mm,
         pair_gap_x:       600.mm,
         stock_bar_length: 2100.mm,
@@ -83,6 +97,12 @@ module Timmerman
         @beam_wide        = beam_wide
         @plank_thickness  = plank_thickness
         @pillow_thickness = pillow_thickness
+        @beam_box_corner_radius   = beam_box_corner_radius
+        @plank_box_corner_radius  = plank_box_corner_radius
+        @pillow_box_corner_radius = pillow_box_corner_radius
+        @beam_box_corner_axis   = _resolve_corner_axis(beam_box_corner_axis)
+        @plank_box_corner_axis  = _resolve_corner_axis(plank_box_corner_axis)
+        @pillow_box_corner_axis = _resolve_corner_axis(pillow_box_corner_axis)
         @slat_gap         = slat_gap
         @pair_gap_x       = pair_gap_x
         @stock_bar_length = stock_bar_length
@@ -100,6 +120,13 @@ module Timmerman
         return mode if %i[off sides components_reuse].include?(mode)
 
         raise ArgumentError, "Config: debug_color must be one of :off, :sides, :components_reuse (got #{debug_color.inspect})"
+      end
+
+      def _resolve_corner_axis(axis)
+        mode = axis.to_sym
+        return mode if %i[long short x y z].include?(mode)
+
+        raise ArgumentError, "Config: corner axis must be one of :long, :short, :x, :y, :z (got #{axis.inspect})"
       end
 
       # Catalog of screw families for hardware rendering (visual / design intent).

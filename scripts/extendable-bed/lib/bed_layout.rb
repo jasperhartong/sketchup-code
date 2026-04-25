@@ -96,7 +96,9 @@ module Timmerman
             countersink_first: @config.hardware_countersink_first,
             through_hole: @config.hardware_through_hole,
             on_beam:  planner ? ->(b) { planner.record(b) } : nil,
-            on_screw: planner ? ->(s) { planner.record_screw(s) } : nil
+            on_screw: planner ? ->(s) { planner.record_screw(s) } : nil,
+            corner_radius_for_part: method(:_corner_radius_for_part),
+            corner_axis_for_part: method(:_corner_axis_for_part)
           )
           front_root = SketchupUtils::PartRendering.render_view(
             pair.front_view, parent: :root, renderer: renderer, layer: layer,
@@ -105,7 +107,9 @@ module Timmerman
             countersink_first: @config.hardware_countersink_first,
             through_hole: @config.hardware_through_hole,
             on_beam:  planner ? ->(b) { planner.record(b) } : nil,
-            on_screw: planner ? ->(s) { planner.record_screw(s) } : nil
+            on_screw: planner ? ->(s) { planner.record_screw(s) } : nil,
+            corner_radius_for_part: method(:_corner_radius_for_part),
+            corner_axis_for_part: method(:_corner_axis_for_part)
           )
 
           _place_root(renderer, back_root,  pair.offset_x, pair.pair_row_y,                    pair.upside_down)
@@ -140,9 +144,29 @@ module Timmerman
           if part.note && !part.note.empty?
             renderer.set_group_attribute(g, Config::ATTR_DICT, 'note', part.note)
           end
-          renderer.add_box(g, at: [0, 0, 0], size: [part.dx, part.dy, part.dz])
+          renderer.add_box(
+            g, at: [0, 0, 0], size: [part.dx, part.dy, part.dz],
+            corner_radius: _corner_radius_for_part(part),
+            corner_axis: _corner_axis_for_part(part)
+          )
           renderer.set_group_transform(g, SketchupUtils::Transform.translation([part.x, part.y, part.z]))
         end
+      end
+
+      def _corner_radius_for_part(part)
+        return @config.pillow_box_corner_radius if part.is_a?(SketchupUtils::Parts::Pillow)
+        return @config.plank_box_corner_radius if part.is_a?(SketchupUtils::Parts::Plank)
+        return @config.beam_box_corner_radius if part.is_a?(SketchupUtils::Parts::Beam)
+
+        0
+      end
+
+      def _corner_axis_for_part(part)
+        return @config.pillow_box_corner_axis if part.is_a?(SketchupUtils::Parts::Pillow)
+        return @config.plank_box_corner_axis if part.is_a?(SketchupUtils::Parts::Plank)
+        return @config.beam_box_corner_axis if part.is_a?(SketchupUtils::Parts::Beam)
+
+        :long
       end
 
       # Rotates 180° about +Y (preserves Y, flips +X / +Z) when +upside_down+,

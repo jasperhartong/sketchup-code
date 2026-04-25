@@ -19,6 +19,9 @@ module Timmerman
         max_z: [120, 120, 240].freeze
       }.freeze
 
+      # Quarter-circle segments per rounded XY footprint corner (before Z pushpull).
+      ROUNDED_BOX_ARC_SEGMENTS = 8
+
       # @param attr_dict [String] SketchUp attribute-dictionary name used for
       #   per-group notes (so parts round-trip with their provenance comment).
       def initialize(model, attr_dict:, debug_color: :off)
@@ -42,15 +45,15 @@ module Timmerman
 
       # Creates a leaf part as a reusable component instance when possible.
       # Falls back to plain group geometry when reuse is disabled.
-      def create_part_box(name, parent:, layer:, size:, transform:, reusable: true)
+      def create_part_box(name, parent:, layer:, size:, transform:, reusable: true, corner_radius: 0, corner_axis: :long)
         unless reusable
           g = create_group(name, parent: parent, layer: layer)
-          add_box(g, at: [0, 0, 0], size: size)
+          add_box(g, at: [0, 0, 0], size: size, corner_radius: corner_radius, corner_axis: corner_axis)
           set_group_transform(g, transform)
           return g
         end
 
-        definition = _box_definition(size)
+        definition = _box_definition(size, corner_radius, corner_axis)
         inst = _child_entities(parent).add_instance(definition, _to_geom_transformation(transform))
         inst.name = name
         inst.layer = layer if layer
@@ -70,18 +73,27 @@ module Timmerman
 
       # ── Geometry primitives ─────────────────────────────────────────────
 
-      def add_box(group, at:, size:)
-        x,  y,  z  = at
-        dx, dy, dz = size
-        pts = [
-          Geom::Point3d.new(x,      y,      z),
-          Geom::Point3d.new(x + dx, y,      z),
-          Geom::Point3d.new(x + dx, y + dy, z),
-          Geom::Point3d.new(x,      y + dy, z)
-        ]
-        f = group.entities.add_face(pts)
-        f.reverse! if f.normal.z < 0
-        f.pushpull(dz)
+      def add_box(group, at:, size:, corner_radius: 0, corner_axis: :long)
+        x,  y,  z  = at.map(&:to_f)
+        dx, dy, dz = size.map(&:to_f)
+        ents = group.entities
+        r_req = corner_radius.to_f
+        if r_req <= 0
+          _add_sharp_prism_z_extrude(ents, x, y, z, dx, dy, dz)
+          return
+        end
+
+        basis = _basis_for_corner_axis(x, y, z, dx, dy, dz, corner_axis)
+        r = _clamp_plan_corner_radius(basis[:u_len], basis[:v_len], r_req)
+        if r <= 1e-9
+          _add_sharp_prism_z_extrude(ents, x, y, z, dx, dy, dz)
+          return
+        end
+
+        return if _try_add_rounded_prism_long_axis_extrude(ents, basis, r)
+
+        warn '[SU renderer] rounded box add_face failed; using sharp corners'
+        _add_sharp_prism_z_extrude(ents, x, y, z, dx, dy, dz)
       end
 
       def add_screw_body(parent_group, name:, transform:, spec:, shaft_length_index:, layer: nil)
@@ -218,6 +230,138 @@ module Timmerman
 
       private
 
+      def _add_sharp_prism_z_extrude(entities, x, y, z, dx, dy, dz)
+        pts = [
+          Geom::Point3d.new(x,      y,      z),
+          Geom::Point3d.new(x + dx, y,      z),
+          Geom::Point3d.new(x + dx, y + dy, z),
+          Geom::Point3d.new(x,      y + dy, z)
+        ]
+        f = entities.add_face(pts)
+        return unless f
+
+        f.reverse! if f.normal.z < 0
+        f.pushpull(dz)
+      end
+
+      # Clamps requested XY corner radius so quarter-arcs fit inside dx×dy (plan at z).
+      def _clamp_plan_corner_radius(dx, dy, requested_r)
+        req = requested_r.to_f
+        return 0.0 if req <= 0
+
+        max_r = (0.5 * [dx, dy].min) - 0.001.mm.to_f
+        return 0.0 if max_r <= 0
+
+        [req, max_r].min
+      end
+
+      # Rounded rectangle in cross-section plane, extruded along the part's long axis.
+      # Returns true on success.
+      def _try_add_rounded_prism_long_axis_extrude(entities, basis, r)
+        origin = basis[:origin]
+        uaxis = basis[:u_axis]
+        vaxis = basis[:v_axis]
+        waxis = basis[:w_axis]
+        u_len = basis[:u_len]
+        v_len = basis[:v_len]
+        w_len = basis[:w_len]
+        n = ROUNDED_BOX_ARC_SEGMENTS
+        p = lambda do |u, v, w = 0.0|
+          Geom::Point3d.new(
+            origin.x + (uaxis.x * u) + (vaxis.x * v) + (waxis.x * w),
+            origin.y + (uaxis.y * u) + (vaxis.y * v) + (waxis.y * w),
+            origin.z + (uaxis.z * u) + (vaxis.z * v) + (waxis.z * w)
+          )
+        end
+
+        edges = []
+        edges << entities.add_line(p.call(r, 0), p.call(u_len - r, 0))
+
+        se = entities.add_arc(
+          p.call(u_len - r, r),
+          uaxis, waxis, r, -0.5 * Math::PI, 0.0, n
+        )
+        edges.concat(Array(se))
+
+        edges << entities.add_line(p.call(u_len, r), p.call(u_len, v_len - r))
+
+        ne = entities.add_arc(
+          p.call(u_len - r, v_len - r),
+          uaxis, waxis, r, 0.0, 0.5 * Math::PI, n
+        )
+        edges.concat(Array(ne))
+
+        edges << entities.add_line(p.call(u_len - r, v_len), p.call(r, v_len))
+
+        nw = entities.add_arc(
+          p.call(r, v_len - r),
+          uaxis, waxis, r, 0.5 * Math::PI, Math::PI, n
+        )
+        edges.concat(Array(nw))
+
+        edges << entities.add_line(p.call(0, v_len - r), p.call(0, r))
+
+        sw = entities.add_arc(
+          p.call(r, r),
+          uaxis, waxis, r, Math::PI, 1.5 * Math::PI, n
+        )
+        edges.concat(Array(sw))
+
+        chain = edges.flatten.compact
+        f = entities.add_face(chain)
+        return false unless f
+
+        f.reverse! unless f.normal.samedirection?(waxis)
+        f.pushpull(w_len)
+        true
+      end
+
+      # Chooses a right-handed local frame where +w_axis+ is the requested axis.
+      # The rounded rectangle is built in the (u,v) plane and extruded along +w.
+      def _basis_for_corner_axis(x, y, z, dx, dy, dz, corner_axis)
+        axis = _resolve_corner_axis(corner_axis, dx, dy, dz)
+        if axis == :x
+          {
+            origin: Geom::Point3d.new(x, y, z),
+            u_axis: Y_AXIS,
+            v_axis: Z_AXIS,
+            w_axis: X_AXIS,
+            u_len: dy,
+            v_len: dz,
+            w_len: dx
+          }
+        elsif axis == :y
+          {
+            origin: Geom::Point3d.new(x, y, z),
+            u_axis: Z_AXIS,
+            v_axis: X_AXIS,
+            w_axis: Y_AXIS,
+            u_len: dz,
+            v_len: dx,
+            w_len: dy
+          }
+        else
+          {
+            origin: Geom::Point3d.new(x, y, z),
+            u_axis: X_AXIS,
+            v_axis: Y_AXIS,
+            w_axis: Z_AXIS,
+            u_len: dx,
+            v_len: dy,
+            w_len: dz
+          }
+        end
+      end
+
+      def _resolve_corner_axis(corner_axis, dx, dy, dz)
+        axis = (corner_axis || :long).to_sym
+        return axis if %i[x y z].include?(axis)
+
+        dims = { x: dx.to_f, y: dy.to_f, z: dz.to_f }
+        sorted = dims.sort_by { |(_, v)| -v }
+        axis == :short ? sorted.last[0] : sorted.first[0]
+      end
+
       def _child_entities(parent)
         parent == :root ? @model.entities : parent.entities
       end
@@ -257,15 +401,26 @@ module Timmerman
                                  ])
       end
 
-      def _box_definition(size)
-        key = size.map { |v| v.to_f.round(6) }.join('|')
+      def _box_definition(size, corner_radius = 0, corner_axis = :long)
+        r = corner_radius.to_f
+        axis = (corner_axis || :long).to_sym
+        base_key = size.map { |v| v.to_f.round(6) }.join('|')
+        key, defn_name =
+          if r.abs < 1e-9
+            [base_key, "EB::PartBox::#{base_key}"]
+          else
+            # Version rounded box definition key so geometry-algorithm changes
+            # rebuild instead of reusing stale cached definitions in-model.
+            rk = "#{base_key}|r#{r.round(6)}|a#{axis}|rv3"
+            [rk, "EB::PartBox::#{rk.tr('|', '_')}"]
+          end
+
         cached = @box_definition_cache[key]
         return cached if cached&.valid?
 
-        defn_name = "EB::PartBox::#{key}"
         defn = @model.definitions[defn_name] || @model.definitions.add(defn_name)
         if defn.entities.length.zero?
-          add_box(defn, at: [0, 0, 0], size: size)
+          add_box(defn, at: [0, 0, 0], size: size, corner_radius: corner_radius, corner_axis: corner_axis)
         end
         @box_definition_cache[key] = defn
       end

@@ -22,6 +22,7 @@ When you need a class, method, or guide: open that file. It contains the officia
 - **Alphabetic index:** https://ruby.sketchup.com/_index.html
 - **Generating geometry:** https://ruby.sketchup.com/file.generating_geometry.html
 - **Sketchup::Entities:** https://ruby.sketchup.com/Sketchup/Entities.html  
+- **Entities#add_arc:** https://ruby.sketchup.com/Sketchup/Entities.html#add_arc-instance_method (XY rounded-rect footprint: `center`, `xaxis`, `normal`, `radius`, start/end radians, `num_segments`; returns edge array; chain with `add_line` then `add_face` + `pushpull`)
 - **Entities#add_dimension_linear:** https://ruby.sketchup.com/Sketchup/Entities.html#add_dimension_linear-instance_method
 - **Sketchup::DimensionLinear:** https://ruby.sketchup.com/Sketchup/DimensionLinear.html
 - **Sketchup::Model:** https://ruby.sketchup.com/Sketchup/Model.html
