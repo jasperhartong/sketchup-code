@@ -115,8 +115,8 @@ module Timmerman
           _place_root(renderer, back_root,  pair.offset_x, pair.pair_row_y,                    pair.upside_down)
           _place_root(renderer, front_root, pair.offset_x, pair.pair_row_y + pair.foot_world_y, pair.upside_down)
 
-          renderer.paint_group(back_root,  Config::PREVIEW_RGB_BACK)
-          renderer.paint_group(front_root, Config::PREVIEW_RGB_FRONT)
+          renderer.paint_group(back_root,  Config::PREVIEW_RGB_BACK, skip_name_re: Config::SCREW_NAME_RE)
+          renderer.paint_group(front_root, Config::PREVIEW_RGB_FRONT, skip_name_re: Config::SCREW_NAME_RE)
 
           renderer.paint_named_children(back_root,  pair.back_highlight_part_names,  Config::PREVIEW_RGB_ACTIVE)
           renderer.paint_named_children(front_root, pair.front_highlight_part_names, Config::PREVIEW_RGB_ACTIVE)

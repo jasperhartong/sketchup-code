@@ -69,7 +69,8 @@ module Timmerman
       end
 
       # Paint every face of +group+ (recursively) with +[r,g,b]+ 0-255.
-      def paint_group(group, rgb)
+      # +skip_name_re+ optionally excludes matching child groups/instances.
+      def paint_group(group, rgb, skip_name_re: nil)
         raise NotImplementedError
       end
 

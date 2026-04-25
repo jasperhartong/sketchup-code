@@ -291,7 +291,7 @@ module Timmerman
       PREVIEW_MAT_BACK    = 'EB preview | back'
       PREVIEW_MAT_FRONT   = 'EB preview | front'
       PREVIEW_RGB_BACK    = [188, 152, 106].freeze
-      PREVIEW_RGB_FRONT   = [168, 130,  90].freeze
+      PREVIEW_RGB_FRONT   = PREVIEW_RGB_BACK
       PREVIEW_RGB_ACTIVE  = [56, 119, 234].freeze
       STEP_ANNOTATIONS_LAYER = 'EB_Step_Annotations'
 

@@ -21,6 +21,7 @@ module Timmerman
 
       # Quarter-circle segments per rounded XY footprint corner (before Z pushpull).
       ROUNDED_BOX_ARC_SEGMENTS = 8
+      SCREW_RGB = [128, 128, 128].freeze
 
       # @param attr_dict [String] SketchUp attribute-dictionary name used for
       #   per-group notes (so parts round-trip with their provenance comment).
@@ -168,16 +169,16 @@ module Timmerman
         @model.layers[name] || @model.layers.add(name)
       end
 
-      def paint_group(group, rgb)
+      def paint_group(group, rgb, skip_name_re: nil)
         return if @debug_color == :components_reuse
 
-        _paint_recursive(group.entities, _ensure_material(rgb))
+        _paint_recursive(group.entities, _ensure_material(rgb), skip_name_re: skip_name_re)
       end
 
       # Explicit paint path for helper geometry (e.g. cut-plan overlays) that
       # should remain visible even when component-reuse debug mode is active.
       def paint_group_force(group, rgb)
-        _paint_recursive(group.entities, _ensure_material(rgb))
+        _paint_recursive(group.entities, _ensure_material(rgb), skip_name_re: nil)
       end
 
       def paint_named_children(root, names, rgb)
@@ -459,7 +460,8 @@ module Timmerman
           spec.shaft_diameter.to_f.round(6),
           l_shaft.to_f.round(6),
           spec.head_diameter.to_f.round(6),
-          spec.head_height.to_f.round(6)
+          spec.head_height.to_f.round(6),
+          'sv3'
         ].join('|')
 
         cached = @screw_definition_cache[key]
@@ -470,6 +472,9 @@ module Timmerman
         if defn.entities.length.zero?
           _build_screw_definition_geometry(defn.entities, spec, shaft_length_index)
         end
+        # Re-assert screw color on cached definitions that might have been
+        # recolored by prior root paint passes in the current SketchUp model.
+        _paint_recursive(defn.entities, _ensure_material(SCREW_RGB))
         @screw_definition_cache[key] = defn
       end
 
@@ -495,7 +500,7 @@ module Timmerman
         f_s.reverse! if f_s.normal.z < 0
         f_s.pushpull(shaft_pull)
 
-        _paint_recursive(ents, _ensure_material([168, 172, 180]))
+        _paint_recursive(ents, _ensure_material(SCREW_RGB))
       end
 
       def _outer_face_for_box_face(entities, geo)
@@ -580,16 +585,20 @@ module Timmerman
         m
       end
 
-      def _paint_recursive(entities, material)
+      def _paint_recursive(entities, material, skip_name_re: nil)
         entities.each do |e|
           case e
           when Sketchup::Face
             e.material      = material
             e.back_material = material
           when Sketchup::Group
-            _paint_recursive(e.entities, material)
+            next if skip_name_re&.match?(e.name)
+
+            _paint_recursive(e.entities, material, skip_name_re: skip_name_re)
           when Sketchup::ComponentInstance
-            _paint_recursive(e.definition.entities, material)
+            next if skip_name_re&.match?(e.name)
+
+            _paint_recursive(e.definition.entities, material, skip_name_re: skip_name_re)
           end
         end
       end
