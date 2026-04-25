@@ -157,9 +157,13 @@ module Timmerman
 
       # ── Key lengths ───────────────────────────────────────────────────────────
 
-      # Each frame half's slats span exactly half the extended length.
-      def slat_length     = length_extended / 2
-      def back_slat_run_y = slat_length + beam_y
+      # Extra comb-tooth run along Y beyond length_extended/2 so back_slat_run_y
+      # (slat_length + beam_y) equals stock_bar_length/2 — e.g. 1050 mm for 2100 stock.
+      # length_extended is unchanged for now; fully extended Y is about 2× this longer.
+      SLAT_TOOTH_EXTRA_Y = 6.mm
+
+      def slat_length      = (length_extended / 2) + SLAT_TOOTH_EXTRA_Y
+      def back_slat_run_y  = slat_length + beam_y
       def front_slat_run_y = back_slat_run_y
 
       # Fully retracted: both slat runs overlapping + one beam depth at each end.
