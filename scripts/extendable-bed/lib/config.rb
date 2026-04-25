@@ -127,6 +127,9 @@ module Timmerman
       # Front comb has one fewer tooth than back (sits in back gaps).
       def front_slat_count = back_slat_count - 1
 
+      # Number of gap helpers per preview pair (depends on slat count).
+      def fork_gap_helper_count = back_slat_count - 1
+
       # Outliner names for slat groups (matches `FrameAssembly#_back_slats` / `#_front_slats`).
       def back_slat_group_names
         (0...back_slat_count).map { |i| "EB | slat | back | #{i + 1}/#{back_slat_count}" }

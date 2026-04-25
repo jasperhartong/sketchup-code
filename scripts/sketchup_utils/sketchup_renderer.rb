@@ -172,18 +172,7 @@ module Timmerman
         return if names.nil? || names.empty?
         return if @debug_color == :components_reuse
 
-        mat = _ensure_material(rgb)
-        Array(names).each do |name|
-          child = _named_child(root, name)
-          next unless child
-
-          child_entities =
-            case child
-            when Sketchup::Group then child.entities
-            when Sketchup::ComponentInstance then child.definition.entities
-            end
-          _paint_recursive(child_entities, mat) if child_entities
-        end
+        _paint_named_children_with_material(root, names, _ensure_material(rgb))
       end
 
       def hide_named_children(root, names, hidden: true)
@@ -241,6 +230,20 @@ module Timmerman
 
       def _named_child(root, name)
         _direct_render_children(root).find { |c| c.name == name }
+      end
+
+      def _paint_named_children_with_material(root, names, material)
+        Array(names).each do |name|
+          child = _named_child(root, name)
+          next unless child
+
+          child_entities =
+            case child
+            when Sketchup::Group then child.entities
+            when Sketchup::ComponentInstance then child.definition.entities
+            end
+          _paint_recursive(child_entities, material) if child_entities
+        end
       end
 
       def _to_geom_transformation(transform)

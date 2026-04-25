@@ -41,9 +41,9 @@ module Timmerman
                      back_exclude: [],
                      front_exclude: [],
                      back_highlight_part_names: [],
-                    front_highlight_part_names: [],
-                    back_hidden_part_names: [],
-                    front_hidden_part_names: [])
+                     front_highlight_part_names: [],
+                     back_hidden_part_names: [],
+                     front_hidden_part_names: [])
         @config       = config
         @back_frame_catalog  = back_frame
         @front_frame_catalog = front_frame

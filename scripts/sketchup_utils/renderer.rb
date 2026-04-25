@@ -94,7 +94,7 @@ module Timmerman
 
       # Wraps an atomic "operation" (undoable on SketchUp; may be a no-op
       # elsewhere). Yields; if the block raises, the backend should abort.
-      def commit(label)
+      def commit(_label)
         yield
       end
 

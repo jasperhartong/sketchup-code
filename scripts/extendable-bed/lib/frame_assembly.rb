@@ -75,6 +75,7 @@ module Timmerman
         _head_ledge_plank
         _head_end_beam
         _back_slats
+        _fork_gap_helpers
         _outer_sisters
         _sister_tie
         _head_corner_leg_screws
@@ -496,6 +497,40 @@ module Timmerman
                 u:         c.beam_wide / 2.0,
                 v:         outer_sister_run_dy / 2.0,
                 spec_id:   :eb_pocket_4mm
+        end
+      end
+
+      # Temporary gauges that should fit in the fork pockets during step 2.
+      # Gauge width = slat width + two side gaps => 44 + 2*3 = 50 mm by default.
+      # These are non-structural helper pieces (rendered red via construction-step styling).
+      def _fork_gap_helpers
+        back_xs, = slat_x_starts
+        slots = back_xs.each_cons(2).map do |x1, x2|
+          x_start = x1 + c.slat_dx
+          [x_start, x2 - x_start]
+        end
+        return if slots.empty?
+
+        gauge_width = c.slat_dx + (2 * c.slat_gap)
+        slots = slots.select { |(_, span)| span >= gauge_width - 0.1.mm }
+        return if slots.empty?
+
+        helper_count = [c.fork_gap_helper_count, slots.length].min
+        selected = slots.first(helper_count) || []
+        return if selected.empty?
+
+        # Place against the head end beam so helpers are actually between the
+        # back slats and touching the head-end edge.
+        y0 = c.beam_y
+        helper_dz = c.beam_narrow
+        # Step 2 is rendered upside down; placing helper top at z_slat_top makes
+        # the helper flush with the ground after the flip+lift placement.
+        z0 = c.z_slat_top - helper_dz
+        selected.each_with_index do |(x_start, _span), idx|
+          beam "EB | helper | fork gap | #{idx + 1}/#{helper_count}",
+               at:   [x_start, y0, z0],
+               size: [gauge_width, c.beam_wide, helper_dz],
+               note: "Temporary fork-gap helper beam: #{gauge_width.to_mm.round(1)} mm length (slat + 2 gaps)."
         end
       end
 

@@ -115,6 +115,11 @@ module Timmerman
         config.front_slat_group_names + FRONT_FOOT_END
       end
 
+      def fork_gap_helper_names(config)
+        max_count = [config.fork_gap_helper_count, [config.back_slat_count - 1, 0].max].min
+        (0...max_count).map { |i| "EB | helper | fork gap | #{i + 1}/#{max_count}" }
+      end
+
       # Step-5 highlight: sub-assembly parts that attach together after flip
       # (all remaining legs + both outer sisters + mid tie).
       FLIP_SUB_ASSEMBLY_BACK_HIGHLIGHTS = (
