@@ -307,6 +307,10 @@ module Timmerman
       # Single-pair root names (cleared together with the multi-pair preview set).
       SINGLE_PAIR_ROOTS = %w[EB_Back EB_Front].freeze
 
+      # Retracted preview pair (non-extended length) — target for native `.glb` export
+      # (`GlbExport.export_nonextended_pair`). See skill `export-nonextended-bed-glb`.
+      NONEXTENDED_GLB_EXPORT_ROOTS = [GROUP_RET_BACK, GROUP_RET_FRONT].freeze
+
       # Written on each successful BedLayout#create (named-group geometry snapshot).
       GEOMETRY_BASELINE_JSON =
         File.expand_path('../references/extendable_bed_geometry_baseline.json', __dir__).freeze

@@ -13,6 +13,10 @@
 #   Timmerman::ExtendableBed::BedLayout.new.clear     # erase all EB groups
 #   Timmerman::ExtendableBed::BedLayout.new.validate  # AABB overlap check
 #
+# Native GLB (retracted pair only): load lib/export_nonextended_bed_glb.rb, then
+#   Timmerman::ExtendableBed::GlbExport.export_nonextended_pair('/path/out.glb')
+# Bridge: sketchup_bridge/commands/export_nonextended_bed_glb.rb — skill: export-nonextended-bed-glb.
+#
 # To customise dimensions, pass a Config to BedLayout:
 #   config = Timmerman::ExtendableBed::Config.new(back_slat_count: 11, length_extended: 2200.mm)
 #   Timmerman::ExtendableBed::BedLayout.new(config).create
