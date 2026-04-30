@@ -111,14 +111,14 @@ module Timmerman
       ].freeze
 
       EXTENSION_SPECS = [
-        { back_name: Config::GROUP_EXT1_BACK, front_name: Config::GROUP_EXT1_FRONT, column: 0, foot: :one_small,
-          pillow_mode: :extended_one_small, tally_stock: false, display_name: Config::PREVIEW_NAME_EXT1 },
-        { back_name: Config::GROUP_HALF_BACK, front_name: Config::GROUP_HALF_FRONT, column: 1, foot: :halfway,
-          pillow_mode: :halfway, tally_stock: false, display_name: Config::PREVIEW_NAME_HALF },
-        { back_name: Config::GROUP_EXT_BACK, front_name: Config::GROUP_EXT_FRONT, column: 2, foot: :extended,
-          pillow_mode: :extended, tally_stock: true, display_name: Config::PREVIEW_NAME_EXT },
-        { back_name: Config::GROUP_RET_BACK, front_name: Config::GROUP_RET_FRONT, column: 3, foot: :retracted,
+        { back_name: Config::GROUP_RET_BACK, front_name: Config::GROUP_RET_FRONT, column: 0, foot: :retracted,
           pillow_mode: :retracted, tally_stock: false, display_name: Config::PREVIEW_NAME_RET },
+        { back_name: Config::GROUP_EXT1_BACK, front_name: Config::GROUP_EXT1_FRONT, column: 1, foot: :one_small,
+          pillow_mode: :extended_one_small, tally_stock: false, display_name: Config::PREVIEW_NAME_EXT1 },
+        { back_name: Config::GROUP_HALF_BACK, front_name: Config::GROUP_HALF_FRONT, column: 2, foot: :halfway,
+          pillow_mode: :halfway, tally_stock: false, display_name: Config::PREVIEW_NAME_HALF },
+        { back_name: Config::GROUP_EXT_BACK, front_name: Config::GROUP_EXT_FRONT, column: 3, foot: :extended,
+          pillow_mode: :extended, tally_stock: true, display_name: Config::PREVIEW_NAME_EXT },
         { back_name: Config::GROUP_RETGND_BACK, front_name: Config::GROUP_RETGND_FRONT, column: 4, foot: :retracted,
           pillow_mode: :retracted_gnd, tally_stock: false, display_name: Config::PREVIEW_NAME_RETGND },
         { back_name: Config::GROUP_RETSCREWS_BACK, front_name: Config::GROUP_RETSCREWS_FRONT,
