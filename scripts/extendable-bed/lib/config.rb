@@ -311,6 +311,23 @@ module Timmerman
       GROUP_RETGND_FRONT = 'EB_RetGnd_Front'
       GROUP_CUT_PLAN_3D  = 'EB_CutPlan_3D'
 
+      # Human-readable names for the extension-degree preview row (one label per back+front pair).
+      PREVIEW_NAME_EXT1      = 'Extended: 1 pillow'.freeze
+      PREVIEW_NAME_HALF      = 'Extended: 2 pillows'.freeze
+      PREVIEW_NAME_EXT       = 'Extended: 3 pillows'.freeze
+      PREVIEW_NAME_RET       = 'Retracted: pillows on top'.freeze
+      PREVIEW_NAME_RETGND    = 'Retracted: pillows below'.freeze
+      PREVIEW_NAME_RETSCREWS = 'Retracted: screws only'.freeze
+
+      EXTENSION_PAIR_DISPLAY_NAME_BY_BACK_ROOT = {
+        GROUP_EXT1_BACK     => PREVIEW_NAME_EXT1,
+        GROUP_HALF_BACK     => PREVIEW_NAME_HALF,
+        GROUP_EXT_BACK      => PREVIEW_NAME_EXT,
+        GROUP_RET_BACK      => PREVIEW_NAME_RET,
+        GROUP_RETGND_BACK   => PREVIEW_NAME_RETGND,
+        GROUP_RETSCREWS_BACK => PREVIEW_NAME_RETSCREWS
+      }.freeze
+
       # Construction sequence labels (reversed from original build-order draft):
       # Step 1 = old prep, ... Step 7 = old full assembly.
       GROUP_STEP1_BACK = 'EB_Step1_Back'
