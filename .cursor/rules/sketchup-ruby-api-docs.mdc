@@ -33,6 +33,8 @@ When you need a class, method, or guide: open that file. It contains the officia
 - **UI::Notification:** https://ruby.sketchup.com/UI/Notification.html (non-blocking toast; constructor: extension, message, icon_name, icon_tooltip; use `.show`; auto-dismisses if no on_accept/on_dismiss)
 - **Sketchup::Materials / Material#color:** https://ruby.sketchup.com/Sketchup/Material.html#color-instance_method (`model.materials[name] || model.materials.add(name)`; `Sketchup::Color.new(r, g, b)` RGB 0–255)
 - **Sketchup::Face#material / #back_material:** https://ruby.sketchup.com/Sketchup/Face.html#material-instance_method
+- **Sketchup::Edge#soft=:** https://ruby.sketchup.com/Sketchup/Edge.html#soft%3D-instance_method (marks edges as soft/hidden in shaded view)
+- **Sketchup::Edge#smooth=:** https://ruby.sketchup.com/Sketchup/Edge.html#smooth%3D-instance_method (blends shading across adjacent faces; usually paired with `soft=`)
 
 For any other class or method, use **`docs/sketchup-ruby-api-index.md`** or the official alphabetic index above.
 

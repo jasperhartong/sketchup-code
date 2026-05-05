@@ -70,7 +70,7 @@ module Timmerman
         pillow_thickness: 120.mm,
         beam_box_corner_radius:   5.mm,
         plank_box_corner_radius:  2.mm,
-        pillow_box_corner_radius: 20.mm,
+        pillow_box_corner_radius: 30.mm,
         beam_box_corner_axis: :long,
         plank_box_corner_axis: :long,
         pillow_box_corner_axis: :short,

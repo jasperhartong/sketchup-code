@@ -21,6 +21,7 @@ module Timmerman
 
       # Quarter-circle segments per rounded XY footprint corner (before Z pushpull).
       ROUNDED_BOX_ARC_SEGMENTS = 8
+      FULL_ROUNDED_BOX_SEGMENTS = 3
       SCREW_RGB = [128, 128, 128].freeze
 
       # @param attr_dict [String] SketchUp attribute-dictionary name used for
@@ -212,6 +213,44 @@ module Timmerman
         end
       end
 
+      # Native "Soften/Smooth Edges" equivalent for API-generated geometry.
+      # Useful for segmented rounded geometry (e.g. pillows) where hard edge
+      # lines between facets should disappear visually.
+      def soften_group_edges(group)
+        group.entities.grep(Sketchup::Edge).each do |edge|
+          next unless edge.valid?
+          next unless edge.faces.length == 2
+
+          f1, f2 = edge.faces
+          # Keep coplanar top/bottom triangulation hard (avoids the visible
+          # diagonal artifact on flat cushion caps). Soften everything else to
+          # make the rounded prism read as fully cushioned.
+          n1z = f1.normal.z.abs
+          n2z = f2.normal.z.abs
+          both_horizontal = (n1z >= 0.999) && (n2z >= 0.999)
+          is_soft = !both_horizontal
+          edge.soft = is_soft
+          edge.smooth = is_soft
+        end
+      end
+
+      # Replaces current group geometry with a fully 3D rounded box.
+      def round_group_box_all_edges(group, size:, radius:)
+        dx, dy, dz = size.map(&:to_f)
+        req = radius.to_f
+        return if dx <= 0 || dy <= 0 || dz <= 0 || req <= 0
+
+        max_r = (0.5 * [dx, dy, dz].min) - 0.001.mm.to_f
+        r = [req, max_r].min
+        return if r <= 1e-9
+
+        ents = group.entities
+        existing = ents.to_a.select(&:valid?)
+        ents.erase_entities(existing) unless existing.empty?
+        _add_full_rounded_box_mesh(ents, 0.0, 0.0, 0.0, dx, dy, dz, r)
+        soften_group_edges(group)
+      end
+
       # ── Lifecycle ────────────────────────────────────────────────────────
 
       def commit(label)
@@ -243,6 +282,202 @@ module Timmerman
 
         f.reverse! if f.normal.z < 0
         f.pushpull(dz)
+      end
+
+      def _add_full_rounded_box_mesh(entities, x, y, z, dx, dy, dz, r)
+        x0, y0, z0 = x, y, z
+        x1, y1, z1 = x + dx, y + dy, z + dz
+        center = Geom::Point3d.new((x0 + x1) * 0.5, (y0 + y1) * 0.5, (z0 + z1) * 0.5)
+        xi0, yi0, zi0 = x0 + r, y0 + r, z0 + r
+        xi1, yi1, zi1 = x1 - r, y1 - r, z1 - r
+        n = FULL_ROUNDED_BOX_SEGMENTS
+
+        # 6 planar center patches.
+        _add_quad_grid(
+          entities,
+          Geom::Point3d.new(xi0, yi0, z0),
+          Geom::Point3d.new(xi1, yi0, z0),
+          Geom::Point3d.new(xi1, yi1, z0),
+          Geom::Point3d.new(xi0, yi1, z0),
+          n, n, center
+        )
+        _add_quad_grid(
+          entities,
+          Geom::Point3d.new(xi0, yi0, z1),
+          Geom::Point3d.new(xi0, yi1, z1),
+          Geom::Point3d.new(xi1, yi1, z1),
+          Geom::Point3d.new(xi1, yi0, z1),
+          n, n, center
+        )
+        _add_quad_grid(
+          entities,
+          Geom::Point3d.new(x0, yi0, zi0),
+          Geom::Point3d.new(x0, yi1, zi0),
+          Geom::Point3d.new(x0, yi1, zi1),
+          Geom::Point3d.new(x0, yi0, zi1),
+          n, n, center
+        )
+        _add_quad_grid(
+          entities,
+          Geom::Point3d.new(x1, yi0, zi0),
+          Geom::Point3d.new(x1, yi0, zi1),
+          Geom::Point3d.new(x1, yi1, zi1),
+          Geom::Point3d.new(x1, yi1, zi0),
+          n, n, center
+        )
+        _add_quad_grid(
+          entities,
+          Geom::Point3d.new(xi0, y0, zi0),
+          Geom::Point3d.new(xi0, y0, zi1),
+          Geom::Point3d.new(xi1, y0, zi1),
+          Geom::Point3d.new(xi1, y0, zi0),
+          n, n, center
+        )
+        _add_quad_grid(
+          entities,
+          Geom::Point3d.new(xi0, y1, zi0),
+          Geom::Point3d.new(xi1, y1, zi0),
+          Geom::Point3d.new(xi1, y1, zi1),
+          Geom::Point3d.new(xi0, y1, zi1),
+          n, n, center
+        )
+
+        # 12 quarter-cylinder edge patches.
+        [-1, 1].each do |sy|
+          [-1, 1].each do |sz|
+            cy = sy.negative? ? yi0 : yi1
+            cz = sz.negative? ? zi0 : zi1
+            grid = Array.new(n + 1) { Array.new(n + 1) }
+            (0..n).each do |i|
+              xx = _lerp(xi0, xi1, i.to_f / n)
+              (0..n).each do |j|
+                a = (j.to_f / n) * (0.5 * Math::PI)
+                yy = cy + (sy * r * Math.cos(a))
+                zz = cz + (sz * r * Math.sin(a))
+                grid[i][j] = Geom::Point3d.new(xx, yy, zz)
+              end
+            end
+            _add_grid_faces(entities, grid, center)
+          end
+        end
+        [-1, 1].each do |sx|
+          [-1, 1].each do |sz|
+            cx = sx.negative? ? xi0 : xi1
+            cz = sz.negative? ? zi0 : zi1
+            grid = Array.new(n + 1) { Array.new(n + 1) }
+            (0..n).each do |i|
+              yy = _lerp(yi0, yi1, i.to_f / n)
+              (0..n).each do |j|
+                a = (j.to_f / n) * (0.5 * Math::PI)
+                xx = cx + (sx * r * Math.cos(a))
+                zz = cz + (sz * r * Math.sin(a))
+                grid[i][j] = Geom::Point3d.new(xx, yy, zz)
+              end
+            end
+            _add_grid_faces(entities, grid, center)
+          end
+        end
+        [-1, 1].each do |sx|
+          [-1, 1].each do |sy|
+            cx = sx.negative? ? xi0 : xi1
+            cy = sy.negative? ? yi0 : yi1
+            grid = Array.new(n + 1) { Array.new(n + 1) }
+            (0..n).each do |i|
+              zz = _lerp(zi0, zi1, i.to_f / n)
+              (0..n).each do |j|
+                a = (j.to_f / n) * (0.5 * Math::PI)
+                xx = cx + (sx * r * Math.cos(a))
+                yy = cy + (sy * r * Math.sin(a))
+                grid[i][j] = Geom::Point3d.new(xx, yy, zz)
+              end
+            end
+            _add_grid_faces(entities, grid, center)
+          end
+        end
+
+        # 8 spherical corner patches.
+        [-1, 1].each do |sx|
+          [-1, 1].each do |sy|
+            [-1, 1].each do |sz|
+              cx = sx.negative? ? xi0 : xi1
+              cy = sy.negative? ? yi0 : yi1
+              cz = sz.negative? ? zi0 : zi1
+              grid = Array.new(n + 1) { Array.new(n + 1) }
+              (0..n).each do |i|
+                a = (i.to_f / n) * (0.5 * Math::PI)
+                (0..n).each do |j|
+                  b = (j.to_f / n) * (0.5 * Math::PI)
+                  xx = cx + (sx * r * Math.cos(a) * Math.cos(b))
+                  yy = cy + (sy * r * Math.sin(a) * Math.cos(b))
+                  zz = cz + (sz * r * Math.sin(b))
+                  grid[i][j] = Geom::Point3d.new(xx, yy, zz)
+                end
+              end
+              _add_grid_faces(entities, grid, center)
+            end
+          end
+        end
+      end
+
+      def _add_quad_grid(entities, p00, p10, p11, p01, nu, nv, center)
+        grid = Array.new(nu + 1) { Array.new(nv + 1) }
+        (0..nu).each do |i|
+          u = i.to_f / nu
+          (0..nv).each do |j|
+            v = j.to_f / nv
+            a = _interp_point(p00, p10, u)
+            b = _interp_point(p01, p11, u)
+            grid[i][j] = _interp_point(a, b, v)
+          end
+        end
+        _add_grid_faces(entities, grid, center)
+      end
+
+      def _add_grid_faces(entities, grid, center)
+        nu = grid.length - 1
+        nv = grid[0].length - 1
+        (0...nu).each do |i|
+          (0...nv).each do |j|
+            p00 = grid[i][j]
+            p10 = grid[i + 1][j]
+            p11 = grid[i + 1][j + 1]
+            p01 = grid[i][j + 1]
+            _add_triangle(entities, p00, p10, p11, center)
+            _add_triangle(entities, p00, p11, p01, center)
+          end
+        end
+      end
+
+      def _lerp(a, b, t)
+        a + ((b - a) * t)
+      end
+
+      def _interp_point(p1, p2, t)
+        Geom::Point3d.new(
+          _lerp(p1.x, p2.x, t),
+          _lerp(p1.y, p2.y, t),
+          _lerp(p1.z, p2.z, t)
+        )
+      end
+
+      def _add_triangle(entities, a, b, c, center)
+        uniq = [a, b, c].map { |p| [p.x.round(6), p.y.round(6), p.z.round(6)] }.uniq
+        return if uniq.length < 3
+
+        f = entities.add_face([a, b, c])
+        return unless f
+
+        to_face = Geom::Vector3d.new(
+          ((a.x + b.x + c.x) / 3.0) - center.x,
+          ((a.y + b.y + c.y) / 3.0) - center.y,
+          ((a.z + b.z + c.z) / 3.0) - center.z
+        )
+        return if to_face.length <= 1e-9
+
+        to_face.normalize!
+        n = f.normal.clone
+        n.normalize!
+        f.reverse! if n.dot(to_face) < 0
       end
 
       # Clamps requested XY corner radius so quarter-arcs fit inside dx×dy (plan at z).

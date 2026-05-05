@@ -146,9 +146,18 @@ module Timmerman
           end
           renderer.add_box(
             g, at: [0, 0, 0], size: [part.dx, part.dy, part.dz],
-            corner_radius: _corner_radius_for_part(part),
+            corner_radius: part.is_a?(SketchupUtils::Parts::Pillow) ? 0 : _corner_radius_for_part(part),
             corner_axis: _corner_axis_for_part(part)
           )
+          if part.is_a?(SketchupUtils::Parts::Pillow) && renderer.respond_to?(:round_group_box_all_edges)
+            renderer.round_group_box_all_edges(
+              g,
+              size: [part.dx, part.dy, part.dz],
+              radius: @config.pillow_box_corner_radius
+            )
+          elsif part.is_a?(SketchupUtils::Parts::Pillow) && renderer.respond_to?(:soften_group_edges)
+            renderer.soften_group_edges(g)
+          end
           renderer.set_group_transform(g, SketchupUtils::Transform.translation([part.x, part.y, part.z]))
         end
       end

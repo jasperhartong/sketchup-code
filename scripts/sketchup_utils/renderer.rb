@@ -91,6 +91,18 @@ module Timmerman
         raise NotImplementedError
       end
 
+      # Marks internal edges as soft/smooth to visually round segmented
+      # geometry (native SketchUp softening; no plugin extension required).
+      def soften_group_edges(group)
+        raise NotImplementedError
+      end
+
+      # Rebuilds a sharp box in +group+ into a fully 3D rounded box using +radius+.
+      # Intended as a post-process after a plain extrusion.
+      def round_group_box_all_edges(group, size:, radius:)
+        raise NotImplementedError
+      end
+
       # ── Lifecycle ────────────────────────────────────────────────────────
 
       # Wraps an atomic "operation" (undoable on SketchUp; may be a no-op
