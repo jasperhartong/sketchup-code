@@ -14,11 +14,12 @@ module Timmerman
     #   planner.print_report
     #   planner.print_hardware_report
     class StockPlanner
-      attr_reader :total_extrusion_m, :piece_count, :cuts, :screw_counts
+      attr_reader :total_extrusion_m, :total_surface_m2, :piece_count, :cuts, :screw_counts
 
       def initialize(config)
         @config          = config
         @total_extrusion_m = 0.0
+        @total_surface_m2  = 0.0  # all 6 faces per beam (ends included) — for finishing/sanding budget
         @piece_count     = 0
         @cuts            = []   # [{ name:, mm: }, ...]
         @screw_counts    = Hash.new(0) # [[spec_id, shaft_length_index], count]
@@ -36,9 +37,23 @@ module Timmerman
         return unless @active
 
         mm = beam.extrusion_mm.to_f
+        s1, s2 = _section_sides_mm(beam, mm)
+        # All 6 faces of the rectangular prism: 4 long sides + 2 ends.
+        surface_mm2 = (2.0 * mm * (s1 + s2)) + (2.0 * s1 * s2)
+
         @total_extrusion_m += mm / 1000.0
+        @total_surface_m2  += surface_mm2 / 1_000_000.0
         @piece_count       += 1
         @cuts              << { name: beam.name, mm: mm }
+      end
+
+      # Returns the two cross-section side lengths in mm by removing the dim
+      # that matches +ext_mm+ (extrusion length) from +beam.size+.
+      def _section_sides_mm(beam, ext_mm)
+        size_mm = beam.size.map { |d| d.to_mm.abs }
+        i = size_mm.find_index { |d| (d - ext_mm).abs < SketchupUtils::Parts::Beam::SECTION_TOL_MM }
+        size_mm.delete_at(i) if i
+        size_mm
       end
 
       # Register one screw placement (same +@active+ / tally scope as #record).
@@ -88,6 +103,10 @@ module Timmerman
           'combined offcuts %.1f mm (%.3f m). (best of FFD/BFD + local moves)',
           label, @total_extrusion_m, @piece_count,
           bars.size, @cuts.size, total_waste, total_waste / 1000.0
+        )
+        puts format(
+          '  Raw wood surface (onbewerkt): %.3f m² — all 6 faces per piece (4 long sides + 2 ends).',
+          @total_surface_m2
         )
         puts "  Kerf between cuts on the same bar is included (#{kerf} mm)." if kerf > 0
 

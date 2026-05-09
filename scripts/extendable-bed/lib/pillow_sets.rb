@@ -8,12 +8,11 @@ module Timmerman
     # once per preview and then rendered through the standard PartRendering
     # driver, same as any other part.
     #
-    # Modes:
-    #   :extended           — big flat on back + three small flats on front
-    #   :extended_one_small — 1 small flat extending front + 2 stacked on big at head
-    #   :halfway            — big flat + couch head + two small flats on front
-    #   :retracted          — big flat + three-layer couch stack at head
-    #   :retracted_gnd      — big flat; three smalls laid flat on floor at head
+    # Modes (IKEA mattress set: 1 big + 2 small):
+    #   :extended           — big flat on back + two small flats on front
+    #   :extended_one_small — 1 small flat extending front + 1 stacked upright on big at head
+    #   :retracted          — big flat + two-layer couch stack at head
+    #   :retracted_gnd      — big flat; two smalls laid flat on floor at head
     #   nil                 — no pillows
     module PillowSets
       # ── BackPillowSet ─────────────────────────────────────────────────────
@@ -36,7 +35,6 @@ module Timmerman
           case @mode
           when :extended           then _extended_back
           when :extended_one_small then _extended_one_small_back
-          when :halfway            then _halfway_back
           when :retracted          then _retracted_back
           when :retracted_gnd      then _retracted_gnd_back
           when nil                 then # no pillows
@@ -65,32 +63,15 @@ module Timmerman
         end
 
         def _extended_one_small_back
-          _big_pillow('Ext1; big flat on slats; two smalls stacked at head (same as retracted base).')
+          _big_pillow('Ext1; big flat on slats; one small stacked upright at head.')
           sm = c.pillow_small_length
           return unless sm.positive?
 
           t = c.pillow_thickness
-          z = c.z_slat_top + t
           pillow 'EB | pillow | small | 2',
-                 at:   [0, y_pillow, z],
-                 size: [c.outer_width, t, sm],
-                 note: 'Ext1; upright on big at head (retracted small|3 geometry).'
-          pillow 'EB | pillow | small | 3',
-                 at:   [0, y_pillow + t, z],
-                 size: [c.outer_width, t, sm],
-                 note: 'Ext1; second stack layer (retracted couch|head geometry).'
-        end
-
-        def _halfway_back
-          _big_pillow('Half-extended; flat big on slats; Y span = pillow_big_length.')
-          sm = c.pillow_small_length
-          return unless sm.positive?
-
-          t = c.pillow_thickness
-          pillow 'EB | pillow | couch | head',
                  at:   [0, y_pillow, c.z_slat_top + t],
                  size: [c.outer_width, t, sm],
-                 note: 'Half-extended; vertical back cushion at y_pillow on top of big pillow.'
+                 note: 'Ext1; small | 2 upright on big at head (small | 1 extends front).'
         end
 
         def _retracted_back
@@ -100,18 +81,14 @@ module Timmerman
 
           t = c.pillow_thickness
           z = c.z_slat_top + t
-          pillow 'EB | pillow | small | 3',
+          pillow 'EB | pillow | small | 1',
                  at:   [0, y_pillow, z],
                  size: [c.outer_width, t, sm],
-                 note: 'Couch; small|3 vertical slab on big pillow; w×t×sm in X×Y×Z.'
-          pillow 'EB | pillow | couch | head',
+                 note: 'Couch; small | 1 vertical slab on big pillow; w×t×sm in X×Y×Z.'
+          pillow 'EB | pillow | small | 2',
                  at:   [0, y_pillow + t, z],
                  size: [c.outer_width, t, sm],
-                 note: 'Couch; back cushion; pillow_thickness along Y; height = small_len; Y0 = y_pillow + t.'
-          pillow 'EB | pillow | small | 1',
-                 at:   [0, y_pillow + (2 * t), z],
-                 size: [c.outer_width, t, sm],
-                 note: 'Retracted; 3rd small upright, same orientation as the other two; Y0 = y_pillow + 2t.'
+                 note: 'Couch back cushion; small | 2 vertical at Y0 = y_pillow + t.'
         end
 
         def _retracted_gnd_back
@@ -135,7 +112,7 @@ module Timmerman
                           end
           y_under_shift = 20.mm
 
-          3.times do |i|
+          c.small_pillow_count.times do |i|
             y = y_cluster + ((c.small_pillow_count - 1 - i) * sm) - y_under_shift
             pillow "EB | pillow | small | #{i + 1}",
                    at:   [0, y, 0],
@@ -167,7 +144,6 @@ module Timmerman
           case @mode
           when :extended           then _extended_front
           when :extended_one_small then _extended_one_small_front
-          when :halfway            then _halfway_front
           when :retracted, :retracted_gnd, nil
             # No front pillows in these modes.
           else
@@ -186,13 +162,13 @@ module Timmerman
           sm = c.pillow_small_length
           return unless sm.positive?
 
-          3.times do |i|
+          c.small_pillow_count.times do |i|
             # Pillows ordered foot→head (index 0 = SMALL_1 is most footward).
             y_world = y_small_head_world + ((c.small_pillow_count - 1 - i) * sm)
             pillow "EB | pillow | small | #{i + 1}",
                    at:   [0, y_world - @foot_world_y, c.z_slat_top],
                    size: [c.outer_width, sm, c.pillow_thickness],
-                   note: "Extended; small #{i + 1}/#{c.small_pillow_count}; equal thirds of extension gap."
+                   note: "Extended; small #{i + 1}/#{c.small_pillow_count}; equal share of extension gap."
           end
         end
 
@@ -204,20 +180,6 @@ module Timmerman
                  at:   [0, y_small_head_world - @foot_world_y, c.z_slat_top],
                  size: [c.outer_width, sm, c.pillow_thickness],
                  note: 'Ext1; one flat extends frame (foot = retracted + one small).'
-        end
-
-        def _halfway_front
-          sm = c.pillow_small_length
-          return unless sm.positive?
-
-          pillow 'EB | pillow | small | 3',
-                 at:   [0, y_small_head_world - @foot_world_y, c.z_slat_top],
-                 size: [c.outer_width, sm, c.pillow_thickness],
-                 note: 'Half-extended; small|3 flat; same Y slot as extended small|3.'
-          pillow 'EB | pillow | small | 2',
-                 at:   [0, y_small_head_world + sm - @foot_world_y, c.z_slat_top],
-                 size: [c.outer_width, sm, c.pillow_thickness],
-                 note: 'Half-extended; small|2 flat; same Y slot as extended small|2.'
         end
       end
     end

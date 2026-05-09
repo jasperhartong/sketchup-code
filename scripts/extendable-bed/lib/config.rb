@@ -76,7 +76,7 @@ module Timmerman
         pillow_box_corner_axis: :short,
         slat_gap:         3.mm,
         pair_gap_x:       600.mm,
-        stock_bar_length: 2100.mm,
+        stock_bar_length: 2700.mm,
         stock_kerf_mm:    0.0,
         debug_color: :off,
         hardware_through_hole: true,
@@ -187,10 +187,15 @@ module Timmerman
 
       # ── Key lengths ───────────────────────────────────────────────────────────
 
-      # Extra comb-tooth run along Y beyond length_extended/2 so back_slat_run_y
-      # (slat_length + beam_y) equals stock_bar_length/2 — e.g. 1050 mm for 2100 stock.
-      # length_extended is unchanged for now; fully extended Y is about 2× this longer.
-      SLAT_TOOTH_EXTRA_Y = 6.mm
+      # Extra comb-tooth run along Y beyond length_extended/2. Sized so the
+      # retracted bed length (slat_length + 2·beam_y) matches the IKEA big
+      # mattress: pillow_big_length = length_retracted + beam_narrow ⇒
+      #   slat_length = pillow_big_length − beam_narrow − 2·beam_y
+      #               = 1300 − 44 − 88 = 1168 mm
+      #   ⇒ SLAT_TOOTH_EXTRA_Y = slat_length − length_extended/2 = 1168 − 1000 = 168 mm.
+      # back_slat_run_y is then 1212 mm (was 1050 mm = stock_bar_length/2 before
+      # the IKEA refit); two slats now fit per 2700 mm bar with ~276 mm waste.
+      SLAT_TOOTH_EXTRA_Y = 168.mm
 
       def slat_length      = (length_extended / 2) + SLAT_TOOTH_EXTRA_Y
       def back_slat_run_y  = slat_length + beam_y
@@ -266,16 +271,15 @@ module Timmerman
 
       # ── Pillows ───────────────────────────────────────────────────────────────
 
-      # Big pillow spans the retracted length; three equal smalls share the full span.
-      # Extended layout (foot→head): small | 1, big, small | 2, small | 3.
+      # IKEA mattress set: 1 big 1300×800×120 + 2 small 350×800×120.
+      # Big pillow spans the retracted length; the two equal smalls share the full
+      # extension span (length_extended − retracted footprint).
+      # Extended layout (foot→head): small | 1, small | 2, big.
       def pillow_big_length   = length_retracted + beam_narrow
-      def small_pillow_count  = 3
+      def small_pillow_count  = 2
       def pillow_small_length = (length_extended - length_retracted - beam_narrow) / small_pillow_count
 
-      # Half-extended preview: front foot is one small cushion short of full extension.
-      def halfway_front_foot_world_y = length_extended - pillow_small_length
-
-      # Ext1 preview: retracted + one small flat’s worth of extension (3 sm total still defined).
+      # Ext1 preview: retracted + one small flat’s worth of extension.
       def one_small_extension_front_foot_world_y = retracted_foot_world_y + pillow_small_length
 
       # ── Cap geometry ─────────────────────────────────────────────────────────
@@ -301,8 +305,6 @@ module Timmerman
       GROUP_EXT_FRONT    = 'EB_Ext_Front'
       GROUP_EXT1_BACK    = 'EB_Ext1_Back'
       GROUP_EXT1_FRONT   = 'EB_Ext1_Front'
-      GROUP_HALF_BACK    = 'EB_Half_Back'
-      GROUP_HALF_FRONT   = 'EB_Half_Front'
       GROUP_RET_BACK     = 'EB_Ret_Back'
       GROUP_RET_FRONT    = 'EB_Ret_Front'
       GROUP_RETSCREWS_BACK  = 'EB_RetScrews_Back'
@@ -313,15 +315,13 @@ module Timmerman
 
       # Human-readable names for the extension-degree preview row (one label per back+front pair).
       PREVIEW_NAME_EXT1      = 'Extended: 1 pillow'.freeze
-      PREVIEW_NAME_HALF      = 'Extended: 2 pillows'.freeze
-      PREVIEW_NAME_EXT       = 'Extended: 3 pillows'.freeze
+      PREVIEW_NAME_EXT       = 'Extended: 2 pillows'.freeze
       PREVIEW_NAME_RET       = 'Retracted: pillows on top'.freeze
       PREVIEW_NAME_RETGND    = 'Retracted: pillows below'.freeze
       PREVIEW_NAME_RETSCREWS = 'Retracted: screws only'.freeze
 
       EXTENSION_PAIR_DISPLAY_NAME_BY_BACK_ROOT = {
         GROUP_EXT1_BACK     => PREVIEW_NAME_EXT1,
-        GROUP_HALF_BACK     => PREVIEW_NAME_HALF,
         GROUP_EXT_BACK      => PREVIEW_NAME_EXT,
         GROUP_RET_BACK      => PREVIEW_NAME_RET,
         GROUP_RETGND_BACK   => PREVIEW_NAME_RETGND,
@@ -346,7 +346,7 @@ module Timmerman
       GROUP_STEP7_FRONT = 'EB_Step7_Front'
 
       # Matches any auto-generated EB pair root group name.
-      GROUP_NAME_RE = /\AEB_(Ext|Ext1|Ret|RetScrews|Half|RetGnd|Step[1-7]|StepExt|StepDecoup|StepNoLedges|StepFlip|StepFlipNoLegs|StepFlipNoCaps|StepPrep|StepSisterPrep)_(Back|Front)\z/
+      GROUP_NAME_RE = /\AEB_(Ext|Ext1|Ret|RetScrews|RetGnd|Half|Step[1-7]|StepExt|StepDecoup|StepNoLedges|StepFlip|StepFlipNoLegs|StepFlipNoCaps|StepPrep|StepSisterPrep)_(Back|Front)\z/
 
       # Single-pair root names (cleared together with the multi-pair preview set).
       SINGLE_PAIR_ROOTS = %w[EB_Back EB_Front].freeze
