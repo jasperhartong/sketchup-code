@@ -199,7 +199,9 @@ module Timmerman
 
       def slat_length      = (length_extended / 2) + SLAT_TOOTH_EXTRA_Y
       def back_slat_run_y  = slat_length + beam_y
-      def front_slat_run_y = back_slat_run_y
+      # Front slats no longer match back slats: they end at the under-slat foot
+      # beam's headward face (see +front_slat_y0+ / +front_slat_y1+).
+      def front_slat_run_y = front_slat_y1 - front_slat_y0
 
       # Fully retracted: both slat runs overlapping + one beam depth at each end.
       def length_retracted = back_slat_run_y + beam_y
@@ -209,6 +211,14 @@ module Timmerman
       def n_slats_x    = back_slat_count + front_slat_count
       def gaps_along_x = n_slats_x - 1
       def outer_width  = (n_slats_x * slat_dx) + (gaps_along_x * slat_gap)
+
+      # Front slats are trimmed at the head end so their headward face is flush
+      # with the under-slat foot beam's headward face (the beam fully sits inside
+      # the slat headward end, screwed up into the slat hearts). The foot end
+      # still abuts the foot end beam (y = -beam_y). Saves ~367 mm per slat vs
+      # the symmetric `back_slat_run_y` length.
+      def front_slat_y0 = under_slat_foot_beam_y0
+      def front_slat_y1 = -beam_y
 
       # ── Z chain ───────────────────────────────────────────────────────────────
 

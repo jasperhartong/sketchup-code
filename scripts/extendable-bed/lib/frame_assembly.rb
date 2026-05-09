@@ -640,12 +640,11 @@ module Timmerman
 
       def _front_slats
         _, front_xs = slat_x_starts
-        y_slat_start = -c.beam_y - c.front_slat_run_y
         front_xs.each_with_index do |x0, i|
           slat "EB | slat | front | #{i + 1}/#{c.front_slat_count}",
-               at:   [x0, y_slat_start, c.z_slat_bottom],
+               at:   [x0, c.front_slat_y0, c.z_slat_bottom],
                size: [c.slat_dx, c.front_slat_run_y, c.slat_dz],
-               note: 'Front (sliding) comb tooth; sits in gaps of back slats; Y run = front_slat_run_y.'
+               note: 'Front (sliding) comb tooth; sits in gaps of back slats; head end flush with under-slat foot beam, foot end abuts foot end beam.'
         end
       end
 
