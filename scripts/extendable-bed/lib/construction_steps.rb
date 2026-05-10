@@ -41,7 +41,7 @@ module Timmerman
         flip_no_legs: ->(_b, _f, _c) {
           { back:  G::BACK_HEAD_LEDGE,
             front: G::FRONT_FOOT_LEDGE + G::FRONT_UNDER_SLAT_FOOT_BEAM +
-                   G::FRONT_FOOT_OUTER_CORNERS }
+                   G::FRONT_FOOT_OUTER_CORNERS + G::FRONT_FOOT_INSETS }
         },
 
         # Step 2: keep only slats + end beams (forking preview). Exclude = full − whitelist.
@@ -66,17 +66,41 @@ module Timmerman
         step_prep_hide_conflicting_screws: ->(_b, _f, c) {
           {
             back: [
+              'EB | screw | back sister -X | under headward 2',
+              'EB | screw | back sister -X | under headward 1',
               'EB | screw | back sister -X | middle',
+              'EB | screw | back sister -X | under footward 1',
+              'EB | screw | back sister -X | under footward 2',
+              'EB | screw | back sister +X | under headward 2',
+              'EB | screw | back sister +X | under headward 1',
               'EB | screw | back sister +X | middle',
+              'EB | screw | back sister +X | under footward 1',
+              'EB | screw | back sister +X | under footward 2',
               "EB | screw | sister tie | 8/#{c.back_slat_count} | heart",
               "EB | screw | sister tie | 2/#{c.back_slat_count} | heart",
               "EB | screw | sister tie | 7/#{c.back_slat_count} | heart",
               "EB | screw | sister tie | 3/#{c.back_slat_count} | heart",
               "EB | screw | sister tie | 6/#{c.back_slat_count} | heart",
               "EB | screw | sister tie | 4/#{c.back_slat_count} | heart",
-              "EB | screw | sister tie | 5/#{c.back_slat_count} | heart"
+              "EB | screw | sister tie | 5/#{c.back_slat_count} | heart",
+              "EB | screw | back under slat support | 8/#{c.back_slat_count} | heart",
+              "EB | screw | back under slat support | 2/#{c.back_slat_count} | heart",
+              "EB | screw | back under slat support | 7/#{c.back_slat_count} | heart",
+              "EB | screw | back under slat support | 3/#{c.back_slat_count} | heart",
+              "EB | screw | back under slat support | 6/#{c.back_slat_count} | heart",
+              "EB | screw | back under slat support | 4/#{c.back_slat_count} | heart",
+              "EB | screw | back under slat support | 5/#{c.back_slat_count} | heart",
+              "EB | screw | head cap | 8/#{c.back_slat_count} | heart",
+              "EB | screw | head cap | 2/#{c.back_slat_count} | heart",
+              "EB | screw | head cap | 7/#{c.back_slat_count} | heart",
+              "EB | screw | head cap | 3/#{c.back_slat_count} | heart",
+              "EB | screw | head cap | 6/#{c.back_slat_count} | heart",
+              "EB | screw | head cap | 4/#{c.back_slat_count} | heart",
+              "EB | screw | head cap | 5/#{c.back_slat_count} | heart"
             ],
-            front: []
+            front: (1..c.front_slat_count).map { |n|
+              "EB | screw | foot cap | #{n}/#{c.front_slat_count} | heart"
+            }
           }
         },
 

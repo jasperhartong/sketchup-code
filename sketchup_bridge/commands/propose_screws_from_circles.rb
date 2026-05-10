@@ -211,7 +211,12 @@ def format_span_expr(span_inches)
   ordered.each do |m|
     next unless c.method(m).arity.zero?
 
-    val = c.public_send(m)
+    begin
+      val = c.public_send(m)
+    rescue StandardError
+      # Skip arity-0 helpers that are not pure dimension getters (or that error in this context).
+      next
+    end
     next unless val.is_a?(Numeric)
     next unless (val.to_f - span_inches).abs < 1e-4
 

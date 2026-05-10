@@ -80,7 +80,9 @@ module Timmerman
         _back_under_slat_support_beam
         _head_corner_leg_screws
         _head_cap_into_inset_leg_screws
+        _head_cap_into_back_slat_hearts_screws
         _sister_tie_into_back_slat_hearts_screws
+        _back_under_slat_support_into_back_slat_hearts_screws
         _sister_into_behind_head_post_screws
         _behind_head_post_into_head_leg_screws
         _head_inset_leg_into_corner_leg_screws
@@ -264,11 +266,32 @@ module Timmerman
         end
       end
 
+      # Inner back slats (1-based indices) that get tie / cap / under-support
+      # heart screws along X — slats 1 and 9 are outer comb teeth.
+      SISTER_TIE_INTO_BACK_SLAT_HEART_INDICES = (2..8).freeze
+
+      # Screw up from under the head cap into inner back slats 2..8 at each heart
+      # (same indices and v as +_sister_tie_into_back_slat_hearts_screws+). Cap
+      # :min_z matches the tie/support Z band; u is world-X minus +head_cap_x0+
+      # because the cap spans only between inset legs.
+      def _head_cap_into_back_slat_hearts_screws
+        return if head_cap_dx <= 0
+
+        back_xs, = slat_x_starts
+        SISTER_TIE_INTO_BACK_SLAT_HEART_INDICES.each do |n|
+          world_x = back_xs[n - 1] + c.slat_dx / 2.0
+          screw "EB | screw | head cap | #{n}/#{c.back_slat_count} | heart",
+                host_name: 'EB | beam | head | cap',
+                face:      :min_z,
+                u:         world_x - head_cap_x0,
+                v:         c.beam_wide / 2.0,
+                spec_id:   :eb_pocket_4mm
+        end
+      end
+
       # Screw up from under the sister tie into each of the 7 inner back slats
       # (2..8) centered on each slat's heart. Tie :min_z face u runs along +X
       # (world-X minus x1_tie); v along +Y across beam_wide.
-      SISTER_TIE_INTO_BACK_SLAT_HEART_INDICES = (2..8).freeze
-
       def _sister_tie_into_back_slat_hearts_screws
         x1_tie, span_tie = sister_tie_x
         return if span_tie <= 0
@@ -280,6 +303,26 @@ module Timmerman
                 host_name: 'EB | beam | back | sister tie',
                 face:      :min_z,
                 u:         world_x - x1_tie,
+                v:         c.beam_wide / 2.0,
+                spec_id:   :eb_pocket_4mm
+        end
+      end
+
+      # Same plan as +_sister_tie_into_back_slat_hearts_screws+: screw up from the
+      # beam's :min_z into inner back slats 2..8 at each slat heart. The under-slat
+      # support shares +sister_tie_x+ span and the same Z band as the sister tie
+      # (narrow stock vertical); only Y differs on the back frame.
+      def _back_under_slat_support_into_back_slat_hearts_screws
+        x1_under, span_under = sister_tie_x
+        return if span_under <= 0
+
+        back_xs, = slat_x_starts
+        SISTER_TIE_INTO_BACK_SLAT_HEART_INDICES.each do |n|
+          world_x = back_xs[n - 1] + c.slat_dx / 2.0
+          screw "EB | screw | back under slat support | #{n}/#{c.back_slat_count} | heart",
+                host_name: 'EB | beam | back | under slat support',
+                face:      :min_z,
+                u:         world_x - x1_under,
                 v:         c.beam_wide / 2.0,
                 spec_id:   :eb_pocket_4mm
         end
@@ -428,16 +471,35 @@ module Timmerman
         end
       end
 
-      # Screw up from under each back sister at its mid-Y point. Sister :min_z
-      # face u runs along +X (span = beam_wide), v along +Y (span = sister_dy).
+      # Five screws up through each outer sister's :min_z: centered at mid-run
+      # (v = outer_sister_run_dy / 2) plus two on each side along +Y. Step =
+      # outer_sister_run_dy / this divisor → outer pair at v ≈ dy/10 and 9dy/10
+      # (wider than /8). Sister :min_z face u along +X (span = beam_wide),
+      # v along +Y (span = sister_dy).
+      SISTER_UNDER_MINZ_V_STEP_DIVISOR = 5.0
+
       def _back_sister_middle_screws
+        dy = outer_sister_run_dy
+        return if dy <= 0
+
+        v_mid = dy / 2.0
+        step  = dy / SISTER_UNDER_MINZ_V_STEP_DIVISOR
+        labels_vs = [
+          ['under headward 2', v_mid - (2 * step)],
+          ['under headward 1', v_mid - step],
+          ['middle', v_mid],
+          ['under footward 1', v_mid + step],
+          ['under footward 2', v_mid + (2 * step)]
+        ]
         %w[+X -X].each do |side|
-          screw "EB | screw | back sister #{side} | middle",
-                host_name: "EB | beam | back | sister | #{side}",
-                face:      :min_z,
-                u:         c.beam_wide / 2.0,
-                v:         outer_sister_run_dy / 2.0,
-                spec_id:   :eb_pocket_4mm
+          labels_vs.each do |label, v|
+            screw "EB | screw | back sister #{side} | #{label}",
+                  host_name: "EB | beam | back | sister | #{side}",
+                  face:      :min_z,
+                  u:         c.beam_wide / 2.0,
+                  v:         v,
+                  spec_id:   :eb_pocket_4mm
+          end
         end
       end
 
@@ -505,9 +567,10 @@ module Timmerman
         _foot_ledge_plank
         _front_slats
         _under_slat_foot_beam
-        _foot_cap_into_inset_leg_screws
         _foot_corner_leg_into_inset_leg_screws
+        _foot_inset_leg_inner_face_screws
         _under_slat_foot_into_front_slat_hearts_screws
+        _foot_cap_into_front_slat_hearts_screws
       end
 
       private
@@ -558,27 +621,9 @@ module Timmerman
         end
       end
 
-      # Pin the foot cap down onto each inset leg below it. On the cap's top
-      # face, u runs along +X (span = foot_cap_dx), v along +Y (span = beam_wide).
-      # One screw per inset leg, centered in Y (between the prior ±Y pair),
-      # mirrored across the X-centerline of the bed.
-      def _foot_cap_into_inset_leg_screws
-        { '-X' => c.beam_narrow / 2.0, '+X' => foot_cap_dx - c.beam_narrow / 2.0 }.each do |x_side, u|
-          screw "EB | screw | foot cap | #{x_side} end into inset leg | mid",
-                host_name: 'EB | beam | foot | cap',
-                face:      :max_z,
-                u:         u,
-                v:         c.beam_wide / 2.0,
-                spec_id:   :eb_pocket_4mm
-        end
-      end
-
-      # Three lateral screws per foot corner leg, going through the corner leg
-      # outer face into the inset leg behind it. Two near the top (at v =
-      # lh_outer − beam_wide/3, one near each Y edge) and one near the bottom
-      # (centered in Y). On +X/−X the outer face flips to :max_x/:min_x; u/v
-      # stay in each leg's part-local frame (both corner legs have identical
-      # axis alignment).
+      # Two lateral screws per foot corner leg through the outer face into the
+      # inset leg (v ≈ lh_outer − beam_wide/3) near ±Y in u. On +X/−X the outer
+      # face is :max_x / :min_x; u/v are in each leg's part-local frame.
       def _foot_corner_leg_into_inset_leg_screws
         { '+X' => :max_x, '-X' => :min_x }.each do |side, outer_face|
           host = "EB | leg | foot | #{side}"
@@ -594,11 +639,30 @@ module Timmerman
                 u:         c.beam_wide - c.beam_narrow / 2.0,
                 v:         c.outer_corner_leg_height - c.beam_wide / 3.0,
                 spec_id:   :eb_pocket_4mm
-          screw "EB | screw | foot leg #{side} | lower | into inset leg",
+        end
+      end
+
+      # Foot inset legs: two screws on the inner broad face (toward slats / bed
+      # center) — matches circle proposal u/v; −X uses :max_x, +X mirror :min_x.
+      def _foot_inset_leg_inner_face_screws
+        {
+          '-X' => { host: 'EB | leg | foot | -X | inset', face: :max_x },
+          '+X' => { host: 'EB | leg | foot | +X | inset', face: :min_x }
+        }.each do |side, info|
+          host = info[:host]
+          face = info[:face]
+          u = c.beam_wide / 2.0
+          screw "EB | screw | foot inset leg #{side} | lower inner face",
                 host_name: host,
-                face:      outer_face,
-                u:         c.beam_wide / 2.0,
-                v:         c.beam_narrow / 2.0,
+                face:      face,
+                u:         u,
+                v:         c.beam_wide / 2.0,
+                spec_id:   :eb_pocket_4mm
+          screw "EB | screw | foot inset leg #{side} | upper inner face",
+                host_name: host,
+                face:      face,
+                u:         u,
+                v:         c.mid_run_leg_height - c.beam_wide / 2.0,
                 spec_id:   :eb_pocket_4mm
         end
       end
@@ -620,6 +684,23 @@ module Timmerman
                 host_name: 'EB | beam | front | under slat foot',
                 face:      :min_z,
                 u:         world_x - x1_under,
+                v:         c.beam_wide / 2.0,
+                spec_id:   :eb_pocket_4mm
+        end
+      end
+
+      # Screw up from under the foot cap into each front slat at its comb heart
+      # (same :min_z / u / v pattern as +BackFrame#_head_cap_into_back_slat_hearts_screws+).
+      def _foot_cap_into_front_slat_hearts_screws
+        return if foot_cap_dx <= 0
+
+        _, front_xs = slat_x_starts
+        (1..c.front_slat_count).each do |n|
+          world_x = front_xs[n - 1] + c.slat_dx / 2.0
+          screw "EB | screw | foot cap | #{n}/#{c.front_slat_count} | heart",
+                host_name: 'EB | beam | foot | cap',
+                face:      :min_z,
+                u:         world_x - foot_cap_x0,
                 v:         c.beam_wide / 2.0,
                 spec_id:   :eb_pocket_4mm
         end

@@ -99,7 +99,8 @@ module Timmerman
         BACK_SISTER_TIE
       ).freeze
 
-      PREP_FRONT_WHITELIST = (FRONT_FOOT_CAP + FRONT_FOOT_INSETS).freeze
+      # Front: foot cap only (foot inset legs omitted — they appear from step 4).
+      PREP_FRONT_WHITELIST = FRONT_FOOT_CAP.freeze
 
       # Step-2 "fork (slats + end beams only)" whitelists — depend on slat count.
       # Consumers call +.fork_back_whitelist(config)+ etc. to include the config's
@@ -119,14 +120,14 @@ module Timmerman
         (0...max_count).map { |i| "EB | helper | fork gap | #{i + 1}/#{max_count}" }
       end
 
-      # Step-5 highlight: sub-assembly parts that attach together after flip
-      # (all remaining legs + both outer sisters + mid tie).
+      # Step 3 +flip_sub_assemblies+ highlight: back sub-assembly cluster; front
+      # foot cap only (foot inset legs hidden in steps 1 and 3).
       FLIP_SUB_ASSEMBLY_BACK_HIGHLIGHTS = (
         BACK_HEAD_OUTER_CORNERS + BACK_HEAD_INSETS + BACK_MID_LEGS +
         BACK_HEAD_POSTS + BACK_MID_POSTS +
         BACK_HEAD_CAP + BACK_SISTERS + BACK_SISTER_TIE
       ).freeze
-      FLIP_SUB_ASSEMBLY_FRONT_HIGHLIGHTS = (FRONT_FOOT_INSETS + FRONT_FOOT_CAP).freeze
+      FLIP_SUB_ASSEMBLY_FRONT_HIGHLIGHTS = FRONT_FOOT_CAP.freeze
 
       # Step-4 highlight: foot outer corner legs (the ones about to be removed).
       FLIP_OUTER_CORNER_BACK_HIGHLIGHTS  = [].freeze
