@@ -37,7 +37,6 @@ module Timmerman
       ].freeze
 
       BACK_HEAD_CAP   = ['EB | beam | head | cap'].freeze
-      BACK_HEAD_END   = ['EB | beam | head | end'].freeze
       BACK_HEAD_LEDGE = ['EB | plank | head | ledge'].freeze
 
       BACK_SISTERS = [
@@ -45,6 +44,7 @@ module Timmerman
         'EB | beam | back | sister | +X'
       ].freeze
       BACK_SISTER_TIE = ['EB | beam | back | sister tie'].freeze
+      BACK_UNDER_SLAT_SUPPORT = ['EB | beam | back | under slat support'].freeze
 
       # ── Front frame ─────────────────────────────────────────────────────
 
@@ -59,7 +59,6 @@ module Timmerman
       ].freeze
 
       FRONT_FOOT_CAP   = ['EB | beam | foot | cap'].freeze
-      FRONT_FOOT_END   = ['EB | beam | foot | end'].freeze
       FRONT_FOOT_LEDGE = ['EB | plank | foot | ledge'].freeze
 
       FRONT_UNDER_SLAT_FOOT_BEAM = ['EB | beam | front | under slat foot'].freeze
@@ -108,11 +107,11 @@ module Timmerman
       module_function
 
       def fork_back_whitelist(config)
-        config.back_slat_group_names + BACK_HEAD_END
+        config.back_slat_group_names
       end
 
       def fork_front_whitelist(config)
-        config.front_slat_group_names + FRONT_FOOT_END
+        config.front_slat_group_names
       end
 
       def fork_gap_helper_names(config)

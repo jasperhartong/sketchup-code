@@ -73,15 +73,13 @@ module Timmerman
         _behind_leg_posts
         _head_cap_beam
         _head_ledge_plank
-        _head_end_beam
         _back_slats
         _fork_gap_helpers
         _outer_sisters
         _sister_tie
+        _back_under_slat_support_beam
         _head_corner_leg_screws
         _head_cap_into_inset_leg_screws
-        _head_cap_between_head_end_screws
-        _head_ledge_between_back_slat_screws
         _sister_tie_into_back_slat_hearts_screws
         _sister_into_behind_head_post_screws
         _behind_head_post_into_head_leg_screws
@@ -173,44 +171,13 @@ module Timmerman
               note: 'On cap and corner legs; full bed width; top 2×BEAM_WIDE above z_slat_bottom.'
       end
 
-      def _head_end_beam
-        beam 'EB | beam | head | end',
-             at:   [0, 0, c.z_slat_bottom],
-             size: [c.outer_width, c.beam_y, c.beam_z],
-             note: 'Head end beam 44x69 mm (beam_y × beam_z); under cap.'
-
-        _head_end_beam_into_slats_screws
-      end
-
-      # :min_y is the headward narrow face (u +X, v +Z in part local).
-      # Vertical positions at one-third and two-thirds of beam height.
-      def _head_end_beam_into_slats_screws
-        back_xs, = slat_x_starts
-        v_lower = c.beam_z / 3.0
-        v_upper = (2.0 * c.beam_z) / 3.0
-        back_xs.each_with_index do |x0, i|
-          u = x0 + (c.slat_dx / 2.0)
-          n = i + 1
-          screw "EB | screw | head end | #{n}/#{c.back_slat_count} | lower",
-                host_name: 'EB | beam | head | end',
-                face:      :min_y,
-                u:         u, v: v_lower,
-                spec_id:   :eb_pocket_4mm
-          screw "EB | screw | head end | #{n}/#{c.back_slat_count} | upper",
-                host_name: 'EB | beam | head | end',
-                face:      :min_y,
-                u:         u, v: v_upper,
-                spec_id:   :eb_pocket_4mm
-        end
-      end
-
       def _back_slats
         back_xs, = slat_x_starts
         back_xs.each_with_index do |x0, i|
           slat "EB | slat | back | #{i + 1}/#{c.back_slat_count}",
-               at:   [x0, c.beam_y, c.z_slat_bottom],
-               size: [c.slat_dx, c.back_slat_run_y, c.slat_dz],
-               note: 'Back (fixed) comb tooth; interlocks with front slats when assembled.'
+               at:   [x0, 0, c.z_slat_bottom],
+               size: [c.slat_dx, c.back_slat_part_depth_y, c.slat_dz],
+               note: 'Back (fixed) comb tooth; narrow-stock depth along +Y at the head (former separate end beam) merged into the slat; interlocks with front slats when assembled.'
         end
       end
 
@@ -241,6 +208,19 @@ module Timmerman
              at:   [x1_tie, c.mid_tie_y0, lh_mid],
              size: [span_tie, c.beam_wide, c.beam_narrow],
              note: 'Mid run; wide face horizontal in Y (69 mm); max_y = length_retracted − plank_thickness (mirrors foot cap plank offset).'
+      end
+
+      # Same X/Z/section as +EB | beam | front | under slat foot+; Y on the back frame is shifted
+      # headward by +beam_wide+ so it sits behind (headward of) the front beam when retracted.
+      def _back_under_slat_support_beam
+        x1_under, span_under = sister_tie_x
+        return unless span_under.positive?
+
+        z_flat = c.z_slat_bottom - c.beam_narrow
+        beam 'EB | beam | back | under slat support',
+             at:   [x1_under, c.back_under_slat_support_y0, z_flat],
+             size: [span_under, c.beam_wide, c.beam_narrow],
+             note: 'Under back slats; headward of front under-slat foot beam when retracted (no Y overlap); carries extended front slat tips.'
       end
 
       # Head corner leg screws, mirrored across the X-centerline of the bed.
@@ -281,45 +261,6 @@ module Timmerman
                 u:         u,
                 v:         c.beam_wide / 2.0,
                 spec_id:   :eb_pocket_4mm
-        end
-      end
-
-      # Screws up from under the head cap into the head end beam above, each
-      # centered in X between a pair of adjacent lower head-end screws (i.e.
-      # over the front-slat gap between them). Cap :min_z face u runs along
-      # +X (world-X minus head_cap_x0); v runs along +Y across beam_wide.
-      HEAD_CAP_BETWEEN_HEAD_END_PAIRS = [[2, 3], [4, 5], [5, 6], [7, 8]].freeze
-
-      def _head_cap_between_head_end_screws
-        back_xs, = slat_x_starts
-        HEAD_CAP_BETWEEN_HEAD_END_PAIRS.each do |n1, n2|
-          mid_world_x = (back_xs[n1 - 1] + back_xs[n2 - 1]) / 2.0 + c.slat_dx / 2.0
-          screw "EB | screw | head cap | mid #{n1}-#{n2} | into head end",
-                host_name: 'EB | beam | head | cap',
-                face:      :min_z,
-                u:         mid_world_x - head_cap_x0,
-                v:         c.beam_wide / 2.0,
-                spec_id:   :eb_pocket_4mm
-        end
-      end
-
-      # Headward-facing screws on the head ledge plank between adjacent back
-      # slats, piercing into the head end beam. Plank `at: [0, y_head, …]` so
-      # plank-local u equals world X; v = beam_wide/2 lands in the middle of
-      # the head end beam's Z band (0..beam_wide from plank-local z=0).
-      HEAD_LEDGE_BETWEEN_BACK_SLAT_PAIRS = [[1, 2], [8,9]].freeze
-
-      def _head_ledge_between_back_slat_screws
-        back_xs, = slat_x_starts
-        HEAD_LEDGE_BETWEEN_BACK_SLAT_PAIRS.each do |n1, n2|
-          mid_world_x = (back_xs[n1 - 1] + back_xs[n2 - 1]) / 2.0 + c.slat_dx / 2.0
-          screw "EB | screw | head ledge | mid #{n1}-#{n2} | into head end",
-                host_name: 'EB | plank | head | ledge',
-                face:      :min_y,
-                u:         mid_world_x,
-                v:         c.beam_wide / 2.0,
-                spec_id:   :eb_pocket_4mm,
-                shaft_length_index: 1
         end
       end
 
@@ -519,9 +460,8 @@ module Timmerman
         selected = slots.first(helper_count) || []
         return if selected.empty?
 
-        # Place against the head end beam so helpers are actually between the
-        # back slats and touching the head-end edge.
-        y0 = c.beam_y
+        # Flush against the headward face of the back slats (y = 0).
+        y0 = 0
         helper_dz = c.beam_narrow
         # Step 2 is rendered upside down; placing helper top at z_slat_top makes
         # the helper flush with the ground after the flip+lift placement.
@@ -536,8 +476,11 @@ module Timmerman
 
       # ── Z / Y / plan helpers ─────────────────────────────────────────────
 
-      def outer_sister_head_y0 = (c.beam_y - c.plank_thickness) + (c.beam_wide - c.beam_narrow)
-      def outer_sister_run_dy  = (c.back_slat_run_y + (2 * c.plank_thickness)) - (c.beam_wide - c.beam_narrow) + c.mid_layout_y_shift - c.beam_narrow
+      # Headward face flush with the footward face of head corner legs (y = beam_wide - plank_thickness).
+      # Run is shortened by beam_narrow so the foot end stays fixed (previous start sat beam_narrow into the leg).
+      def outer_sister_head_y0 = c.beam_wide - c.plank_thickness
+      def outer_sister_run_dy  =
+        (c.back_slat_run_y + (2 * c.plank_thickness)) - (c.beam_wide - c.beam_narrow) + c.mid_layout_y_shift + c.beam_y - (2 * c.beam_narrow)
 
       def lh_outer = c.outer_corner_leg_height
       def lh_mid   = c.mid_run_leg_height
@@ -560,12 +503,9 @@ module Timmerman
         _foot_legs
         _foot_cap_beam
         _foot_ledge_plank
-        _foot_end_beam
         _front_slats
         _under_slat_foot_beam
         _foot_cap_into_inset_leg_screws
-        _foot_cap_between_foot_end_screws
-        _foot_ledge_between_front_slat_screws
         _foot_corner_leg_into_inset_leg_screws
         _under_slat_foot_into_front_slat_hearts_screws
       end
@@ -608,43 +548,13 @@ module Timmerman
               note: 'On cap and corner legs; full bed width; top 2×BEAM_WIDE above z_slat_bottom.'
       end
 
-      def _foot_end_beam
-        beam 'EB | beam | foot | end',
-             at:   [0, -c.beam_y, c.z_slat_bottom],
-             size: [c.outer_width, c.beam_y, c.beam_z],
-             note: 'Foot end beam 44x69 mm (beam_y × beam_z); under cap.'
-
-        _foot_end_beam_into_slats_screws
-      end
-
-      def _foot_end_beam_into_slats_screws
-        _, front_xs = slat_x_starts
-        v_lower = c.beam_z / 3.0
-        v_upper = (2.0 * c.beam_z) / 3.0
-        fc = c.front_slat_count
-        front_xs.each_with_index do |x0, i|
-          u = x0 + (c.slat_dx / 2.0)
-          n = i + 1
-          screw "EB | screw | foot end | #{n}/#{fc} | lower",
-                host_name: 'EB | beam | foot | end',
-                face:      :max_y,
-                u:         u, v: v_lower,
-                spec_id:   :eb_pocket_4mm
-          screw "EB | screw | foot end | #{n}/#{fc} | upper",
-                host_name: 'EB | beam | foot | end',
-                face:      :max_y,
-                u:         u, v: v_upper,
-                spec_id:   :eb_pocket_4mm
-        end
-      end
-
       def _front_slats
         _, front_xs = slat_x_starts
         front_xs.each_with_index do |x0, i|
           slat "EB | slat | front | #{i + 1}/#{c.front_slat_count}",
                at:   [x0, c.front_slat_y0, c.z_slat_bottom],
                size: [c.slat_dx, c.front_slat_run_y, c.slat_dz],
-               note: 'Front (sliding) comb tooth; sits in gaps of back slats; head end flush with under-slat foot beam, foot end abuts foot end beam.'
+               note: 'Front (sliding) comb tooth; 69 mm headward of under-slat foot beam bears on back EB | beam | back | under slat support when retracted; footward narrow stock merged from former foot end beam.'
         end
       end
 
@@ -660,51 +570,6 @@ module Timmerman
                 u:         u,
                 v:         c.beam_wide / 2.0,
                 spec_id:   :eb_pocket_4mm
-        end
-      end
-
-      # Screws up from under the foot cap into the foot end beam above, each
-      # centered in X between a pair of adjacent lower foot-end screws (foot-side
-      # mirror of +BackFrame#_head_cap_between_head_end_screws+; the gap between
-      # foot-end screws n1/fc and n2/fc sits over back slat n2).
-      FOOT_CAP_BETWEEN_FOOT_END_PAIRS = [[2, 3], [3, 4], [5, 6], [6, 7]].freeze
-
-      def _foot_cap_between_foot_end_screws
-        _, front_xs = slat_x_starts
-        FOOT_CAP_BETWEEN_FOOT_END_PAIRS.each do |n1, n2|
-          mid_world_x = (front_xs[n1 - 1] + front_xs[n2 - 1]) / 2.0 + c.slat_dx / 2.0
-          screw "EB | screw | foot cap | mid #{n1}-#{n2} | into foot end",
-                host_name: 'EB | beam | foot | cap',
-                face:      :min_z,
-                u:         mid_world_x - foot_cap_x0,
-                v:         c.beam_wide / 2.0,
-                spec_id:   :eb_pocket_4mm
-        end
-      end
-
-      # Footward-facing screws on the foot ledge plank between adjacent front
-      # slats, piercing headward (−Y) into the foot end beam. The foot ledge
-      # plank spans y ∈ [0, plank_thickness] while the foot end beam sits at
-      # y ∈ [−beam_y, 0], so we drive from the outer face `:max_y` through the
-      # plank into the foot end beam. Plank `at: [0, 0, …]` ⇒ plank-local u
-      # equals world X; v = beam_wide/2 lands in the middle of the foot end
-      # beam's Z band (0..beam_wide from plank-local z=0).
-      # (Foot-side mirror of +BackFrame#_head_ledge_between_back_slat_screws+;
-      # the face flips from :min_y ↔ :max_y because the ledge plank sits on
-      # the opposite side of the end beam compared to the head side.)
-      FOOT_LEDGE_BETWEEN_FRONT_SLAT_PAIRS = [[1, 2], [7, 8]].freeze
-
-      def _foot_ledge_between_front_slat_screws
-        _, front_xs = slat_x_starts
-        FOOT_LEDGE_BETWEEN_FRONT_SLAT_PAIRS.each do |n1, n2|
-          mid_world_x = (front_xs[n1 - 1] + front_xs[n2 - 1]) / 2.0 + c.slat_dx / 2.0
-          screw "EB | screw | foot ledge | mid #{n1}-#{n2} | into foot end",
-                host_name: 'EB | plank | foot | ledge',
-                face:      :max_y,
-                u:         mid_world_x,
-                v:         c.beam_wide / 2.0,
-                spec_id:   :eb_pocket_4mm,
-                shaft_length_index: 1
         end
       end
 

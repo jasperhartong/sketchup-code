@@ -9,7 +9,7 @@ module Timmerman
     #   — Bed width (outer_width, along X)
     #   — Extended length (head plank face to foot plank face, along Y)
     #   — Retracted length (same reference lines, retracted pair)
-    #   — Slat run (back_slat_run_y, along Y)
+    #   — Slat run (back_slat_part_depth_y, along Y)
     #   — Leg height (leg_height, along Z)
     #   — Beam section (beam_narrow and beam_wide, shown on a corner leg)
     #
@@ -59,10 +59,10 @@ module Timmerman
 
       # ── Individual dimension types ────────────────────────────────────────
 
-      # Bed outer width along X, shown on the headward face of the head end beam.
+      # Bed outer width along X, shown on the headward face of the back slats (y = 0).
       def _dim_width(entities, c, layer)
         z_top = c.z_slat_bottom + c.beam_z
-        y_dim = 0   # headward face of head end beam
+        y_dim = 0   # headward face of merged back slat / former head end plane
         pt1   = Geom::Point3d.new(0,            y_dim, z_top)
         pt2   = Geom::Point3d.new(c.outer_width, y_dim, z_top)
         _add_dim(entities, pt1, pt2,
@@ -70,8 +70,8 @@ module Timmerman
                  layer: layer)
       end
 
-      # Extended length: from headward face of head end beam to footward face of front
-      # foot end beam.  pt2 is in the back-frame's local space: foot_world_y − 0 = foot_y.
+      # Extended length: from headward face of back slats (y = 0) to footward outer face
+      # of the front half (front root local y = 0; former foot end beam outer face).
       def _dim_extended_length(entities, back_group, front_group, c, layer)
         foot_world_y = front_group.transformation.origin.y
         back_world_y = back_group.transformation.origin.y    # 0 for back frame
@@ -80,18 +80,18 @@ module Timmerman
         z_mid = c.z_slat_bottom / 2.0
         x_dim = c.outer_width + c.outer_width * DIM_OFFSET_SCALE
         pt1   = Geom::Point3d.new(x_dim, 0,                          z_mid)
-        pt2   = Geom::Point3d.new(x_dim, foot_local_y - c.beam_y,    z_mid)
+        pt2   = Geom::Point3d.new(x_dim, foot_local_y,             z_mid)
         _add_dim(entities, pt1, pt2,
                  Geom::Vector3d.new(c.outer_width * DIM_OFFSET_SCALE, 0, 0),
                  layer: layer)
       end
 
-      # Back slat run along Y (from end-beam face at y=0 to slat tip at BACK_SLAT_RUN_Y+BEAM_Y).
+      # Back slat run along Y (headward face y = 0 to slat tip; includes former head end beam depth).
       def _dim_slat_run(entities, c, layer)
         z_top = c.z_slat_top
         x_dim = c.outer_width / 2.0
-        pt1   = Geom::Point3d.new(x_dim, c.beam_y,                       z_top)
-        pt2   = Geom::Point3d.new(x_dim, c.beam_y + c.back_slat_run_y,   z_top)
+        pt1   = Geom::Point3d.new(x_dim, 0,                             z_top)
+        pt2   = Geom::Point3d.new(x_dim, c.back_slat_part_depth_y,      z_top)
         _add_dim(entities, pt1, pt2,
                  Geom::Vector3d.new(0, 0, c.slat_dz * DIM_OFFSET_SCALE),
                  layer: layer)
@@ -131,7 +131,7 @@ module Timmerman
                  layer: layer)
       end
 
-      # Retracted length: head end beam face (y=0) to retracted foot position.
+      # Retracted length: headward face of back slats (y = 0) to retracted foot position.
       def _dim_retracted_length(entities, c, layer)
         z_mid = c.z_slat_bottom / 2.0
         x_dim = c.outer_width + c.outer_width * DIM_OFFSET_SCALE

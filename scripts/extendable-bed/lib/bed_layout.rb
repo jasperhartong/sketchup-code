@@ -96,6 +96,7 @@ module Timmerman
             countersink_first: @config.hardware_countersink_first,
             through_hole: @config.hardware_through_hole,
             on_beam:  planner ? ->(b) { planner.record(b) } : nil,
+            on_plank: planner ? ->(p) { planner.record_plank(p) } : nil,
             on_screw: planner ? ->(s) { planner.record_screw(s) } : nil,
             corner_radius_for_part: method(:_corner_radius_for_part),
             corner_axis_for_part: method(:_corner_axis_for_part)
@@ -107,6 +108,7 @@ module Timmerman
             countersink_first: @config.hardware_countersink_first,
             through_hole: @config.hardware_through_hole,
             on_beam:  planner ? ->(b) { planner.record(b) } : nil,
+            on_plank: planner ? ->(p) { planner.record_plank(p) } : nil,
             on_screw: planner ? ->(s) { planner.record_screw(s) } : nil,
             corner_radius_for_part: method(:_corner_radius_for_part),
             corner_axis_for_part: method(:_corner_axis_for_part)

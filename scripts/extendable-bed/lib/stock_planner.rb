@@ -9,17 +9,19 @@ module Timmerman
     #
     # Usage:
     #   planner = StockPlanner.new(config)
-    #   planner.record(beam_part)     # called by SketchUpRenderer for every Beam
+    #   planner.record(beam_part)     # called by SketchUpRenderer for every Beam (incl. Leg/Slat)
+    #   planner.record_plank(plank)   # same scope — sheet panels
     #   planner.record_screw(placement)  # same tally scope — only when planner is passed in
     #   planner.print_report
     #   planner.print_hardware_report
     class StockPlanner
-      attr_reader :total_extrusion_m, :total_surface_m2, :piece_count, :cuts, :screw_counts
+      attr_reader :total_extrusion_m, :total_surface_m2, :total_volume_m3, :piece_count, :cuts, :screw_counts
 
       def initialize(config)
         @config          = config
         @total_extrusion_m = 0.0
         @total_surface_m2  = 0.0  # all 6 faces per beam (ends included) — for finishing/sanding budget
+        @total_volume_m3   = 0.0  # beam prism volume + plank boxes (same tally as stock; excludes pillows)
         @piece_count     = 0
         @cuts            = []   # [{ name:, mm: }, ...]
         @screw_counts    = Hash.new(0) # [[spec_id, shaft_length_index], count]
@@ -40,11 +42,27 @@ module Timmerman
         s1, s2 = _section_sides_mm(beam, mm)
         # All 6 faces of the rectangular prism: 4 long sides + 2 ends.
         surface_mm2 = (2.0 * mm * (s1 + s2)) + (2.0 * s1 * s2)
+        volume_mm3  = mm * s1 * s2
 
         @total_extrusion_m += mm / 1000.0
         @total_surface_m2  += surface_mm2 / 1_000_000.0
+        @total_volume_m3   += volume_mm3 / 1_000_000_000.0
         @piece_count       += 1
         @cuts              << { name: beam.name, mm: mm }
+      end
+
+      # Register one Plank (18 mm sheet panels, etc.). Same +@active+ scope as #record.
+      def record_plank(plank)
+        return unless @active
+
+        dx = plank.dx.to_mm.abs
+        dy = plank.dy.to_mm.abs
+        dz = plank.dz.to_mm.abs
+        @total_volume_m3 += (dx * dy * dz) / 1_000_000_000.0
+      end
+
+      def estimated_bed_mass_kg
+        @total_volume_m3 * @config.wood_density_kg_m3
       end
 
       # Returns the two cross-section side lengths in mm by removing the dim
@@ -107,6 +125,12 @@ module Timmerman
         puts format(
           '  Raw wood surface (onbewerkt): %.3f m² — all 6 faces per piece (4 long sides + 2 ends).',
           @total_surface_m2
+        )
+        rho = @config.wood_density_kg_m3
+        puts format(
+          '  Solid wood volume (beams + planks, no pillows): %.4f m³  →  ~%.1f kg  (@ %.0f kg/m³). ' \
+          'Screw metal excluded.',
+          @total_volume_m3, estimated_bed_mass_kg, rho
         )
         puts "  Kerf between cuts on the same bar is included (#{kerf} mm)." if kerf > 0
 

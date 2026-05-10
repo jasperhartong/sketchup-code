@@ -38,6 +38,10 @@ module Timmerman
       attr_reader :stock_bar_length  # standard bar length for cut planning
       attr_reader :stock_kerf_mm     # blade kerf between cuts (0 = no kerf)
 
+      # Bulk density for estimated bed mass from tallied solid wood (beams/legs/slats + planks).
+      # kg/m³ — oven-dry typical construction pine is often ~450–550; adjust for your actual species.
+      attr_reader :wood_density_kg_m3
+
       # Debug rendering mode:
       #   :off              => no debug coloring
       #   :sides            => axis-face colors
@@ -77,7 +81,8 @@ module Timmerman
         slat_gap:         3.mm,
         pair_gap_x:       600.mm,
         stock_bar_length: 2700.mm,
-        stock_kerf_mm:    0.0,
+        stock_kerf_mm: 0.0,
+        wood_density_kg_m3: 500.0,
         debug_color: :off,
         hardware_through_hole: true,
         hardware_cut_hosts: false,
@@ -107,6 +112,7 @@ module Timmerman
         @pair_gap_x       = pair_gap_x
         @stock_bar_length = stock_bar_length
         @stock_kerf_mm    = stock_kerf_mm.to_f
+        @wood_density_kg_m3 = wood_density_kg_m3.to_f
         @debug_color = _resolve_debug_color(debug_color)
         @hardware_through_hole = hardware_through_hole ? true : false
         @hardware_cut_hosts = hardware_cut_hosts ? true : false
@@ -199,12 +205,17 @@ module Timmerman
 
       def slat_length      = (length_extended / 2) + SLAT_TOOTH_EXTRA_Y
       def back_slat_run_y  = slat_length + beam_y
-      # Front slats no longer match back slats: they end at the under-slat foot
-      # beam's headward face (see +front_slat_y0+ / +front_slat_y1+).
-      def front_slat_run_y = front_slat_y1 - front_slat_y0
 
       # Fully retracted: both slat runs overlapping + one beam depth at each end.
       def length_retracted = back_slat_run_y + beam_y
+
+      # Back slat solids span y ∈ [0, back_slat_part_depth_y): merged head end band (beam_y)
+      # plus tooth run; +beam_narrow so the footward face meets EB | plank | foot | ledge
+      # (front frame y = 0 when translated by retracted_foot_world_y — same as pillow_big_length).
+      def back_slat_part_depth_y = length_retracted + beam_narrow
+      # Front slats no longer match back slats: they end at the under-slat foot
+      # beam's headward face (see +front_slat_y0+ / +front_slat_y1+).
+      def front_slat_run_y = front_slat_y1 - front_slat_y0
 
       # ── Bed width ─────────────────────────────────────────────────────────────
 
@@ -212,13 +223,12 @@ module Timmerman
       def gaps_along_x = n_slats_x - 1
       def outer_width  = (n_slats_x * slat_dx) + (gaps_along_x * slat_gap)
 
-      # Front slats are trimmed at the head end so their headward face is flush
-      # with the under-slat foot beam's headward face (the beam fully sits inside
-      # the slat headward end, screwed up into the slat hearts). The foot end
-      # still abuts the foot end beam (y = -beam_y). Saves ~367 mm per slat vs
-      # the symmetric `back_slat_run_y` length.
-      def front_slat_y0 = under_slat_foot_beam_y0
-      def front_slat_y1 = -beam_y
+      # Front slats: headward face beam_wide headward of the under-slat foot beam's
+      # headward face so a 69 mm strip overlaps the back +EB | beam | back | under slat support+
+      # when retracted; the under-slat foot beam still sits inside the slat. Footward
+      # face is y = 0 (former foot end beam merged into the slat).
+      def front_slat_y0 = under_slat_foot_beam_y0 - beam_wide
+      def front_slat_y1 = 0
 
       # ── Z chain ───────────────────────────────────────────────────────────────
 
@@ -258,6 +268,13 @@ module Timmerman
       # back frame, forming a continuous brace across the slat-interlock zone:
       #   foot_world_y + under_slat_foot_beam_y0 + beam_wide  ==  mid_tie_y0  (when foot_world_y = length_extended)
       def under_slat_foot_beam_y0 = mid_tie_y0 - length_extended - beam_wide
+
+      # Back-frame beam under slats: when the front is at +retracted_foot_world_y+, this beam
+      # sits immediately headward (−Y) of +EB | beam | front | under slat foot+ (no overlap in Y):
+      # back spans [R+under_y0−beam_wide, R+under_y0], front under beam [R+under_y0, R+under_y0+beam_wide]
+      # in world Y (R = retracted_foot_world_y, under_y0 = under_slat_foot_beam_y0). The front slat
+      # extension (+beam_wide headward) bears on this back beam.
+      def back_under_slat_support_y0 = retracted_foot_world_y + under_slat_foot_beam_y0 - beam_wide
 
       # ── World Y positions for the front frame (sliding half) ──────────────────
 

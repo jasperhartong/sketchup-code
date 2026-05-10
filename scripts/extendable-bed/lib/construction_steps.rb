@@ -68,10 +68,6 @@ module Timmerman
             back: [
               'EB | screw | back sister -X | middle',
               'EB | screw | back sister +X | middle',
-              'EB | screw | head cap | mid 7-8 | into head end',
-              'EB | screw | head cap | mid 2-3 | into head end',
-              'EB | screw | head cap | mid 5-6 | into head end',
-              'EB | screw | head cap | mid 4-5 | into head end',
               "EB | screw | sister tie | 8/#{c.back_slat_count} | heart",
               "EB | screw | sister tie | 2/#{c.back_slat_count} | heart",
               "EB | screw | sister tie | 7/#{c.back_slat_count} | heart",
@@ -80,12 +76,7 @@ module Timmerman
               "EB | screw | sister tie | 4/#{c.back_slat_count} | heart",
               "EB | screw | sister tie | 5/#{c.back_slat_count} | heart"
             ],
-            front: [
-              'EB | screw | foot cap | mid 6-7 | into foot end',
-              'EB | screw | foot cap | mid 2-3 | into foot end',
-              'EB | screw | foot cap | mid 5-6 | into foot end',
-              'EB | screw | foot cap | mid 3-4 | into foot end'
-            ]
+            front: []
           }
         },
 
@@ -198,7 +189,8 @@ module Timmerman
       def highlights(key)
         case key
         when :under_slat_foot_end
-          { back: [], front: BedPartGroups::FRONT_UNDER_SLAT_FOOT_BEAM.dup }
+          { back: BedPartGroups::BACK_UNDER_SLAT_SUPPORT.dup,
+            front: BedPartGroups::FRONT_UNDER_SLAT_FOOT_BEAM.dup }
         when :head_and_foot_ledges
           { back: [LEDGE_HEAD], front: [LEDGE_FOOT] }
         when :none

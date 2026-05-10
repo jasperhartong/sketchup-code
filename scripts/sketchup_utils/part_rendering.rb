@@ -12,7 +12,7 @@
 #                             layer:    some_layer,
 #                             on_beam:  ->(b) { planner.record(b) })
 #
-# The block hooks (+on_beam+, +on_screw+) let StockPlanner and friends count
+# The block hooks (+on_beam+, +on_plank+, +on_screw+) let StockPlanner and friends count
 # parts without the renderer knowing anything about them.
 
 module Timmerman
@@ -35,12 +35,13 @@ module Timmerman
       # @param cut_hosts [Boolean] if true, screws cut countersink + hole on hosts
       # @param countersink_first [Boolean] countersink pocket then through hole (vs single clearance bore)
       # @param through_hole [Boolean] when countersink_first, skip the bore step if false
-      # @param corner_radius_for_part [Proc,nil] optional proc called with +part+, returns desired corner radius
-      # @param corner_axis_for_part [Proc,nil] optional proc called with +part+, returns :long/:short/:x/:y/:z
+      # @param on_beam [Proc,nil]   called with each Parts::Beam (incl. Leg, Slat subclasses)
+      # @param on_plank [Proc,nil]  called with each Parts::Plank
+      # @param on_screw [Proc,nil]  called with each screw placement
       def render_view(view, parent:, renderer:, layer: nil,
                       attr_dict: nil,
                       cut_hosts: false, countersink_first: false, through_hole: true,
-                      on_beam: nil, on_screw: nil,
+                      on_beam: nil, on_plank: nil, on_screw: nil,
                       corner_radius_for_part: nil, corner_axis_for_part: nil)
         root = renderer.create_group(view.group_name, parent: parent, layer: layer)
 
@@ -58,6 +59,7 @@ module Timmerman
           )
           part_groups[part.name] = g
           on_beam&.call(part) if part.is_a?(Parts::Beam)
+          on_plank&.call(part) if part.is_a?(Parts::Plank)
         end
 
         view.hardware.each do |placement|
