@@ -76,6 +76,14 @@ After the fix, write another temporary `command.rb` that:
 - **Never declare success based on the run log alone** — always verify the actual rendered output through the bridge before telling the user it is fixed.
 - Leave the final `command.rb` as the normal run command (`Timmerman::SkeletonDimensions.clear` + `.run`) once validation passes.
 
+### 4. Overlap validation — built-in, always runs
+`BedLayout#create` **always** calls `Validator.new.validate(model, highlight: …)` at the end of every build — no extra call needed in `command.rb`. The validator:
+- Prints `[EB validate] OK` or `[EB validate] FAIL — N overlapping part pair(s):` with each pair named.
+- Draws magenta intersection markers in the model **only** when `debug_color: :overlaps` is set.
+- **Never add allowlists or skip logic** — every reported overlap must be fixed in the spec geometry.
+
+When adding or changing parts in `extendable_bed_spec.rb`, always read the `[EB validate]` line from the bridge output. A FAIL line must be resolved before the work is considered done. Pre-existing FAILs that predate your change must be noted and reported to the user rather than silently ignored.
+
 **`DimensionLinear` audit pattern** (verified working). When auditing dimensions added by the plugin, use the same scope as clear (sublayer + target_entities):
 ```ruby
 model = Sketchup.active_model

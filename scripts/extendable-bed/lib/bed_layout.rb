@@ -85,10 +85,9 @@ module Timmerman
 
         renderer.finalize_scenes(prefix: 'EB | ', purge_all: false)
 
-        if c.debug_color == :overlaps
-          renderer.commit('Extendable bed: highlight overlaps') do
-            Validator.new.validate(model, highlight: true)
-          end
+        highlight = c.debug_color == :overlaps
+        renderer.commit('Extendable bed: validate overlaps') do
+          Validator.new.validate(model, highlight: highlight)
         end
 
         renderer.invalidate_view if model
