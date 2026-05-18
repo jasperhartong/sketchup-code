@@ -71,6 +71,7 @@ _su_utils  = File.expand_path('../sketchup_utils', __dir__)
   dimensions
   retracted_pillow_layout_export
   preview_scenes
+  third_angle_projection
 ].each { |f| load File.join(_eb_lib, "#{f}.rb") }
 
 module Timmerman

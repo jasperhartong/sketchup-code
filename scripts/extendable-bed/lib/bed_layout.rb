@@ -70,6 +70,11 @@ module Timmerman
           scenes[:cut_plan].track(cut_root) if cut_root && scenes
         end
 
+        if model && scenes
+          ThirdAngleProjection.create_scene(model, renderer,
+                                            config: @config, layer: layer, scenes: scenes)
+        end
+
         PreviewScenes.finalize_on_renderer(model, renderer) if model
         _save_geometry_baseline(model) if model && save_baseline
       end
@@ -80,13 +85,21 @@ module Timmerman
         # Step labels are standalone Text entities, not inside EB roots.
         _purge_step_annotations!(model, roots)
         _purge_named_recursive(roots, Config::PURGE_NESTED_PART_GROUP_NAMES, skip_ref: true)
-        to_erase = roots.grep(Sketchup::Group).select do |g|
-          Config::GROUP_NAME_RE.match?(g.name) ||
-            Config::SINGLE_PAIR_ROOTS.include?(g.name) ||
-            g.name == Config::GROUP_CUT_PLAN_3D
+        # Pair roots are now ComponentInstances after to_component!; also erase
+        # any legacy Group roots that may remain from older model versions.
+        to_erase = roots.select do |e|
+          next false unless e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance)
+
+          Config::GROUP_NAME_RE.match?(e.name) ||
+            Config::SINGLE_PAIR_ROOTS.include?(e.name) ||
+            e.name == Config::GROUP_CUT_PLAN_3D ||
+            e.name == Config::GROUP_3RD_ANGLE
         end
         to_erase.each(&:erase!)
-        model.definitions.purge_unused if @config.purge_unused_definitions
+        # Always purge after erase: orphaned EB component definitions from the
+        # previous build would otherwise accumulate and cause name-collision
+        # suffixes (#1, #2 …) when to_component! runs on the next build.
+        model.definitions.purge_unused
       end
 
       def validate(model = Sketchup.active_model)
@@ -153,13 +166,22 @@ module Timmerman
           _render_pillow_view_into(front_pillow_view, front_root, renderer: renderer, layer: layer)
         end
 
+        # Convert root groups to ComponentDefinitions OUTSIDE the commit operation.
+        # Group#to_component starts its own internal SketchUp operation; calling it
+        # inside an active operation causes a silent nested-operation conflict that
+        # aborts all model changes from that pair.
+        back_root  = renderer.to_component!(back_root)
+        front_root = renderer.to_component!(front_root)
+
         _track_preview_scene_roots(scenes, pair, back_root, front_root)
       end
 
       def _track_preview_scene_roots(scenes, pair, back_root, front_root)
-        return unless scenes && pair.scene_key
+        return unless scenes
 
-        scenes[pair.scene_key]&.track_pair(back_root, front_root)
+        scenes[pair.scene_key]&.track_pair(back_root, front_root) if pair.scene_key
+        # All pairs appear in the "Component definitions" overview scene.
+        scenes[:definitions]&.track_pair(back_root, front_root)
       end
 
       # Pillows are rendered directly as child groups of the frame root (no
@@ -227,8 +249,8 @@ module Timmerman
         snap_rb = File.expand_path('../../sketchup_utils/named_group_geometry_snapshot.rb', __dir__)
         load snap_rb unless defined?(Timmerman::SketchupUtils::NamedGroupGeometrySnapshot)
 
-        root_filter = lambda do |g|
-          Config::GROUP_NAME_RE.match?(g.name) || Config::SINGLE_PAIR_ROOTS.include?(g.name)
+        root_filter = lambda do |e|
+          Config::GROUP_NAME_RE.match?(e.name) || Config::SINGLE_PAIR_ROOTS.include?(e.name)
         end
         Timmerman::SketchupUtils::NamedGroupGeometrySnapshot.save_snapshot(
           Config::GEOMETRY_BASELINE_JSON,

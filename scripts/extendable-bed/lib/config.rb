@@ -300,6 +300,9 @@ module Timmerman
       # Stock cut-plan 3D bars — fourth band, clear of construction row.
       def cut_plan_row_y = construction_steps_row_y - preview_row_step
 
+      # 3rd angle projection layout — fifth band, below cut plan.
+      def third_angle_row_y = cut_plan_row_y - preview_row_step
+
       def preview_column_step = outer_width + pair_gap_x
 
       # Extra +X for the upside-down step: 180° about +Y mirrors local X, so the
@@ -348,6 +351,7 @@ module Timmerman
       GROUP_RETGND_BACK  = 'EB_RetGnd_Back'
       GROUP_RETGND_FRONT = 'EB_RetGnd_Front'
       GROUP_CUT_PLAN_3D  = 'EB_CutPlan_3D'
+      GROUP_3RD_ANGLE    = 'EB_3rdAngle'
 
       # Human-readable names for the extension-degree preview row (one label per back+front pair).
       PREVIEW_NAME_EXT1      = 'Extended: 1 pillow'.freeze

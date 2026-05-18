@@ -114,6 +114,15 @@ module Timmerman
       # Tells the backend to refresh / flush after a batch of operations.
       def invalidate_view; end
 
+      # ── Components (optional; SketchUpRenderer only) ─────────────────────
+
+      # Converts a Group handle into a ComponentInstance (SketchUp Group#to_component).
+      # Returns the new ComponentInstance. The original group is replaced.
+      # No-op on non-SketchUp backends — returns +group+ unchanged.
+      def to_component!(group)
+        group
+      end
+
       # ── SketchUp scenes (optional; SketchUpRenderer only) ─────────────────
 
       # Register a scene tab to be captured later. Returns a scope; call +track+

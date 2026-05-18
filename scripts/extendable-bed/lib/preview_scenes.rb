@@ -20,12 +20,16 @@ module Timmerman
       CONSTRUCTION_STEP_RE = /\AEB_Step[1-8]_(Back|Front)\z/
 
       STANDARD_SCENES = [
-        { key: :variants,     title: 'All variants',      camera: :iso,
+        { key: :definitions,  title: 'Component definitions', camera: :iso,
+          roots: :all_eb_roots },
+        { key: :variants,     title: 'All variants',          camera: :iso,
           roots: EXTENSION_VARIANT_ROOTS },
-        { key: :construction, title: 'Construction steps', camera: :iso,
+        { key: :construction, title: 'Construction steps',    camera: :iso,
           roots: :construction_steps },
-        { key: :cut_plan,     title: 'Cut plan',           camera: :top,
-          roots: [Config::GROUP_CUT_PLAN_3D], optional: true }
+        { key: :cut_plan,     title: 'Cut plan',              camera: :top,
+          roots: [Config::GROUP_CUT_PLAN_3D], optional: true },
+        { key: :third_angle,  title: '3rd angle (retracted)', camera: :top,
+          roots: :third_angle_group, optional: true }
       ].freeze
 
       module_function
@@ -87,35 +91,51 @@ module Timmerman
         roots = entry[:roots]
         case roots
         when :construction_steps then _construction_step_roots(model)
+        when :all_eb_roots       then _all_eb_roots(model)
+        when :third_angle_group  then _third_angle_root(model)
         else _find_roots(model, roots)
         end
       end
 
+      # Finds named roots by exact name match; handles both Group and
+      # ComponentInstance (root pair groups are now ComponentDefinition instances
+      # after BedLayout converts them with to_component!).
       def _find_roots(model, names)
         names.filter_map do |name|
-          model.entities.grep(Sketchup::Group).find { |g| g.valid? && g.name == name }
+          model.entities.find do |e|
+            (e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance)) &&
+              e.valid? && e.name == name
+          end
         end
       end
 
       def _construction_step_roots(model)
-        model.entities.grep(Sketchup::Group).select do |g|
-          g.valid? && CONSTRUCTION_STEP_RE.match?(g.name)
+        model.entities.select do |e|
+          (e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance)) &&
+            e.valid? && CONSTRUCTION_STEP_RE.match?(e.name)
         end
       end
 
-      def _all_eb_root_groups(model)
-        model.entities.grep(Sketchup::Group).select do |g|
-          g.valid? && (
-            Config::GROUP_NAME_RE.match?(g.name) ||
-            Config::SINGLE_PAIR_ROOTS.include?(g.name) ||
-            g.name == Config::GROUP_CUT_PLAN_3D
-          )
+      # All variant + step pair roots (excludes cut plan and 3rd angle container).
+      # Used for the "Component definitions" overview scene.
+      def _all_eb_roots(model)
+        model.entities.select do |e|
+          (e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance)) &&
+            e.valid? &&
+            (Config::GROUP_NAME_RE.match?(e.name) || Config::SINGLE_PAIR_ROOTS.include?(e.name))
         end
+      end
+
+      def _third_angle_root(model)
+        root = model.entities.find do |e|
+          e.is_a?(Sketchup::Group) && e.valid? && e.name == Config::GROUP_3RD_ANGLE
+        end
+        root ? [root] : []
       end
 
       def _unhide_all_eb_roots(model)
-        _all_eb_root_groups(model).each do |g|
-          g.hidden = false if g.respond_to?(:hidden=)
+        (_all_eb_roots(model) + _third_angle_root(model)).each do |e|
+          e.hidden = false if e.respond_to?(:hidden=)
         end
       end
 

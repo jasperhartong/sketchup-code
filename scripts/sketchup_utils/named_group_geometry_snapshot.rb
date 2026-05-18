@@ -13,16 +13,18 @@ module Timmerman
   module SketchupUtils
     module NamedGroupGeometrySnapshot
       class << self
-        # @param root_filter [Proc, nil] if given, called as root_filter.call(Sketchup::Group)
-        #   for each top-level group; only matching roots are included.
+        # @param root_filter [Proc, nil] if given, called as root_filter.call(entity)
+        #   for each top-level group or component instance; only matching roots are included.
         # @return [Hash] { "Root / Child / …" => { min: [x,y,z], max: [x,y,z] } } in mm
         def snapshot(model = Sketchup.active_model, root_filter: nil)
           result = {}
-          model.entities.grep(Sketchup::Group).each do |root|
+          model.entities.each do |root|
+            next unless root.is_a?(Sketchup::Group) || root.is_a?(Sketchup::ComponentInstance)
             next unless root.valid?
             next if root_filter && !root_filter.call(root)
 
-            _walk(root.entities, root.transformation, [root.name], result)
+            child_entities = root.is_a?(Sketchup::Group) ? root.entities : root.definition.entities
+            _walk(child_entities, root.transformation, [root.name], result)
           end
           result
         end

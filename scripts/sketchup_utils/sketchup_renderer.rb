@@ -45,6 +45,20 @@ module Timmerman
         @scene_capture.scene(name, camera: camera, &block)
       end
 
+      # Converts a Group to a ComponentInstance (SketchUp Group#to_component).
+      # Returns the new ComponentInstance; the group is replaced in-place.
+      # Explicitly copies the group name onto both the instance and its definition,
+      # since SketchUp's Group#to_component does not preserve the name automatically.
+      def to_component!(group)
+        name     = group.name
+        instance = group.to_component
+        if name && !name.empty?
+          instance.name            = name
+          instance.definition.name = name
+        end
+        instance
+      end
+
       # Creates all registered scenes. +purge_all+ removes every existing page first.
       def finalize_scenes(prefix: nil, purge_all: false)
         return [] unless @scene_capture
