@@ -529,6 +529,7 @@ module Timmerman
         _foot_ledge_plank
         _front_slats
         _under_slat_extension_stop_plank
+        _under_slat_extension_stop_into_front_slat_hearts_screws
         _foot_corner_leg_into_inset_leg_screws
         _foot_inset_leg_inner_face_screws
         _foot_cap_into_front_slat_hearts_screws
@@ -654,6 +655,25 @@ module Timmerman
               at:   [x1_under, c.front_extension_stop_y0, c.z_slat_bottom - c.plank_thickness],
               size: [span_under, c.extension_stop_plank_width, c.plank_thickness],
               note: 'Under front slats; width = mid_tie_y0 − usable_length_extended − front_extension_stop_y0; footward face meets back mid tie when extended.'
+      end
+
+      # Screw up through the extension-stop plank into inner front slats 2..(n−1)
+      # at each comb heart (outer front slats 1 and n have no stop screw).
+      # :min_z matches foot cap / sister tie → head below plank, shaft into slats.
+      def _under_slat_extension_stop_into_front_slat_hearts_screws
+        x1_under, span_under = sister_tie_x
+        return if span_under <= 0
+
+        _, front_xs = slat_x_starts
+        (2...c.front_slat_count).each do |n|
+          world_x = front_xs[n - 1] + c.slat_dx / 2.0
+          screw "EB | screw | under slat stop | #{n}/#{c.front_slat_count} | heart",
+                host_name: 'EB | plank | front | under slat extension stop',
+                face:      :min_z,
+                u:         world_x - x1_under,
+                v:         c.extension_stop_plank_width / 2.0,
+                spec_id:   :eb_pocket_4mm
+        end
       end
 
       # ── Z / Y / plan helpers ─────────────────────────────────────────────
