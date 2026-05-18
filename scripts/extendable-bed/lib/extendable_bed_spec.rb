@@ -659,7 +659,7 @@ module Timmerman
             [3, 1, 2].each_with_index do |n, idx|
               y_world = y_small_head_world + (idx * sm)
               instance(from_id: "PillowSmall#{n}",
-                       at: [0, y_world - foot_ext + foot_ext, c.z_slat_top])
+                       at: [0, y_world, c.z_slat_top])
             end
           end
 

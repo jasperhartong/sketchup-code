@@ -302,8 +302,6 @@ module Timmerman
         return if specs.empty?
 
         cols = DECLARATIONS_GRID_COLS
-        gap  = DECLARATIONS_GAP
-
         step = DECLARATIONS_GRID_STEP
 
         scene_name = "#{@decl_set.prefix} | #{DECLARATIONS_SCENE_SUFFIX}"

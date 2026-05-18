@@ -61,9 +61,6 @@ module Timmerman
       # When true, cut countersink pocket then through hole; when false, a single through hole only.
       attr_reader :hardware_countersink_first
 
-      # When true, clear() also purges unused component definitions after root erase.
-      attr_reader :purge_unused_definitions
-
       # When true, render the stock cut plan as 3D bars in the model.
       attr_reader :show_cut_plan_3d
 
@@ -92,7 +89,6 @@ module Timmerman
         hardware_through_hole: true,
         hardware_cut_hosts: false,
         hardware_countersink_first: false,
-        purge_unused_definitions: false,
         show_cut_plan_3d: true
       )
         unless back_slat_count.is_a?(Integer) && back_slat_count.positive? && back_slat_count.odd?
@@ -129,7 +125,6 @@ module Timmerman
         @hardware_through_hole = hardware_through_hole ? true : false
         @hardware_cut_hosts = hardware_cut_hosts ? true : false
         @hardware_countersink_first = hardware_countersink_first ? true : false
-        @purge_unused_definitions = purge_unused_definitions ? true : false
         @show_cut_plan_3d = show_cut_plan_3d ? true : false
       end
 
@@ -176,10 +171,6 @@ module Timmerman
 
       # Number of gap helpers per preview pair (depends on slat count).
       def fork_gap_helper_count = back_slat_count - 1
-
-      # Head tie → middle back slats: pocket axis tilt (degrees) from the face **outward normal**
-      # toward `pocket_tilt_toward: :pos_v` (+foot on :max_z). Matches a typical ~15° pocket jig.
-      def head_tie_slat_pocket_tilt_deg = 15.0
 
       # Slats: narrow face along X (bed width), wide face vertical (stiffer in bending).
       def slat_dx = beam_narrow
@@ -246,7 +237,6 @@ module Timmerman
 
       # Legs stop here in the standard (inset) case.
       def leg_height = z_slat_bottom - beam_z
-      alias z_leg_top leg_height
 
       # Outer corner legs extend through the cap band so the shortened cap bears on them.
       def outer_corner_leg_height = z_beam_bottom
@@ -315,12 +305,6 @@ module Timmerman
 
       # Ext1 preview: retracted + one small flat’s worth of extension.
       def one_small_extension_front_foot_world_y = retracted_foot_world_y + pillow_small_length
-
-      # ── Cap geometry ─────────────────────────────────────────────────────────
-
-      # Head/foot cap: starts at inner face of outer corner leg, spans to the other.
-      def cap_x0 = leg_x
-      def cap_dx = outer_width - (2 * leg_x)
 
       # ── SketchUp layer / material names ──────────────────────────────────────
 

@@ -15,8 +15,6 @@ module Timmerman
     #   planner.print_report
     #   planner.print_hardware_report
     class StockPlanner
-      attr_reader :total_extrusion_m, :total_surface_m2, :total_volume_m3, :piece_count, :cuts, :screw_counts
-
       def initialize(config)
         @config          = config
         @total_extrusion_m = 0.0
@@ -28,11 +26,6 @@ module Timmerman
         @specs_by_id     = {}          # remembered from placements (decouples from Config)
         @active          = true
       end
-
-      # Pause/resume tallying (extra preview pairs are not counted).
-      def pause!  = (@active = false)
-      def resume! = (@active = true)
-      def active? = @active
 
       # Register a Beam part.  Only called when active.
       def record(beam)

@@ -38,16 +38,6 @@ module Timmerman
 
       def scene_full_name(title) = "#{SCENE_PREFIX}#{title}"
 
-      # Open empty scopes on +renderer+ (during +BedLayout#create+). Returns
-      # { key => SceneScope } or nil when the renderer has no scene support.
-      def open_scopes(renderer)
-        return nil unless renderer.respond_to?(:scene)
-
-        STANDARD_SCENES.to_h do |entry|
-          [entry[:key], renderer.scene(scene_full_name(entry[:title]), camera: entry[:camera])]
-        end
-      end
-
       # Re-capture the standard scenes from geometry already in the model.
       def create_standard_set(model: Sketchup.active_model)
         missing = STANDARD_SCENES.reject { |e| e[:optional] }.find do |entry|
@@ -60,16 +50,6 @@ module Timmerman
         capture = Timmerman::SketchupUtils::SceneCapture.new(model)
         _register_on_capture(capture, model)
         created = capture.finalize!(purge_all: true)
-        model.commit_operation
-        _log_created(created)
-        created
-      end
-
-      def finalize_on_renderer(model, renderer)
-        return unless renderer.respond_to?(:finalize_scenes)
-
-        model.start_operation('EB scenes', true)
-        created = renderer.finalize_scenes(purge_all: true)
         model.commit_operation
         _log_created(created)
         created
@@ -147,16 +127,6 @@ module Timmerman
         all_3ap = _third_angle_root(model) + _third_angle_ext_root(model)
         (_all_eb_roots(model) + all_3ap).each do |e|
           e.hidden = false if e.respond_to?(:hidden=)
-        end
-      end
-
-      def _remove_scenes_with_prefix(model, prefix)
-        loop do
-          pages = model.pages.to_a
-          victim = pages.find { |p| p.name.start_with?(prefix) }
-          break unless victim
-
-          model.pages.erase(victim)
         end
       end
 

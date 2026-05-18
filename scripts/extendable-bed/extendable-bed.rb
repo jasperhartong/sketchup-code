@@ -66,7 +66,6 @@ _su_utils  = File.expand_path('../sketchup_utils', __dir__)
   validator
   extendable_bed_spec
   bed_layout
-  dimensions
   retracted_pillow_layout_export
   preview_scenes
   third_angle_projection

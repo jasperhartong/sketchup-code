@@ -16,9 +16,7 @@ module Timmerman
     #   Validator.new(config).validate(model)        # prints + returns pairs
     #   Validator.new(config).overlapping_pairs(model)  # just returns pairs
     class Validator
-      def initialize(config)
-        @config = config
-      end
+      def initialize(_config = nil); end
 
       # Prints a summary; returns the overlap list (empty = OK).
       def validate(model = Sketchup.active_model)
@@ -62,42 +60,6 @@ module Timmerman
           end
         end
         pairs
-      end
-
-      # Unique [root_group_name, part_name] for every part in at least one overlap.
-      def overlap_part_keys(overlaps)
-        require 'set'
-        keys = Set.new
-        overlaps.each do |p|
-          keys << [p[:back_root], p[:part_a]]  if p[:half_a] == :back
-          keys << [p[:front_root], p[:part_a]] if p[:half_a] == :front
-          keys << [p[:back_root], p[:part_b]]  if p[:half_b] == :back
-          keys << [p[:front_root], p[:part_b]] if p[:half_b] == :front
-        end
-        keys.to_a
-      end
-
-      # Magenta (default) on each overlapping part. Returns count painted.
-      def highlight_overlapping_parts(renderer, model, overlaps,
-                                        rgb: Config::PREVIEW_RGB_OVERLAP)
-        painted = 0
-        overlap_part_keys(overlaps).each do |root_name, part_name|
-          root = model.entities.grep(Sketchup::Group).find { |g| g.valid? && g.name == root_name }
-          next unless root
-
-          child = root.entities.find { |e| e.valid? && e.name == part_name }
-          next unless child
-
-          if renderer.respond_to?(:paint_structural_part_highlight)
-            renderer.paint_structural_part_highlight(child, rgb)
-          elsif renderer.respond_to?(:paint_named_children_force)
-            renderer.paint_named_children_force(root, [part_name], rgb)
-          else
-            renderer.paint_named_children(root, [part_name], rgb)
-          end
-          painted += 1
-        end
-        painted
       end
 
       private
