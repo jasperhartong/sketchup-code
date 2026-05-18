@@ -22,7 +22,7 @@ module Timmerman
       # Vertical spacing (plan/bottom row) between views.
       LAYOUT_GAP = 300.mm
       # Horizontal spacing between left / front / right / back views.
-      H_LAYOUT_GAP = 600.mm
+      H_LAYOUT_GAP = 1200.mm
       # Perpendicular distance from the view edge to the dimension line.
       DIM_OFFSET = 200.mm
 
@@ -68,7 +68,7 @@ module Timmerman
           foot_y:         config.extended_front_foot_world_y,
           container_name: Config::GROUP_3RD_ANGLE_EXT,
           scene_key:      :third_angle_ext,
-          annotations:    %i[seat_height bed_length pillow_length bed_width]
+          annotations:    %i[seat_height bed_length pillows_length bed_width]
         )
       end
 
@@ -157,12 +157,17 @@ module Timmerman
           sub.transformation = t_container
         end
 
-        _add_annotations(container, back_def, bb, positions, annotations)
+        _add_annotations(container, back_def, bb, positions, annotations,
+                         front_def: front_def, foot_y: foot_y)
       end
 
       # Dispatch each annotation symbol to the corresponding _dim_* method.
-      def _add_annotations(container, back_def, bb, positions, annotations)
-        annotations.each { |ann| send(:"_dim_#{ann}", container, back_def, bb, positions) }
+      def _add_annotations(container, back_def, bb, positions, annotations,
+                           front_def: nil, foot_y: nil)
+        annotations.each do |ann|
+          send(:"_dim_#{ann}", container, back_def, bb, positions,
+               front_def: front_def, foot_y: foot_y)
+        end
       end
 
       # ── Dimension methods ─────────────────────────────────────────────────
@@ -173,7 +178,7 @@ module Timmerman
       #   container_y = z  - cz
 
       # Vertical: ground → top of big pillow (seat), left of the left view.
-      def _dim_seat_height(container, back_def, bb, positions)
+      def _dim_seat_height(container, back_def, bb, positions, front_def: nil, foot_y: nil)
         lx = positions[:left][0]
         l  = bb.max.y - bb.min.y
         cz = bb.center.z
@@ -192,7 +197,7 @@ module Timmerman
       end
 
       # Horizontal: full bed length, bottom of the left view, offset down.
-      def _dim_bed_length(container, _back_def, bb, positions)
+      def _dim_bed_length(container, _back_def, bb, positions, front_def: nil, foot_y: nil)
         lx  = positions[:left][0]
         l   = bb.max.y - bb.min.y
         cz  = bb.center.z
@@ -206,8 +211,9 @@ module Timmerman
         )
       end
 
-      # Horizontal: big pillow (seat) length, top of pillow in left view, offset up.
-      def _dim_pillow_length(container, back_def, bb, positions)
+      # Horizontal: big pillow (seat) length only, top of pillow in left view, offset up.
+      # Used in the retracted variant where only the big pillow is flat on the slats.
+      def _dim_pillow_length(container, back_def, bb, positions, front_def: nil, foot_y: nil)
         lx = positions[:left][0]
         cy = bb.center.y
         cz = bb.center.z
@@ -227,10 +233,37 @@ module Timmerman
         )
       end
 
+      # Horizontal: full bed-of-pillows length (big + all smalls), top of pillow in
+      # left view, offset up.  Used in the extended variant where smalls live on the
+      # front frame — equals usable_length_extended (2000 mm in default config).
+      def _dim_pillows_length(container, back_def, bb, positions, front_def: nil, foot_y: nil)
+        lx = positions[:left][0]
+        cy = bb.center.y
+        cz = bb.center.z
+
+        pillow_bb = _big_pillow_bounds(back_def)
+        return unless pillow_bb
+
+        seat_top_y = pillow_bb.max.z - cz
+
+        min_y, max_y = _pillows_y_extent(back_def, front_def, foot_y)
+        return unless min_y && max_y
+
+        head_x = lx + cy - min_y
+        foot_x = lx + cy - max_y
+
+        _add_dimension(
+          container,
+          Geom::Point3d.new(head_x, seat_top_y, 0),
+          Geom::Point3d.new(foot_x, seat_top_y, 0),
+          Geom::Vector3d.new(0, DIM_OFFSET, 0)
+        )
+      end
+
       # Horizontal: outer bed width, bottom of the front view, offset down.
       # Front view: R_z(180°)·R_x(90°) maps original X → -X, so width is
       # symmetric around x=0: -w/2 … +w/2.
-      def _dim_bed_width(container, _back_def, bb, _positions)
+      def _dim_bed_width(container, _back_def, bb, _positions, front_def: nil, foot_y: nil)
         w = bb.max.x - bb.min.x
         h = bb.max.z - bb.min.z
 
@@ -255,6 +288,40 @@ module Timmerman
             e.name == 'EB | pillow | big'
         end
         inst&.bounds
+      end
+
+      # Returns [min_y, max_y] in pair-local space across all pillows in both
+      # back_def (offset 0) and front_def (offset foot_y).  When front_def or
+      # foot_y is nil only the back pillows are considered.
+      def _pillows_y_extent(back_def, front_def, foot_y)
+        min_y = nil
+        max_y = nil
+
+        _each_pillow_entity(back_def) do |e|
+          b = e.bounds
+          min_y = min_y ? [min_y, b.min.y].min : b.min.y
+          max_y = max_y ? [max_y, b.max.y].max : b.max.y
+        end
+
+        if front_def && foot_y
+          _each_pillow_entity(front_def) do |e|
+            b = e.bounds
+            min_y = min_y ? [min_y, b.min.y + foot_y].min : b.min.y + foot_y
+            max_y = max_y ? [max_y, b.max.y + foot_y].max : b.max.y + foot_y
+          end
+        end
+
+        [min_y, max_y]
+      end
+
+      # Yields every direct child of +def_+ whose name matches PILLOW_NAME_RE.
+      def _each_pillow_entity(def_, &block)
+        def_.entities.each do |e|
+          next unless e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance)
+          next unless e.name.match?(Config::PILLOW_NAME_RE)
+
+          block.call(e)
+        end
       end
 
       # 6 rotations that bring each face of the bed to face +Z (visible from top).
