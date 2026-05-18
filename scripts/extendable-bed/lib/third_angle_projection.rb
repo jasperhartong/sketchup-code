@@ -20,8 +20,10 @@ module Timmerman
     # container. The container itself is placed at +third_angle_row_y+ on the
     # world Y axis, well clear of the other preview rows.
     module ThirdAngleProjection
-      # Spacing (in SketchUp internal units = inches) between views in the layout.
+      # Vertical spacing (plan/bottom row) between views.
       LAYOUT_GAP = 300.mm
+      # Horizontal spacing between left / front / right / back views.
+      H_LAYOUT_GAP = 600.mm
 
       # Short labels for the 6 view sub-groups (used as group names).
       VIEW_NAMES = %i[front plan bottom right left back].freeze
@@ -112,11 +114,15 @@ module Timmerman
         o = Geom::Point3d.new(0, 0, 0)
         x = Geom::Vector3d.new(1, 0, 0)
         y = Geom::Vector3d.new(0, 1, 0)
+        z = Geom::Vector3d.new(0, 0, 1)
         {
-          front:  Geom::Transformation.rotation(o, x,  90.degrees),
+          front:  Geom::Transformation.rotation(o, z, 180.degrees) *
+                  Geom::Transformation.rotation(o, x,  90.degrees),
           back:   Geom::Transformation.rotation(o, x, -90.degrees),
-          right:  Geom::Transformation.rotation(o, y, -90.degrees),
-          left:   Geom::Transformation.rotation(o, y,  90.degrees),
+          right:  Geom::Transformation.rotation(o, z, -90.degrees) *
+                  Geom::Transformation.rotation(o, y, -90.degrees),
+          left:   Geom::Transformation.rotation(o, z,  90.degrees) *
+                  Geom::Transformation.rotation(o, y,  90.degrees),
           plan:   Geom::Transformation.new,
           bottom: Geom::Transformation.rotation(o, x, 180.degrees)
         }
@@ -138,17 +144,18 @@ module Timmerman
       # Front view is centred at (0, 0); all others derive from it.
       def _layout_positions(bb)
         g  = LAYOUT_GAP
+        hg = H_LAYOUT_GAP
         w  = bb.max.x - bb.min.x   # bed width
         l  = bb.max.y - bb.min.y   # bed length (retracted)
         h  = bb.max.z - bb.min.z   # bed height
 
         {
-          front:  [0,                         0                    ],
-          plan:   [0,                         h / 2.0 + g + l / 2.0],
-          bottom: [0,                       -(h / 2.0 + g + l / 2.0)],
-          right:  [ w / 2.0 + g + h / 2.0,   0                    ],
-          left:   [-(w / 2.0 + g + h / 2.0), 0                    ],
-          back:   [ w + 2 * g + h,            0                    ]
+          front:  [0,                           0                      ],
+          plan:   [0,                           h / 2.0 + g + l / 2.0 ],
+          bottom: [0,                         -(h / 2.0 + g + l / 2.0)],
+          right:  [ w / 2.0 + hg + h / 2.0,    0                      ],
+          left:   [-(w / 2.0 + hg + h / 2.0),  0                      ],
+          back:   [ w / 2.0 + hg + h + hg + h / 2.0, 0               ]
         }
       end
 
