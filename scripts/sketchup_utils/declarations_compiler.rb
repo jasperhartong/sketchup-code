@@ -140,6 +140,11 @@ module Timmerman
           # Render each part; keep a name → group map for screw host lookup.
           part_groups = {}
           part_specs.each do |ps|
+            r = @cr_kind.fetch(ps.kind, 0)
+            # Pillows: create a plain box definition first, then apply full 3D
+            # rounding to the definition so every instance that references it
+            # automatically gets the rounded geometry.
+            is_pillow = ps.kind == :pillow
             g = @renderer.create_part_box(
               ps.id,
               parent:        root_group,
@@ -147,9 +152,13 @@ module Timmerman
               size:          ps.size,
               transform:     Transform.translation(ps.at),
               reusable:      !@cut_hosts,
-              corner_radius: @cr_kind.fetch(ps.kind, 0),
+              corner_radius: is_pillow ? 0 : r,
               corner_axis:   @ca_kind.fetch(ps.kind, :long)
             )
+            if is_pillow && r > 0 && @renderer.respond_to?(:round_group_box_all_edges)
+              defn = g.respond_to?(:definition) ? g.definition : g
+              @renderer.round_group_box_all_edges(defn, size: ps.size, radius: r)
+            end
             if @attr_dict && ps.note && !ps.note.empty?
               @renderer.set_group_attribute(g, @attr_dict, 'note', ps.note)
             end
