@@ -124,15 +124,12 @@ module Timmerman
       end
 
       def _variant_label(back_root_name)
-        Config::EXTENSION_PAIR_DISPLAY_NAME_BY_BACK_ROOT[back_root_name] ||
-          (back_root_name[/\AEB_Step(\d+)_Back\z/, 1] && "Construction step #{$1}") ||
-          back_root_name
+        back_root_name
       end
 
       def _eb_root_groups(model)
         model.entities.grep(Sketchup::Group).select do |g|
-          Config::GROUP_NAME_RE.match?(g.name) ||
-            Config::SINGLE_PAIR_ROOTS.include?(g.name)
+          g.name.start_with?('EB | ')
         end
       end
 
@@ -175,7 +172,8 @@ module Timmerman
       end
 
       def _overlap_check_part?(name)
-        Config::SOLID_NAME_RE.match?(name) || Config::PILLOW_NAME_RE.match?(name)
+        # Include any named entity that isn't a hardware screw or empty.
+        name && !name.empty? && !name.include?('_screw_') && !name.include?('screw_into_')
       end
 
       def _aabb_overlap?(bb1, bb2)

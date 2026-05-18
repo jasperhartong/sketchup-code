@@ -27,7 +27,7 @@ module Timmerman
         { key: :construction, title: 'Construction steps',    camera: :iso,
           roots: :construction_steps },
         { key: :cut_plan,     title: 'Cut plan',              camera: :top,
-          roots: [Config::GROUP_CUT_PLAN_3D], optional: true },
+          roots: ['EB_CutPlan_3D'], optional: true },
         { key: :third_angle,     title: '3rd angle (retracted)', camera: :top,
           roots: :third_angle_group,     optional: true },
         { key: :third_angle_ext, title: '3rd angle (extended)',  camera: :top,
@@ -125,20 +125,20 @@ module Timmerman
         model.entities.select do |e|
           (e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance)) &&
             e.valid? &&
-            (Config::GROUP_NAME_RE.match?(e.name) || Config::SINGLE_PAIR_ROOTS.include?(e.name))
+            e.name.start_with?('EB | ')
         end
       end
 
       def _third_angle_root(model)
         root = model.entities.find do |e|
-          e.is_a?(Sketchup::Group) && e.valid? && e.name == Config::GROUP_3RD_ANGLE
+          e.is_a?(Sketchup::Group) && e.valid? && e.name == 'EB_3rdAngle'
         end
         root ? [root] : []
       end
 
       def _third_angle_ext_root(model)
         root = model.entities.find do |e|
-          e.is_a?(Sketchup::Group) && e.valid? && e.name == Config::GROUP_3RD_ANGLE_EXT
+          e.is_a?(Sketchup::Group) && e.valid? && e.name == 'EB_3rdAngleExt'
         end
         root ? [root] : []
       end

@@ -105,9 +105,7 @@ module Timmerman
 
       def _unhide_tracked_roots
         @specs.each do |spec|
-          spec[:roots].each do |g|
-            g.hidden = false if g.valid? && g.respond_to?(:hidden=)
-          end
+          spec[:roots].each { |g| g.hidden = false if g.valid? && g.respond_to?(:hidden=) }
         end
       end
 

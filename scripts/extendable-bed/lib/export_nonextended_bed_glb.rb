@@ -15,7 +15,7 @@ module Timmerman
       # @return [Boolean] same as {Sketchup::Model#export}
       def export_nonextended_pair(path, model = Sketchup.active_model)
         stash = []
-        roots = Config::NONEXTENDED_GLB_EXPORT_ROOTS
+        roots = ['EB | BedRetracted']
         expanded = File.expand_path(path)
         unless File.extname(expanded).casecmp?('.glb')
           raise ArgumentError, "GlbExport: path must end with .glb (got #{path.inspect})"

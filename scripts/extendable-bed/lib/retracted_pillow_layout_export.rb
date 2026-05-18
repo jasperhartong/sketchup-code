@@ -102,8 +102,9 @@ module Timmerman
       end
 
       def _find_retracted_roots!(model)
-        missing = Config::NONEXTENDED_GLB_EXPORT_ROOTS.reject do |name|
-          model.entities.grep(Sketchup::Group).any? { |g| g.valid? && g.name == name }
+        roots = ['EB | BedRetracted']
+        missing = roots.reject do |name|
+          model.entities.any? { |e| e.valid? && e.name == name }
         end
         return if missing.empty?
 
@@ -122,7 +123,7 @@ module Timmerman
 
       def _isolate_retracted_pair!(model)
         stash = []
-        keep = Config::NONEXTENDED_GLB_EXPORT_ROOTS
+        keep = ['EB | BedRetracted']
         model.entities.each do |e|
           next unless e.respond_to?(:hidden?) && e.respond_to?(:hidden=)
 
@@ -175,7 +176,7 @@ module Timmerman
 
       def _build_page(doc, layer, page, skp_path, spec, anchors)
         title = Layout::FormattedText.new(
-          "#{Config::PREVIEW_NAME_RET} — #{spec[:name]}",
+          "Retracted: pillows on top — #{spec[:name]}",
           TITLE_BOUNDS
         )
         doc.add_entity(title, layer, page)

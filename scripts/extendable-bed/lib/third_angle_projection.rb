@@ -52,10 +52,10 @@ module Timmerman
 
       def retracted_variant(config)
         ProjectionVariant.new(
-          back_def_name:  Config::GROUP_RET_BACK,
-          front_def_name: Config::GROUP_RET_FRONT,
+          back_def_name:  'EB | BackFrame',
+          front_def_name: 'EB | FrontFrame',
           foot_y:         config.retracted_foot_world_y,
-          container_name: Config::GROUP_3RD_ANGLE,
+          container_name: 'EB_3rdAngle',
           scene_key:      :third_angle,
           annotations:    %i[seat_height bed_length pillow_length bed_width]
         )
@@ -63,10 +63,10 @@ module Timmerman
 
       def extended_variant(config)
         ProjectionVariant.new(
-          back_def_name:  Config::GROUP_EXT_BACK,
-          front_def_name: Config::GROUP_EXT_FRONT,
+          back_def_name:  'EB | BackFrame',
+          front_def_name: 'EB | FrontFrame',
           foot_y:         config.extended_front_foot_world_y,
-          container_name: Config::GROUP_3RD_ANGLE_EXT,
+          container_name: 'EB_3rdAngleExt',
           scene_key:      :third_angle_ext,
           annotations:    %i[seat_height bed_length pillows_length bed_width]
         )
@@ -318,7 +318,7 @@ module Timmerman
       def _each_pillow_entity(def_, &block)
         def_.entities.each do |e|
           next unless e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance)
-          next unless e.name.match?(Config::PILLOW_NAME_RE)
+          next unless e.name.start_with?('foam') || e.name.include?('pillow')
 
           block.call(e)
         end
