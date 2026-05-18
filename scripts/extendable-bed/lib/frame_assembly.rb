@@ -93,18 +93,19 @@ module Timmerman
 
       private
 
-      # Head corner legs (through cap band to z_slat_bottom): BEAM_NARROW along +X
-      # (outer faces flush sisters at x=0 / x=outer_width), BEAM_WIDE along +Y.
+      # Head corner legs (through cap band to z_slat_bottom): BEAM_WIDE along +X
+      # (wide face flush head cap inner faces at x=beam_wide / outer_width−beam_wide),
+      # BEAM_NARROW along +Y (footward face meets outer sisters).
       def _head_legs
         leg 'EB | leg | head | -X',
             at:   [0, y_head, 0],
             size: [head_corner_leg_dx, head_corner_leg_dy, lh_outer],
-            note: 'Corner −X: min_x flush sister outer −X; narrow along +X, wide along +Y to match head cap.'
+            note: 'Corner −X: min_x flush outer; wide along +X with cap, narrow along +Y to sisters.'
 
         leg 'EB | leg | head | +X',
             at:   [c.outer_width - head_corner_leg_dx, y_head, 0],
             size: [head_corner_leg_dx, head_corner_leg_dy, lh_outer],
-            note: 'Corner +X: max_x flush sister outer +X; mirror of −X corner in plan.'
+            note: 'Corner +X: max_x flush outer; mirror −X in plan.'
 
         leg 'EB | leg | head | -X | inset',
             at:   [head_corner_leg_dx, y_head, 0],
@@ -139,12 +140,12 @@ module Timmerman
         beam 'EB | leg | post | behind head | -X',
              at:   [0, y_head_b, 0],
              size: [c.leg_x, c.leg_y, head_inset_dz],
-             note: 'Rotated 69×44 in plan vs mid posts; min_x flush head −X leg; Z to cap underside.'
+             note: '69×44 plan; min_x flush head −X; footward face at head leg max_y; Z to cap underside.'
 
         beam 'EB | leg | post | behind head | +X',
              at:   [c.outer_width - c.leg_x, y_head_b, 0],
              size: [c.leg_x, c.leg_y, head_inset_dz],
-             note: 'Rotated; max_x flush head +X leg outer; Z to cap underside.'
+             note: 'Mirror +X; max_x flush head +X outer; Z to cap underside.'
 
         beam 'EB | leg | post | behind mid | -X',
              at:   [0, y_mid_b, 0],
@@ -211,10 +212,7 @@ module Timmerman
       end
 
       # Head corner leg screws, mirrored across the X-centerline of the bed.
-      # Each leg box is 44×69×191 in its own local frame, so `u` and `v` are
-      # identical on both sides; only the outer-face key flips (`:max_x` on +X
-      # leg, `:min_x` on −X leg) since "outer" means a different local face in
-      # each leg's frame. The headward face `:min_y` is the same on both.
+      # Each leg box is 69×44×191 in its own local frame (wide along +X).
       def _head_corner_leg_screws
         { '+X' => :max_x, '-X' => :min_x }.each do |side, outer_face|
           host = "EB | leg | head | #{side}"
@@ -222,7 +220,7 @@ module Timmerman
           screw "EB | screw | head leg #{side} | outer-top",
                 host_name: host,
                 face:      outer_face,
-                u:         c.beam_wide / 2.0,
+                u:         c.beam_narrow / 2.0,
                 v:         c.outer_corner_leg_height - c.beam_wide / 2.0,
                 spec_id:   :eb_pocket_4mm,
                 shaft_length_index: 1
@@ -230,7 +228,7 @@ module Timmerman
           screw "EB | screw | head leg #{side} | front-top",
                 host_name: host,
                 face:      :min_y,
-                u:         c.beam_narrow / 2.0,
+                u:         c.beam_wide / 2.0,
                 v:         c.outer_corner_leg_height - c.beam_narrow / 2.0,
                 spec_id:   :eb_pocket_4mm
         end
@@ -503,11 +501,10 @@ module Timmerman
 
       # ── Z / Y / plan helpers ─────────────────────────────────────────────
 
-      # Headward face flush with the footward face of head corner legs (y = beam_wide - plank_thickness).
-      # Run is shortened by beam_narrow so the foot end stays fixed (previous start sat beam_narrow into the leg).
-      def outer_sister_head_y0 = c.beam_wide - c.plank_thickness
+      # Headward face flush with the footward face of head corner legs (y = beam_narrow − plank_thickness).
+      def outer_sister_head_y0 = c.beam_narrow - c.plank_thickness
       def outer_sister_run_dy  =
-        (c.back_slat_run_y + (2 * c.plank_thickness)) - (c.beam_wide - c.beam_narrow) + c.mid_layout_y_shift + c.beam_y - (2 * c.beam_narrow)
+        (c.back_slat_run_y + (2 * c.plank_thickness)) + c.mid_layout_y_shift + c.beam_y - (2 * c.beam_narrow)
 
       def lh_outer = c.outer_corner_leg_height
       def lh_mid   = c.mid_run_leg_height
@@ -515,8 +512,8 @@ module Timmerman
       def mid_y0   = (c.retracted_frame_depth_y - c.leg_x) + c.plank_thickness + c.mid_layout_y_shift
       def mid_leg_y0 = mid_y0 + (c.beam_wide - c.beam_y)
 
-      def head_corner_leg_dx = c.beam_narrow
-      def head_corner_leg_dy = c.beam_wide
+      def head_corner_leg_dx = c.beam_wide
+      def head_corner_leg_dy = c.beam_narrow
       def head_cap_x0 = head_corner_leg_dx
       def head_cap_dx = c.outer_width - (2 * head_corner_leg_dx)
       def head_inset_dz = c.z_slat_bottom - c.beam_narrow

@@ -101,28 +101,16 @@ module Timmerman
           sm = c.pillow_small_length
           return unless sm.positive?
 
-          pad           = c.slat_gap
           y_head        = -c.plank_thickness
-          mid_y0_val    = (c.retracted_frame_depth_y - c.leg_x) + c.plank_thickness + c.mid_layout_y_shift
-          y_post_head   = y_head + c.beam_wide + c.leg_y + pad
-          y_inset_legs  = y_head + c.leg_y + pad
-          y_corridor_lo = [y_inset_legs, y_post_head].max
-          y_corridor_hi = mid_y0_val - pad
-          total_sm      = c.small_pillow_count * sm
-          avail         = y_corridor_hi - y_corridor_lo
-          y_cluster     = if avail >= total_sm
-                            y_corridor_lo + ((avail - total_sm) / 2.0)
-                          else
-                            y_corridor_lo
-                          end
-          y_under_shift = 20.mm
+          y_head_b      = y_head + c.beam_narrow
+          y_cluster     = y_head_b + c.leg_y
 
           FOOT_TO_HEAD_SMALL_NUMBERS.each_with_index do |n, idx|
-            y = y_cluster + (idx * sm) - y_under_shift
+            y = y_cluster + (idx * sm)
             pillow "EB | pillow | small | #{n}",
                    at:   [0, y, 0],
                    size: [c.outer_width, sm, c.pillow_thickness],
-                   note: "Retracted+stored; small | #{n} (#{idx + 1}/3 foot→head) on floor; clears posts."
+                   note: "Retracted+stored; small | #{n} (#{idx + 1}/3 foot→head); head flush behind-head +X post max_y."
           end
         end
       end
