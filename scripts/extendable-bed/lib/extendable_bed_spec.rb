@@ -171,7 +171,7 @@ module Timmerman
         # Step 3 (flip, no legs): no foot outer corners + insets.
         step3_front_hide = %w[foot_ledge foot_corner_neg_x foot_corner_pos_x
                                foot_inset_neg_x foot_inset_pos_x]
-        step3_back_hide  = ['head_ledge extension_stop']
+        step3_back_hide  = %w[head_ledge extension_stop]
 
         # Step 4 (flip, no ledges, no extension stop).
         step4_back_hide  = ['head_ledge']

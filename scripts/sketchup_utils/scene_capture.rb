@@ -131,7 +131,7 @@ module Timmerman
         c  = bb.center
         d  = [bb.diagonal, 1.0].max
         cam = view.camera
-        cam.perspective = false
+        cam.perspective = true
         cam.set(Geom::Point3d.new(c.x - d, c.y + d, c.z + d), c, Geom::Vector3d.new(0, 0, 1))
         view.zoom(roots)
       end

@@ -3,7 +3,7 @@
 module Timmerman
   module ExtendableBed
     # Native SketchUp GLB export for one logical bed: the retracted (non-extended)
-    # preview roots from {Config::NONEXTENDED_GLB_EXPORT_ROOTS}.
+    # composite group (definition name "EB | BedRetracted").
     #
     # The GLB exporter does not document `selectionset_only`; we hide every other
     # root +Drawingelement+, export, then restore visibility.
@@ -25,7 +25,11 @@ module Timmerman
           next unless e.respond_to?(:hidden?) && e.respond_to?(:hidden=)
 
           stash << [e, e.hidden?]
-          keep = e.is_a?(Sketchup::Group) && roots.include?(e.name)
+          keep = case e
+                 when Sketchup::Group             then roots.include?(e.name)
+                 when Sketchup::ComponentInstance then roots.include?(e.definition.name)
+                 else false
+                 end
           e.hidden = !keep
         end
 
