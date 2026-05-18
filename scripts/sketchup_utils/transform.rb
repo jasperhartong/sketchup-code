@@ -18,15 +18,6 @@ module Timmerman
         @matrix = matrix.map(&:dup).freeze
       end
 
-      def self.identity
-        new([
-              [1.0, 0.0, 0.0, 0.0],
-              [0.0, 1.0, 0.0, 0.0],
-              [0.0, 0.0, 1.0, 0.0],
-              [0.0, 0.0, 0.0, 1.0]
-            ])
-      end
-
       # Translation by [x, y, z] (SketchUp Length or Numeric).
       def self.translation(vec)
         x, y, z = vec

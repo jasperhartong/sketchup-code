@@ -32,13 +32,6 @@ module Timmerman
         raise NotImplementedError
       end
 
-      # Returns the group's bounds min.z in SketchUp length units (for the
-      # "lift upside-down root to z=0" trick). Optional on backends that don't
-      # have bounds — the bed's upside-down placement uses it.
-      def group_min_z(group)
-        raise NotImplementedError
-      end
-
       # ── Geometry primitives (local to a group) ───────────────────────────
 
       # Extrudes an axis-aligned box into a group.
@@ -71,17 +64,6 @@ module Timmerman
       # Paint every face of +group+ (recursively) with +[r,g,b]+ 0-255.
       # +skip_name_re+ optionally excludes matching child groups/instances.
       def paint_group(group, rgb, skip_name_re: nil)
-        raise NotImplementedError
-      end
-
-      # Paint named direct children of +root+ with +rgb+. +names+ is an array
-      # of group names (Outliner-style exact match).
-      def paint_named_children(root, names, rgb)
-        raise NotImplementedError
-      end
-
-      # Toggle visibility on named direct children of +root+.
-      def hide_named_children(root, names, hidden: true)
         raise NotImplementedError
       end
 

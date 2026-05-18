@@ -53,7 +53,6 @@ _su_utils  = File.expand_path('../sketchup_utils', __dir__)
   renderer
   scene_capture
   sketchup_renderer
-  part_catalog
   part_rendering
   declarations
   declarations_compiler

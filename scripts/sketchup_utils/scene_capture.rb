@@ -43,9 +43,6 @@ module Timmerman
           entities.flatten.compact.each { track(_1) }
         end
 
-        def track_pair(back, front)
-          track_all(back, front)
-        end
       end
 
       def initialize(model)
