@@ -4,5 +4,5 @@ load core
 config = Timmerman::ExtendableBed::Config.new(debug_color: :off)
 bed    = Timmerman::ExtendableBed::BedLayout.new(config)
 bed.clear(Sketchup.active_model)
-bed.create(Sketchup.active_model, save_baseline: false)
+bed.create(Sketchup.active_model)
 "OK"
