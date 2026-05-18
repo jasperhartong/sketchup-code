@@ -18,7 +18,7 @@ cleared = SketchupBridgeUtils.delete_root_proposal_circles
 puts "[rebuild] cleared #{cleared} proposal circle(s)." if cleared.positive?
 
 config = Timmerman::ExtendableBed::Config.new(
-  debug_color: :off
+  debug_color: :overlaps
 )
 Timmerman::ExtendableBed.clear
 Timmerman::ExtendableBed::BedLayout.new(config).create
