@@ -229,9 +229,8 @@ module Timmerman
         renderer.commit('Extendable bed: cut plan 3D') do
           root = renderer.create_group(Config::GROUP_CUT_PLAN_3D, parent: :root, layer: layer)
           bar_spacing_y = (@config.beam_wide + 20.mm)
-          side_offset_cols = 8
-          bar_x0 = side_offset_cols * (@config.outer_width + @config.pair_gap_x)
-          bar_y0 = 0
+          bar_x0 = 0
+          bar_y0 = @config.cut_plan_row_y
           section_y = @config.beam_narrow
           section_z = @config.beam_wide
           stock_len = @config.stock_bar_length

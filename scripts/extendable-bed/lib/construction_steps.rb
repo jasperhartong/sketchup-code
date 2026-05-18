@@ -136,7 +136,7 @@ module Timmerman
       module_function
 
       def construction_bed_pairs(config, back_frame:, front_frame:)
-        step   = config.outer_width + config.pair_gap_x
+        step   = config.preview_column_step
         flip_x = config.construction_flip_extra_offset_x
         row_y  = config.construction_steps_row_y
 
@@ -173,8 +173,9 @@ module Timmerman
       end
 
       def extension_degree_bed_pairs(config, back_frame:, front_frame:)
-        step = config.outer_width + config.pair_gap_x
+        step = config.preview_column_step
         EXTENSION_SPECS.map do |spec|
+          row_y = config.extension_preview_row_y
           foot_y = foot_world_y_for(config, spec[:foot])
           hidden = resolve_hidden(spec[:variant], back_frame, front_frame, config)
           helper_names = BedPartGroups.fork_gap_helper_names(config)
@@ -185,6 +186,7 @@ module Timmerman
             back_name:    spec[:back_name],
             front_name:   spec[:front_name],
             offset_x:     spec[:column] * step,
+            pair_row_y:   row_y,
             foot_world_y: foot_y,
             pillow_mode:  spec[:pillow_mode],
             tally_stock:  spec[:tally_stock],

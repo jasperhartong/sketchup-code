@@ -17,6 +17,13 @@
 #   Timmerman::ExtendableBed::GlbExport.export_nonextended_pair('/path/out.glb')
 # Bridge: sketchup_bridge/commands/export_nonextended_bed_glb.rb — skill: export-nonextended-bed-glb.
 #
+# LayOut sheets (retracted + pillows, side/front/top + key dims): load
+#   lib/retracted_pillow_layout_export.rb, then RetractedPillowLayoutExport.export
+# Bridge: sketchup_bridge/commands/export_retracted_pillow_layout.rb
+#
+# SketchUp Scene tabs (variants iso, construction iso, cut plan top) — refreshed on each rebuild.
+# Bridge: included from default command.rb via create_preview_scenes.rb
+#
 # To customise dimensions, pass a Config to BedLayout:
 #   config = Timmerman::ExtendableBed::Config.new(back_slat_count: 11, usable_length_extended: 2200.mm, usable_length_retracted: 1300.mm)
 #   Timmerman::ExtendableBed::BedLayout.new(config).create
@@ -61,6 +68,8 @@ _su_utils  = File.expand_path('../sketchup_utils', __dir__)
   construction_steps
   bed_layout
   dimensions
+  retracted_pillow_layout_export
+  preview_scenes
 ].each { |f| load File.join(_eb_lib, "#{f}.rb") }
 
 module Timmerman

@@ -34,6 +34,7 @@ module Timmerman
       # ── Layout ────────────────────────────────────────────────────────────────
       attr_reader :slat_gap          # gap between adjacent comb teeth (X)
       attr_reader :pair_gap_x        # side-by-side spacing between preview pairs
+      attr_reader :preview_band_gap  # empty space between extension / construction / cut-plan rows
 
       # ── Stock planning ────────────────────────────────────────────────────────
       attr_reader :stock_bar_length  # standard bar length for cut planning
@@ -83,6 +84,7 @@ module Timmerman
         pillow_box_corner_axis: :short,
         slat_gap:         3.mm,
         pair_gap_x:       600.mm,
+        preview_band_gap: 3600.mm,
         stock_bar_length: 2700.mm,
         stock_kerf_mm: 0.0,
         wood_density_kg_m3: 500.0,
@@ -119,6 +121,7 @@ module Timmerman
         @pillow_box_corner_axis = _resolve_corner_axis(pillow_box_corner_axis)
         @slat_gap         = slat_gap
         @pair_gap_x       = pair_gap_x
+        @preview_band_gap = preview_band_gap
         @stock_bar_length = stock_bar_length
         @stock_kerf_mm    = stock_kerf_mm.to_f
         @wood_density_kg_m3 = wood_density_kg_m3.to_f
@@ -285,8 +288,16 @@ module Timmerman
       # extension (visible comb gap). Upright steps 1–3 use extended_front_foot_world_y.
       def decoupled_front_foot_world_y = usable_length_extended + pillow_small_length
 
-      # World Y offset for the construction-step preview row (headward of y=0).
-      def construction_steps_row_y = -(usable_length_extended + pair_gap_x)
+      # Extension-degree previews sit on this row (+Y = head).
+      def extension_preview_row_y = 0
+
+      # Construction-step row — separated from extension previews by +preview_band_gap+.
+      def construction_steps_row_y = -(usable_length_extended + preview_band_gap)
+
+      # Stock cut-plan 3D bars — third band, clear of construction row.
+      def cut_plan_row_y = construction_steps_row_y - (usable_length_extended + preview_band_gap)
+
+      def preview_column_step = outer_width + pair_gap_x
 
       # Extra +X for the upside-down step: 180° about +Y mirrors local X, so the
       # group's geometry lies mostly left of its anchor; shift by outer_width so it
