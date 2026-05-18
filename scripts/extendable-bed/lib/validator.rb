@@ -2,19 +2,19 @@
 
 module Timmerman
   module ExtendableBed
-    # Checks that no two parts in +OVERLAP_CHECK_NAME_RE+ (structural solids and pillows;
-    # not screws or helpers) have overlapping axis-aligned bounding boxes within each
-    # preview variant
-    # (back root + front root at their placed world transforms). Touching faces are
-    # allowed; only true volumetric overlap is flagged.
+    # Checks that no two leaf parts within any EB component definition have
+    # overlapping axis-aligned bounding boxes. Screws are excluded.
     #
-    # NEVER add exceptions, allowlists, or “intentional overlap” skips in this class.
-    # If the validator reports an overlap, fix the geometry in Config / frame assembly —
-    # do not weaken the check.
+    # Touching faces (coincident surfaces) are allowed; only true volumetric
+    # overlap is flagged.
+    #
+    # NEVER add exceptions, allowlists, or "intentional overlap" skips.
+    # If the validator reports an overlap, fix the geometry — do not weaken
+    # the check.
     #
     # Usage:
-    #   Validator.new(config).validate(model)        # prints + returns pairs
-    #   Validator.new(config).overlapping_pairs(model)  # just returns pairs
+    #   Validator.new.validate(model)            # prints + returns pairs
+    #   Validator.new.overlapping_pairs(model)   # just returns pairs
     class Validator
       def initialize(_config = nil); end
 
@@ -22,22 +22,21 @@ module Timmerman
       def validate(model = Sketchup.active_model)
         pairs = overlapping_pairs(model)
         if pairs.empty?
-          puts '[EB validate] OK — no part bounding-box overlaps in any preview variant.'
+          puts '[EB validate] OK — no part bounding-box overlaps.'
         else
-          puts "[EB validate] FAIL — #{pairs.size} overlapping part pair(s) (includes pillows vs frames):"
+          puts "[EB validate] FAIL — #{pairs.size} overlapping part pair(s):"
           pairs.each { |p| puts _format_overlap_line(p) }
         end
         pairs
       end
 
       # Returns an array of hashes per overlapping pair:
-      #   :variant, :roots, :half_a, :part_a, :half_b, :part_b
+      #   :definition, :part_a, :part_b
       def overlapping_pairs(model = Sketchup.active_model)
         pairs = []
-        _eb_preview_pairs(model).each do |preview|
+        _eb_definitions(model).each do |defn|
           items = []
-          _collect_solids(preview[:back].entities, preview[:back].transformation, items, half: :back)
-          _collect_solids(preview[:front].entities, preview[:front].transformation, items, half: :front)
+          _collect_parts(defn.entities, Geom::Transformation.new, items)
 
           (0...items.size).each do |i|
             ((i + 1)...items.size).each do |j|
@@ -46,16 +45,7 @@ module Timmerman
               next if a[:eid] == b[:eid]
               next unless _aabb_overlap?(a[:bb], b[:bb])
 
-              pairs << {
-                variant:    preview[:variant],
-                roots:      preview[:roots],
-                back_root:  preview[:back].name,
-                front_root: preview[:front].name,
-                half_a:     a[:half],
-                part_a:     a[:name],
-                half_b:     b[:half],
-                part_b:     b[:name]
-              }
+              pairs << { definition: defn.name, part_a: a[:name], part_b: b[:name] }
             end
           end
         end
@@ -65,77 +55,67 @@ module Timmerman
       private
 
       def _format_overlap_line(p)
-        "  #{p[:variant]} (#{p[:roots]}): " \
-          "[#{p[:half_a]}] #{p[:part_a]}  ⟷  [#{p[:half_b]}] #{p[:part_b]}"
+        "  [#{p[:definition]}]  #{p[:part_a]}  ⟷  #{p[:part_b]}"
       end
 
-      def _eb_preview_pairs(model)
-        backs = _eb_root_groups(model).select { |g| g.name.end_with?('_Back') }
-        backs.filter_map do |back|
-          front_name = back.name.sub(/_Back\z/, '_Front')
-          front = model.entities.grep(Sketchup::Group).find { |g| g.valid? && g.name == front_name }
-          next unless front
-
-          {
-            back:    back,
-            front:   front,
-            roots:   "#{back.name} + #{front.name}",
-            variant: _variant_label(back.name)
-          }
+      # All unique EB component definitions referenced by root-level instances.
+      def _eb_definitions(model)
+        seen = {}
+        model.entities.each do |e|
+          next unless e.is_a?(Sketchup::ComponentInstance) && e.valid?
+          next unless e.definition.name.start_with?('EB | ')
+          seen[e.definition.name] ||= e.definition
         end
+        seen.values
       end
 
-      def _variant_label(back_root_name)
-        back_root_name
-      end
-
-      def _eb_root_groups(model)
-        model.entities.grep(Sketchup::Group).select do |g|
-          g.name.start_with?('EB | ')
-        end
-      end
-
-      def _collect_solids(entities, parent_world_tr, out, half:)
+      # Recursively collect leaf part instances (non-screw, named, raw geometry).
+      # Composite groups (no faces in their definition) are transparently recursed.
+      def _collect_parts(entities, parent_tr, out)
         entities.each do |e|
           next unless e.valid?
 
           case e
-          when Sketchup::Group
-            if _overlap_check_part?(e.name)
-              out << {
-                name: e.name,
-                half: half,
-                bb:   _world_bb(e, parent_world_tr),
-                eid:  e.entityID
-              }
-            end
-            _collect_solids(e.entities, parent_world_tr * e.transformation, out, half: half)
           when Sketchup::ComponentInstance
-            if _overlap_check_part?(e.name)
-              out << {
-                name: e.name,
-                half: half,
-                bb:   _world_bb(e, parent_world_tr),
-                eid:  e.entityID
-              }
+            next if e.name.nil? || e.name.empty?
+            next if _screw_instance?(e)
+
+            local_tr = parent_tr * e.transformation
+            if _leaf_definition?(e.definition)
+              out << { name: e.name, bb: _local_bb(e, parent_tr), eid: e.entityID }
+            else
+              _collect_parts(e.definition.entities, local_tr, out)
             end
-            _collect_solids(e.definition.entities, parent_world_tr * e.transformation, out, half: half)
+          when Sketchup::Group
+            next if e.name.nil? || e.name.empty?
+
+            local_tr = parent_tr * e.transformation
+            if e.entities.any? { |c| c.is_a?(Sketchup::Face) }
+              out << { name: e.name, bb: _local_bb(e, parent_tr), eid: e.entityID }
+            else
+              _collect_parts(e.entities, local_tr, out)
+            end
           end
         end
       end
 
-      # Parent-space bounds corners → world AABB (+parent_world_tr+ only; element bounds
-      # are already in the parent coordinate system per Drawingelement#bounds).
-      def _world_bb(element, parent_world_tr)
-        bb = element.bounds
-        wb = Geom::BoundingBox.new
-        8.times { |i| wb.add(bb.corner(i).transform(parent_world_tr)) }
-        wb
+      # A definition is a leaf when it contains raw faces (not just sub-instances).
+      def _leaf_definition?(defn)
+        defn.entities.any? { |e| e.is_a?(Sketchup::Face) }
       end
 
-      def _overlap_check_part?(name)
-        # Include any named entity that isn't a hardware screw or empty.
-        name && !name.empty? && !name.include?('_screw_') && !name.include?('screw_into_')
+      # Screw instances are identified by their definition name prefix set by
+      # SketchupRenderer#_screw_definition (e.g. "EB::Screw::eb_pocket_4mm|...").
+      def _screw_instance?(inst)
+        inst.definition.name.start_with?('EB::Screw::')
+      end
+
+      # Transform element bounds (parent-local) into the running coordinate frame.
+      def _local_bb(element, parent_tr)
+        bb = element.bounds
+        wb = Geom::BoundingBox.new
+        8.times { |i| wb.add(bb.corner(i).transform(parent_tr)) }
+        wb
       end
 
       def _aabb_overlap?(bb1, bb2)
