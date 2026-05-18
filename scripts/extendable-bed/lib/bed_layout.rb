@@ -71,8 +71,17 @@ module Timmerman
         end
 
         if model && scenes
-          ThirdAngleProjection.create_scene(model, renderer,
-                                            config: @config, layer: layer, scenes: scenes)
+          next_row_y = @config.third_angle_row_y
+          [
+            ThirdAngleProjection.retracted_variant(@config),
+            ThirdAngleProjection.extended_variant(@config)
+          ].each do |variant|
+            bottom_y = ThirdAngleProjection.create_scene(
+              model, renderer,
+              variant: variant, row_y: next_row_y, layer: layer, scenes: scenes
+            )
+            next_row_y = bottom_y - @config.preview_row_step if bottom_y
+          end
         end
 
         PreviewScenes.finalize_on_renderer(model, renderer) if model
@@ -93,7 +102,8 @@ module Timmerman
           Config::GROUP_NAME_RE.match?(e.name) ||
             Config::SINGLE_PAIR_ROOTS.include?(e.name) ||
             e.name == Config::GROUP_CUT_PLAN_3D ||
-            e.name == Config::GROUP_3RD_ANGLE
+            e.name == Config::GROUP_3RD_ANGLE ||
+            e.name == Config::GROUP_3RD_ANGLE_EXT
         end
         to_erase.each(&:erase!)
         # Always purge after erase: orphaned EB component definitions from the

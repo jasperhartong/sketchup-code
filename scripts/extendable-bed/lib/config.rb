@@ -301,6 +301,8 @@ module Timmerman
       def cut_plan_row_y = construction_steps_row_y - preview_row_step
 
       # 3rd angle projection layout — fifth band, below cut plan.
+      # Extended projection is positioned dynamically below the retracted one
+      # (see ThirdAngleProjection.create_scene chaining in BedLayout#create).
       def third_angle_row_y = cut_plan_row_y - preview_row_step
 
       def preview_column_step = outer_width + pair_gap_x
@@ -350,8 +352,9 @@ module Timmerman
       GROUP_RET_FRONT    = 'EB_Ret_Front'
       GROUP_RETGND_BACK  = 'EB_RetGnd_Back'
       GROUP_RETGND_FRONT = 'EB_RetGnd_Front'
-      GROUP_CUT_PLAN_3D  = 'EB_CutPlan_3D'
-      GROUP_3RD_ANGLE    = 'EB_3rdAngle'
+      GROUP_CUT_PLAN_3D      = 'EB_CutPlan_3D'
+      GROUP_3RD_ANGLE        = 'EB_3rdAngle'
+      GROUP_3RD_ANGLE_EXT    = 'EB_3rdAngleExt'
 
       # Human-readable names for the extension-degree preview row (one label per back+front pair).
       PREVIEW_NAME_EXT1      = 'Extended: 1 pillow'.freeze

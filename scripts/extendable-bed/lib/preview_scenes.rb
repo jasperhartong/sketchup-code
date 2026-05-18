@@ -28,8 +28,10 @@ module Timmerman
           roots: :construction_steps },
         { key: :cut_plan,     title: 'Cut plan',              camera: :top,
           roots: [Config::GROUP_CUT_PLAN_3D], optional: true },
-        { key: :third_angle,  title: '3rd angle (retracted)', camera: :top,
-          roots: :third_angle_group, optional: true }
+        { key: :third_angle,     title: '3rd angle (retracted)', camera: :top,
+          roots: :third_angle_group,     optional: true },
+        { key: :third_angle_ext, title: '3rd angle (extended)',  camera: :top,
+          roots: :third_angle_ext_group, optional: true }
       ].freeze
 
       module_function
@@ -90,9 +92,10 @@ module Timmerman
       def roots_for_entry(model, entry)
         roots = entry[:roots]
         case roots
-        when :construction_steps then _construction_step_roots(model)
-        when :all_eb_roots       then _all_eb_roots(model)
-        when :third_angle_group  then _third_angle_root(model)
+        when :construction_steps   then _construction_step_roots(model)
+        when :all_eb_roots         then _all_eb_roots(model)
+        when :third_angle_group    then _third_angle_root(model)
+        when :third_angle_ext_group then _third_angle_ext_root(model)
         else _find_roots(model, roots)
         end
       end
@@ -133,8 +136,16 @@ module Timmerman
         root ? [root] : []
       end
 
+      def _third_angle_ext_root(model)
+        root = model.entities.find do |e|
+          e.is_a?(Sketchup::Group) && e.valid? && e.name == Config::GROUP_3RD_ANGLE_EXT
+        end
+        root ? [root] : []
+      end
+
       def _unhide_all_eb_roots(model)
-        (_all_eb_roots(model) + _third_angle_root(model)).each do |e|
+        all_3ap = _third_angle_root(model) + _third_angle_ext_root(model)
+        (_all_eb_roots(model) + all_3ap).each do |e|
           e.hidden = false if e.respond_to?(:hidden=)
         end
       end
