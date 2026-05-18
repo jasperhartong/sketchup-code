@@ -22,7 +22,8 @@ STEP_TITLES = [
   'add front legs (flipped)',
   'add front under slat (flipped)',
   'Flip correctly',
-  'add head/ foot boards'
+  'add head/ foot boards',
+  'retracted, no pillows'
 ].freeze
 
 EXTENSION_LABEL_PAIRS = Timmerman::ExtendableBed::BedPairCatalog::EXTENSION_SPECS.map do |spec|

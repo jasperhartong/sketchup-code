@@ -3,7 +3,7 @@
 module Timmerman
   module ExtendableBed
     # Declarative tables for preview BedPair instances:
-    #   — 7 construction-assembly steps (headward row, progressive omissions)
+    #   — 8 construction-assembly steps (headward row, progressive omissions)
     #   — extension-degree previews (the usage row)
     #
     # Each step maps to a +variant+ symbol in +VARIANT_EXCLUDES+, which lists
@@ -108,14 +108,15 @@ module Timmerman
       LEDGE_FOOT = 'EB | plank | foot | ledge'
 
       CONSTRUCTION_SPECS = [
-        # Order and visual position now both follow step-number order (1..7).
+        # Order and visual position now both follow step-number order (1..8).
         { back_name: Config::GROUP_STEP1_BACK, front_name: Config::GROUP_STEP1_FRONT, column: 0, foot: :decoupled, upside_down: true,  variant: :sub_assembly_prep,                 helper: :hidden, hidden_variant: :step_prep_hide_conflicting_screws },
         { back_name: Config::GROUP_STEP2_BACK, front_name: Config::GROUP_STEP2_FRONT, column: 1, foot: :decoupled, upside_down: true,  variant: :flip_no_caps,                      helper: :show },
         { back_name: Config::GROUP_STEP3_BACK, front_name: Config::GROUP_STEP3_FRONT, column: 2, foot: :decoupled, upside_down: true,  variant: :flip_no_legs,                      helper: :hidden },
         { back_name: Config::GROUP_STEP4_BACK, front_name: Config::GROUP_STEP4_FRONT, column: 3, foot: :decoupled, upside_down: true,  variant: :construction_no_ledges,           helper: :hidden },
         { back_name: Config::GROUP_STEP5_BACK, front_name: Config::GROUP_STEP5_FRONT, column: 4, foot: :extended,  upside_down: true,  variant: :construction_no_ledges_with_beam, helper: :hidden },
         { back_name: Config::GROUP_STEP6_BACK, front_name: Config::GROUP_STEP6_FRONT, column: 5, foot: :extended,  upside_down: false, variant: :construction_no_ledges_with_beam, helper: :hidden },
-        { back_name: Config::GROUP_STEP7_BACK, front_name: Config::GROUP_STEP7_FRONT, column: 6, foot: :extended,  upside_down: false, variant: :construction_full,              helper: :hidden }
+        { back_name: Config::GROUP_STEP7_BACK, front_name: Config::GROUP_STEP7_FRONT, column: 6, foot: :extended,  upside_down: false, variant: :construction_full,              helper: :hidden },
+        { back_name: Config::GROUP_STEP8_BACK, front_name: Config::GROUP_STEP8_FRONT, column: 7, foot: :retracted, upside_down: false, variant: :construction_full,              helper: :hidden }
       ].freeze
 
       EXTENSION_SPECS = [
@@ -142,7 +143,7 @@ module Timmerman
         CONSTRUCTION_SPECS.map do |spec|
           col     = spec[:column]
           ox      = (col * step) + (spec[:upside_down] ? flip_x : 0)
-          foot_y  = spec[:foot] == :decoupled ? config.decoupled_front_foot_world_y : config.extended_front_foot_world_y
+          foot_y  = foot_world_y_for(config, spec[:foot])
           excludes = resolve_excludes(spec[:variant], back_frame, front_frame, config)
           helper_excludes = helper_excludes(spec[:helper], config)
           excludes = {

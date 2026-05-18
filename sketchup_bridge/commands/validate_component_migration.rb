@@ -18,8 +18,8 @@ puts "[component-migration] EB definitions: #{defs.length}"
 puts "[component-migration] top-level child component instances under EB roots: #{insts}"
 
 cfg = Timmerman::ExtendableBed::Config
-step_roots = model.entities.grep(Sketchup::Group).select { |g| g.valid? && g.name =~ /\AEB_Step[1-7]_(Back|Front)\z/ }
-puts "[component-migration] step roots: #{step_roots.length} (expected 14)"
+step_roots = model.entities.grep(Sketchup::Group).select { |g| g.valid? && g.name =~ /\AEB_Step[1-8]_(Back|Front)\z/ }
+puts "[component-migration] step roots: #{step_roots.length} (expected 16)"
 
 missing_visibility_targets = []
 layout.pairs_for(Timmerman::ExtendableBed::BackFrame.new(config), Timmerman::ExtendableBed::FrontFrame.new(config)).each do |pair|

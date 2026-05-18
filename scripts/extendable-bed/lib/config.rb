@@ -353,7 +353,7 @@ module Timmerman
       }.freeze
 
       # Construction sequence labels (reversed from original build-order draft):
-      # Step 1 = old prep, ... Step 7 = old full assembly.
+      # Step 1 = old prep, ... Step 7 = full extended, Step 8 = full retracted (no pillows).
       GROUP_STEP1_BACK = 'EB_Step1_Back'
       GROUP_STEP1_FRONT = 'EB_Step1_Front'
       GROUP_STEP2_BACK = 'EB_Step2_Back'
@@ -368,9 +368,11 @@ module Timmerman
       GROUP_STEP6_FRONT = 'EB_Step6_Front'
       GROUP_STEP7_BACK = 'EB_Step7_Back'
       GROUP_STEP7_FRONT = 'EB_Step7_Front'
+      GROUP_STEP8_BACK = 'EB_Step8_Back'
+      GROUP_STEP8_FRONT = 'EB_Step8_Front'
 
       # Matches any auto-generated EB pair root group name.
-      GROUP_NAME_RE = /\AEB_(Ext|Ext1|Ret|RetScrews|RetGnd|Half|Step[1-7]|StepExt|StepDecoup|StepNoLedges|StepFlip|StepFlipNoLegs|StepFlipNoCaps|StepPrep|StepSisterPrep)_(Back|Front)\z/
+      GROUP_NAME_RE = /\AEB_(Ext|Ext1|Ret|RetScrews|RetGnd|Half|Step[1-8]|StepExt|StepDecoup|StepNoLedges|StepFlip|StepFlipNoLegs|StepFlipNoCaps|StepPrep|StepSisterPrep)_(Back|Front)\z/
 
       # Single-pair root names (cleared together with the multi-pair preview set).
       SINGLE_PAIR_ROOTS = %w[EB_Back EB_Front].freeze

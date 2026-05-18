@@ -7211,6 +7211,1266 @@
       226.65
     ]
   },
+  "EB_Step8_Back / EB | leg | head | -X": {
+    "min": [
+      9772.0,
+      -2618.0,
+      0.0
+    ],
+    "max": [
+      9841.0,
+      -2574.0,
+      191.0
+    ]
+  },
+  "EB_Step8_Back / EB | leg | head | +X": {
+    "min": [
+      10499.0,
+      -2618.0,
+      0.0
+    ],
+    "max": [
+      10568.0,
+      -2574.0,
+      191.0
+    ]
+  },
+  "EB_Step8_Back / EB | leg | head | -X | inset": {
+    "min": [
+      9841.0,
+      -2618.0,
+      0.0
+    ],
+    "max": [
+      9885.0,
+      -2549.0,
+      147.0
+    ]
+  },
+  "EB_Step8_Back / EB | leg | head | +X | inset": {
+    "min": [
+      10455.0,
+      -2618.0,
+      0.0
+    ],
+    "max": [
+      10499.0,
+      -2549.0,
+      147.0
+    ]
+  },
+  "EB_Step8_Back / EB | leg | mid run | -X": {
+    "min": [
+      9772.0,
+      -1595.0,
+      0.0
+    ],
+    "max": [
+      9841.0,
+      -1551.0,
+      191.0
+    ]
+  },
+  "EB_Step8_Back / EB | leg | mid run | +X": {
+    "min": [
+      10499.0,
+      -1595.0,
+      0.0
+    ],
+    "max": [
+      10568.0,
+      -1551.0,
+      191.0
+    ]
+  },
+  "EB_Step8_Back / EB | leg | post | behind head | -X": {
+    "min": [
+      9772.0,
+      -2574.0,
+      0.0
+    ],
+    "max": [
+      9841.0,
+      -2530.0,
+      147.0
+    ]
+  },
+  "EB_Step8_Back / EB | leg | post | behind head | +X": {
+    "min": [
+      10499.0,
+      -2574.0,
+      0.0
+    ],
+    "max": [
+      10568.0,
+      -2530.0,
+      147.0
+    ]
+  },
+  "EB_Step8_Back / EB | leg | post | behind mid | -X": {
+    "min": [
+      9772.0,
+      -1639.0,
+      0.0
+    ],
+    "max": [
+      9841.0,
+      -1595.0,
+      147.0
+    ]
+  },
+  "EB_Step8_Back / EB | leg | post | behind mid | +X": {
+    "min": [
+      10499.0,
+      -1639.0,
+      0.0
+    ],
+    "max": [
+      10568.0,
+      -1595.0,
+      147.0
+    ]
+  },
+  "EB_Step8_Back / EB | beam | head | cap": {
+    "min": [
+      9841.0,
+      -2618.0,
+      147.0
+    ],
+    "max": [
+      10499.0,
+      -2549.0,
+      191.0
+    ]
+  },
+  "EB_Step8_Back / EB | plank | head | ledge": {
+    "min": [
+      9772.0,
+      -2618.0,
+      191.0
+    ],
+    "max": [
+      10568.0,
+      -2600.0,
+      329.0
+    ]
+  },
+  "EB_Step8_Back / EB | slat | back | 1/9": {
+    "min": [
+      9772.0,
+      -2600.0,
+      191.0
+    ],
+    "max": [
+      9816.0,
+      -1500.0,
+      260.0
+    ]
+  },
+  "EB_Step8_Back / EB | slat | back | 2/9": {
+    "min": [
+      9866.0,
+      -2600.0,
+      191.0
+    ],
+    "max": [
+      9910.0,
+      -1500.0,
+      260.0
+    ]
+  },
+  "EB_Step8_Back / EB | slat | back | 3/9": {
+    "min": [
+      9960.0,
+      -2600.0,
+      191.0
+    ],
+    "max": [
+      10004.0,
+      -1500.0,
+      260.0
+    ]
+  },
+  "EB_Step8_Back / EB | slat | back | 4/9": {
+    "min": [
+      10054.0,
+      -2600.0,
+      191.0
+    ],
+    "max": [
+      10098.0,
+      -1500.0,
+      260.0
+    ]
+  },
+  "EB_Step8_Back / EB | slat | back | 5/9": {
+    "min": [
+      10148.0,
+      -2600.0,
+      191.0
+    ],
+    "max": [
+      10192.0,
+      -1500.0,
+      260.0
+    ]
+  },
+  "EB_Step8_Back / EB | slat | back | 6/9": {
+    "min": [
+      10242.0,
+      -2600.0,
+      191.0
+    ],
+    "max": [
+      10286.0,
+      -1500.0,
+      260.0
+    ]
+  },
+  "EB_Step8_Back / EB | slat | back | 7/9": {
+    "min": [
+      10336.0,
+      -2600.0,
+      191.0
+    ],
+    "max": [
+      10380.0,
+      -1500.0,
+      260.0
+    ]
+  },
+  "EB_Step8_Back / EB | slat | back | 8/9": {
+    "min": [
+      10430.0,
+      -2600.0,
+      191.0
+    ],
+    "max": [
+      10474.0,
+      -1500.0,
+      260.0
+    ]
+  },
+  "EB_Step8_Back / EB | slat | back | 9/9": {
+    "min": [
+      10524.0,
+      -2600.0,
+      191.0
+    ],
+    "max": [
+      10568.0,
+      -1500.0,
+      260.0
+    ]
+  },
+  "EB_Step8_Back / EB | beam | back | sister | -X": {
+    "min": [
+      9772.0,
+      -2574.0,
+      147.0
+    ],
+    "max": [
+      9841.0,
+      -1595.0,
+      191.0
+    ]
+  },
+  "EB_Step8_Back / EB | beam | back | sister | +X": {
+    "min": [
+      10499.0,
+      -2574.0,
+      147.0
+    ],
+    "max": [
+      10568.0,
+      -1595.0,
+      191.0
+    ]
+  },
+  "EB_Step8_Back / EB | beam | back | sister tie": {
+    "min": [
+      9841.0,
+      -1620.0,
+      147.0
+    ],
+    "max": [
+      10499.0,
+      -1551.0,
+      191.0
+    ]
+  },
+  "EB_Step8_Back / EB | screw | head leg +X | outer-top": {
+    "min": [
+      10518.35,
+      -2600.0,
+      152.5
+    ],
+    "max": [
+      10568.35,
+      -2592.0,
+      160.5
+    ]
+  },
+  "EB_Step8_Back / EB | screw | head leg +X | front-top": {
+    "min": [
+      10529.5,
+      -2618.35,
+      165.0
+    ],
+    "max": [
+      10537.5,
+      -2538.35,
+      173.0
+    ]
+  },
+  "EB_Step8_Back / EB | screw | head leg -X | outer-top": {
+    "min": [
+      9771.65,
+      -2600.0,
+      152.5
+    ],
+    "max": [
+      9821.65,
+      -2592.0,
+      160.5
+    ]
+  },
+  "EB_Step8_Back / EB | screw | head leg -X | front-top": {
+    "min": [
+      9802.5,
+      -2618.35,
+      165.0
+    ],
+    "max": [
+      9810.5,
+      -2538.35,
+      173.0
+    ]
+  },
+  "EB_Step8_Back / EB | screw | head cap | +X end into inset leg": {
+    "min": [
+      10473.0,
+      -2587.5,
+      111.35
+    ],
+    "max": [
+      10481.0,
+      -2579.5,
+      191.35
+    ]
+  },
+  "EB_Step8_Back / EB | screw | head cap | -X end into inset leg": {
+    "min": [
+      9859.0,
+      -2587.5,
+      111.35
+    ],
+    "max": [
+      9867.0,
+      -2579.5,
+      191.35
+    ]
+  },
+  "EB_Step8_Back / EB | screw | head cap | 2/9 | heart": {
+    "min": [
+      9884.0,
+      -2587.5,
+      146.65
+    ],
+    "max": [
+      9892.0,
+      -2579.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | head cap | 3/9 | heart": {
+    "min": [
+      9978.0,
+      -2587.5,
+      146.65
+    ],
+    "max": [
+      9986.0,
+      -2579.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | head cap | 4/9 | heart": {
+    "min": [
+      10072.0,
+      -2587.5,
+      146.65
+    ],
+    "max": [
+      10080.0,
+      -2579.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | head cap | 5/9 | heart": {
+    "min": [
+      10166.0,
+      -2587.5,
+      146.65
+    ],
+    "max": [
+      10174.0,
+      -2579.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | head cap | 6/9 | heart": {
+    "min": [
+      10260.0,
+      -2587.5,
+      146.65
+    ],
+    "max": [
+      10268.0,
+      -2579.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | head cap | 7/9 | heart": {
+    "min": [
+      10354.0,
+      -2587.5,
+      146.65
+    ],
+    "max": [
+      10362.0,
+      -2579.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | head cap | 8/9 | heart": {
+    "min": [
+      10448.0,
+      -2587.5,
+      146.65
+    ],
+    "max": [
+      10456.0,
+      -2579.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | sister tie | 2/9 | heart": {
+    "min": [
+      9884.0,
+      -1589.5,
+      146.65
+    ],
+    "max": [
+      9892.0,
+      -1581.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | sister tie | 3/9 | heart": {
+    "min": [
+      9978.0,
+      -1589.5,
+      146.65
+    ],
+    "max": [
+      9986.0,
+      -1581.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | sister tie | 4/9 | heart": {
+    "min": [
+      10072.0,
+      -1589.5,
+      146.65
+    ],
+    "max": [
+      10080.0,
+      -1581.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | sister tie | 5/9 | heart": {
+    "min": [
+      10166.0,
+      -1589.5,
+      146.65
+    ],
+    "max": [
+      10174.0,
+      -1581.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | sister tie | 6/9 | heart": {
+    "min": [
+      10260.0,
+      -1589.5,
+      146.65
+    ],
+    "max": [
+      10268.0,
+      -1581.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | sister tie | 7/9 | heart": {
+    "min": [
+      10354.0,
+      -1589.5,
+      146.65
+    ],
+    "max": [
+      10362.0,
+      -1581.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | sister tie | 8/9 | heart": {
+    "min": [
+      10448.0,
+      -1589.5,
+      146.65
+    ],
+    "max": [
+      10456.0,
+      -1581.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | back sister +X | into behind-head post": {
+    "min": [
+      10529.5,
+      -2563.333,
+      111.35
+    ],
+    "max": [
+      10537.5,
+      -2555.333,
+      191.35
+    ]
+  },
+  "EB_Step8_Back / EB | screw | back sister -X | into behind-head post": {
+    "min": [
+      9802.5,
+      -2563.333,
+      111.35
+    ],
+    "max": [
+      9810.5,
+      -2555.333,
+      191.35
+    ]
+  },
+  "EB_Step8_Back / EB | screw | behind head post +X | upper into head leg": {
+    "min": [
+      10542.0,
+      -2579.65,
+      108.5
+    ],
+    "max": [
+      10550.0,
+      -2529.65,
+      116.5
+    ]
+  },
+  "EB_Step8_Back / EB | screw | behind head post +X | lower into head leg": {
+    "min": [
+      10542.0,
+      -2579.65,
+      19.0
+    ],
+    "max": [
+      10550.0,
+      -2529.65,
+      27.0
+    ]
+  },
+  "EB_Step8_Back / EB | screw | behind head post -X | upper into head leg": {
+    "min": [
+      9790.0,
+      -2579.65,
+      108.5
+    ],
+    "max": [
+      9798.0,
+      -2529.65,
+      116.5
+    ]
+  },
+  "EB_Step8_Back / EB | screw | behind head post -X | lower into head leg": {
+    "min": [
+      9790.0,
+      -2579.65,
+      19.0
+    ],
+    "max": [
+      9798.0,
+      -2529.65,
+      27.0
+    ]
+  },
+  "EB_Step8_Back / EB | screw | head inset leg +X | lower into corner leg": {
+    "min": [
+      10454.65,
+      -2599.0,
+      10.667
+    ],
+    "max": [
+      10504.65,
+      -2591.0,
+      18.667
+    ]
+  },
+  "EB_Step8_Back / EB | screw | head inset leg +X | upper into corner leg": {
+    "min": [
+      10454.65,
+      -2599.0,
+      108.5
+    ],
+    "max": [
+      10504.65,
+      -2591.0,
+      116.5
+    ]
+  },
+  "EB_Step8_Back / EB | screw | head inset leg -X | lower into corner leg": {
+    "min": [
+      9835.35,
+      -2599.0,
+      10.667
+    ],
+    "max": [
+      9885.35,
+      -2591.0,
+      18.667
+    ]
+  },
+  "EB_Step8_Back / EB | screw | head inset leg -X | upper into corner leg": {
+    "min": [
+      9835.35,
+      -2599.0,
+      108.5
+    ],
+    "max": [
+      9885.35,
+      -2591.0,
+      116.5
+    ]
+  },
+  "EB_Step8_Back / EB | screw | mid run leg +X | max_y mid": {
+    "min": [
+      10529.5,
+      -1600.65,
+      152.5
+    ],
+    "max": [
+      10537.5,
+      -1550.65,
+      160.5
+    ]
+  },
+  "EB_Step8_Back / EB | screw | mid run leg -X | max_y mid": {
+    "min": [
+      9802.5,
+      -1600.65,
+      152.5
+    ],
+    "max": [
+      9810.5,
+      -1550.65,
+      160.5
+    ]
+  },
+  "EB_Step8_Back / EB | screw | mid run leg +X | outer upper": {
+    "min": [
+      10488.35,
+      -1577.0,
+      172.333
+    ],
+    "max": [
+      10568.35,
+      -1569.0,
+      180.333
+    ]
+  },
+  "EB_Step8_Back / EB | screw | mid run leg -X | outer upper": {
+    "min": [
+      9771.65,
+      -1577.0,
+      172.333
+    ],
+    "max": [
+      9851.65,
+      -1569.0,
+      180.333
+    ]
+  },
+  "EB_Step8_Back / EB | screw | back sister +X | into behind-mid post": {
+    "min": [
+      10529.5,
+      -1633.5,
+      111.35
+    ],
+    "max": [
+      10537.5,
+      -1625.5,
+      191.35
+    ]
+  },
+  "EB_Step8_Back / EB | screw | back sister -X | into behind-mid post": {
+    "min": [
+      9802.5,
+      -1633.5,
+      111.35
+    ],
+    "max": [
+      9810.5,
+      -1625.5,
+      191.35
+    ]
+  },
+  "EB_Step8_Back / EB | screw | mid run leg +X | into behind-mid post | -Z": {
+    "min": [
+      10549.333,
+      -1600.65,
+      19.0
+    ],
+    "max": [
+      10557.333,
+      -1550.65,
+      27.0
+    ]
+  },
+  "EB_Step8_Back / EB | screw | mid run leg +X | into behind-mid post | +Z": {
+    "min": [
+      10549.333,
+      -1600.65,
+      108.5
+    ],
+    "max": [
+      10557.333,
+      -1550.65,
+      116.5
+    ]
+  },
+  "EB_Step8_Back / EB | screw | mid run leg -X | into behind-mid post | -Z": {
+    "min": [
+      9782.667,
+      -1600.65,
+      19.0
+    ],
+    "max": [
+      9790.667,
+      -1550.65,
+      27.0
+    ]
+  },
+  "EB_Step8_Back / EB | screw | mid run leg -X | into behind-mid post | +Z": {
+    "min": [
+      9782.667,
+      -1600.65,
+      108.5
+    ],
+    "max": [
+      9790.667,
+      -1550.65,
+      116.5
+    ]
+  },
+  "EB_Step8_Back / EB | screw | back sister +X | under headward 2": {
+    "min": [
+      10529.5,
+      -2480.1,
+      146.65
+    ],
+    "max": [
+      10537.5,
+      -2472.1,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | back sister +X | under headward 1": {
+    "min": [
+      10529.5,
+      -2284.3,
+      146.65
+    ],
+    "max": [
+      10537.5,
+      -2276.3,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | back sister +X | middle": {
+    "min": [
+      10529.5,
+      -2088.5,
+      146.65
+    ],
+    "max": [
+      10537.5,
+      -2080.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | back sister +X | under footward 1": {
+    "min": [
+      10529.5,
+      -1892.7,
+      146.65
+    ],
+    "max": [
+      10537.5,
+      -1884.7,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | back sister +X | under footward 2": {
+    "min": [
+      10529.5,
+      -1696.9,
+      146.65
+    ],
+    "max": [
+      10537.5,
+      -1688.9,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | back sister -X | under headward 2": {
+    "min": [
+      9802.5,
+      -2480.1,
+      146.65
+    ],
+    "max": [
+      9810.5,
+      -2472.1,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | back sister -X | under headward 1": {
+    "min": [
+      9802.5,
+      -2284.3,
+      146.65
+    ],
+    "max": [
+      9810.5,
+      -2276.3,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | back sister -X | middle": {
+    "min": [
+      9802.5,
+      -2088.5,
+      146.65
+    ],
+    "max": [
+      9810.5,
+      -2080.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | back sister -X | under footward 1": {
+    "min": [
+      9802.5,
+      -1892.7,
+      146.65
+    ],
+    "max": [
+      9810.5,
+      -1884.7,
+      226.65
+    ]
+  },
+  "EB_Step8_Back / EB | screw | back sister -X | under footward 2": {
+    "min": [
+      9802.5,
+      -1696.9,
+      146.65
+    ],
+    "max": [
+      9810.5,
+      -1688.9,
+      226.65
+    ]
+  },
+  "EB_Step8_Front / EB | leg | foot | -X": {
+    "min": [
+      9772.0,
+      -1551.0,
+      0.0
+    ],
+    "max": [
+      9816.0,
+      -1482.0,
+      191.0
+    ]
+  },
+  "EB_Step8_Front / EB | leg | foot | +X": {
+    "min": [
+      10524.0,
+      -1551.0,
+      0.0
+    ],
+    "max": [
+      10568.0,
+      -1482.0,
+      191.0
+    ]
+  },
+  "EB_Step8_Front / EB | leg | foot | -X | inset": {
+    "min": [
+      9816.0,
+      -1551.0,
+      0.0
+    ],
+    "max": [
+      9860.0,
+      -1482.0,
+      147.0
+    ]
+  },
+  "EB_Step8_Front / EB | leg | foot | +X | inset": {
+    "min": [
+      10480.0,
+      -1551.0,
+      0.0
+    ],
+    "max": [
+      10524.0,
+      -1482.0,
+      147.0
+    ]
+  },
+  "EB_Step8_Front / EB | beam | foot | cap": {
+    "min": [
+      9837.0,
+      -1551.0,
+      147.0
+    ],
+    "max": [
+      10524.0,
+      -1482.0,
+      191.0
+    ]
+  },
+  "EB_Step8_Front / EB | plank | foot | ledge": {
+    "min": [
+      9772.0,
+      -1500.0,
+      191.0
+    ],
+    "max": [
+      10568.0,
+      -1482.0,
+      329.0
+    ]
+  },
+  "EB_Step8_Front / EB | slat | front | 1/8": {
+    "min": [
+      9819.0,
+      -2600.0,
+      191.0
+    ],
+    "max": [
+      9863.0,
+      -1500.0,
+      260.0
+    ]
+  },
+  "EB_Step8_Front / EB | slat | front | 2/8": {
+    "min": [
+      9913.0,
+      -2600.0,
+      191.0
+    ],
+    "max": [
+      9957.0,
+      -1500.0,
+      260.0
+    ]
+  },
+  "EB_Step8_Front / EB | slat | front | 3/8": {
+    "min": [
+      10007.0,
+      -2600.0,
+      191.0
+    ],
+    "max": [
+      10051.0,
+      -1500.0,
+      260.0
+    ]
+  },
+  "EB_Step8_Front / EB | slat | front | 4/8": {
+    "min": [
+      10101.0,
+      -2600.0,
+      191.0
+    ],
+    "max": [
+      10145.0,
+      -1500.0,
+      260.0
+    ]
+  },
+  "EB_Step8_Front / EB | slat | front | 5/8": {
+    "min": [
+      10195.0,
+      -2600.0,
+      191.0
+    ],
+    "max": [
+      10239.0,
+      -1500.0,
+      260.0
+    ]
+  },
+  "EB_Step8_Front / EB | slat | front | 6/8": {
+    "min": [
+      10289.0,
+      -2600.0,
+      191.0
+    ],
+    "max": [
+      10333.0,
+      -1500.0,
+      260.0
+    ]
+  },
+  "EB_Step8_Front / EB | slat | front | 7/8": {
+    "min": [
+      10383.0,
+      -2600.0,
+      191.0
+    ],
+    "max": [
+      10427.0,
+      -1500.0,
+      260.0
+    ]
+  },
+  "EB_Step8_Front / EB | slat | front | 8/8": {
+    "min": [
+      10477.0,
+      -2600.0,
+      191.0
+    ],
+    "max": [
+      10521.0,
+      -1500.0,
+      260.0
+    ]
+  },
+  "EB_Step8_Front / EB | plank | front | under slat extension stop": {
+    "min": [
+      9841.0,
+      -2549.0,
+      173.0
+    ],
+    "max": [
+      10499.0,
+      -2520.0,
+      191.0
+    ]
+  },
+  "EB_Step8_Front / EB | screw | foot leg +X | upper -y | into inset leg": {
+    "min": [
+      10488.35,
+      -1540.333,
+      164.0
+    ],
+    "max": [
+      10568.35,
+      -1532.333,
+      172.0
+    ]
+  },
+  "EB_Step8_Front / EB | screw | foot leg +X | upper +y | into inset leg": {
+    "min": [
+      10488.35,
+      -1508.0,
+      164.0
+    ],
+    "max": [
+      10568.35,
+      -1500.0,
+      172.0
+    ]
+  },
+  "EB_Step8_Front / EB | screw | foot leg -X | upper -y | into inset leg": {
+    "min": [
+      9771.65,
+      -1540.333,
+      164.0
+    ],
+    "max": [
+      9851.65,
+      -1532.333,
+      172.0
+    ]
+  },
+  "EB_Step8_Front / EB | screw | foot leg -X | upper +y | into inset leg": {
+    "min": [
+      9771.65,
+      -1508.0,
+      164.0
+    ],
+    "max": [
+      9851.65,
+      -1500.0,
+      172.0
+    ]
+  },
+  "EB_Step8_Front / EB | screw | foot inset leg -X | lower inner face": {
+    "min": [
+      9780.35,
+      -1520.5,
+      30.5
+    ],
+    "max": [
+      9860.35,
+      -1512.5,
+      38.5
+    ]
+  },
+  "EB_Step8_Front / EB | screw | foot inset leg -X | upper inner face": {
+    "min": [
+      9780.35,
+      -1520.5,
+      108.5
+    ],
+    "max": [
+      9860.35,
+      -1512.5,
+      116.5
+    ]
+  },
+  "EB_Step8_Front / EB | screw | foot inset leg +X | lower inner face": {
+    "min": [
+      10479.65,
+      -1520.5,
+      30.5
+    ],
+    "max": [
+      10559.65,
+      -1512.5,
+      38.5
+    ]
+  },
+  "EB_Step8_Front / EB | screw | foot inset leg +X | upper inner face": {
+    "min": [
+      10479.65,
+      -1520.5,
+      108.5
+    ],
+    "max": [
+      10559.65,
+      -1512.5,
+      116.5
+    ]
+  },
+  "EB_Step8_Front / EB | screw | foot cap | 1/8 | heart": {
+    "min": [
+      9837.0,
+      -1520.5,
+      146.65
+    ],
+    "max": [
+      9845.0,
+      -1512.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Front / EB | screw | foot cap | 2/8 | heart": {
+    "min": [
+      9931.0,
+      -1520.5,
+      146.65
+    ],
+    "max": [
+      9939.0,
+      -1512.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Front / EB | screw | foot cap | 3/8 | heart": {
+    "min": [
+      10025.0,
+      -1520.5,
+      146.65
+    ],
+    "max": [
+      10033.0,
+      -1512.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Front / EB | screw | foot cap | 4/8 | heart": {
+    "min": [
+      10119.0,
+      -1520.5,
+      146.65
+    ],
+    "max": [
+      10127.0,
+      -1512.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Front / EB | screw | foot cap | 5/8 | heart": {
+    "min": [
+      10213.0,
+      -1520.5,
+      146.65
+    ],
+    "max": [
+      10221.0,
+      -1512.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Front / EB | screw | foot cap | 6/8 | heart": {
+    "min": [
+      10307.0,
+      -1520.5,
+      146.65
+    ],
+    "max": [
+      10315.0,
+      -1512.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Front / EB | screw | foot cap | 7/8 | heart": {
+    "min": [
+      10401.0,
+      -1520.5,
+      146.65
+    ],
+    "max": [
+      10409.0,
+      -1512.5,
+      226.65
+    ]
+  },
+  "EB_Step8_Front / EB | screw | foot cap | 8/8 | heart": {
+    "min": [
+      10495.0,
+      -1520.5,
+      146.65
+    ],
+    "max": [
+      10503.0,
+      -1512.5,
+      226.65
+    ]
+  },
   "EB_Ret_Back / EB | leg | head | -X": {
     "min": [
       0.0,
