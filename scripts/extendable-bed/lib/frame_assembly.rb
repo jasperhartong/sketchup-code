@@ -134,7 +134,7 @@ module Timmerman
       # Four 44×69 stock posts — one behind each outer leg in head and mid Y bands.
       def _behind_leg_posts
         y_head_b = y_head + head_corner_leg_dy
-        y_mid_b  = mid_leg_y0 - c.leg_x
+        y_mid_b  = mid_leg_y0 - c.leg_y
 
         beam 'EB | leg | post | behind head | -X',
              at:   [0, y_head_b, 0],
@@ -148,13 +148,13 @@ module Timmerman
 
         beam 'EB | leg | post | behind mid | -X',
              at:   [0, y_mid_b, 0],
-             size: [c.leg_y, c.leg_x, lh_mid],
-             note: '44x69 plan (leg_y×leg_x); headward of mid leg; 69 mm along Y on outer −X face.'
+             size: [c.leg_x, c.leg_y, lh_mid],
+             note: '69×44 plan (leg_x×leg_y); min_x flush mid run −X; wide face coplanar with mid run outer −X.'
 
         beam 'EB | leg | post | behind mid | +X',
-             at:   [c.outer_width - c.leg_y, y_mid_b, 0],
-             size: [c.leg_y, c.leg_x, lh_mid],
-             note: '44x69 plan (leg_y×leg_x); headward of mid leg; 69 mm along Y on outer +X face.'
+             at:   [c.outer_width - c.leg_x, y_mid_b, 0],
+             size: [c.leg_x, c.leg_y, lh_mid],
+             note: 'Mirror +X; max_x flush mid run +X; wide face coplanar with mid run outer +X.'
       end
 
       def _head_cap_beam
@@ -423,7 +423,7 @@ module Timmerman
       # outer back sister down onto the behind-mid post near its footward end.
       # The sister's foot end sits at v = outer_sister_run_dy; offset back by
       # beam_wide/2 places the screw centered over the behind-mid post
-      # footprint (post runs from mid_leg_y0 − leg_x to mid_leg_y0, and the
+      # footprint (post runs from mid_leg_y0 − leg_y to mid_leg_y0, and the
       # sister's max_y is flush with mid_leg_y0).
       def _sister_into_behind_mid_post_screws
         %w[+X -X].each do |side|

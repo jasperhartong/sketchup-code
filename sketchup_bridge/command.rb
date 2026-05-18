@@ -26,3 +26,4 @@ Timmerman::ExtendableBed::BedLayout.new(config).create
 # Keep construction-step labels visible after every rebuild.
 load File.expand_path('commands/annotate_construction_steps.rb', __dir__)
 'OK'
+

@@ -298,12 +298,11 @@ module Timmerman
 
       # ── Pillows ───────────────────────────────────────────────────────────────
 
-      # Big pillow matches usable slat bottom; two smalls each take one third of the extension gap
-      # (the remaining third is comb clearance between retracted foot and extended foot).
-      # Extended layout (foot→head): small | 1, small | 2, big.
+      # Big pillow matches usable slat bottom; three smalls fill the extension gap (equal thirds).
+      # Extended layout on front (foot→head): small | 3, small | 1, small | 2, then big on back.
       def pillow_big_length   = usable_length_retracted
-      def small_pillow_count  = 2
-      def pillow_small_length = (usable_length_extended - usable_length_retracted) / 3.0
+      def small_pillow_count  = 3
+      def pillow_small_length = (usable_length_extended - usable_length_retracted) / small_pillow_count.to_f
 
       # Ext1 preview: retracted + one small flat’s worth of extension.
       def one_small_extension_front_foot_world_y = retracted_foot_world_y + pillow_small_length
@@ -340,7 +339,7 @@ module Timmerman
 
       # Human-readable names for the extension-degree preview row (one label per back+front pair).
       PREVIEW_NAME_EXT1      = 'Extended: 1 pillow'.freeze
-      PREVIEW_NAME_EXT       = 'Extended: 2 pillows'.freeze
+      PREVIEW_NAME_EXT       = 'Extended: 3 pillows'.freeze
       PREVIEW_NAME_RET       = 'Retracted: pillows on top'.freeze
       PREVIEW_NAME_RETGND    = 'Retracted: pillows below'.freeze
       PREVIEW_NAME_RETSCREWS = 'Retracted: screws only'.freeze

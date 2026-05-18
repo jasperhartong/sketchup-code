@@ -8,13 +8,15 @@ module Timmerman
     # once per preview and then rendered through the standard PartRendering
     # driver, same as any other part.
     #
-    # Modes (IKEA mattress set: 1 big + 2 small):
-    #   :extended           — big flat on back + two small flats on front
-    #   :extended_one_small — 1 small flat extending front + 1 stacked upright on big at head
-    #   :retracted          — big flat + two-layer couch stack at head
-    #   :retracted_gnd      — big flat; two smalls laid flat on floor at head
+    # Modes (IKEA mattress set: 1 big + 3 small):
+    #   :extended           — big flat on back + three small flats on front (foot→head: 3, 1, 2)
+    #   :extended_one_small — 1 small flat on front + upright 2 and 3 stacked on big at head
+    #   :retracted          — big flat + three upright cushions at head (3, 1, 2)
+    #   :retracted_gnd      — big flat; three smalls flat on floor at head (3, 1, 2)
     #   nil                 — no pillows
     module PillowSets
+      # Foot→head order for small-pillow names in the extension gap / under-bed storage.
+      FOOT_TO_HEAD_SMALL_NUMBERS = [3, 1, 2].freeze
       # ── BackPillowSet ─────────────────────────────────────────────────────
       # Pillows rendered inside the back root group (back-frame local space).
       class BackPillowSet < SketchupUtils::PartCatalog
@@ -63,15 +65,20 @@ module Timmerman
         end
 
         def _extended_one_small_back
-          _big_pillow('Ext1; big flat on slats; one small stacked upright at head.')
+          _big_pillow('Ext1; big flat on slats; upright smalls stacked at head.')
           sm = c.pillow_small_length
           return unless sm.positive?
 
           t = c.pillow_thickness
+          z = c.z_slat_top + t
           pillow 'EB | pillow | small | 2',
-                 at:   [0, y_pillow, c.z_slat_top + t],
+                 at:   [0, y_pillow, z],
                  size: [c.outer_width, t, sm],
-                 note: 'Ext1; small | 2 upright on big at head (small | 1 extends front).'
+                 note: 'Ext1; small | 2 upright on big (small | 1 extends front).'
+          pillow 'EB | pillow | small | 3',
+                 at:   [0, y_pillow + t, z],
+                 size: [c.outer_width, t, sm],
+                 note: 'Ext1; small | 3 upright in front of small | 2 (same orientation as retracted couch).'
         end
 
         def _retracted_back
@@ -81,14 +88,12 @@ module Timmerman
 
           t = c.pillow_thickness
           z = c.z_slat_top + t
-          pillow 'EB | pillow | small | 1',
-                 at:   [0, y_pillow, z],
-                 size: [c.outer_width, t, sm],
-                 note: 'Couch; small | 1 vertical slab on big pillow; w×t×sm in X×Y×Z.'
-          pillow 'EB | pillow | small | 2',
-                 at:   [0, y_pillow + t, z],
-                 size: [c.outer_width, t, sm],
-                 note: 'Couch back cushion; small | 2 vertical at Y0 = y_pillow + t.'
+          FOOT_TO_HEAD_SMALL_NUMBERS.each_with_index do |n, idx|
+            pillow "EB | pillow | small | #{n}",
+                   at:   [0, y_pillow + (idx * t), z],
+                   size: [c.outer_width, t, sm],
+                   note: "Couch; small | #{n} upright (#{idx + 1}/3 foot→head along +Y)."
+          end
         end
 
         def _retracted_gnd_back
@@ -112,12 +117,12 @@ module Timmerman
                           end
           y_under_shift = 20.mm
 
-          c.small_pillow_count.times do |i|
-            y = y_cluster + ((c.small_pillow_count - 1 - i) * sm) - y_under_shift
-            pillow "EB | pillow | small | #{i + 1}",
+          FOOT_TO_HEAD_SMALL_NUMBERS.each_with_index do |n, idx|
+            y = y_cluster + (idx * sm) - y_under_shift
+            pillow "EB | pillow | small | #{n}",
                    at:   [0, y, 0],
                    size: [c.outer_width, sm, c.pillow_thickness],
-                   note: "Retracted+stored; small #{i + 1}/#{c.small_pillow_count} on floor; flush with frame sides; Y clears posts; shifted −Y 20 mm."
+                   note: "Retracted+stored; small | #{n} (#{idx + 1}/3 foot→head) on floor; clears posts."
           end
         end
       end
@@ -162,13 +167,12 @@ module Timmerman
           sm = c.pillow_small_length
           return unless sm.positive?
 
-          c.small_pillow_count.times do |i|
-            # Pillows ordered foot→head (index 0 = SMALL_1 is most footward).
-            y_world = y_small_head_world + ((c.small_pillow_count - 1 - i) * sm)
-            pillow "EB | pillow | small | #{i + 1}",
+          FOOT_TO_HEAD_SMALL_NUMBERS.each_with_index do |n, idx|
+            y_world = y_small_head_world + (idx * sm)
+            pillow "EB | pillow | small | #{n}",
                    at:   [0, y_world - @foot_world_y, c.z_slat_top],
                    size: [c.outer_width, sm, c.pillow_thickness],
-                   note: "Extended; small #{i + 1}/#{c.small_pillow_count}; equal share of extension gap."
+                   note: "Extended; small | #{n} (#{idx + 1}/3 foot→head); fills extension gap."
           end
         end
 

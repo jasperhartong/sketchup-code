@@ -2,8 +2,9 @@
 
 module Timmerman
   module ExtendableBed
-    # Checks that no two structural parts (beams, legs, slats, planks — not screws or
-    # pillows) have overlapping axis-aligned bounding boxes within each preview variant
+    # Checks that no two parts in +OVERLAP_CHECK_NAME_RE+ (structural solids and pillows;
+    # not screws or helpers) have overlapping axis-aligned bounding boxes within each
+    # preview variant
     # (back root + front root at their placed world transforms). Touching faces are
     # allowed; only true volumetric overlap is flagged.
     #
@@ -23,9 +24,9 @@ module Timmerman
       def validate(model = Sketchup.active_model)
         pairs = overlapping_pairs(model)
         if pairs.empty?
-          puts '[EB validate] OK — no structural part bounding-box overlaps in any preview variant.'
+          puts '[EB validate] OK — no part bounding-box overlaps in any preview variant.'
         else
-          puts "[EB validate] FAIL — #{pairs.size} overlapping part pair(s):"
+          puts "[EB validate] FAIL — #{pairs.size} overlapping part pair(s) (includes pillows vs frames):"
           pairs.each { |p| puts _format_overlap_line(p) }
         end
         pairs
@@ -141,7 +142,7 @@ module Timmerman
 
           case e
           when Sketchup::Group
-            if Config::SOLID_NAME_RE.match?(e.name)
+            if _overlap_check_part?(e.name)
               out << {
                 name: e.name,
                 half: half,
@@ -151,7 +152,7 @@ module Timmerman
             end
             _collect_solids(e.entities, parent_world_tr * e.transformation, out, half: half)
           when Sketchup::ComponentInstance
-            if Config::SOLID_NAME_RE.match?(e.name)
+            if _overlap_check_part?(e.name)
               out << {
                 name: e.name,
                 half: half,
@@ -171,6 +172,10 @@ module Timmerman
         wb = Geom::BoundingBox.new
         8.times { |i| wb.add(bb.corner(i).transform(parent_world_tr)) }
         wb
+      end
+
+      def _overlap_check_part?(name)
+        Config::SOLID_NAME_RE.match?(name) || Config::PILLOW_NAME_RE.match?(name)
       end
 
       def _aabb_overlap?(bb1, bb2)

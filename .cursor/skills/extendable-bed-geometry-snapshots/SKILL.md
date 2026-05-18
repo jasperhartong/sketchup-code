@@ -79,7 +79,7 @@ For each `[MISMATCH]` / `[ADDED]` / `[MISSING]` line:
 - **Reuse and extend what exists** in [`config.rb`](scripts/extendable-bed/lib/config.rb): primary inputs (`beam_narrow`, `beam_wide`, `plank_thickness`, `top_of_slats_z`, …) and derived `def` helpers (`z_slat_bottom`, `leg_height`, `cap_x0`, …). Add a new `def` there when a value is a design parameter or reused in more than one part, instead of embedding unexplained literals in assemblies.
 - **Express geometry as alignment to other dimensions**: positions/sizes should read as relationships (flush with `z_slat_bottom`, span from inner leg to inner leg, `2 * beam_wide`, `leg_height + plank_thickness`, same X as another beam) rather than orphan numbers lifted from a bbox unless that number is intentionally a new primary input.
 - When a manual delta is a raw length (e.g. +50 mm), **interpret it**: is it a stock section, a gap, a multiple of `plank_thickness` / `beam_narrow`, or an offset from an existing chain? Prefer wiring through `Config` so the model stays self-consistent when inputs change.
-- **AABB overlap validator** ([`validator.rb`](scripts/extendable-bed/lib/validator.rb)): **never** add exceptions, allowlists, or “intentional bearing” skips. If `[EB validate] FAIL` reports overlaps, fix geometry — do not weaken the validator.
+- **AABB overlap validator** ([`validator.rb`](scripts/extendable-bed/lib/validator.rb)): checks structural parts **and pillows** (not screws/helpers). **Never** add exceptions or allowlists. If `[EB validate] FAIL` reports overlaps, fix geometry — do not weaken the validator. Use `debug_color: :overlaps` in `command.rb` to paint overlaps magenta.
 
 ### All variants = same components, different placement (critical)
 

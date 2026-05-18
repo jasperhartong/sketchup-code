@@ -97,8 +97,8 @@
   },
   "EB_Step1_Back / EB | leg | post | behind mid | -X": {
     "min": [
-      752.0,
-      -1664.0,
+      727.0,
+      -1639.0,
       79.65
     ],
     "max": [
@@ -110,11 +110,11 @@
   "EB_Step1_Back / EB | leg | post | behind mid | +X": {
     "min": [
       0.0,
-      -1664.0,
+      -1639.0,
       79.65
     ],
     "max": [
-      44.0,
+      69.0,
       -1595.0,
       226.65
     ]
@@ -1273,8 +1273,8 @@
   },
   "EB_Step3_Back / EB | leg | post | behind mid | -X": {
     "min": [
-      3544.0,
-      -1664.0,
+      3519.0,
+      -1639.0,
       113.0
     ],
     "max": [
@@ -1286,11 +1286,11 @@
   "EB_Step3_Back / EB | leg | post | behind mid | +X": {
     "min": [
       2792.0,
-      -1664.0,
+      -1639.0,
       113.0
     ],
     "max": [
-      2836.0,
+      2861.0,
       -1595.0,
       260.0
     ]
@@ -2353,8 +2353,8 @@
   },
   "EB_Step4_Back / EB | leg | post | behind mid | -X": {
     "min": [
-      4940.0,
-      -1664.0,
+      4915.0,
+      -1639.0,
       113.0
     ],
     "max": [
@@ -2366,11 +2366,11 @@
   "EB_Step4_Back / EB | leg | post | behind mid | +X": {
     "min": [
       4188.0,
-      -1664.0,
+      -1639.0,
       113.0
     ],
     "max": [
-      4232.0,
+      4257.0,
       -1595.0,
       260.0
     ]
@@ -3577,8 +3577,8 @@
   },
   "EB_Step5_Back / EB | leg | post | behind mid | -X": {
     "min": [
-      6336.0,
-      -1664.0,
+      6311.0,
+      -1639.0,
       113.0
     ],
     "max": [
@@ -3590,11 +3590,11 @@
   "EB_Step5_Back / EB | leg | post | behind mid | +X": {
     "min": [
       5584.0,
-      -1664.0,
+      -1639.0,
       113.0
     ],
     "max": [
-      5628.0,
+      5653.0,
       -1595.0,
       260.0
     ]
@@ -4814,19 +4814,19 @@
   "EB_Step6_Back / EB | leg | post | behind mid | -X": {
     "min": [
       6980.0,
-      -1664.0,
+      -1639.0,
       0.0
     ],
     "max": [
-      7024.0,
+      7049.0,
       -1595.0,
       147.0
     ]
   },
   "EB_Step6_Back / EB | leg | post | behind mid | +X": {
     "min": [
-      7732.0,
-      -1664.0,
+      7707.0,
+      -1639.0,
       0.0
     ],
     "max": [
@@ -6050,19 +6050,19 @@
   "EB_Step7_Back / EB | leg | post | behind mid | -X": {
     "min": [
       8376.0,
-      -1664.0,
+      -1639.0,
       0.0
     ],
     "max": [
-      8420.0,
+      8445.0,
       -1595.0,
       147.0
     ]
   },
   "EB_Step7_Back / EB | leg | post | behind mid | +X": {
     "min": [
-      9128.0,
-      -1664.0,
+      9103.0,
+      -1639.0,
       0.0
     ],
     "max": [
@@ -7310,19 +7310,19 @@
   "EB_Ret_Back / EB | leg | post | behind mid | -X": {
     "min": [
       0.0,
-      936.0,
+      961.0,
       0.0
     ],
     "max": [
-      44.0,
+      69.0,
       1005.0,
       147.0
     ]
   },
   "EB_Ret_Back / EB | leg | post | behind mid | +X": {
     "min": [
-      752.0,
-      936.0,
+      727.0,
+      961.0,
       0.0
     ],
     "max": [
@@ -8207,7 +8207,7 @@
       380.0
     ]
   },
-  "EB_Ret_Back / EB | pillow | small | 1": {
+  "EB_Ret_Back / EB | pillow | small | 3": {
     "min": [
       0.0,
       0.0,
@@ -8219,7 +8219,7 @@
       680.0
     ]
   },
-  "EB_Ret_Back / EB | pillow | small | 2": {
+  "EB_Ret_Back / EB | pillow | small | 1": {
     "min": [
       0.0,
       120.0,
@@ -8228,6 +8228,18 @@
     "max": [
       796.0,
       240.0,
+      680.0
+    ]
+  },
+  "EB_Ret_Back / EB | pillow | small | 2": {
+    "min": [
+      0.0,
+      240.0,
+      380.0
+    ],
+    "max": [
+      796.0,
+      360.0,
       680.0
     ]
   },
@@ -8702,19 +8714,19 @@
   "EB_Ext1_Back / EB | leg | post | behind mid | -X": {
     "min": [
       1396.0,
-      936.0,
+      961.0,
       0.0
     ],
     "max": [
-      1440.0,
+      1465.0,
       1005.0,
       147.0
     ]
   },
   "EB_Ext1_Back / EB | leg | post | behind mid | +X": {
     "min": [
-      2148.0,
-      936.0,
+      2123.0,
+      961.0,
       0.0
     ],
     "max": [
@@ -9611,6 +9623,18 @@
       680.0
     ]
   },
+  "EB_Ext1_Back / EB | pillow | small | 3": {
+    "min": [
+      1396.0,
+      120.0,
+      380.0
+    ],
+    "max": [
+      2192.0,
+      240.0,
+      680.0
+    ]
+  },
   "EB_Ext1_Front / EB | leg | foot | -X": {
     "min": [
       1396.0,
@@ -10094,19 +10118,19 @@
   "EB_Ext_Back / EB | leg | post | behind mid | -X": {
     "min": [
       2792.0,
-      936.0,
+      961.0,
       0.0
     ],
     "max": [
-      2836.0,
+      2861.0,
       1005.0,
       147.0
     ]
   },
   "EB_Ext_Back / EB | leg | post | behind mid | +X": {
     "min": [
-      3544.0,
-      936.0,
+      3519.0,
+      961.0,
       0.0
     ],
     "max": [
@@ -11363,6 +11387,18 @@
       226.65
     ]
   },
+  "EB_Ext_Front / EB | pillow | small | 3": {
+    "min": [
+      2792.0,
+      1100.0,
+      260.0
+    ],
+    "max": [
+      3588.0,
+      1400.0,
+      380.0
+    ]
+  },
   "EB_Ext_Front / EB | pillow | small | 1": {
     "min": [
       2792.0,
@@ -11378,12 +11414,12 @@
   "EB_Ext_Front / EB | pillow | small | 2": {
     "min": [
       2792.0,
-      1100.0,
+      1700.0,
       260.0
     ],
     "max": [
       3588.0,
-      1400.0,
+      2000.0,
       380.0
     ]
   },
@@ -11486,19 +11522,19 @@
   "EB_RetGnd_Back / EB | leg | post | behind mid | -X": {
     "min": [
       4188.0,
-      936.0,
+      961.0,
       0.0
     ],
     "max": [
-      4232.0,
+      4257.0,
       1005.0,
       147.0
     ]
   },
   "EB_RetGnd_Back / EB | leg | post | behind mid | +X": {
     "min": [
-      4940.0,
-      936.0,
+      4915.0,
+      961.0,
       0.0
     ],
     "max": [
@@ -12383,27 +12419,39 @@
       380.0
     ]
   },
-  "EB_RetGnd_Back / EB | pillow | small | 1": {
+  "EB_RetGnd_Back / EB | pillow | small | 3": {
     "min": [
       4188.0,
-      517.5,
+      78.0,
       0.0
     ],
     "max": [
       4984.0,
-      817.5,
+      378.0,
+      120.0
+    ]
+  },
+  "EB_RetGnd_Back / EB | pillow | small | 1": {
+    "min": [
+      4188.0,
+      378.0,
+      0.0
+    ],
+    "max": [
+      4984.0,
+      678.0,
       120.0
     ]
   },
   "EB_RetGnd_Back / EB | pillow | small | 2": {
     "min": [
       4188.0,
-      217.5,
+      678.0,
       0.0
     ],
     "max": [
       4984.0,
-      517.5,
+      978.0,
       120.0
     ]
   },
@@ -12878,19 +12926,19 @@
   "EB_RetScrews_Back / EB | leg | post | behind mid | -X": {
     "min": [
       5584.0,
-      936.0,
+      961.0,
       0.0
     ],
     "max": [
-      5628.0,
+      5653.0,
       1005.0,
       147.0
     ]
   },
   "EB_RetScrews_Back / EB | leg | post | behind mid | +X": {
     "min": [
-      6336.0,
-      936.0,
+      6311.0,
+      961.0,
       0.0
     ],
     "max": [
