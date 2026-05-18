@@ -135,9 +135,7 @@ module Timmerman
       def _dim_retracted_length(entities, c, layer)
         z_mid = c.z_slat_bottom / 2.0
         x_dim = c.outer_width + c.outer_width * DIM_OFFSET_SCALE
-        # In the retracted back frame local space, foot world Y is retracted_foot_world_y;
-        # front frame translation is retracted_foot_world_y, so slat end in back local space:
-        y_ret_end = c.length_retracted + c.beam_narrow
+        y_ret_end = c.usable_length_retracted
         pt1 = Geom::Point3d.new(x_dim, 0,         z_mid)
         pt2 = Geom::Point3d.new(x_dim, y_ret_end, z_mid)
         _add_dim(entities, pt1, pt2,

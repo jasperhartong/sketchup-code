@@ -209,7 +209,7 @@ module Timmerman
         beam 'EB | beam | back | sister tie',
              at:   [x1_tie, c.mid_tie_y0, lh_mid],
              size: [span_tie, c.beam_wide, c.beam_narrow],
-             note: 'Mid run; wide face horizontal in Y (69 mm); max_y = length_retracted − plank_thickness (mirrors foot cap plank offset).'
+             note: 'Mid run; wide face horizontal in Y (69 mm); max_y = retracted_frame_depth_y − plank_thickness (mirrors foot cap plank offset).'
       end
 
       # Same X/Z/section as +EB | beam | front | under slat foot+; Y on the back frame is shifted
@@ -547,7 +547,7 @@ module Timmerman
       def lh_outer = c.outer_corner_leg_height
       def lh_mid   = c.mid_run_leg_height
       def y_head   = -c.plank_thickness
-      def mid_y0   = (c.length_retracted - c.leg_x) + c.plank_thickness + c.mid_layout_y_shift
+      def mid_y0   = (c.retracted_frame_depth_y - c.leg_x) + c.plank_thickness + c.mid_layout_y_shift
       def mid_leg_y0 = mid_y0 + (c.beam_wide - c.beam_y)
 
       def head_corner_leg_dx = c.beam_narrow

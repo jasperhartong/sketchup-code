@@ -14,7 +14,8 @@ module Timmerman
       # ── Primary inputs ────────────────────────────────────────────────────────
       attr_reader :back_slat_count   # must be a positive odd integer
       attr_reader :top_of_slats_z    # world +Z of the upper face of the comb slats
-      attr_reader :length_extended   # fully-extended bed length (head to foot face)
+      attr_reader :usable_length_extended  # fully-extended usable slat bottom (head → foot)
+      attr_reader :usable_length_retracted # retracted usable slat bottom (head → foot, y = 0 … foot)
 
       # ── Stock section ─────────────────────────────────────────────────────────
       attr_reader :beam_narrow       # 44 mm
@@ -67,7 +68,8 @@ module Timmerman
       def initialize(
         back_slat_count:  9,
         top_of_slats_z:   260.mm,
-        length_extended:  2000.mm,
+        usable_length_extended:  2000.mm,
+        usable_length_retracted: 1300.mm,
         beam_narrow:      44.mm,
         beam_wide:        69.mm,
         plank_thickness:  18.mm,
@@ -97,7 +99,13 @@ module Timmerman
 
         @back_slat_count  = back_slat_count
         @top_of_slats_z   = top_of_slats_z
-        @length_extended  = length_extended
+        @usable_length_extended  = usable_length_extended
+        @usable_length_retracted = usable_length_retracted
+        if usable_length_retracted >= usable_length_extended
+          raise ArgumentError,
+                'Config: usable_length_retracted must be less than usable_length_extended ' \
+                "(got #{usable_length_retracted.to_mm.round(1)} mm vs #{usable_length_extended.to_mm.round(1)} mm)"
+        end
         @beam_narrow      = beam_narrow
         @beam_wide        = beam_wide
         @plank_thickness  = plank_thickness
@@ -193,26 +201,16 @@ module Timmerman
 
       # ── Key lengths ───────────────────────────────────────────────────────────
 
-      # Extra comb-tooth run along Y beyond length_extended/2. Sized so the
-      # retracted bed length (slat_length + 2·beam_y) matches the IKEA big
-      # mattress: pillow_big_length = length_retracted + beam_narrow ⇒
-      #   slat_length = pillow_big_length − beam_narrow − 2·beam_y
-      #               = 1300 − 44 − 88 = 1168 mm
-      #   ⇒ SLAT_TOOTH_EXTRA_Y = slat_length − length_extended/2 = 1168 − 1000 = 168 mm.
-      # back_slat_run_y is then 1212 mm (was 1050 mm = stock_bar_length/2 before
-      # the IKEA refit); two slats now fit per 2700 mm bar with ~276 mm waste.
-      SLAT_TOOTH_EXTRA_Y = 168.mm
+      # Retracted comb overlap depth (head slat face → back slat footward end, before narrow foot stock).
+      def retracted_frame_depth_y = usable_length_retracted - beam_narrow
 
-      def slat_length      = (length_extended / 2) + SLAT_TOOTH_EXTRA_Y
-      def back_slat_run_y  = slat_length + beam_y
+      # Comb tooth run and back slat Y span derived from usable_length_retracted (slat_length + 2·beam_y + beam_narrow).
+      def slat_length     = retracted_frame_depth_y - (2 * beam_y)
+      def back_slat_run_y = slat_length + beam_y
 
-      # Fully retracted: both slat runs overlapping + one beam depth at each end.
-      def length_retracted = back_slat_run_y + beam_y
-
-      # Back slat solids span y ∈ [0, back_slat_part_depth_y): merged head end band (beam_y)
-      # plus tooth run; +beam_narrow so the footward face meets EB | plank | foot | ledge
-      # (front frame y = 0 when translated by retracted_foot_world_y — same as pillow_big_length).
-      def back_slat_part_depth_y = length_retracted + beam_narrow
+      # Back slat solids span y ∈ [0, back_slat_part_depth_y); footward face at usable_length_retracted
+      # (front frame y = 0 when translated by retracted_foot_world_y).
+      def back_slat_part_depth_y = usable_length_retracted
       # Front slats no longer match back slats: they end at the under-slat foot
       # beam's headward face (see +front_slat_y0+ / +front_slat_y1+).
       def front_slat_run_y = front_slat_y1 - front_slat_y0
@@ -257,17 +255,17 @@ module Timmerman
       def mid_layout_y_shift = beam_y - beam_wide
 
       # Mid-tie Y anchor on the back frame: one plank_thickness + beam_wide headward of the
-      # back-slat footward end (length_retracted), shifted +Y by MID_TIE_OUTWARD_SHIFT so
+      # back-slat footward end (retracted_frame_depth_y), shifted +Y by MID_TIE_OUTWARD_SHIFT so
       # the mid tie sits flush with the outside of the structure (the under-slat foot-end
       # beam shifts with it via +under_slat_foot_beam_y0+).
       MID_TIE_OUTWARD_SHIFT = 11.mm
-      def mid_tie_y0 = length_retracted - plank_thickness - beam_wide + MID_TIE_OUTWARD_SHIFT
+      def mid_tie_y0 = retracted_frame_depth_y - plank_thickness - beam_wide + MID_TIE_OUTWARD_SHIFT
 
       # Under-slat foot-end beam Y anchor on the front frame. Positioned so that in the fully-extended
-      # state (front frame translated by length_extended) its max_y is flush with mid_tie_y0 on the
+      # state (front frame translated by usable_length_extended) its max_y is flush with mid_tie_y0 on the
       # back frame, forming a continuous brace across the slat-interlock zone:
-      #   foot_world_y + under_slat_foot_beam_y0 + beam_wide  ==  mid_tie_y0  (when foot_world_y = length_extended)
-      def under_slat_foot_beam_y0 = mid_tie_y0 - length_extended - beam_wide
+      #   foot_world_y + under_slat_foot_beam_y0 + beam_wide  ==  mid_tie_y0  (when foot_world_y = usable_length_extended)
+      def under_slat_foot_beam_y0 = mid_tie_y0 - usable_length_extended - beam_wide
 
       # Back-frame beam under slats: when the front is at +retracted_foot_world_y+, this beam
       # sits immediately headward (−Y) of +EB | beam | front | under slat foot+ (no overlap in Y):
@@ -279,32 +277,31 @@ module Timmerman
       # ── World Y positions for the front frame (sliding half) ──────────────────
 
       # Front foot at the far end when fully extended.
-      def extended_front_foot_world_y = length_extended
+      def extended_front_foot_world_y = usable_length_extended
 
       # Upside-down construction row: front half one small-pillow segment past nominal
       # extension (visible comb gap). Upright steps 1–3 use extended_front_foot_world_y.
-      def decoupled_front_foot_world_y = length_extended + pillow_small_length
+      def decoupled_front_foot_world_y = usable_length_extended + pillow_small_length
 
       # World Y offset for the construction-step preview row (headward of y=0).
-      def construction_steps_row_y = -(length_extended + pair_gap_x)
+      def construction_steps_row_y = -(usable_length_extended + pair_gap_x)
 
       # Extra +X for the upside-down step: 180° about +Y mirrors local X, so the
       # group's geometry lies mostly left of its anchor; shift by outer_width so it
       # clears the previous construction column (same row_y).
       def construction_flip_extra_offset_x = outer_width
 
-      # Front foot position when retracted (outer face of front end beam).
-      def retracted_foot_world_y = length_retracted + beam_narrow
+      # Front foot position when retracted (outer face of front end beam; equals usable_length_retracted).
+      def retracted_foot_world_y = usable_length_retracted
 
       # ── Pillows ───────────────────────────────────────────────────────────────
 
-      # IKEA mattress set: 1 big 1300×800×120 + 2 small 350×800×120.
-      # Big pillow spans the retracted length; the two equal smalls share the full
-      # extension span (length_extended − retracted footprint).
+      # Big pillow matches usable slat bottom; two smalls each take one third of the extension gap
+      # (the remaining third is comb clearance between retracted foot and extended foot).
       # Extended layout (foot→head): small | 1, small | 2, big.
-      def pillow_big_length   = length_retracted + beam_narrow
+      def pillow_big_length   = usable_length_retracted
       def small_pillow_count  = 2
-      def pillow_small_length = (length_extended - length_retracted - beam_narrow) / small_pillow_count
+      def pillow_small_length = (usable_length_extended - usable_length_retracted) / 3.0
 
       # Ext1 preview: retracted + one small flat’s worth of extension.
       def one_small_extension_front_foot_world_y = retracted_foot_world_y + pillow_small_length

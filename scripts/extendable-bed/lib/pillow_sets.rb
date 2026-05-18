@@ -98,7 +98,7 @@ module Timmerman
 
           pad           = c.slat_gap
           y_head        = -c.plank_thickness
-          mid_y0_val    = (c.length_retracted - c.leg_x) + c.plank_thickness + c.mid_layout_y_shift
+          mid_y0_val    = (c.retracted_frame_depth_y - c.leg_x) + c.plank_thickness + c.mid_layout_y_shift
           y_post_head   = y_head + c.beam_wide + c.leg_y + pad
           y_inset_legs  = y_head + c.leg_y + pad
           y_corridor_lo = [y_inset_legs, y_post_head].max

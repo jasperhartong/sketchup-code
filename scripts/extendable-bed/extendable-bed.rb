@@ -18,7 +18,7 @@
 # Bridge: sketchup_bridge/commands/export_nonextended_bed_glb.rb — skill: export-nonextended-bed-glb.
 #
 # To customise dimensions, pass a Config to BedLayout:
-#   config = Timmerman::ExtendableBed::Config.new(back_slat_count: 11, length_extended: 2200.mm)
+#   config = Timmerman::ExtendableBed::Config.new(back_slat_count: 11, usable_length_extended: 2200.mm, usable_length_retracted: 1300.mm)
 #   Timmerman::ExtendableBed::BedLayout.new(config).create
 #
 # Hardware / debug (optional Config keyword args):
