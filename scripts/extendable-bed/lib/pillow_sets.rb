@@ -11,7 +11,7 @@ module Timmerman
     # Modes (IKEA mattress set: 1 big + 3 small):
     #   :extended           — big flat on back + three small flats on front (foot→head: 3, 1, 2)
     #   :extended_one_small — 1 small flat on front + upright 2 and 3 stacked on big at head
-    #   :retracted          — big flat + three upright cushions at head (3, 1, 2)
+    #   :retracted          — big flat; small | 1 upright at head; | 2 along +X outer edge; | 3 under slats
     #   :retracted_gnd      — big flat; three smalls flat on floor at head (3, 1, 2)
     #   nil                 — no pillows
     module PillowSets
@@ -53,6 +53,9 @@ module Timmerman
         # config (beam_y == beam_narrow); kept as a formula for other configs.
         def y_pillow = c.beam_y - c.beam_narrow
 
+        # Head-side cluster for smalls stored flat on the floor (same anchor as :retracted_gnd).
+        def _head_small_storage_y0 = -c.plank_thickness + c.beam_narrow + c.leg_y
+
         def _big_pillow(note)
           pillow 'EB | pillow | big',
                  at:   [0, y_pillow, c.z_slat_top],
@@ -88,12 +91,18 @@ module Timmerman
 
           t = c.pillow_thickness
           z = c.z_slat_top + t
-          FOOT_TO_HEAD_SMALL_NUMBERS.each_with_index do |n, idx|
-            pillow "EB | pillow | small | #{n}",
-                   at:   [0, y_pillow + (idx * t), z],
-                   size: [c.outer_width, t, sm],
-                   note: "Couch; small | #{n} upright (#{idx + 1}/3 foot→head along +Y)."
-          end
+          pillow 'EB | pillow | small | 3',
+                 at:   [0, _head_small_storage_y0, 0],
+                 size: [c.outer_width, sm, c.pillow_thickness],
+                 note: 'Couch; small | 3 flat under slats at head (foot storage).'
+          pillow 'EB | pillow | small | 1',
+                 at:   [0, y_pillow, z],
+                 size: [c.outer_width, t, sm],
+                 note: 'Couch; small | 1 upright at head (+Y foot of stack).'
+          pillow 'EB | pillow | small | 2',
+                 at:   [c.outer_width - t, y_pillow + t, z],
+                 size: [t, c.outer_width, sm],
+                 note: 'Couch; small | 2 along +X outer edge; wide face flush bed side; +Y flush small | 1.'
         end
 
         def _retracted_gnd_back
@@ -101,9 +110,7 @@ module Timmerman
           sm = c.pillow_small_length
           return unless sm.positive?
 
-          y_head        = -c.plank_thickness
-          y_head_b      = y_head + c.beam_narrow
-          y_cluster     = y_head_b + c.leg_y
+          y_cluster = _head_small_storage_y0
 
           FOOT_TO_HEAD_SMALL_NUMBERS.each_with_index do |n, idx|
             y = y_cluster + (idx * sm)
