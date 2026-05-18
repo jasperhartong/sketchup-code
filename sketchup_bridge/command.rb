@@ -13,6 +13,5 @@ Timmerman::ExtendableBed.clear
 Timmerman::ExtendableBed::BedLayout.new(config).create
 
 load File.expand_path('commands/annotate_construction_steps.rb', __dir__)
-load File.expand_path('commands/create_preview_scenes.rb', __dir__)
 
 'OK'

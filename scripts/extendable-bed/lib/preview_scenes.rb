@@ -3,12 +3,8 @@
 module Timmerman
   module ExtendableBed
     # SketchUp Scenes (tabs): camera jumps to each spatial band (no hide/show).
-    # Layout bands are separated in +Config+ (+preview_band_gap+):
-    #   — extension previews @ +extension_preview_row_y+
-    #   — construction steps @ +construction_steps_row_y+
-    #   — cut plan @ +cut_plan_row_y+
-    #
-    #   Timmerman::ExtendableBed::PreviewScenes.create_standard_set
+    # +STANDARD_SCENES+ is the single registry; +BedLayout#create+ opens scopes
+    # during the build, +create_standard_set+ re-captures from existing roots.
     module PreviewScenes
       SCENE_PREFIX = 'EB | '
 
@@ -17,54 +13,64 @@ module Timmerman
         EB_Ext_Back EB_Ext_Front
         EB_Ret_Back EB_Ret_Front
         EB_RetGnd_Back EB_RetGnd_Front
+      ].freeze
+
+      SCREWS_ONLY_ROOTS = %w[
         EB_RetScrews_Back EB_RetScrews_Front
       ].freeze
 
       CONSTRUCTION_STEP_RE = /\AEB_Step[1-8]_(Back|Front)\z/
 
+      STANDARD_SCENES = [
+        { key: :variants,     title: 'All variants',         view: :iso,
+          roots: EXTENSION_VARIANT_ROOTS },
+        { key: :screws_only,  title: 'Screws only',          view: :iso,
+          roots: SCREWS_ONLY_ROOTS },
+        { key: :construction, title: 'Construction steps', view: :iso,
+          roots: :construction_steps },
+        { key: :cut_plan,     title: 'Cut plan',             top: true,
+          roots: [Config::GROUP_CUT_PLAN_3D], optional: true }
+      ].freeze
+
       ORTHO_VIEWS = {
-        side:   { label: 'Side',   action: 'viewRight:' },
-        front:  { label: 'Front',  action: 'viewFront:' },
-        back:   { label: 'Back',   action: 'viewBack:' },
-        left:   { label: 'Left',   action: 'viewLeft:' },
-        top:    { label: 'Top',    action: 'viewTop:' },
-        bottom: { label: 'Bottom', action: 'viewBottom:' }
+        side:   { label: 'Side',   view: :right },
+        front:  { label: 'Front',  view: :front },
+        back:   { label: 'Back',   view: :back },
+        left:   { label: 'Left',   view: :left },
+        top:    { label: 'Top',    view: :top },
+        bottom: { label: 'Bottom', view: :bottom }
       }.freeze
 
       module_function
 
+      def scene_full_name(title) = "#{SCENE_PREFIX}#{title}"
+
+      # Open empty scopes on +renderer+ (during +BedLayout#create+). Returns
+      # { key => SceneScope } or nil when the renderer has no scene support.
+      def open_scopes(renderer)
+        return nil unless renderer.respond_to?(:scene)
+
+        STANDARD_SCENES.to_h do |entry|
+          [entry[:key], renderer.scene(scene_full_name(entry[:title]), **_camera_opts(entry))]
+        end
+      end
+
+      # Re-capture the standard scenes from geometry already in the model.
       def create_standard_set(model: Sketchup.active_model)
-        model.start_operation('EB scenes: standard set', true)
-        removed = _purge_all_pages(model)
-        _unhide_all_eb_roots(model)
-
-        variant_roots = _find_roots(model, EXTENSION_VARIANT_ROOTS)
-        raise 'Extension preview roots missing — run BedLayout#create first.' if variant_roots.empty?
-
-        step_roots = _construction_step_roots(model)
-        raise 'Construction step roots missing — run BedLayout#create first.' if step_roots.empty?
-
-        cut_plan = _find_roots(model, [Config::GROUP_CUT_PLAN_3D]).first
-
-        created = []
-        created << _capture_scene(
-          model, "#{SCENE_PREFIX}All variants", variant_roots,
-          view_action: 'viewIso:', parallel: nil
-        )
-        created << _capture_scene(
-          model, "#{SCENE_PREFIX}Construction steps", step_roots,
-          view_action: 'viewIso:', parallel: nil
-        )
-        if cut_plan
-          created << _capture_cut_plan_top_scene(model, "#{SCENE_PREFIX}Cut plan", cut_plan)
-        else
-          warn '[EB scenes] Cut plan group not found (show_cut_plan_3d off?) — skipped Cut plan scene.'
+        missing = STANDARD_SCENES.reject { |e| e[:optional] }.find do |entry|
+          roots_for_entry(model, entry).empty?
+        end
+        if missing
+          raise "#{missing[:title]} roots missing — run BedLayout#create first."
         end
 
-        _drop_stray_pages(model, keep_names: created.to_set)
+        model.start_operation('EB scenes: standard set', true)
+        _unhide_all_eb_roots(model)
+        capture = Timmerman::SketchupUtils::SceneCapture.new(model)
+        _register_on_capture(capture, model)
+        created = capture.finalize!(purge_all: true)
         model.commit_operation
-        puts "[EB scenes] #{created.size} scene(s)#{" (removed #{removed} old)" if removed.positive?}"
-        created.each { |n| puts "  — #{n}" }
+        _log_created(created)
         created
       end
 
@@ -74,19 +80,24 @@ module Timmerman
           extended:   %w[EB_Ext_Back EB_Ext_Front],
           retracted:  [Config::GROUP_RET_BACK, Config::GROUP_RET_FRONT],
           ret_gnd:    %w[EB_RetGnd_Back EB_RetGnd_Front],
-          ret_screws: %w[EB_RetScrews_Back EB_RetScrews_Front]
+          ret_screws: SCREWS_ONLY_ROOTS
         }.fetch(variant)
         short = { ext1: 'Ext1', extended: 'Ext', retracted: 'Ret',
                   ret_gnd: 'RetGnd', ret_screws: 'RetScr' }.fetch(variant)
         roots = _find_roots(model, spec)
+
         model.start_operation("EB scenes: #{short}", true)
         _unhide_all_eb_roots(model)
         _remove_scenes_with_prefix(model, "#{SCENE_PREFIX}#{short} |")
-        created = views.map do |key|
+
+        capture = Timmerman::SketchupUtils::SceneCapture.new(model)
+        views.each do |key|
           v = ORTHO_VIEWS.fetch(key)
-          _capture_scene(model, "#{SCENE_PREFIX}#{short} | #{v[:label]}", roots,
-                         view_action: v[:action], parallel: true)
+          capture.scene("#{SCENE_PREFIX}#{short} | #{v[:label]}", view: v[:view], parallel: true) do |s|
+            s.track_all(*roots)
+          end
         end
+        created = capture.finalize!
         model.commit_operation
         created
       end
@@ -94,6 +105,46 @@ module Timmerman
       def create_all_extension_variants(model: Sketchup.active_model)
         %i[ext1 extended retracted ret_gnd ret_screws].flat_map do |v|
           create_for_variant(v, model: model)
+        end
+      end
+
+      def finalize_on_renderer(model, renderer)
+        return unless renderer.respond_to?(:finalize_scenes)
+
+        model.start_operation('EB scenes', true)
+        created = renderer.finalize_scenes(purge_all: true)
+        model.commit_operation
+        _log_created(created)
+        created
+      end
+
+      def _camera_opts(entry)
+        opts = {}
+        opts[:view] = entry[:view] if entry[:view]
+        opts[:top] = true if entry[:top]
+        opts[:parallel] = entry[:parallel] if entry.key?(:parallel)
+        opts
+      end
+
+      def _register_on_capture(capture, model)
+        STANDARD_SCENES.each do |entry|
+          roots = roots_for_entry(model, entry)
+          if roots.empty?
+            warn "[EB scenes] #{entry[:title]} skipped — no roots." if entry[:optional]
+            next
+          end
+
+          capture.scene(scene_full_name(entry[:title]), **_camera_opts(entry)) do |s|
+            s.track_all(*roots)
+          end
+        end
+      end
+
+      def roots_for_entry(model, entry)
+        roots = entry[:roots]
+        case roots
+        when :construction_steps then _construction_step_roots(model)
+        else _find_roots(model, roots)
         end
       end
 
@@ -125,89 +176,19 @@ module Timmerman
         end
       end
 
-      def _drop_stray_pages(model, keep_names:)
-        model.pages.to_a.each do |page|
-          next if keep_names.include?(page.name)
-
-          model.pages.erase(page)
-        end
-      end
-
-      def _purge_all_pages(model)
-        removed = 0
+      def _remove_scenes_with_prefix(model, prefix)
         loop do
           pages = model.pages.to_a
-          break if pages.empty?
+          victim = pages.find { |p| p.name.start_with?(prefix) }
+          break unless victim
 
-          model.pages.erase(pages.last)
-          removed += 1
-        rescue StandardError
-          break
+          model.pages.erase(victim)
         end
-        removed
       end
 
-      def _remove_scenes_with_prefix(model, prefix)
-        removed = 0
-        model.pages.to_a.each do |page|
-          next unless page.name.start_with?(prefix)
-
-          model.pages.erase(page)
-          removed += 1
-        end
-        removed
-      end
-
-      # Camera only — visibility stays as in the model (spatial bands, not per-scene hide).
-      def _scene_capture_flags
-        PAGE_USE_CAMERA
-      end
-
-      # Plan view: parallel projection, eye on +Z, up = +Y (head→foot), framed on cut-plan root.
-      def _capture_cut_plan_top_scene(model, scene_name, cut_plan_root)
-        view = model.active_view
-        cam  = view.camera
-        bb   = _world_bounds([cut_plan_root])
-        c    = bb.center
-
-        cam.perspective = false
-        cam.set(
-          Geom::Point3d.new(c.x, c.y, bb.max.z + bb.diagonal * 2.0),
-          Geom::Point3d.new(c.x, c.y, c.z),
-          Geom::Vector3d.new(0, 1, 0)
-        )
-        view.zoom([cut_plan_root])
-        cam.perspective = false
-
-        page = model.pages.add(scene_name)
-        page.name = scene_name
-        page.update(_scene_capture_flags)
-        scene_name
-      end
-
-      def _world_bounds(entities)
-        bb = Geom::BoundingBox.new
-        entities.each do |e|
-          next unless e.valid?
-
-          b = e.bounds
-          t = e.transformation
-          8.times { |i| bb.add(b.corner(i).transform(t)) }
-        end
-        bb
-      end
-
-      def _capture_scene(model, scene_name, zoom_targets, view_action:, parallel: true)
-        view = model.active_view
-
-        Sketchup.send_action(view_action)
-        view.camera.perspective = false if parallel == true
-        view.zoom(zoom_targets)
-
-        page = model.pages.add(scene_name)
-        page.name = scene_name
-        page.update(_scene_capture_flags)
-        scene_name
+      def _log_created(created)
+        puts "[EB scenes] #{created.size} scene(s)"
+        created.each { |n| puts "  — #{n}" }
       end
     end
   end

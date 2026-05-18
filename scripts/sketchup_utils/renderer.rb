@@ -113,6 +113,22 @@ module Timmerman
 
       # Tells the backend to refresh / flush after a batch of operations.
       def invalidate_view; end
+
+      # ── SketchUp scenes (optional; SketchUpRenderer only) ─────────────────
+
+      # Register a scene tab to be captured later. Returns a scope; call +track+
+      # on each root group that should frame the view, then +finalize_scenes+.
+      def create_scene(_name, view: :iso, parallel: nil, top: false)
+        raise NotImplementedError
+      end
+
+      def scene(_name, view: :iso, parallel: nil, top: false)
+        raise NotImplementedError
+      end
+
+      def finalize_scenes(purge_all: false)
+        raise NotImplementedError
+      end
     end
   end
 end

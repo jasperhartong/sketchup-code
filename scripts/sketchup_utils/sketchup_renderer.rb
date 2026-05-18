@@ -33,6 +33,29 @@ module Timmerman
         @box_definition_cache = {}
         @screw_definition_cache = {}
         @component_debug_material_cache = {}
+        @scene_capture = model ? SketchupUtils::SceneCapture.new(model) : nil
+      end
+
+      # Register a scene tab (see SketchupUtils::SceneCapture). Returns a scope;
+      # call +scope.track(group)+ for each root that should frame the view.
+      def create_scene(name, view: :iso, parallel: nil, top: false)
+        raise 'create_scene requires a SketchUp model' unless @scene_capture
+
+        @scene_capture.create_scene(name, view: view, parallel: parallel, top: top)
+      end
+
+      # Like +create_scene+; yields the scope when a block is given.
+      def scene(name, view: :iso, parallel: nil, top: false, &block)
+        raise 'scene requires a SketchUp model' unless @scene_capture
+
+        @scene_capture.scene(name, view: view, parallel: parallel, top: top, &block)
+      end
+
+      # Creates all registered scenes. +purge_all+ removes every existing page first.
+      def finalize_scenes(prefix: nil, purge_all: false)
+        return [] unless @scene_capture
+
+        @scene_capture.finalize!(prefix: prefix, purge_all: purge_all)
       end
 
       # ── Scene graph ──────────────────────────────────────────────────────

@@ -34,7 +34,7 @@ module Timmerman
       # ── Layout ────────────────────────────────────────────────────────────────
       attr_reader :slat_gap          # gap between adjacent comb teeth (X)
       attr_reader :pair_gap_x        # side-by-side spacing between preview pairs
-      attr_reader :preview_band_gap  # empty space between extension / construction / cut-plan rows
+      attr_reader :preview_band_gap  # empty space between preview rows (variants, screws, steps, cut plan)
 
       # ── Stock planning ────────────────────────────────────────────────────────
       attr_reader :stock_bar_length  # standard bar length for cut planning
@@ -291,11 +291,17 @@ module Timmerman
       # Extension-degree previews sit on this row (+Y = head).
       def extension_preview_row_y = 0
 
-      # Construction-step row — separated from extension previews by +preview_band_gap+.
-      def construction_steps_row_y = -(usable_length_extended + preview_band_gap)
+      # One row step: bed footprint along Y plus the empty band gap.
+      def preview_row_step = usable_length_extended + preview_band_gap
 
-      # Stock cut-plan 3D bars — third band, clear of construction row.
-      def cut_plan_row_y = construction_steps_row_y - (usable_length_extended + preview_band_gap)
+      # Screws-only preview — one band below the extension variants.
+      def screws_only_row_y = extension_preview_row_y - preview_row_step
+
+      # Construction-step row — one band below screws-only.
+      def construction_steps_row_y = screws_only_row_y - preview_row_step
+
+      # Stock cut-plan 3D bars — fourth band, clear of construction row.
+      def cut_plan_row_y = construction_steps_row_y - preview_row_step
 
       def preview_column_step = outer_width + pair_gap_x
 

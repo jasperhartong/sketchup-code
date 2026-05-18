@@ -21,8 +21,8 @@
 #   lib/retracted_pillow_layout_export.rb, then RetractedPillowLayoutExport.export
 # Bridge: sketchup_bridge/commands/export_retracted_pillow_layout.rb
 #
-# SketchUp Scene tabs (variants iso, construction iso, cut plan top) — refreshed on each rebuild.
-# Bridge: included from default command.rb via create_preview_scenes.rb
+# SketchUp Scene tabs (variants, screws only, construction, cut plan) — created during BedLayout#create.
+# Standalone refresh: sketchup_bridge/commands/create_preview_scenes.rb
 #
 # To customise dimensions, pass a Config to BedLayout:
 #   config = Timmerman::ExtendableBed::Config.new(back_slat_count: 11, usable_length_extended: 2200.mm, usable_length_retracted: 1300.mm)
@@ -51,6 +51,7 @@ _su_utils  = File.expand_path('../sketchup_utils', __dir__)
   transform
   pocket_geometry
   renderer
+  scene_capture
   sketchup_renderer
   part_catalog
   part_rendering

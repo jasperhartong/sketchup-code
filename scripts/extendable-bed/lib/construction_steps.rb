@@ -127,11 +127,14 @@ module Timmerman
         { back_name: Config::GROUP_EXT_BACK, front_name: Config::GROUP_EXT_FRONT, column: 2, foot: :extended,
           pillow_mode: :extended, tally_stock: true, display_name: Config::PREVIEW_NAME_EXT },
         { back_name: Config::GROUP_RETGND_BACK, front_name: Config::GROUP_RETGND_FRONT, column: 3, foot: :retracted,
-          pillow_mode: :retracted_gnd, tally_stock: false, display_name: Config::PREVIEW_NAME_RETGND },
-        { back_name: Config::GROUP_RETSCREWS_BACK, front_name: Config::GROUP_RETSCREWS_FRONT,
-          column: 4, foot: :retracted, pillow_mode: nil, tally_stock: false, variant: :screws_only,
-          display_name: Config::PREVIEW_NAME_RETSCREWS }
+          pillow_mode: :retracted_gnd, tally_stock: false, display_name: Config::PREVIEW_NAME_RETGND }
       ].freeze
+
+      SCREWS_ONLY_SPEC = {
+        back_name: Config::GROUP_RETSCREWS_BACK, front_name: Config::GROUP_RETSCREWS_FRONT,
+        column: 0, foot: :retracted, pillow_mode: nil, tally_stock: false, variant: :screws_only,
+        display_name: Config::PREVIEW_NAME_RETSCREWS, band: :screws_only
+      }.freeze
 
       module_function
 
@@ -164,6 +167,7 @@ module Timmerman
             pillow_mode:  nil,
             tally_stock:  false,
             upside_down:  spec[:upside_down],
+            scene_key:    :construction,
             back_exclude:  excludes[:back],
             front_exclude: excludes[:front],
             back_hidden_part_names:  hidden[:back],
@@ -174,8 +178,9 @@ module Timmerman
 
       def extension_degree_bed_pairs(config, back_frame:, front_frame:)
         step = config.preview_column_step
-        EXTENSION_SPECS.map do |spec|
-          row_y = config.extension_preview_row_y
+        (EXTENSION_SPECS + [SCREWS_ONLY_SPEC]).map do |spec|
+          row_y = spec[:band] == :screws_only ? config.screws_only_row_y : config.extension_preview_row_y
+          scene_key = spec[:band] == :screws_only ? :screws_only : :variants
           foot_y = foot_world_y_for(config, spec[:foot])
           hidden = resolve_hidden(spec[:variant], back_frame, front_frame, config)
           helper_names = BedPartGroups.fork_gap_helper_names(config)
@@ -191,6 +196,7 @@ module Timmerman
             pillow_mode:  spec[:pillow_mode],
             tally_stock:  spec[:tally_stock],
             display_name: spec[:display_name],
+            scene_key:    scene_key,
             back_hidden_part_names:  hidden[:back] + helper_names,
             front_hidden_part_names: hidden[:front] + helper_names
           )

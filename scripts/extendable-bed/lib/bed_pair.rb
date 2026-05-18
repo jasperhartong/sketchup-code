@@ -11,7 +11,7 @@ module Timmerman
     # and mode-specific pillow sets.
     class BedPair
       attr_reader :back_name, :front_name, :offset_x, :pair_row_y, :foot_world_y,
-                  :pillow_mode, :tally_stock, :upside_down, :display_name,
+                  :pillow_mode, :tally_stock, :upside_down, :display_name, :scene_key,
                   :back_exclude, :front_exclude,
                   :back_hidden_part_names, :front_hidden_part_names
 
@@ -25,6 +25,7 @@ module Timmerman
       # @param tally_stock [Boolean]     when true, this pair's beams count toward the cut list
       # @param upside_down [Boolean]     when true, root is rotated 180° about +Y (construction flip row)
       # @param display_name [String, nil] human label for extension-degree previews; nil for construction steps
+      # @param scene_key [Symbol, nil] +PreviewScenes::STANDARD_SCENES+ key for scene tracking; nil to skip
       def initialize(config,
                      back_frame:,
                      front_frame:,
@@ -37,6 +38,7 @@ module Timmerman
                      tally_stock: true,
                      upside_down: false,
                      display_name: nil,
+                     scene_key: nil,
                      back_exclude: [],
                      front_exclude: [],
                      back_hidden_part_names: [],
@@ -53,6 +55,7 @@ module Timmerman
         @tally_stock  = tally_stock
         @upside_down  = upside_down
         @display_name = display_name&.dup&.freeze
+        @scene_key    = scene_key
         @back_exclude  = back_exclude.dup.freeze
         @front_exclude = front_exclude.dup.freeze
         @back_hidden_part_names  = back_hidden_part_names.dup.freeze

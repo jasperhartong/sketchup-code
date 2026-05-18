@@ -39,9 +39,10 @@ module Timmerman
         back_frame  = BackFrame.new(@config)
         front_frame = FrontFrame.new(@config)
         stock       = StockPlanner.new(@config)
+        scenes      = model ? PreviewScenes.open_scopes(renderer) : nil
 
         pairs_for(back_frame, front_frame).each do |pair|
-          _render_pair(pair, renderer: renderer, layer: layer, stock: stock)
+          _render_pair(pair, renderer: renderer, layer: layer, stock: stock, scenes: scenes)
         end
 
         renderer.invalidate_view
@@ -64,8 +65,12 @@ module Timmerman
                              Config::GROUP_EXT_BACK, Config::GROUP_EXT_FRONT)
         stock.print_report(label:           "[EB stock] #{stock_label}")
         stock.print_hardware_report(label:  "[EB hardware] #{stock_label}")
-        _render_cut_plan_3d(renderer, stock, layer) if model && @config.show_cut_plan_3d
+        if model && @config.show_cut_plan_3d
+          cut_root = _render_cut_plan_3d(renderer, stock, layer)
+          scenes[:cut_plan].track(cut_root) if cut_root && scenes
+        end
 
+        PreviewScenes.finalize_on_renderer(model, renderer) if model
         _save_geometry_baseline(model) if model && save_baseline
       end
 
@@ -96,8 +101,10 @@ module Timmerman
 
       private
 
-      def _render_pair(pair, renderer:, layer:, stock:)
+      def _render_pair(pair, renderer:, layer:, stock:, scenes: nil)
         op_label = "#{pair.back_name} + #{pair.front_name}"
+        back_root = nil
+        front_root = nil
 
         renderer.commit("Extendable bed: #{op_label}") do
           planner = pair.tally_stock ? stock : nil
@@ -145,6 +152,14 @@ module Timmerman
           _render_pillow_view_into(back_pillow_view,  back_root,  renderer: renderer, layer: layer)
           _render_pillow_view_into(front_pillow_view, front_root, renderer: renderer, layer: layer)
         end
+
+        _track_preview_scene_roots(scenes, pair, back_root, front_root)
+      end
+
+      def _track_preview_scene_roots(scenes, pair, back_root, front_root)
+        return unless scenes && pair.scene_key
+
+        scenes[pair.scene_key]&.track_pair(back_root, front_root)
       end
 
       # Pillows are rendered directly as child groups of the frame root (no
@@ -224,8 +239,9 @@ module Timmerman
 
       def _render_cut_plan_3d(renderer, stock, layer)
         result = stock.cut_plan_result
-        return unless result[:ok]
+        return nil unless result[:ok]
 
+        root = nil
         renderer.commit('Extendable bed: cut plan 3D') do
           root = renderer.create_group(Config::GROUP_CUT_PLAN_3D, parent: :root, layer: layer)
           bar_spacing_y = (@config.beam_wide + 20.mm)
@@ -257,6 +273,7 @@ module Timmerman
             end
           end
         end
+        root
       end
 
       def _paint_cut_plan_group(renderer, group, rgb)
