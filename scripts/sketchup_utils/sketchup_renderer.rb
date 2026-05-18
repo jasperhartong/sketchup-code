@@ -766,6 +766,7 @@ module Timmerman
 
         defn_name = "EB::Screw::#{key}"
         defn = @model.definitions[defn_name] || @model.definitions.add(defn_name)
+        defn.set_attribute(@attr_dict, 'ignore_overlaps', true) if @attr_dict
         if defn.entities.length.zero?
           _build_screw_definition_geometry(defn.entities, spec, shaft_length_index)
         end

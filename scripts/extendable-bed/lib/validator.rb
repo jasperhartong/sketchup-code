@@ -78,7 +78,7 @@ module Timmerman
           case e
           when Sketchup::ComponentInstance
             next if e.name.nil? || e.name.empty?
-            next if _screw_instance?(e)
+            next if _ignore_overlaps?(e)
 
             local_tr = parent_tr * e.transformation
             if _leaf_definition?(e.definition)
@@ -104,10 +104,12 @@ module Timmerman
         defn.entities.any? { |e| e.is_a?(Sketchup::Face) }
       end
 
-      # Screw instances are identified by their definition name prefix set by
-      # SketchupRenderer#_screw_definition (e.g. "EB::Screw::eb_pocket_4mm|...").
-      def _screw_instance?(inst)
-        inst.definition.name.start_with?('EB::Screw::')
+      # Parts opt out of overlap checking via 'ignore_overlaps' on their
+      # ComponentDefinition attribute dictionary — set at definition-creation time
+      # by the renderer (currently all screw definitions). Any future hardware kind
+      # (nails, brackets, …) just needs the same attribute; no validator changes needed.
+      def _ignore_overlaps?(inst)
+        inst.definition.get_attribute(Config::ATTR_DICT, 'ignore_overlaps')
       end
 
       # Transform element bounds (parent-local) into the running coordinate frame.

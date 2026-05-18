@@ -180,11 +180,12 @@ module Timmerman
             _render_screw(root_group, host_group, host_ps, ss)
           end
 
-          # Apply preview paint.
+          # Apply preview paint (normal mode) or axis-face debug colors (:sides mode).
           if @preview_rgb
             @renderer.paint_group(root_group, @preview_rgb,
                                   skip_name_re: /\Ascrew\z/)
           end
+          @renderer.debug_paint_axis_faces(root_group, skip_name_re: /\Ascrew\z/)
 
           # Place InstanceRef children inside the group.
           inst_refs.each do |ref|
