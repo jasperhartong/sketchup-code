@@ -24,6 +24,8 @@ module Timmerman
       LAYOUT_GAP = 300.mm
       # Horizontal spacing between left / front / right / back views.
       H_LAYOUT_GAP = 600.mm
+      # How far the height dimension line is pushed to the left of the left view.
+      DIM_OFFSET = 200.mm
 
       # Short labels for the 6 view sub-groups (used as group names).
       VIEW_NAMES = %i[front plan bottom right left back].freeze
@@ -79,7 +81,7 @@ module Timmerman
         bb
       end
 
-      # Place one sub-group per view inside +container+.
+      # Place one sub-group per view inside +container+, then add annotations.
       def _build_views(container, back_def, front_def, foot_y, bb)
         rotations = _view_rotations
         positions = _layout_positions(bb)
@@ -98,6 +100,85 @@ module Timmerman
 
           sub.transformation = t_container
         end
+
+        _add_annotations(container, back_def, bb, positions)
+      end
+
+      # All dimension annotations on the container.
+      def _add_annotations(container, back_def, bb, positions)
+        lx  = positions[:left][0]
+        l   = bb.max.y - bb.min.y   # bed length (retracted)
+        h   = bb.max.z - bb.min.z   # bed height
+        cx  = bb.center.x
+        cy  = bb.center.y
+        cz  = bb.center.z
+
+        left_edge_x   = lx - l / 2.0
+        bottom_edge_y = -(h / 2.0 + LAYOUT_GAP + l / 2.0)   # bottom edge of bottom view
+
+        pillow_bb    = _big_pillow_bounds(back_def)
+        seat_top_z   = pillow_bb ? pillow_bb.max.z : bb.max.z
+
+        right_edge_x       = lx + l / 2.0
+        bottom_edge_y_left = bb.min.z - cz   # ground level in left view container Y
+        seat_top_y         = seat_top_z - cz
+
+        # In the left view, original Y maps to container -X:
+        #   container_x = -y + lx + cy
+        pillow_x1 = lx + cy - pillow_bb.min.y if pillow_bb   # head end of pillow
+        pillow_x2 = lx + cy - pillow_bb.max.y if pillow_bb   # foot end of pillow
+
+        # Seat height: left of left view, vertical, offset left.
+        _add_dimension(
+          container,
+          Geom::Point3d.new(left_edge_x, bottom_edge_y_left, 0),
+          Geom::Point3d.new(left_edge_x, seat_top_y,         0),
+          Geom::Vector3d.new(-DIM_OFFSET, 0, 0)
+        )
+
+        # Bed length (retracted): bottom of left view, horizontal, offset down.
+        _add_dimension(
+          container,
+          Geom::Point3d.new(left_edge_x,  bottom_edge_y_left, 0),
+          Geom::Point3d.new(right_edge_x, bottom_edge_y_left, 0),
+          Geom::Vector3d.new(0, -DIM_OFFSET, 0)
+        )
+
+        # Pillow (seat) length: top of left view, horizontal, offset up.
+        if pillow_bb
+          _add_dimension(
+            container,
+            Geom::Point3d.new(pillow_x1, seat_top_y, 0),
+            Geom::Point3d.new(pillow_x2, seat_top_y, 0),
+            Geom::Vector3d.new(0, DIM_OFFSET, 0)
+          )
+        end
+
+        # Bed width: bottom of front view, horizontal, offset down.
+        # Front view: R_z(180°)·R_x(90°) maps original X → container -X,
+        # so width is symmetric: -w/2 … +w/2 around x=0.
+        w = bb.max.x - bb.min.x
+        _add_dimension(
+          container,
+          Geom::Point3d.new(-w / 2.0, -h / 2.0, 0),
+          Geom::Point3d.new( w / 2.0, -h / 2.0, 0),
+          Geom::Vector3d.new(0, -DIM_OFFSET, 0)
+        )
+      end
+
+      # Add a single DimensionLinear to +container+.
+      def _add_dimension(container, p1, p2, offset)
+        container.entities.add_dimension_linear(p1, p2, offset)
+      end
+
+      # Returns the bounding box of the "EB | pillow | big" group inside +back_def+
+      # in the definition's local space (= pair-local space, back at origin).
+      def _big_pillow_bounds(back_def)
+        inst = back_def.entities.find do |e|
+          (e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance)) &&
+            e.name == 'EB | pillow | big'
+        end
+        inst&.bounds
       end
 
       # 6 rotations that bring each face of the bed to face +Z (visible from top).
