@@ -43,8 +43,8 @@
 _eb_lib    = File.expand_path('lib', __dir__)
 _su_utils  = File.expand_path('../sketchup_utils', __dir__)
 
-# Generic, bed-agnostic part-modelling utilities (Parts, Hardware, PartCatalog,
-# Transform, PocketGeometry, Renderer interface + SketchUp impl, PartRendering).
+# Generic, bed-agnostic utilities: Parts, Hardware, Transform, PocketGeometry,
+# Renderer interface + SketchUp implementation, PartRendering, declarative DSL.
 %w[
   parts
   hardware
@@ -53,22 +53,18 @@ _su_utils  = File.expand_path('../sketchup_utils', __dir__)
   renderer
   scene_capture
   sketchup_renderer
-  part_catalog
   part_rendering
+  declarations
+  declarations_compiler
 ].each { |f| load File.join(_su_utils, "#{f}.rb") }
 
 # Extendable-bed-specific code.
 %w[
   config
-  bed_part_groups
   stock_planner
   validator
-  frame_assembly
-  pillow_sets
-  bed_pair
-  construction_steps
+  extendable_bed_spec
   bed_layout
-  dimensions
   retracted_pillow_layout_export
   preview_scenes
   third_angle_projection

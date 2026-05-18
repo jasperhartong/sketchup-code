@@ -27,7 +27,7 @@ module Timmerman
         { key: :construction, title: 'Construction steps',    camera: :iso,
           roots: :construction_steps },
         { key: :cut_plan,     title: 'Cut plan',              camera: :top,
-          roots: [Config::GROUP_CUT_PLAN_3D], optional: true },
+          roots: ['EB_CutPlan_3D'], optional: true },
         { key: :third_angle,     title: '3rd angle (retracted)', camera: :top,
           roots: :third_angle_group,     optional: true },
         { key: :third_angle_ext, title: '3rd angle (extended)',  camera: :top,
@@ -37,16 +37,6 @@ module Timmerman
       module_function
 
       def scene_full_name(title) = "#{SCENE_PREFIX}#{title}"
-
-      # Open empty scopes on +renderer+ (during +BedLayout#create+). Returns
-      # { key => SceneScope } or nil when the renderer has no scene support.
-      def open_scopes(renderer)
-        return nil unless renderer.respond_to?(:scene)
-
-        STANDARD_SCENES.to_h do |entry|
-          [entry[:key], renderer.scene(scene_full_name(entry[:title]), camera: entry[:camera])]
-        end
-      end
 
       # Re-capture the standard scenes from geometry already in the model.
       def create_standard_set(model: Sketchup.active_model)
@@ -60,16 +50,6 @@ module Timmerman
         capture = Timmerman::SketchupUtils::SceneCapture.new(model)
         _register_on_capture(capture, model)
         created = capture.finalize!(purge_all: true)
-        model.commit_operation
-        _log_created(created)
-        created
-      end
-
-      def finalize_on_renderer(model, renderer)
-        return unless renderer.respond_to?(:finalize_scenes)
-
-        model.start_operation('EB scenes', true)
-        created = renderer.finalize_scenes(purge_all: true)
         model.commit_operation
         _log_created(created)
         created
@@ -125,20 +105,20 @@ module Timmerman
         model.entities.select do |e|
           (e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance)) &&
             e.valid? &&
-            (Config::GROUP_NAME_RE.match?(e.name) || Config::SINGLE_PAIR_ROOTS.include?(e.name))
+            e.name.start_with?('EB | ')
         end
       end
 
       def _third_angle_root(model)
         root = model.entities.find do |e|
-          e.is_a?(Sketchup::Group) && e.valid? && e.name == Config::GROUP_3RD_ANGLE
+          e.is_a?(Sketchup::Group) && e.valid? && e.name == 'EB_3rdAngle'
         end
         root ? [root] : []
       end
 
       def _third_angle_ext_root(model)
         root = model.entities.find do |e|
-          e.is_a?(Sketchup::Group) && e.valid? && e.name == Config::GROUP_3RD_ANGLE_EXT
+          e.is_a?(Sketchup::Group) && e.valid? && e.name == 'EB_3rdAngleExt'
         end
         root ? [root] : []
       end
@@ -147,16 +127,6 @@ module Timmerman
         all_3ap = _third_angle_root(model) + _third_angle_ext_root(model)
         (_all_eb_roots(model) + all_3ap).each do |e|
           e.hidden = false if e.respond_to?(:hidden=)
-        end
-      end
-
-      def _remove_scenes_with_prefix(model, prefix)
-        loop do
-          pages = model.pages.to_a
-          victim = pages.find { |p| p.name.start_with?(prefix) }
-          break unless victim
-
-          model.pages.erase(victim)
         end
       end
 

@@ -43,6 +43,7 @@ module Timmerman
         :back_def_name, :front_def_name, :foot_y,
         :container_name, :scene_key,
         :annotations,
+        :pillow_def_name,   # optional — composite definition that holds pillow instances
         keyword_init: true
       )
 
@@ -52,23 +53,25 @@ module Timmerman
 
       def retracted_variant(config)
         ProjectionVariant.new(
-          back_def_name:  Config::GROUP_RET_BACK,
-          front_def_name: Config::GROUP_RET_FRONT,
+          back_def_name:  'EB | BackFrame',
+          front_def_name: 'EB | FrontFrame',
           foot_y:         config.retracted_foot_world_y,
-          container_name: Config::GROUP_3RD_ANGLE,
+          container_name: 'EB_3rdAngle',
           scene_key:      :third_angle,
-          annotations:    %i[seat_height bed_length pillow_length bed_width]
+          annotations:    %i[seat_height bed_length pillow_length bed_width],
+          pillow_def_name: 'EB | BedRetracted'
         )
       end
 
       def extended_variant(config)
         ProjectionVariant.new(
-          back_def_name:  Config::GROUP_EXT_BACK,
-          front_def_name: Config::GROUP_EXT_FRONT,
+          back_def_name:  'EB | BackFrame',
+          front_def_name: 'EB | FrontFrame',
           foot_y:         config.extended_front_foot_world_y,
-          container_name: Config::GROUP_3RD_ANGLE_EXT,
+          container_name: 'EB_3rdAngleExt',
           scene_key:      :third_angle_ext,
-          annotations:    %i[seat_height bed_length pillows_length bed_width]
+          annotations:    %i[seat_height bed_length pillows_length bed_width],
+          pillow_def_name: 'EB | BedExtended'
         )
       end
 
@@ -86,8 +89,9 @@ module Timmerman
       def create_scene(model, renderer, variant:, row_y:, layer:, scenes:)
         return unless model && renderer && scenes
 
-        back_def  = model.definitions[variant.back_def_name]
-        front_def = model.definitions[variant.front_def_name]
+        back_def    = model.definitions[variant.back_def_name]
+        front_def   = model.definitions[variant.front_def_name]
+        pillow_def  = variant.pillow_def_name ? model.definitions[variant.pillow_def_name] : nil
         unless back_def && front_def
           warn "[3AP] #{variant.back_def_name} / #{variant.front_def_name} not found — skipping."
           return
@@ -107,7 +111,7 @@ module Timmerman
         )
 
         _build_views(container, back_def, front_def, variant.foot_y, bb,
-                     annotations: variant.annotations)
+                     annotations: variant.annotations, pillow_def: pillow_def)
 
         scenes[variant.scene_key]&.track(container)
 
@@ -138,7 +142,7 @@ module Timmerman
       end
 
       # Place one sub-group per view inside +container+, then add annotations.
-      def _build_views(container, back_def, front_def, foot_y, bb, annotations:)
+      def _build_views(container, back_def, front_def, foot_y, bb, annotations:, pillow_def: nil)
         rotations = _view_rotations
         positions = _layout_positions(bb)
         t_front   = Geom::Transformation.translation(Geom::Vector3d.new(0, foot_y, 0))
@@ -158,15 +162,15 @@ module Timmerman
         end
 
         _add_annotations(container, back_def, bb, positions, annotations,
-                         front_def: front_def, foot_y: foot_y)
+                         front_def: front_def, foot_y: foot_y, pillow_def: pillow_def)
       end
 
       # Dispatch each annotation symbol to the corresponding _dim_* method.
       def _add_annotations(container, back_def, bb, positions, annotations,
-                           front_def: nil, foot_y: nil)
+                           front_def: nil, foot_y: nil, pillow_def: nil)
         annotations.each do |ann|
           send(:"_dim_#{ann}", container, back_def, bb, positions,
-               front_def: front_def, foot_y: foot_y)
+               front_def: front_def, foot_y: foot_y, pillow_def: pillow_def)
         end
       end
 
@@ -178,12 +182,12 @@ module Timmerman
       #   container_y = z  - cz
 
       # Vertical: ground → top of big pillow (seat), left of the left view.
-      def _dim_seat_height(container, back_def, bb, positions, front_def: nil, foot_y: nil)
+      def _dim_seat_height(container, back_def, bb, positions, front_def: nil, foot_y: nil, pillow_def: nil)
         lx = positions[:left][0]
         l  = bb.max.y - bb.min.y
         cz = bb.center.z
 
-        pillow_bb  = _big_pillow_bounds(back_def)
+        pillow_bb  = _big_pillow_bounds(pillow_def || back_def)
         seat_top_z = pillow_bb ? pillow_bb.max.z : bb.max.z
 
         left_edge_x = lx - l / 2.0
@@ -197,7 +201,7 @@ module Timmerman
       end
 
       # Horizontal: full bed length, bottom of the left view, offset down.
-      def _dim_bed_length(container, _back_def, bb, positions, front_def: nil, foot_y: nil)
+      def _dim_bed_length(container, _back_def, bb, positions, front_def: nil, foot_y: nil, pillow_def: nil)
         lx  = positions[:left][0]
         l   = bb.max.y - bb.min.y
         cz  = bb.center.z
@@ -213,12 +217,12 @@ module Timmerman
 
       # Horizontal: big pillow (seat) length only, top of pillow in left view, offset up.
       # Used in the retracted variant where only the big pillow is flat on the slats.
-      def _dim_pillow_length(container, back_def, bb, positions, front_def: nil, foot_y: nil)
+      def _dim_pillow_length(container, back_def, bb, positions, front_def: nil, foot_y: nil, pillow_def: nil)
         lx = positions[:left][0]
         cy = bb.center.y
         cz = bb.center.z
 
-        pillow_bb = _big_pillow_bounds(back_def)
+        pillow_bb = _big_pillow_bounds(pillow_def || back_def)
         return unless pillow_bb
 
         seat_top_y = pillow_bb.max.z - cz
@@ -236,17 +240,18 @@ module Timmerman
       # Horizontal: full bed-of-pillows length (big + all smalls), top of pillow in
       # left view, offset up.  Used in the extended variant where smalls live on the
       # front frame — equals usable_length_extended (2000 mm in default config).
-      def _dim_pillows_length(container, back_def, bb, positions, front_def: nil, foot_y: nil)
+      def _dim_pillows_length(container, back_def, bb, positions, front_def: nil, foot_y: nil, pillow_def: nil)
         lx = positions[:left][0]
         cy = bb.center.y
         cz = bb.center.z
 
-        pillow_bb = _big_pillow_bounds(back_def)
+        src = pillow_def || back_def
+        pillow_bb = _big_pillow_bounds(src)
         return unless pillow_bb
 
         seat_top_y = pillow_bb.max.z - cz
 
-        min_y, max_y = _pillows_y_extent(back_def, front_def, foot_y)
+        min_y, max_y = _pillows_y_extent(src)
         return unless min_y && max_y
 
         head_x = lx + cy - min_y
@@ -263,7 +268,7 @@ module Timmerman
       # Horizontal: outer bed width, bottom of the front view, offset down.
       # Front view: R_z(180°)·R_x(90°) maps original X → -X, so width is
       # symmetric around x=0: -w/2 … +w/2.
-      def _dim_bed_width(container, _back_def, bb, _positions, front_def: nil, foot_y: nil)
+      def _dim_bed_width(container, _back_def, bb, _positions, front_def: nil, foot_y: nil, pillow_def: nil)
         w = bb.max.x - bb.min.x
         h = bb.max.z - bb.min.z
 
@@ -280,45 +285,49 @@ module Timmerman
         container.entities.add_dimension_linear(p1, p2, offset)
       end
 
-      # Returns the bounding box of the "EB | pillow | big" group inside +back_def+
-      # in the definition's local space (= pair-local space, back is at origin).
-      def _big_pillow_bounds(back_def)
-        inst = back_def.entities.find do |e|
-          (e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance)) &&
-            e.name == 'EB | pillow | big'
+      # Returns the bounding box of the big pillow instance inside +def_+ in that
+      # definition's local space. Looks for an instance named 'PillowBig' (DSL) or
+      # one whose name includes 'pillow | big' (legacy).
+      def _big_pillow_bounds(def_)
+        return nil unless def_
+
+        inst = def_.entities.find do |e|
+          next unless e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance)
+
+          e.name == 'PillowBig' || e.name.include?('pillow | big')
         end
         inst&.bounds
       end
 
-      # Returns [min_y, max_y] in pair-local space across all pillows in both
-      # back_def (offset 0) and front_def (offset foot_y).  When front_def or
-      # foot_y is nil only the back pillows are considered.
-      def _pillows_y_extent(back_def, front_def, foot_y)
+      # Returns [min_y, max_y] in +def_+'s local space across all pillow instances.
+      # When +def_+ is the composite (e.g. BedRetracted), pillows already sit at
+      # their correct Y positions so no additional offset is needed.
+      def _pillows_y_extent(def_)
+        return [nil, nil] unless def_
+
         min_y = nil
         max_y = nil
 
-        _each_pillow_entity(back_def) do |e|
+        _each_pillow_entity(def_) do |e|
           b = e.bounds
           min_y = min_y ? [min_y, b.min.y].min : b.min.y
           max_y = max_y ? [max_y, b.max.y].max : b.max.y
         end
 
-        if front_def && foot_y
-          _each_pillow_entity(front_def) do |e|
-            b = e.bounds
-            min_y = min_y ? [min_y, b.min.y + foot_y].min : b.min.y + foot_y
-            max_y = max_y ? [max_y, b.max.y + foot_y].max : b.max.y + foot_y
-          end
-        end
-
         [min_y, max_y]
       end
 
-      # Yields every direct child of +def_+ whose name matches PILLOW_NAME_RE.
+      # Yields every direct child of +def_+ that looks like a pillow instance.
+      # Matches the DSL name convention ('PillowBig', 'PillowSmall*') as well as
+      # the legacy 'foam' / 'pillow' naming.
       def _each_pillow_entity(def_, &block)
+        return unless def_
+
         def_.entities.each do |e|
           next unless e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance)
-          next unless e.name.match?(Config::PILLOW_NAME_RE)
+          next unless e.name.start_with?('Pillow') ||
+                      e.name.start_with?('foam')   ||
+                      e.name.include?('pillow')
 
           block.call(e)
         end

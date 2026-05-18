@@ -21,7 +21,7 @@ module Timmerman
       attr_reader :beam_narrow       # 44 mm
       attr_reader :beam_wide         # 69 mm
       attr_reader :plank_thickness   # 18 mm — non-structural sheet panels
-      attr_reader :pillow_thickness  # 100 mm — foam short edge
+      attr_reader :pillow_thickness  # 120 mm — foam short edge
 
       # XY footprint corner radius before Z push/pull on catalog beams (Beam/Leg/Slat) and pillows.
       attr_reader :beam_box_corner_radius
@@ -61,9 +61,6 @@ module Timmerman
       # When true, cut countersink pocket then through hole; when false, a single through hole only.
       attr_reader :hardware_countersink_first
 
-      # When true, clear() also purges unused component definitions after root erase.
-      attr_reader :purge_unused_definitions
-
       # When true, render the stock cut plan as 3D bars in the model.
       attr_reader :show_cut_plan_3d
 
@@ -92,7 +89,6 @@ module Timmerman
         hardware_through_hole: true,
         hardware_cut_hosts: false,
         hardware_countersink_first: false,
-        purge_unused_definitions: false,
         show_cut_plan_3d: true
       )
         unless back_slat_count.is_a?(Integer) && back_slat_count.positive? && back_slat_count.odd?
@@ -129,7 +125,6 @@ module Timmerman
         @hardware_through_hole = hardware_through_hole ? true : false
         @hardware_cut_hosts = hardware_cut_hosts ? true : false
         @hardware_countersink_first = hardware_countersink_first ? true : false
-        @purge_unused_definitions = purge_unused_definitions ? true : false
         @show_cut_plan_3d = show_cut_plan_3d ? true : false
       end
 
@@ -176,20 +171,6 @@ module Timmerman
 
       # Number of gap helpers per preview pair (depends on slat count).
       def fork_gap_helper_count = back_slat_count - 1
-
-      # Outliner names for slat groups (matches `FrameAssembly#_back_slats` / `#_front_slats`).
-      def back_slat_group_names
-        (0...back_slat_count).map { |i| "EB | slat | back | #{i + 1}/#{back_slat_count}" }
-      end
-
-      def front_slat_group_names
-        fc = front_slat_count
-        (0...fc).map { |i| "EB | slat | front | #{i + 1}/#{fc}" }
-      end
-
-      # Head tie → middle back slats: pocket axis tilt (degrees) from the face **outward normal**
-      # toward `pocket_tilt_toward: :pos_v` (+foot on :max_z). Matches a typical ~15° pocket jig.
-      def head_tie_slat_pocket_tilt_deg = 15.0
 
       # Slats: narrow face along X (bed width), wide face vertical (stiffer in bending).
       def slat_dx = beam_narrow
@@ -256,7 +237,6 @@ module Timmerman
 
       # Legs stop here in the standard (inset) case.
       def leg_height = z_slat_bottom - beam_z
-      alias z_leg_top leg_height
 
       # Outer corner legs extend through the cap band so the shortened cap bears on them.
       def outer_corner_leg_height = z_beam_bottom
@@ -326,114 +306,16 @@ module Timmerman
       # Ext1 preview: retracted + one small flat’s worth of extension.
       def one_small_extension_front_foot_world_y = retracted_foot_world_y + pillow_small_length
 
-      # ── Cap geometry ─────────────────────────────────────────────────────────
+      # ── SketchUp layer / material names ──────────────────────────────────────
 
-      # Head/foot cap: starts at inner face of outer corner leg, spans to the other.
-      def cap_x0 = leg_x
-      def cap_dx = outer_width - (2 * leg_x)
-
-      # ── SketchUp layer / material names (stable, used across classes) ─────────
-
-      LAYER_NAME          = 'EB_ExtendableBed'
-      ATTR_DICT           = 'Timmerman::ExtendableBed'
-      PREVIEW_MAT_BACK    = 'EB preview | back'
-      PREVIEW_MAT_FRONT   = 'EB preview | front'
-      PREVIEW_RGB_BACK    = [188, 152, 106].freeze
+      LAYER_NAME       = 'EB_ExtendableBed'
+      ATTR_DICT        = 'Timmerman::ExtendableBed'
+      PREVIEW_RGB_BACK = [188, 152, 106].freeze
       PREVIEW_RGB_OVERLAP = [255, 0, 220].freeze
-      STEP_ANNOTATIONS_LAYER = 'EB_Step_Annotations'
-
-      # ── Outliner group names for the four preview pairs ───────────────────────
-
-      GROUP_EXT_BACK     = 'EB_Ext_Back'
-      GROUP_EXT_FRONT    = 'EB_Ext_Front'
-      GROUP_EXT1_BACK    = 'EB_Ext1_Back'
-      GROUP_EXT1_FRONT   = 'EB_Ext1_Front'
-      GROUP_RET_BACK     = 'EB_Ret_Back'
-      GROUP_RET_FRONT    = 'EB_Ret_Front'
-      GROUP_RETGND_BACK  = 'EB_RetGnd_Back'
-      GROUP_RETGND_FRONT = 'EB_RetGnd_Front'
-      GROUP_CUT_PLAN_3D      = 'EB_CutPlan_3D'
-      GROUP_3RD_ANGLE        = 'EB_3rdAngle'
-      GROUP_3RD_ANGLE_EXT    = 'EB_3rdAngleExt'
-
-      # Human-readable names for the extension-degree preview row (one label per back+front pair).
-      PREVIEW_NAME_EXT1      = 'Extended: 1 pillow'.freeze
-      PREVIEW_NAME_EXT       = 'Extended: 3 pillows'.freeze
-      PREVIEW_NAME_RET       = 'Retracted: pillows on top'.freeze
-      PREVIEW_NAME_RETGND    = 'Retracted: pillows below'.freeze
-
-      EXTENSION_PAIR_DISPLAY_NAME_BY_BACK_ROOT = {
-        GROUP_EXT1_BACK   => PREVIEW_NAME_EXT1,
-        GROUP_EXT_BACK    => PREVIEW_NAME_EXT,
-        GROUP_RET_BACK    => PREVIEW_NAME_RET,
-        GROUP_RETGND_BACK => PREVIEW_NAME_RETGND
-      }.freeze
-
-      # Construction sequence labels (reversed from original build-order draft):
-      # Step 1 = old prep, ... Step 7 = full extended, Step 8 = full retracted (no pillows).
-      GROUP_STEP1_BACK = 'EB_Step1_Back'
-      GROUP_STEP1_FRONT = 'EB_Step1_Front'
-      GROUP_STEP2_BACK = 'EB_Step2_Back'
-      GROUP_STEP2_FRONT = 'EB_Step2_Front'
-      GROUP_STEP3_BACK = 'EB_Step3_Back'
-      GROUP_STEP3_FRONT = 'EB_Step3_Front'
-      GROUP_STEP4_BACK = 'EB_Step4_Back'
-      GROUP_STEP4_FRONT = 'EB_Step4_Front'
-      GROUP_STEP5_BACK = 'EB_Step5_Back'
-      GROUP_STEP5_FRONT = 'EB_Step5_Front'
-      GROUP_STEP6_BACK = 'EB_Step6_Back'
-      GROUP_STEP6_FRONT = 'EB_Step6_Front'
-      GROUP_STEP7_BACK = 'EB_Step7_Back'
-      GROUP_STEP7_FRONT = 'EB_Step7_Front'
-      GROUP_STEP8_BACK = 'EB_Step8_Back'
-      GROUP_STEP8_FRONT = 'EB_Step8_Front'
-
-      # Matches any auto-generated EB pair root group name.
-      GROUP_NAME_RE = /\AEB_(Ext|Ext1|Ret|RetGnd|Half|Step[1-8]|StepExt|StepDecoup|StepNoLedges|StepFlip|StepFlipNoLegs|StepFlipNoCaps|StepPrep|StepSisterPrep)_(Back|Front)\z/
-
-      # Single-pair root names (cleared together with the multi-pair preview set).
-      SINGLE_PAIR_ROOTS = %w[EB_Back EB_Front].freeze
-
-      # Retracted preview pair (non-extended length) — target for native `.glb` export
-      # (`GlbExport.export_nonextended_pair`). See skill `export-nonextended-bed-glb`.
-      NONEXTENDED_GLB_EXPORT_ROOTS = [GROUP_RET_BACK, GROUP_RET_FRONT].freeze
 
       # Written on each successful BedLayout#create (named-group geometry snapshot).
       GEOMETRY_BASELINE_JSON =
         File.expand_path('../references/extendable_bed_geometry_baseline.json', __dir__).freeze
-
-      # Design-reference copies placed manually in the model — cleared must NOT touch these.
-      REFERENCE_ROOT_RE = /\A(?:NEW|New)_EB_Ext_(Back|Front)\z/
-
-      # ── Part-name prefixes and regexes ───────────────────────────────────────
-
-      PLANK_NAME_RE  = /\AEB \| plank \|/
-      PILLOW_NAME_RE = /\AEB \| pillow \|/
-      # Sibling hardware groups under each frame root (cleared with parent).
-      SCREW_NAME_RE  = /\AEB \| screw \|/
-      # Structural parts checked by the AABB overlap validator (excludes screws, pillows, helpers).
-      SOLID_NAME_RE  = /\AEB \| (beam|leg|slat|plank) \|/
-
-      # Nested part-group names to erase on clear (previous labels after part renames).
-      # Each entry is an exact Outliner group name; both are cleared before re-rendering.
-      PURGE_NESTED_PART_GROUP_NAMES = [
-        'EB | beam | behind leg | mid -X',
-        'EB | beam | behind leg | mid +X',
-        'EB | beam | behind leg | head -X',
-        'EB | beam | behind leg | head +X',
-        'EB | beam | behind leg | mid -X | headward',
-        'EB | beam | behind leg | mid +X | headward',
-        'EB | beam | mid tie | vertical filler | -X',
-        'EB | beam | mid tie | vertical filler | +X',
-        # Renamed in the PartCatalog refactor; list old names so old renders clear cleanly.
-        'EB | beam | sister | outer -X',
-        'EB | beam | sister | outer +X',
-        'EB | beam | mid tie | between sisters',
-        'EB | leg | post | behind mid | -X | headward',
-        'EB | leg | post | behind mid | +X | headward',
-        'EB | beam | front | under slats | foot end',
-        'EB | beam | front | under slat foot'
-      ].freeze
     end
   end
 end

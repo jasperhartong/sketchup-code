@@ -43,9 +43,6 @@ module Timmerman
           entities.flatten.compact.each { track(_1) }
         end
 
-        def track_pair(back, front)
-          track_all(back, front)
-        end
       end
 
       def initialize(model)
@@ -105,9 +102,7 @@ module Timmerman
 
       def _unhide_tracked_roots
         @specs.each do |spec|
-          spec[:roots].each do |g|
-            g.hidden = false if g.valid? && g.respond_to?(:hidden=)
-          end
+          spec[:roots].each { |g| g.hidden = false if g.valid? && g.respond_to?(:hidden=) }
         end
       end
 
@@ -133,7 +128,7 @@ module Timmerman
         c  = bb.center
         d  = [bb.diagonal, 1.0].max
         cam = view.camera
-        cam.perspective = false
+        cam.perspective = true
         cam.set(Geom::Point3d.new(c.x - d, c.y + d, c.z + d), c, Geom::Vector3d.new(0, 0, 1))
         view.zoom(roots)
       end

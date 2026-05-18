@@ -1,116 +1,16 @@
 # frozen_string_literal: true
 
-# Backend-agnostic driver: given a PartCatalog::View (or raw catalog) and a
-# renderer that implements the SketchupUtils::Renderer interface, produce
-# scene groups. This is the single code path used for every geometric thing
-# (beams, legs, slats, planks, pillows, screws).
-#
-# Usage:
-#   PartRendering.render_view(view,
-#                             parent: :root,
-#                             renderer: renderer,
-#                             layer:    some_layer,
-#                             on_beam:  ->(b) { planner.record(b) })
-#
-# The block hooks (+on_beam+, +on_plank+, +on_screw+) let StockPlanner and friends count
-# parts without the renderer knowing anything about them.
+# Low-level screw-rendering helper used by DeclarationsCompiler.
+# The higher-level `render_view` / `_render_part` path (PartCatalog-driven)
+# has been removed; only the screw pipeline below is still active.
 
 module Timmerman
   module SketchupUtils
     module PartRendering
       module_function
 
-      ATTR_DICT_KEY_NOTE = 'note'
       # Keep screw heads visibly above the entry face to avoid z-fighting.
       SCREW_SURFACE_PROTRUSION = 0.35.mm
-
-      # Renders a single catalog view into +parent+. Returns the created root
-      # group handle.
-      #
-      # @param view [PartCatalog::View] must expose .group_name, .parts, .hardware
-      # @param parent [Symbol, group-handle] :root or a parent group from the renderer
-      # @param renderer [SketchupUtils::Renderer] concrete backend
-      # @param layer [Object, nil] backend-specific layer handle (ignored by backends without layers)
-      # @param attr_dict [String, nil] dictionary name used for per-part +note+ round-trip
-      # @param cut_hosts [Boolean] if true, screws cut countersink + hole on hosts
-      # @param countersink_first [Boolean] countersink pocket then through hole (vs single clearance bore)
-      # @param through_hole [Boolean] when countersink_first, skip the bore step if false
-      # @param on_beam [Proc,nil]   called with each Parts::Beam (incl. Leg, Slat subclasses)
-      # @param on_plank [Proc,nil]  called with each Parts::Plank
-      # @param on_screw [Proc,nil]  called with each screw placement
-      def render_view(view, parent:, renderer:, layer: nil,
-                      attr_dict: nil,
-                      cut_hosts: false, countersink_first: false, through_hole: true,
-                      on_beam: nil, on_plank: nil, on_screw: nil,
-                      corner_radius_for_part: nil, corner_axis_for_part: nil)
-        root = renderer.create_group(view.group_name, parent: parent, layer: layer)
-
-        part_groups = {}
-        view.parts.each do |part|
-          g = _render_part(
-            root,
-            part,
-            renderer: renderer,
-            layer: layer,
-            attr_dict: attr_dict,
-            reusable: !cut_hosts,
-            corner_radius_for_part: corner_radius_for_part,
-            corner_axis_for_part: corner_axis_for_part
-          )
-          part_groups[part.name] = g
-          on_beam&.call(part) if part.is_a?(Parts::Beam)
-          on_plank&.call(part) if part.is_a?(Parts::Plank)
-        end
-
-        view.hardware.each do |placement|
-          host_group = part_groups[placement.host_name]
-          unless host_group
-            warn "[PartRendering] host group not found for screw #{placement.name.inspect}: #{placement.host_name.inspect}"
-            next
-          end
-          host_part = view.parts.find { |p| p.name == placement.host_name }
-          _render_screw(root, host_group, host_part, placement,
-                        renderer: renderer, layer: layer,
-                        cut_hosts: cut_hosts, countersink_first: countersink_first,
-                        through_hole: through_hole)
-          on_screw&.call(placement)
-        end
-
-        root
-      end
-
-      # ── internal ─────────────────────────────────────────────────────────
-
-      def _render_part(parent_group, part, renderer:, layer:, attr_dict:, reusable:, corner_radius_for_part:, corner_axis_for_part:)
-        corner_radius = corner_radius_for_part ? corner_radius_for_part.call(part) : 0
-        corner_axis = corner_axis_for_part ? corner_axis_for_part.call(part) : :long
-        g = if renderer.respond_to?(:create_part_box)
-              renderer.create_part_box(
-                part.name,
-                parent: parent_group,
-                layer: layer,
-                size: [part.dx, part.dy, part.dz],
-                transform: Transform.translation([part.x, part.y, part.z]),
-                reusable: reusable,
-                corner_radius: corner_radius,
-                corner_axis: corner_axis
-              )
-            else
-              renderer.create_group(part.name, parent: parent_group, layer: layer)
-            end
-
-        if attr_dict && part.note && !part.note.empty?
-          renderer.set_group_attribute(g, attr_dict, ATTR_DICT_KEY_NOTE, part.note)
-        end
-        unless renderer.respond_to?(:create_part_box)
-          renderer.add_box(
-            g, at: [0, 0, 0], size: [part.dx, part.dy, part.dz],
-            corner_radius: corner_radius, corner_axis: corner_axis
-          )
-          renderer.set_group_transform(g, Transform.translation([part.x, part.y, part.z]))
-        end
-        g
-      end
 
       def _render_screw(root, host_group, host_part, placement,
                         renderer:, layer:, cut_hosts:, countersink_first:, through_hole:)

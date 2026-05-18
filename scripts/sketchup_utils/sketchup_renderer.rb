@@ -102,8 +102,6 @@ module Timmerman
         group.set_attribute(dict, key, value)
       end
 
-      def group_min_z(group) = group.bounds.min.z
-
       # ── Geometry primitives ─────────────────────────────────────────────
 
       def add_box(group, at:, size:, corner_radius: 0, corner_axis: :long)
@@ -211,48 +209,6 @@ module Timmerman
       # should remain visible even when component-reuse debug mode is active.
       def paint_group_force(group, rgb)
         _paint_recursive(group.entities, _ensure_material(rgb), skip_name_re: nil)
-      end
-
-      def paint_named_children(root, names, rgb)
-        return if names.nil? || names.empty?
-        return unless @debug_color == :off
-
-        _paint_named_children_with_material(root, names, _ensure_material(rgb))
-      end
-
-      # Overlap debug highlights — works regardless of +debug_color+ mode.
-      def paint_named_children_force(root, names, rgb)
-        return if names.nil? || names.empty?
-
-        Array(names).each do |name|
-          child = _named_child(root, name)
-          paint_structural_part_highlight(child, rgb) if child
-        end
-      end
-
-      # Magenta overlap markers: paint definition faces on a unique instance copy.
-      # +instance.material+ alone is often invisible after preview wood was applied.
-      def paint_structural_part_highlight(element, rgb)
-        return unless element&.valid?
-
-        mat = _ensure_material(rgb)
-        case element
-        when Sketchup::ComponentInstance
-          element.make_unique
-          element.material = nil
-          _paint_recursive(element.definition.entities, mat)
-        when Sketchup::Group
-          _paint_recursive(element.entities, mat)
-        end
-      end
-
-      def hide_named_children(root, names, hidden: true)
-        return if names.nil? || names.empty?
-
-        Array(names).each do |name|
-          child = _named_child(root, name)
-          child.hidden = hidden if child
-        end
       end
 
       def debug_paint_axis_faces(root, skip_name_re:)
@@ -665,24 +621,6 @@ module Timmerman
         end
       end
 
-      def _named_child(root, name)
-        _direct_render_children(root).find { |c| c.name == name }
-      end
-
-      def _paint_named_children_with_material(root, names, material)
-        Array(names).each do |name|
-          child = _named_child(root, name)
-          next unless child
-
-          case child
-          when Sketchup::Group
-            _paint_recursive(child.entities, material)
-          when Sketchup::ComponentInstance
-            _paint_component_instance(child, material)
-          end
-        end
-      end
-
       def _to_geom_transformation(transform)
         m = transform.matrix
         # Geom::Transformation accepts a 16-element column-major array.
@@ -766,6 +704,7 @@ module Timmerman
 
         defn_name = "EB::Screw::#{key}"
         defn = @model.definitions[defn_name] || @model.definitions.add(defn_name)
+        defn.set_attribute(@attr_dict, 'ignore_overlaps', true) if @attr_dict
         if defn.entities.length.zero?
           _build_screw_definition_geometry(defn.entities, spec, shaft_length_index)
         end

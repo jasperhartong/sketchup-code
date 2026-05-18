@@ -85,7 +85,6 @@ module Timmerman
         end
 
         def spec_id = @spec.id
-        def shaft_length = @spec.shaft_length_at(@shaft_length_index)
       end
     end
   end

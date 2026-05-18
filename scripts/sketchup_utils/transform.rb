@@ -18,15 +18,6 @@ module Timmerman
         @matrix = matrix.map(&:dup).freeze
       end
 
-      def self.identity
-        new([
-              [1.0, 0.0, 0.0, 0.0],
-              [0.0, 1.0, 0.0, 0.0],
-              [0.0, 0.0, 1.0, 0.0],
-              [0.0, 0.0, 0.0, 1.0]
-            ])
-      end
-
       # Translation by [x, y, z] (SketchUp Length or Numeric).
       def self.translation(vec)
         x, y, z = vec
@@ -46,6 +37,29 @@ module Timmerman
               [ 0.0, 1.0,  0.0, 0.0],
               [ 0.0, 0.0, -1.0, 0.0],
               [ 0.0, 0.0,  0.0, 1.0]
+            ])
+      end
+
+      # 90° CCW rotation about the +X axis: Y → +Z, Z → −Y.
+      # After this rotation a box [0..w, 0..len, 0..thick] occupies
+      # x[0..w], y[-thick..0], z[0..len].  Add +thick to the Y translation
+      # to bring y_min back to the intended world position.
+      def self.rotation_x_90
+        new([
+              [1.0, 0.0,  0.0, 0.0],
+              [0.0, 0.0, -1.0, 0.0],
+              [0.0, 1.0,  0.0, 0.0],
+              [0.0, 0.0,  0.0, 1.0]
+            ])
+      end
+
+      # 90° CCW rotation about the +Z axis: X → +Y, Y → −X.
+      def self.rotation_z_90
+        new([
+              [0.0, -1.0, 0.0, 0.0],
+              [1.0,  0.0, 0.0, 0.0],
+              [0.0,  0.0, 1.0, 0.0],
+              [0.0,  0.0, 0.0, 1.0]
             ])
       end
 
