@@ -118,11 +118,8 @@ module Timmerman
 
       # Register a scene tab to be captured later. Returns a scope; call +track+
       # on each root group that should frame the view, then +finalize_scenes+.
-      def create_scene(_name, view: :iso, parallel: nil, top: false)
-        raise NotImplementedError
-      end
-
-      def scene(_name, view: :iso, parallel: nil, top: false)
+      # camera: :iso | :top | :front | :back | :left | :right | :bottom
+      def scene(_name, camera: :iso)
         raise NotImplementedError
       end
 

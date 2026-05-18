@@ -97,11 +97,6 @@ module Timmerman
           }
         },
 
-        # Keep all hosts for screw placement, then hide all part groups so only
-        # screw hardware remains visible.
-        screws_only: ->(b, f, _c) {
-          { back: b.names, front: f.names }
-        }
       }.freeze
 
       LEDGE_HEAD = 'EB | plank | head | ledge'
@@ -129,12 +124,6 @@ module Timmerman
         { back_name: Config::GROUP_RETGND_BACK, front_name: Config::GROUP_RETGND_FRONT, column: 3, foot: :retracted,
           pillow_mode: :retracted_gnd, tally_stock: false, display_name: Config::PREVIEW_NAME_RETGND }
       ].freeze
-
-      SCREWS_ONLY_SPEC = {
-        back_name: Config::GROUP_RETSCREWS_BACK, front_name: Config::GROUP_RETSCREWS_FRONT,
-        column: 0, foot: :retracted, pillow_mode: nil, tally_stock: false, variant: :screws_only,
-        display_name: Config::PREVIEW_NAME_RETSCREWS, band: :screws_only
-      }.freeze
 
       module_function
 
@@ -178,9 +167,9 @@ module Timmerman
 
       def extension_degree_bed_pairs(config, back_frame:, front_frame:)
         step = config.preview_column_step
-        (EXTENSION_SPECS + [SCREWS_ONLY_SPEC]).map do |spec|
-          row_y = spec[:band] == :screws_only ? config.screws_only_row_y : config.extension_preview_row_y
-          scene_key = spec[:band] == :screws_only ? :screws_only : :variants
+        EXTENSION_SPECS.map do |spec|
+          row_y = config.extension_preview_row_y
+          scene_key = :variants
           foot_y = foot_world_y_for(config, spec[:foot])
           hidden = resolve_hidden(spec[:variant], back_frame, front_frame, config)
           helper_names = BedPartGroups.fork_gap_helper_names(config)

@@ -38,17 +38,11 @@ module Timmerman
 
       # Register a scene tab (see SketchupUtils::SceneCapture). Returns a scope;
       # call +scope.track(group)+ for each root that should frame the view.
-      def create_scene(name, view: :iso, parallel: nil, top: false)
-        raise 'create_scene requires a SketchUp model' unless @scene_capture
-
-        @scene_capture.create_scene(name, view: view, parallel: parallel, top: top)
-      end
-
-      # Like +create_scene+; yields the scope when a block is given.
-      def scene(name, view: :iso, parallel: nil, top: false, &block)
+      # camera: :iso | :top | :front | :back | :left | :right | :bottom
+      def scene(name, camera: :iso, &block)
         raise 'scene requires a SketchUp model' unless @scene_capture
 
-        @scene_capture.scene(name, view: view, parallel: parallel, top: top, &block)
+        @scene_capture.scene(name, camera: camera, &block)
       end
 
       # Creates all registered scenes. +purge_all+ removes every existing page first.

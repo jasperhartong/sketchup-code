@@ -2,6 +2,8 @@
 
 module Timmerman
   module ExtendableBed
+    remove_const :PreviewScenes if const_defined?(:PreviewScenes, false)
+
     # SketchUp Scenes (tabs): camera jumps to each spatial band (no hide/show).
     # +STANDARD_SCENES+ is the single registry; +BedLayout#create+ opens scopes
     # during the build, +create_standard_set+ re-captures from existing roots.
@@ -15,31 +17,16 @@ module Timmerman
         EB_RetGnd_Back EB_RetGnd_Front
       ].freeze
 
-      SCREWS_ONLY_ROOTS = %w[
-        EB_RetScrews_Back EB_RetScrews_Front
-      ].freeze
-
       CONSTRUCTION_STEP_RE = /\AEB_Step[1-8]_(Back|Front)\z/
 
       STANDARD_SCENES = [
-        { key: :variants,     title: 'All variants',         view: :iso,
+        { key: :variants,     title: 'All variants',      camera: :iso,
           roots: EXTENSION_VARIANT_ROOTS },
-        { key: :screws_only,  title: 'Screws only',          view: :iso,
-          roots: SCREWS_ONLY_ROOTS },
-        { key: :construction, title: 'Construction steps', view: :iso,
+        { key: :construction, title: 'Construction steps', camera: :iso,
           roots: :construction_steps },
-        { key: :cut_plan,     title: 'Cut plan',             top: true,
+        { key: :cut_plan,     title: 'Cut plan',           camera: :top,
           roots: [Config::GROUP_CUT_PLAN_3D], optional: true }
       ].freeze
-
-      ORTHO_VIEWS = {
-        side:   { label: 'Side',   view: :right },
-        front:  { label: 'Front',  view: :front },
-        back:   { label: 'Back',   view: :back },
-        left:   { label: 'Left',   view: :left },
-        top:    { label: 'Top',    view: :top },
-        bottom: { label: 'Bottom', view: :bottom }
-      }.freeze
 
       module_function
 
@@ -51,7 +38,7 @@ module Timmerman
         return nil unless renderer.respond_to?(:scene)
 
         STANDARD_SCENES.to_h do |entry|
-          [entry[:key], renderer.scene(scene_full_name(entry[:title]), **_camera_opts(entry))]
+          [entry[:key], renderer.scene(scene_full_name(entry[:title]), camera: entry[:camera])]
         end
       end
 
@@ -60,9 +47,7 @@ module Timmerman
         missing = STANDARD_SCENES.reject { |e| e[:optional] }.find do |entry|
           roots_for_entry(model, entry).empty?
         end
-        if missing
-          raise "#{missing[:title]} roots missing — run BedLayout#create first."
-        end
+        raise "#{missing[:title]} roots missing — run BedLayout#create first." if missing
 
         model.start_operation('EB scenes: standard set', true)
         _unhide_all_eb_roots(model)
@@ -72,40 +57,6 @@ module Timmerman
         model.commit_operation
         _log_created(created)
         created
-      end
-
-      def create_for_variant(variant, model: Sketchup.active_model, views: %i[side front top])
-        spec = {
-          ext1:       %w[EB_Ext1_Back EB_Ext1_Front],
-          extended:   %w[EB_Ext_Back EB_Ext_Front],
-          retracted:  [Config::GROUP_RET_BACK, Config::GROUP_RET_FRONT],
-          ret_gnd:    %w[EB_RetGnd_Back EB_RetGnd_Front],
-          ret_screws: SCREWS_ONLY_ROOTS
-        }.fetch(variant)
-        short = { ext1: 'Ext1', extended: 'Ext', retracted: 'Ret',
-                  ret_gnd: 'RetGnd', ret_screws: 'RetScr' }.fetch(variant)
-        roots = _find_roots(model, spec)
-
-        model.start_operation("EB scenes: #{short}", true)
-        _unhide_all_eb_roots(model)
-        _remove_scenes_with_prefix(model, "#{SCENE_PREFIX}#{short} |")
-
-        capture = Timmerman::SketchupUtils::SceneCapture.new(model)
-        views.each do |key|
-          v = ORTHO_VIEWS.fetch(key)
-          capture.scene("#{SCENE_PREFIX}#{short} | #{v[:label]}", view: v[:view], parallel: true) do |s|
-            s.track_all(*roots)
-          end
-        end
-        created = capture.finalize!
-        model.commit_operation
-        created
-      end
-
-      def create_all_extension_variants(model: Sketchup.active_model)
-        %i[ext1 extended retracted ret_gnd ret_screws].flat_map do |v|
-          create_for_variant(v, model: model)
-        end
       end
 
       def finalize_on_renderer(model, renderer)
@@ -118,14 +69,6 @@ module Timmerman
         created
       end
 
-      def _camera_opts(entry)
-        opts = {}
-        opts[:view] = entry[:view] if entry[:view]
-        opts[:top] = true if entry[:top]
-        opts[:parallel] = entry[:parallel] if entry.key?(:parallel)
-        opts
-      end
-
       def _register_on_capture(capture, model)
         STANDARD_SCENES.each do |entry|
           roots = roots_for_entry(model, entry)
@@ -134,7 +77,7 @@ module Timmerman
             next
           end
 
-          capture.scene(scene_full_name(entry[:title]), **_camera_opts(entry)) do |s|
+          capture.scene(scene_full_name(entry[:title]), camera: entry[:camera]) do |s|
             s.track_all(*roots)
           end
         end
@@ -188,7 +131,7 @@ module Timmerman
 
       def _log_created(created)
         puts "[EB scenes] #{created.size} scene(s)"
-        created.each { |n| puts "  — #{n}" }
+        created.each { |n| puts "  -- #{n}" }
       end
     end
   end

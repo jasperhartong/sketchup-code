@@ -2,19 +2,33 @@
 
 module Timmerman
   module SketchupUtils
+    remove_const :SceneCapture if const_defined?(:SceneCapture, false)
+
     # Deferred SketchUp scene (Page) tabs: register zoom targets while building
     # geometry, then capture cameras in one pass.
     #
-    #   capture.scene('My view', view: :iso) { |s| s.track(root) }
+    # Usage:
+    #   capture = SceneCapture.new(model)
+    #   capture.scene('My iso view', camera: :iso) { |s| s.track(root) }
+    #   capture.scene('Cut plan',    camera: :top) { |s| s.track(root) }
     #   capture.finalize!
+    #
+    # camera: values
+    #   :iso    — NW parallel isometric  (eye at -X, +Y, +Z relative to center)
+    #   :top    — parallel plan view     (eye above, up = +Y)
+    #   :front  — parallel front         (uses Sketchup.send_action)
+    #   :back   — parallel back
+    #   :left   — parallel left
+    #   :right  — parallel right (side)
+    #   :bottom — parallel bottom
     class SceneCapture
-      VIEW_ACTIONS = {
-        iso:    'viewIso:',
+      # PAGE_USE_CAMERA (= 1) is a global constant defined by the SketchUp runtime.
+
+      SEND_ACTION_CAMERAS = {
         front:  'viewFront:',
         back:   'viewBack:',
         left:   'viewLeft:',
         right:  'viewRight:',
-        top:    'viewTop:',
         bottom: 'viewBottom:'
       }.freeze
 
@@ -39,23 +53,20 @@ module Timmerman
         @specs = []
       end
 
-      # @return [SceneScope]
-      def create_scene(name, view: :iso, parallel: nil, top: false)
-        view_action = VIEW_ACTIONS.fetch(view) { view }
-        spec = { name: name, view: view_action, parallel: parallel, top: top, roots: [] }
+      # Register a scene. Returns a SceneScope; call +track+ on each root
+      # group that should be framed. Optionally pass a block.
+      #
+      # @param camera [:iso, :top, :front, :back, :left, :right, :bottom]
+      def scene(name, camera: :iso)
+        spec = { name: name, camera: camera, roots: [] }
         @specs << spec
-        SceneScope.new(spec: spec)
-      end
-
-      def scene(name, view: :iso, parallel: nil, top: false)
-        scope = create_scene(name, view: view, parallel: parallel, top: top)
+        scope = SceneScope.new(spec: spec)
         yield scope if block_given?
         scope
       end
 
-      # @param prefix [String] remove pages whose names start with this (ignored when +purge_all+)
-      # @param purge_all [Boolean] erase every page before adding registered scenes
-      # @return [Array<String>] scene names created
+      # @param purge_all [Boolean] erase every existing page before adding scenes
+      # @return [Array<String>] names of scenes created
       def finalize!(prefix: nil, purge_all: false)
         purge_all ? _purge_all_pages : _purge_pages(prefix) if purge_all || (prefix && !prefix.empty?)
         _unhide_tracked_roots
@@ -101,40 +112,55 @@ module Timmerman
       end
 
       def _capture_scene(model, spec, roots)
-        if spec[:top]
-          _capture_top_camera(model.active_view, roots)
-        else
-          _capture_view_camera(model.active_view, roots,
-                               view_action: spec[:view], parallel: spec[:parallel])
+        case spec[:camera]
+        when :iso    then _set_iso_camera(model.active_view, roots)
+        when :top    then _set_top_camera(model.active_view, roots)
+        else              _set_action_camera(model.active_view, spec[:camera], roots)
         end
-        _add_page(model, spec[:name])
+        page = model.pages.add(spec[:name])
+        page.name = spec[:name]
+        page.update(PAGE_USE_CAMERA)
       end
 
-      def _capture_view_camera(view, roots, view_action:, parallel:)
-        Sketchup.send_action(view_action)
-        view.camera.perspective = false if parallel
+      # ---- Camera implementations ------------------------------------------
+
+      # Sketchup.send_action is unreliable from the bridge for :iso and :top,
+      # so those two are set via explicit camera math. Others use send_action.
+
+      # NW parallel isometric: eye at (-X, +Y, +Z) relative to scene center.
+      def _set_iso_camera(view, roots)
+        bb = _world_bounds(roots)
+        c  = bb.center
+        d  = [bb.diagonal, 1.0].max
+        cam = view.camera
+        cam.perspective = false
+        cam.set(Geom::Point3d.new(c.x - d, c.y + d, c.z + d), c, Geom::Vector3d.new(0, 0, 1))
         view.zoom(roots)
       end
 
-      def _capture_top_camera(view, roots)
+      # Plan view: eye above center, up = +Y (head-to-foot readable).
+      def _set_top_camera(view, roots)
+        bb = _world_bounds(roots)
+        c  = bb.center
+        d  = [bb.diagonal, 1.0].max
         cam = view.camera
-        bb  = _world_bounds(roots)
-        c   = bb.center
-
         cam.perspective = false
         cam.set(
-          Geom::Point3d.new(c.x, c.y, bb.max.z + bb.diagonal * 2.0),
+          Geom::Point3d.new(c.x, c.y, bb.max.z + d * 2.0),
           Geom::Point3d.new(c.x, c.y, c.z),
           Geom::Vector3d.new(0, 1, 0)
         )
         view.zoom(roots)
-        cam.perspective = false
       end
 
-      def _add_page(model, scene_name)
-        page = model.pages.add(scene_name)
-        page.name = scene_name
-        page.update(PAGE_USE_CAMERA)
+      # Front / back / side: use SketchUp's built-in action, then force parallel.
+      def _set_action_camera(view, camera_sym, roots)
+        action = SEND_ACTION_CAMERAS.fetch(camera_sym) do
+          raise ArgumentError, "Unknown camera: #{camera_sym.inspect}"
+        end
+        Sketchup.send_action(action)
+        view.camera.perspective = false
+        view.zoom(roots)
       end
 
       def _world_bounds(entities)

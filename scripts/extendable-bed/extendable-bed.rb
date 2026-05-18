@@ -21,7 +21,7 @@
 #   lib/retracted_pillow_layout_export.rb, then RetractedPillowLayoutExport.export
 # Bridge: sketchup_bridge/commands/export_retracted_pillow_layout.rb
 #
-# SketchUp Scene tabs (variants, screws only, construction, cut plan) — created during BedLayout#create.
+# SketchUp Scene tabs (variants, construction steps, cut plan) — created during BedLayout#create.
 # Standalone refresh: sketchup_bridge/commands/create_preview_scenes.rb
 #
 # To customise dimensions, pass a Config to BedLayout:

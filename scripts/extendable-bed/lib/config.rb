@@ -294,11 +294,8 @@ module Timmerman
       # One row step: bed footprint along Y plus the empty band gap.
       def preview_row_step = usable_length_extended + preview_band_gap
 
-      # Screws-only preview — one band below the extension variants.
-      def screws_only_row_y = extension_preview_row_y - preview_row_step
-
-      # Construction-step row — one band below screws-only.
-      def construction_steps_row_y = screws_only_row_y - preview_row_step
+      # Construction-step row — one band below the extension variants.
+      def construction_steps_row_y = extension_preview_row_y - preview_row_step
 
       # Stock cut-plan 3D bars — fourth band, clear of construction row.
       def cut_plan_row_y = construction_steps_row_y - preview_row_step
@@ -348,8 +345,6 @@ module Timmerman
       GROUP_EXT1_FRONT   = 'EB_Ext1_Front'
       GROUP_RET_BACK     = 'EB_Ret_Back'
       GROUP_RET_FRONT    = 'EB_Ret_Front'
-      GROUP_RETSCREWS_BACK  = 'EB_RetScrews_Back'
-      GROUP_RETSCREWS_FRONT = 'EB_RetScrews_Front'
       GROUP_RETGND_BACK  = 'EB_RetGnd_Back'
       GROUP_RETGND_FRONT = 'EB_RetGnd_Front'
       GROUP_CUT_PLAN_3D  = 'EB_CutPlan_3D'
@@ -359,14 +354,12 @@ module Timmerman
       PREVIEW_NAME_EXT       = 'Extended: 3 pillows'.freeze
       PREVIEW_NAME_RET       = 'Retracted: pillows on top'.freeze
       PREVIEW_NAME_RETGND    = 'Retracted: pillows below'.freeze
-      PREVIEW_NAME_RETSCREWS = 'Retracted: screws only'.freeze
 
       EXTENSION_PAIR_DISPLAY_NAME_BY_BACK_ROOT = {
-        GROUP_EXT1_BACK     => PREVIEW_NAME_EXT1,
-        GROUP_EXT_BACK      => PREVIEW_NAME_EXT,
-        GROUP_RET_BACK      => PREVIEW_NAME_RET,
-        GROUP_RETGND_BACK   => PREVIEW_NAME_RETGND,
-        GROUP_RETSCREWS_BACK => PREVIEW_NAME_RETSCREWS
+        GROUP_EXT1_BACK   => PREVIEW_NAME_EXT1,
+        GROUP_EXT_BACK    => PREVIEW_NAME_EXT,
+        GROUP_RET_BACK    => PREVIEW_NAME_RET,
+        GROUP_RETGND_BACK => PREVIEW_NAME_RETGND
       }.freeze
 
       # Construction sequence labels (reversed from original build-order draft):
@@ -389,7 +382,7 @@ module Timmerman
       GROUP_STEP8_FRONT = 'EB_Step8_Front'
 
       # Matches any auto-generated EB pair root group name.
-      GROUP_NAME_RE = /\AEB_(Ext|Ext1|Ret|RetScrews|RetGnd|Half|Step[1-8]|StepExt|StepDecoup|StepNoLedges|StepFlip|StepFlipNoLegs|StepFlipNoCaps|StepPrep|StepSisterPrep)_(Back|Front)\z/
+      GROUP_NAME_RE = /\AEB_(Ext|Ext1|Ret|RetGnd|Half|Step[1-8]|StepExt|StepDecoup|StepNoLedges|StepFlip|StepFlipNoLegs|StepFlipNoCaps|StepPrep|StepSisterPrep)_(Back|Front)\z/
 
       # Single-pair root names (cleared together with the multi-pair preview set).
       SINGLE_PAIR_ROOTS = %w[EB_Back EB_Front].freeze
