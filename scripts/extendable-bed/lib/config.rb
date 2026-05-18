@@ -44,9 +44,10 @@ module Timmerman
       attr_reader :wood_density_kg_m3
 
       # Debug rendering mode:
-      #   :off              => no debug coloring
+      #   :off              => preview wood tone on all structural parts
       #   :sides            => axis-face colors
       #   :components_reuse => shared color per component definition
+      #   :overlaps         => wood preview + magenta on AABB-overlapping parts
       attr_reader :debug_color
 
       # When false, only the countersink pocket is cut; the shaft through-hole step is skipped
@@ -69,7 +70,7 @@ module Timmerman
         back_slat_count:  9,
         top_of_slats_z:   260.mm,
         usable_length_extended:  2000.mm,
-        usable_length_retracted: 1300.mm,
+        usable_length_retracted: 1100.mm,
         beam_narrow:      44.mm,
         beam_wide:        69.mm,
         plank_thickness:  18.mm,
@@ -131,9 +132,11 @@ module Timmerman
 
       def _resolve_debug_color(debug_color)
         mode = debug_color.to_sym
-        return mode if %i[off sides components_reuse].include?(mode)
+        return mode if %i[off sides components_reuse overlaps].include?(mode)
 
-        raise ArgumentError, "Config: debug_color must be one of :off, :sides, :components_reuse (got #{debug_color.inspect})"
+        raise ArgumentError,
+              'Config: debug_color must be one of :off, :sides, :components_reuse, :overlaps ' \
+              "(got #{debug_color.inspect})"
       end
 
       def _resolve_corner_axis(axis)
@@ -222,8 +225,7 @@ module Timmerman
       def outer_width  = (n_slats_x * slat_dx) + (gaps_along_x * slat_gap)
 
       # Front slats: headward face beam_wide headward of the under-slat foot beam's
-      # headward face so a 69 mm strip overlaps the back +EB | beam | back | under slat support+
-      # when retracted; the under-slat foot beam still sits inside the slat. Footward
+      # headward face; the under-slat foot beam still sits inside the slat. Footward
       # face is y = 0 (former foot end beam merged into the slat).
       def front_slat_y0 = under_slat_foot_beam_y0 - beam_wide
       def front_slat_y1 = 0
@@ -266,13 +268,6 @@ module Timmerman
       # back frame, forming a continuous brace across the slat-interlock zone:
       #   foot_world_y + under_slat_foot_beam_y0 + beam_wide  ==  mid_tie_y0  (when foot_world_y = usable_length_extended)
       def under_slat_foot_beam_y0 = mid_tie_y0 - usable_length_extended - beam_wide
-
-      # Back-frame beam under slats: when the front is at +retracted_foot_world_y+, this beam
-      # sits immediately headward (−Y) of +EB | beam | front | under slat foot+ (no overlap in Y):
-      # back spans [R+under_y0−beam_wide, R+under_y0], front under beam [R+under_y0, R+under_y0+beam_wide]
-      # in world Y (R = retracted_foot_world_y, under_y0 = under_slat_foot_beam_y0). The front slat
-      # extension (+beam_wide headward) bears on this back beam.
-      def back_under_slat_support_y0 = retracted_foot_world_y + under_slat_foot_beam_y0 - beam_wide
 
       # ── World Y positions for the front frame (sliding half) ──────────────────
 
@@ -319,8 +314,7 @@ module Timmerman
       PREVIEW_MAT_BACK    = 'EB preview | back'
       PREVIEW_MAT_FRONT   = 'EB preview | front'
       PREVIEW_RGB_BACK    = [188, 152, 106].freeze
-      PREVIEW_RGB_FRONT   = PREVIEW_RGB_BACK
-      PREVIEW_RGB_ACTIVE  = [56, 119, 234].freeze
+      PREVIEW_RGB_OVERLAP = [255, 0, 220].freeze
       STEP_ANNOTATIONS_LAYER = 'EB_Step_Annotations'
 
       # ── Outliner group names for the four preview pairs ───────────────────────
@@ -392,8 +386,8 @@ module Timmerman
       PILLOW_NAME_RE = /\AEB \| pillow \|/
       # Sibling hardware groups under each frame root (cleared with parent).
       SCREW_NAME_RE  = /\AEB \| screw \|/
-      # Beams and legs only (excludes slats) — used by the AABB validator.
-      SOLID_NAME_RE  = /\AEB \| (beam|leg) \|/
+      # Structural parts checked by the AABB overlap validator (excludes screws, pillows, helpers).
+      SOLID_NAME_RE  = /\AEB \| (beam|leg|slat|plank) \|/
 
       # Nested part-group names to erase on clear (previous labels after part renames).
       # Each entry is an exact Outliner group name; both are cleared before re-rendering.

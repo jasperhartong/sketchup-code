@@ -46,7 +46,20 @@ module Timmerman
 
         renderer.invalidate_view
 
-        Validator.new(@config).validate(model) if model
+        if model
+          validator = Validator.new(@config)
+          overlaps  = validator.validate(model)
+          if @config.debug_color == :overlaps
+            keys = validator.overlap_part_keys(overlaps)
+            painted = validator.highlight_overlapping_parts(renderer, model, overlaps)
+            renderer.invalidate_view
+            if overlaps.empty?
+              puts '[EB validate] Overlap debug: no overlaps — all parts stay wood tone.'
+            else
+              puts "[EB validate] Overlap debug: #{painted}/#{keys.size} part(s) painted magenta."
+            end
+          end
+        end
         stock_label = format('(one bed = %s + %s) ——',
                              Config::GROUP_EXT_BACK, Config::GROUP_EXT_FRONT)
         stock.print_report(label:           "[EB stock] #{stock_label}")
@@ -118,10 +131,8 @@ module Timmerman
           _place_root(renderer, front_root, pair.offset_x, pair.pair_row_y + pair.foot_world_y, pair.upside_down)
 
           renderer.paint_group(back_root,  Config::PREVIEW_RGB_BACK, skip_name_re: Config::SCREW_NAME_RE)
-          renderer.paint_group(front_root, Config::PREVIEW_RGB_FRONT, skip_name_re: Config::SCREW_NAME_RE)
+          renderer.paint_group(front_root, Config::PREVIEW_RGB_BACK, skip_name_re: Config::SCREW_NAME_RE)
 
-          renderer.paint_named_children(back_root,  pair.back_highlight_part_names,  Config::PREVIEW_RGB_ACTIVE)
-          renderer.paint_named_children(front_root, pair.front_highlight_part_names, Config::PREVIEW_RGB_ACTIVE)
           renderer.hide_named_children(back_root,  pair.back_hidden_part_names,  hidden: true)
           renderer.hide_named_children(front_root, pair.front_hidden_part_names, hidden: true)
 

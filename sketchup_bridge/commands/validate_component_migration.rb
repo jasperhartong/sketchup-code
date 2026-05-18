@@ -23,22 +23,22 @@ puts "[component-migration] step roots: #{step_roots.length} (expected 14)"
 
 missing_visibility_targets = []
 layout.pairs_for(Timmerman::ExtendableBed::BackFrame.new(config), Timmerman::ExtendableBed::FrontFrame.new(config)).each do |pair|
-  [pair.back_name, pair.back_hidden_part_names, pair.back_highlight_part_names].tap do |root_name, hidden_names, highlight_names|
+  [pair.back_name, pair.back_hidden_part_names].each do |root_name, hidden_names|
     root = model.entities.grep(Sketchup::Group).find { |g| g.name == root_name }
     next unless root
     children = root.entities.select { |e| e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance) }
     names = children.map(&:name)
-    (Array(hidden_names) + Array(highlight_names)).each do |name|
+    Array(hidden_names).each do |name|
       missing_visibility_targets << "#{root_name}:#{name}" unless names.include?(name)
     end
   end
 
-  [pair.front_name, pair.front_hidden_part_names, pair.front_highlight_part_names].tap do |root_name, hidden_names, highlight_names|
+  [pair.front_name, pair.front_hidden_part_names].each do |root_name, hidden_names|
     root = model.entities.grep(Sketchup::Group).find { |g| g.name == root_name }
     next unless root
     children = root.entities.select { |e| e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance) }
     names = children.map(&:name)
-    (Array(hidden_names) + Array(highlight_names)).each do |name|
+    Array(hidden_names).each do |name|
       missing_visibility_targets << "#{root_name}:#{name}" unless names.include?(name)
     end
   end

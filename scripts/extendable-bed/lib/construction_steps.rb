@@ -3,7 +3,7 @@
 module Timmerman
   module ExtendableBed
     # Declarative tables for preview BedPair instances:
-    #   — 7 construction-assembly steps (headward row, progressive omissions + highlights)
+    #   — 7 construction-assembly steps (headward row, progressive omissions)
     #   — extension-degree previews (the usage row)
     #
     # Each step maps to a +variant+ symbol in +VARIANT_EXCLUDES+, which lists
@@ -24,7 +24,7 @@ module Timmerman
         # Step 7: full bed, nothing hidden.
         construction_full: ->(_b, _f, _c) { { back: [], front: [] } },
 
-        # Step 6: ledges removed, under-slat-foot beam retained (then highlighted).
+        # Step 6: ledges removed, under-slat-foot beam retained.
         construction_no_ledges_with_beam: ->(_b, _f, _c) {
           { back:  G::BACK_HEAD_LEDGE,
             front: G::FRONT_FOOT_LEDGE }
@@ -83,13 +83,6 @@ module Timmerman
               "EB | screw | sister tie | 6/#{c.back_slat_count} | heart",
               "EB | screw | sister tie | 4/#{c.back_slat_count} | heart",
               "EB | screw | sister tie | 5/#{c.back_slat_count} | heart",
-              "EB | screw | back under slat support | 8/#{c.back_slat_count} | heart",
-              "EB | screw | back under slat support | 2/#{c.back_slat_count} | heart",
-              "EB | screw | back under slat support | 7/#{c.back_slat_count} | heart",
-              "EB | screw | back under slat support | 3/#{c.back_slat_count} | heart",
-              "EB | screw | back under slat support | 6/#{c.back_slat_count} | heart",
-              "EB | screw | back under slat support | 4/#{c.back_slat_count} | heart",
-              "EB | screw | back under slat support | 5/#{c.back_slat_count} | heart",
               "EB | screw | head cap | 8/#{c.back_slat_count} | heart",
               "EB | screw | head cap | 2/#{c.back_slat_count} | heart",
               "EB | screw | head cap | 7/#{c.back_slat_count} | heart",
@@ -116,13 +109,13 @@ module Timmerman
 
       CONSTRUCTION_SPECS = [
         # Order and visual position now both follow step-number order (1..7).
-        { back_name: Config::GROUP_STEP1_BACK, front_name: Config::GROUP_STEP1_FRONT, column: 0, foot: :decoupled, upside_down: true,  variant: :sub_assembly_prep,                 highlight: :none, helper: :hidden, hidden_variant: :step_prep_hide_conflicting_screws },
-        { back_name: Config::GROUP_STEP2_BACK, front_name: Config::GROUP_STEP2_FRONT, column: 1, foot: :decoupled, upside_down: true,  variant: :flip_no_caps,                      highlight: :none, helper: :show },
-        { back_name: Config::GROUP_STEP3_BACK, front_name: Config::GROUP_STEP3_FRONT, column: 2, foot: :decoupled, upside_down: true,  variant: :flip_no_legs,                      highlight: :flip_sub_assemblies, helper: :hidden },
-        { back_name: Config::GROUP_STEP4_BACK, front_name: Config::GROUP_STEP4_FRONT, column: 3, foot: :decoupled, upside_down: true,  variant: :construction_no_ledges,           highlight: :flip_outer_corner_legs, helper: :hidden },
-        { back_name: Config::GROUP_STEP5_BACK, front_name: Config::GROUP_STEP5_FRONT, column: 4, foot: :extended,  upside_down: true,  variant: :construction_no_ledges_with_beam, highlight: :under_slat_foot_end, helper: :hidden },
-        { back_name: Config::GROUP_STEP6_BACK, front_name: Config::GROUP_STEP6_FRONT, column: 5, foot: :extended,  upside_down: false, variant: :construction_no_ledges_with_beam, highlight: :none, helper: :hidden },
-        { back_name: Config::GROUP_STEP7_BACK, front_name: Config::GROUP_STEP7_FRONT, column: 6, foot: :extended,  upside_down: false, variant: :construction_full,              highlight: :head_and_foot_ledges, helper: :hidden }
+        { back_name: Config::GROUP_STEP1_BACK, front_name: Config::GROUP_STEP1_FRONT, column: 0, foot: :decoupled, upside_down: true,  variant: :sub_assembly_prep,                 helper: :hidden, hidden_variant: :step_prep_hide_conflicting_screws },
+        { back_name: Config::GROUP_STEP2_BACK, front_name: Config::GROUP_STEP2_FRONT, column: 1, foot: :decoupled, upside_down: true,  variant: :flip_no_caps,                      helper: :show },
+        { back_name: Config::GROUP_STEP3_BACK, front_name: Config::GROUP_STEP3_FRONT, column: 2, foot: :decoupled, upside_down: true,  variant: :flip_no_legs,                      helper: :hidden },
+        { back_name: Config::GROUP_STEP4_BACK, front_name: Config::GROUP_STEP4_FRONT, column: 3, foot: :decoupled, upside_down: true,  variant: :construction_no_ledges,           helper: :hidden },
+        { back_name: Config::GROUP_STEP5_BACK, front_name: Config::GROUP_STEP5_FRONT, column: 4, foot: :extended,  upside_down: true,  variant: :construction_no_ledges_with_beam, helper: :hidden },
+        { back_name: Config::GROUP_STEP6_BACK, front_name: Config::GROUP_STEP6_FRONT, column: 5, foot: :extended,  upside_down: false, variant: :construction_no_ledges_with_beam, helper: :hidden },
+        { back_name: Config::GROUP_STEP7_BACK, front_name: Config::GROUP_STEP7_FRONT, column: 6, foot: :extended,  upside_down: false, variant: :construction_full,              helper: :hidden }
       ].freeze
 
       EXTENSION_SPECS = [
@@ -150,7 +143,6 @@ module Timmerman
           col     = spec[:column]
           ox      = (col * step) + (spec[:upside_down] ? flip_x : 0)
           foot_y  = spec[:foot] == :decoupled ? config.decoupled_front_foot_world_y : config.extended_front_foot_world_y
-          hl      = highlights(spec[:highlight])
           excludes = resolve_excludes(spec[:variant], back_frame, front_frame, config)
           helper_excludes = helper_excludes(spec[:helper], config)
           excludes = {
@@ -173,8 +165,6 @@ module Timmerman
             upside_down:  spec[:upside_down],
             back_exclude:  excludes[:back],
             front_exclude: excludes[:front],
-            back_highlight_part_names:  hl[:back],
-            front_highlight_part_names: hl[:front],
             back_hidden_part_names:  hidden[:back],
             front_hidden_part_names: hidden[:front]
           )
@@ -208,28 +198,6 @@ module Timmerman
         resolver = VARIANT_EXCLUDES[variant] ||
                    raise(ArgumentError, "Unknown assembly variant: #{variant.inspect}")
         resolver.call(back_frame, front_frame, config)
-      end
-
-      def highlights(key)
-        case key
-        when :under_slat_foot_end
-          { back: BedPartGroups::BACK_UNDER_SLAT_SUPPORT.dup,
-            front: BedPartGroups::FRONT_UNDER_SLAT_FOOT_BEAM.dup }
-        when :head_and_foot_ledges
-          { back: [LEDGE_HEAD], front: [LEDGE_FOOT] }
-        when :none
-          { back: [], front: [] }
-        when :flip_outer_corner_legs
-          { back:  BedPartGroups::FLIP_OUTER_CORNER_BACK_HIGHLIGHTS.dup,
-            front: BedPartGroups::FLIP_OUTER_CORNER_FRONT_HIGHLIGHTS.dup }
-        when :flip_head_foot_caps
-          { back: ['EB | beam | head | cap'], front: ['EB | beam | foot | cap'] }
-        when :flip_sub_assemblies
-          { back:  BedPartGroups::FLIP_SUB_ASSEMBLY_BACK_HIGHLIGHTS.dup,
-            front: BedPartGroups::FLIP_SUB_ASSEMBLY_FRONT_HIGHLIGHTS.dup }
-        else
-          raise ArgumentError, "Unknown construction highlight key: #{key.inspect}"
-        end
       end
 
       def resolve_hidden(variant, back_frame, front_frame, config)

@@ -12,7 +12,6 @@ module Timmerman
     class BedPair
       attr_reader :back_name, :front_name, :offset_x, :pair_row_y, :foot_world_y,
                   :pillow_mode, :tally_stock, :upside_down, :display_name,
-                  :back_highlight_part_names, :front_highlight_part_names,
                   :back_exclude, :front_exclude,
                   :back_hidden_part_names, :front_hidden_part_names
 
@@ -20,8 +19,6 @@ module Timmerman
       # @param front_frame [FrontFrame]   shared catalog instance (one per Config)
       # @param back_exclude  [Array<String>] part names to hide in the back view for this preview
       # @param front_exclude [Array<String>] part names to hide in the front view for this preview
-      # @param back_highlight_part_names  [Array<String>] painted with PREVIEW_RGB_ACTIVE after render
-      # @param front_highlight_part_names [Array<String>]
       # @param back_hidden_part_names  [Array<String>] direct children hidden after render
       # @param front_hidden_part_names [Array<String>] direct children hidden after render
       # @param pillow_mode [Symbol, nil]  see +PillowSets+ for allowed values
@@ -42,8 +39,6 @@ module Timmerman
                      display_name: nil,
                      back_exclude: [],
                      front_exclude: [],
-                     back_highlight_part_names: [],
-                     front_highlight_part_names: [],
                      back_hidden_part_names: [],
                      front_hidden_part_names: [])
         @config       = config
@@ -60,8 +55,6 @@ module Timmerman
         @display_name = display_name&.dup&.freeze
         @back_exclude  = back_exclude.dup.freeze
         @front_exclude = front_exclude.dup.freeze
-        @back_highlight_part_names  = back_highlight_part_names.dup.freeze
-        @front_highlight_part_names = front_highlight_part_names.dup.freeze
         @back_hidden_part_names  = back_hidden_part_names.dup.freeze
         @front_hidden_part_names = front_hidden_part_names.dup.freeze
       end

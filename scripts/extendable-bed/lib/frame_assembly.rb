@@ -77,12 +77,10 @@ module Timmerman
         _fork_gap_helpers
         _outer_sisters
         _sister_tie
-        _back_under_slat_support_beam
         _head_corner_leg_screws
         _head_cap_into_inset_leg_screws
         _head_cap_into_back_slat_hearts_screws
         _sister_tie_into_back_slat_hearts_screws
-        _back_under_slat_support_into_back_slat_hearts_screws
         _sister_into_behind_head_post_screws
         _behind_head_post_into_head_leg_screws
         _head_inset_leg_into_corner_leg_screws
@@ -212,19 +210,6 @@ module Timmerman
              note: 'Mid run; wide face horizontal in Y (69 mm); max_y = retracted_frame_depth_y − plank_thickness (mirrors foot cap plank offset).'
       end
 
-      # Same X/Z/section as +EB | beam | front | under slat foot+; Y on the back frame is shifted
-      # headward by +beam_wide+ so it sits behind (headward of) the front beam when retracted.
-      def _back_under_slat_support_beam
-        x1_under, span_under = sister_tie_x
-        return unless span_under.positive?
-
-        z_flat = c.z_slat_bottom - c.beam_narrow
-        beam 'EB | beam | back | under slat support',
-             at:   [x1_under, c.back_under_slat_support_y0, z_flat],
-             size: [span_under, c.beam_wide, c.beam_narrow],
-             note: 'Under back slats; headward of front under-slat foot beam when retracted (no Y overlap); carries extended front slat tips.'
-      end
-
       # Head corner leg screws, mirrored across the X-centerline of the bed.
       # Each leg box is 44×69×191 in its own local frame, so `u` and `v` are
       # identical on both sides; only the outer-face key flips (`:max_x` on +X
@@ -266,8 +251,8 @@ module Timmerman
         end
       end
 
-      # Inner back slats (1-based indices) that get tie / cap / under-support
-      # heart screws along X — slats 1 and 9 are outer comb teeth.
+      # Inner back slats (1-based indices) that get tie / cap heart screws along X
+      # — slats 1 and 9 are outer comb teeth.
       SISTER_TIE_INTO_BACK_SLAT_HEART_INDICES = (2..8).freeze
 
       # Screw up from under the head cap into inner back slats 2..8 at each heart
@@ -303,26 +288,6 @@ module Timmerman
                 host_name: 'EB | beam | back | sister tie',
                 face:      :min_z,
                 u:         world_x - x1_tie,
-                v:         c.beam_wide / 2.0,
-                spec_id:   :eb_pocket_4mm
-        end
-      end
-
-      # Same plan as +_sister_tie_into_back_slat_hearts_screws+: screw up from the
-      # beam's :min_z into inner back slats 2..8 at each slat heart. The under-slat
-      # support shares +sister_tie_x+ span and the same Z band as the sister tie
-      # (narrow stock vertical); only Y differs on the back frame.
-      def _back_under_slat_support_into_back_slat_hearts_screws
-        x1_under, span_under = sister_tie_x
-        return if span_under <= 0
-
-        back_xs, = slat_x_starts
-        SISTER_TIE_INTO_BACK_SLAT_HEART_INDICES.each do |n|
-          world_x = back_xs[n - 1] + c.slat_dx / 2.0
-          screw "EB | screw | back under slat support | #{n}/#{c.back_slat_count} | heart",
-                host_name: 'EB | beam | back | under slat support',
-                face:      :min_z,
-                u:         world_x - x1_under,
                 v:         c.beam_wide / 2.0,
                 spec_id:   :eb_pocket_4mm
         end
@@ -617,7 +582,7 @@ module Timmerman
           slat "EB | slat | front | #{i + 1}/#{c.front_slat_count}",
                at:   [x0, c.front_slat_y0, c.z_slat_bottom],
                size: [c.slat_dx, c.front_slat_run_y, c.slat_dz],
-               note: 'Front (sliding) comb tooth; 69 mm headward of under-slat foot beam bears on back EB | beam | back | under slat support when retracted; footward narrow stock merged from former foot end beam.'
+               note: 'Front (sliding) comb tooth; 69 mm headward of under-slat foot beam; footward narrow stock merged from former foot end beam.'
         end
       end
 

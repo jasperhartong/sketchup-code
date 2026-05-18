@@ -171,7 +171,7 @@ module Timmerman
       end
 
       def paint_group(group, rgb, skip_name_re: nil)
-        return if @debug_color == :components_reuse
+        return unless _preview_instance_paint?
 
         _paint_recursive(group.entities, _ensure_material(rgb), skip_name_re: skip_name_re)
       end
@@ -184,9 +184,35 @@ module Timmerman
 
       def paint_named_children(root, names, rgb)
         return if names.nil? || names.empty?
-        return if @debug_color == :components_reuse
+        return unless @debug_color == :off
 
         _paint_named_children_with_material(root, names, _ensure_material(rgb))
+      end
+
+      # Overlap debug highlights — works regardless of +debug_color+ mode.
+      def paint_named_children_force(root, names, rgb)
+        return if names.nil? || names.empty?
+
+        Array(names).each do |name|
+          child = _named_child(root, name)
+          paint_structural_part_highlight(child, rgb) if child
+        end
+      end
+
+      # Magenta overlap markers: paint definition faces on a unique instance copy.
+      # +instance.material+ alone is often invisible after preview wood was applied.
+      def paint_structural_part_highlight(element, rgb)
+        return unless element&.valid?
+
+        mat = _ensure_material(rgb)
+        case element
+        when Sketchup::ComponentInstance
+          element.make_unique
+          element.material = nil
+          _paint_recursive(element.definition.entities, mat)
+        when Sketchup::Group
+          _paint_recursive(element.entities, mat)
+        end
       end
 
       def hide_named_children(root, names, hidden: true)
@@ -617,12 +643,12 @@ module Timmerman
           child = _named_child(root, name)
           next unless child
 
-          child_entities =
-            case child
-            when Sketchup::Group then child.entities
-            when Sketchup::ComponentInstance then child.definition.entities
-            end
-          _paint_recursive(child_entities, material) if child_entities
+          case child
+          when Sketchup::Group
+            _paint_recursive(child.entities, material)
+          when Sketchup::ComponentInstance
+            _paint_component_instance(child, material)
+          end
         end
       end
 
@@ -652,12 +678,17 @@ module Timmerman
           end
 
         cached = @box_definition_cache[key]
-        return cached if cached&.valid?
+        if cached&.valid?
+          _clear_face_materials(cached.entities) if _preview_instance_paint?
+          return cached
+        end
 
         defn = @model.definitions[defn_name] || @model.definitions.add(defn_name)
         if defn.entities.length.zero?
           add_box(defn, at: [0, 0, 0], size: size, corner_radius: corner_radius, corner_axis: corner_axis)
         end
+        # :off preview uses per-instance material; strip stale face paints on shared defs.
+        _clear_face_materials(defn.entities) if _preview_instance_paint?
         @box_definition_cache[key] = defn
       end
 
@@ -820,6 +851,22 @@ module Timmerman
         m
       end
 
+      # Strip face paints so shared ComponentDefinitions honor each instance's
+      # +material+ (legacy preview passes painted definition.entities and leaked color).
+      def _clear_face_materials(entities)
+        entities.each do |e|
+          case e
+          when Sketchup::Face
+            e.material      = nil
+            e.back_material = nil
+          when Sketchup::Group
+            _clear_face_materials(e.entities)
+          when Sketchup::ComponentInstance
+            _clear_face_materials(e.definition.entities)
+          end
+        end
+      end
+
       def _paint_recursive(entities, material, skip_name_re: nil)
         entities.each do |e|
           case e
@@ -833,9 +880,24 @@ module Timmerman
           when Sketchup::ComponentInstance
             next if skip_name_re&.match?(e.name)
 
-            _paint_recursive(e.definition.entities, material, skip_name_re: skip_name_re)
+            _paint_component_instance(e, material, skip_name_re: skip_name_re)
           end
         end
+      end
+
+      # :off / :overlaps — per-instance preview color (shared defs must not carry face materials).
+      # :sides / :components_reuse — paint definition faces (see +debug_paint_axis_faces+ /
+      #   +_apply_component_debug_color+).
+      def _paint_component_instance(instance, material, skip_name_re: nil)
+        if _preview_instance_paint?
+          instance.material = material
+        else
+          _paint_recursive(instance.definition.entities, material, skip_name_re: skip_name_re)
+        end
+      end
+
+      def _preview_instance_paint?
+        %i[off overlaps].include?(@debug_color)
       end
     end
   end

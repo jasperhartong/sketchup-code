@@ -11,7 +11,7 @@
 # Then:
 #   Timmerman::ExtendableBed::BedLayout.new.create    # build all preview pairs
 #   Timmerman::ExtendableBed::BedLayout.new.clear     # erase all EB groups
-#   Timmerman::ExtendableBed::BedLayout.new.validate  # AABB overlap check
+#   Timmerman::ExtendableBed::BedLayout.new.validate  # AABB overlap (beams/legs/slats/planks per preview pair)
 #
 # Native GLB (retracted pair only): load lib/export_nonextended_bed_glb.rb, then
 #   Timmerman::ExtendableBed::GlbExport.export_nonextended_pair('/path/out.glb')
@@ -22,8 +22,8 @@
 #   Timmerman::ExtendableBed::BedLayout.new(config).create
 #
 # Hardware / debug (optional Config keyword args):
-#   debug_color: :off | :sides | :components_reuse
-#     :sides            — six colours on axis-aligned part faces (after highlights).
+#   debug_color: :off | :sides | :components_reuse | :overlaps
+#     :sides            — six colours on axis-aligned part faces
 #     :components_reuse — same color for all instances sharing a component definition.
 #   show_cut_plan_3d: true|false — render stock bars and assigned cuts as 3D geometry.
 #   hardware_cut_hosts: true  — cut countersink + hole in wood (experimental; default false

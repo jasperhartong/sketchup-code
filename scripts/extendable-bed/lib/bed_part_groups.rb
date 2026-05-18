@@ -7,7 +7,7 @@ module Timmerman
     # part names — compose freely via array concatenation.
     #
     # Used by +construction_steps.rb+ to build the +VARIANT_EXCLUDES+ table
-    # and by +BedPairCatalog.highlights+.
+    # and by +BedPairCatalog+ variant excludes.
     module BedPartGroups
       # ── Back frame ──────────────────────────────────────────────────────
 
@@ -44,7 +44,6 @@ module Timmerman
         'EB | beam | back | sister | +X'
       ].freeze
       BACK_SISTER_TIE = ['EB | beam | back | sister tie'].freeze
-      BACK_UNDER_SLAT_SUPPORT = ['EB | beam | back | under slat support'].freeze
 
       # ── Front frame ─────────────────────────────────────────────────────
 
