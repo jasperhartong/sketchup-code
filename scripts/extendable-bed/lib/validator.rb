@@ -7,6 +7,10 @@ module Timmerman
     # (back root + front root at their placed world transforms). Touching faces are
     # allowed; only true volumetric overlap is flagged.
     #
+    # NEVER add exceptions, allowlists, or “intentional overlap” skips in this class.
+    # If the validator reports an overlap, fix the geometry in Config / frame assembly —
+    # do not weaken the check.
+    #
     # Usage:
     #   Validator.new(config).validate(model)        # prints + returns pairs
     #   Validator.new(config).overlapping_pairs(model)  # just returns pairs

@@ -214,8 +214,27 @@ module Timmerman
       # Back slat solids span y ∈ [0, back_slat_part_depth_y); footward face at usable_length_retracted
       # (front frame y = 0 when translated by retracted_foot_world_y).
       def back_slat_part_depth_y = usable_length_retracted
-      # Front slats no longer match back slats: they end at the under-slat foot
-      # beam's headward face (see +front_slat_y0+ / +front_slat_y1+).
+
+      # Back head cap on the fixed frame (matches +BackFrame#y_head+ / head cap placement).
+      def back_head_cap_y0 = -plank_thickness
+      def back_head_cap_max_world_y = back_head_cap_y0 + beam_wide
+
+      # Extension stop headward limit when retracted: footward of head cap (no cap overlap).
+      def front_extension_stop_y0 = back_head_cap_max_world_y - usable_length_retracted
+
+      # +Y width = comb overlap left between retracted clearance and extended mid-tie meet.
+      def extension_stop_plank_width
+        mid_tie_y0 - usable_length_extended - front_extension_stop_y0
+      end
+
+      # Retracted: slat bears on head cap but clears head ledge (ledge spans cap y₀…y₀+plank_thickness).
+      def back_head_ledge_max_world_y = back_head_cap_y0 + plank_thickness
+
+      def front_slat_y0_at_retracted_on_head_cap = back_head_ledge_max_world_y - usable_length_retracted
+
+      def front_slat_y0 = [front_slat_y0_at_retracted_on_head_cap, front_extension_stop_y0].min
+
+      def front_slat_y1 = 0
       def front_slat_run_y = front_slat_y1 - front_slat_y0
 
       # ── Bed width ─────────────────────────────────────────────────────────────
@@ -223,12 +242,6 @@ module Timmerman
       def n_slats_x    = back_slat_count + front_slat_count
       def gaps_along_x = n_slats_x - 1
       def outer_width  = (n_slats_x * slat_dx) + (gaps_along_x * slat_gap)
-
-      # Front slats: headward face beam_wide headward of the under-slat foot beam's
-      # headward face; the under-slat foot beam still sits inside the slat. Footward
-      # face is y = 0 (former foot end beam merged into the slat).
-      def front_slat_y0 = under_slat_foot_beam_y0 - beam_wide
-      def front_slat_y1 = 0
 
       # ── Z chain ───────────────────────────────────────────────────────────────
 
@@ -258,16 +271,10 @@ module Timmerman
 
       # Mid-tie Y anchor on the back frame: one plank_thickness + beam_wide headward of the
       # back-slat footward end (retracted_frame_depth_y), shifted +Y by MID_TIE_OUTWARD_SHIFT so
-      # the mid tie sits flush with the outside of the structure (the under-slat foot-end
-      # beam shifts with it via +under_slat_foot_beam_y0+).
+      # the mid tie sits flush with the outside of the structure. The front extension-stop
+      # plank meets it when foot_world_y == usable_length_extended.
       MID_TIE_OUTWARD_SHIFT = 11.mm
       def mid_tie_y0 = retracted_frame_depth_y - plank_thickness - beam_wide + MID_TIE_OUTWARD_SHIFT
-
-      # Under-slat foot-end beam Y anchor on the front frame. Positioned so that in the fully-extended
-      # state (front frame translated by usable_length_extended) its max_y is flush with mid_tie_y0 on the
-      # back frame, forming a continuous brace across the slat-interlock zone:
-      #   foot_world_y + under_slat_foot_beam_y0 + beam_wide  ==  mid_tie_y0  (when foot_world_y = usable_length_extended)
-      def under_slat_foot_beam_y0 = mid_tie_y0 - usable_length_extended - beam_wide
 
       # ── World Y positions for the front frame (sliding half) ──────────────────
 
@@ -406,7 +413,8 @@ module Timmerman
         'EB | beam | mid tie | between sisters',
         'EB | leg | post | behind mid | -X | headward',
         'EB | leg | post | behind mid | +X | headward',
-        'EB | beam | front | under slats | foot end'
+        'EB | beam | front | under slats | foot end',
+        'EB | beam | front | under slat foot'
       ].freeze
     end
   end

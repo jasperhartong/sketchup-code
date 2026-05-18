@@ -60,7 +60,7 @@ module Timmerman
       FRONT_FOOT_CAP   = ['EB | beam | foot | cap'].freeze
       FRONT_FOOT_LEDGE = ['EB | plank | foot | ledge'].freeze
 
-      FRONT_UNDER_SLAT_FOOT_BEAM = ['EB | beam | front | under slat foot'].freeze
+      FRONT_UNDER_SLAT_EXTENSION_STOP = ['EB | plank | front | under slat extension stop'].freeze
 
       # ── Composite groups (aliases for common combinations) ──────────────
 

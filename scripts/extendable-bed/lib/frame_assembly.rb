@@ -531,10 +531,9 @@ module Timmerman
         _foot_cap_beam
         _foot_ledge_plank
         _front_slats
-        _under_slat_foot_beam
+        _under_slat_extension_stop_plank
         _foot_corner_leg_into_inset_leg_screws
         _foot_inset_leg_inner_face_screws
-        _under_slat_foot_into_front_slat_hearts_screws
         _foot_cap_into_front_slat_hearts_screws
       end
 
@@ -582,7 +581,7 @@ module Timmerman
           slat "EB | slat | front | #{i + 1}/#{c.front_slat_count}",
                at:   [x0, c.front_slat_y0, c.z_slat_bottom],
                size: [c.slat_dx, c.front_slat_run_y, c.slat_dz],
-               note: 'Front (sliding) comb tooth; 69 mm headward of under-slat foot beam; footward narrow stock merged from former foot end beam.'
+               note: 'Front (sliding) comb tooth; retracted headward edge on head cap, footward of head ledge; foot at y = 0.'
         end
       end
 
@@ -632,28 +631,6 @@ module Timmerman
         end
       end
 
-      # Foot-side mirror of +BackFrame#_sister_tie_into_back_slat_hearts_screws+:
-      # screw up from under the front under-slat-foot beam into each of the 6
-      # inner front slats (2..7) centered on each slat's heart. Beam :min_z face
-      # u runs along +X (world-X minus x1_under); v along +Y across beam_wide.
-      UNDER_SLAT_FOOT_INTO_FRONT_SLAT_HEART_INDICES = (2..7).freeze
-
-      def _under_slat_foot_into_front_slat_hearts_screws
-        x1_under, span_under = sister_tie_x
-        return unless span_under.positive?
-
-        _, front_xs = slat_x_starts
-        UNDER_SLAT_FOOT_INTO_FRONT_SLAT_HEART_INDICES.each do |n|
-          world_x = front_xs[n - 1] + c.slat_dx / 2.0
-          screw "EB | screw | under slat foot | #{n}/#{c.front_slat_count} | heart",
-                host_name: 'EB | beam | front | under slat foot',
-                face:      :min_z,
-                u:         world_x - x1_under,
-                v:         c.beam_wide / 2.0,
-                spec_id:   :eb_pocket_4mm
-        end
-      end
-
       # Screw up from under the foot cap into each front slat at its comb heart
       # (same :min_z / u / v pattern as +BackFrame#_head_cap_into_back_slat_hearts_screws+).
       def _foot_cap_into_front_slat_hearts_screws
@@ -671,16 +648,15 @@ module Timmerman
         end
       end
 
-      # Beam under the foot end of the front slats (sister inner span).
-      def _under_slat_foot_beam
+      # Plank stop under front slats (sister inner span): limits extension against back mid tie.
+      def _under_slat_extension_stop_plank
         x1_under, span_under = sister_tie_x
         return unless span_under.positive?
 
-        z_flat = c.z_slat_bottom - c.beam_narrow
-        beam 'EB | beam | front | under slat foot',
-             at:   [x1_under, c.under_slat_foot_beam_y0, z_flat],
-             size: [span_under, c.beam_wide, c.beam_narrow],
-             note: 'Under front slats; max_z flush slat bottom; 69 mm along +Y against slats; X between sister inners; max_y flush with back sister tie min_y when extended.'
+        plank 'EB | plank | front | under slat extension stop',
+              at:   [x1_under, c.front_extension_stop_y0, c.z_slat_bottom - c.plank_thickness],
+              size: [span_under, c.extension_stop_plank_width, c.plank_thickness],
+              note: 'Under front slats; width = mid_tie_y0 − usable_length_extended − front_extension_stop_y0; footward face meets back mid tie when extended.'
       end
 
       # ── Z / Y / plan helpers ─────────────────────────────────────────────

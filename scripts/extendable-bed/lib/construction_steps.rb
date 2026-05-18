@@ -24,23 +24,23 @@ module Timmerman
         # Step 7: full bed, nothing hidden.
         construction_full: ->(_b, _f, _c) { { back: [], front: [] } },
 
-        # Step 6: ledges removed, under-slat-foot beam retained.
+        # Step 6: ledges removed, under-slat extension stop retained.
         construction_no_ledges_with_beam: ->(_b, _f, _c) {
           { back:  G::BACK_HEAD_LEDGE,
             front: G::FRONT_FOOT_LEDGE }
         },
 
-        # Ledges + under-slat foot beam all gone.
+        # Ledges + under-slat extension stop all gone.
         construction_no_ledges: ->(_b, _f, _c) {
           { back:  G::BACK_HEAD_LEDGE,
-            front: G::FRONT_FOOT_LEDGE + G::FRONT_UNDER_SLAT_FOOT_BEAM }
+            front: G::FRONT_FOOT_LEDGE + G::FRONT_UNDER_SLAT_EXTENSION_STOP }
         },
 
         # Step 3: also remove foot outer corners (they aren't part of the
         # step-1 sub-assembly, unlike the head outer corners).
         flip_no_legs: ->(_b, _f, _c) {
           { back:  G::BACK_HEAD_LEDGE,
-            front: G::FRONT_FOOT_LEDGE + G::FRONT_UNDER_SLAT_FOOT_BEAM +
+            front: G::FRONT_FOOT_LEDGE + G::FRONT_UNDER_SLAT_EXTENSION_STOP +
                    G::FRONT_FOOT_OUTER_CORNERS + G::FRONT_FOOT_INSETS }
         },
 
