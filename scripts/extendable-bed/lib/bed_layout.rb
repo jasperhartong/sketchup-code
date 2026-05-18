@@ -119,17 +119,19 @@ module Timmerman
 
       private
 
-      # Walk the DeclarationSet and feed every leaf PartSpec into +stock+.
-      # Composite groups (InstanceRef children) are skipped to avoid double-counting.
+      # Walk the DeclarationSet and feed every leaf PartSpec / ScrewSpec into +stock+.
+      # Composite groups (InstanceRef-only children) are skipped to avoid double-counting.
       BeamProxy  = Struct.new(:name, :size) do
         def extrusion_mm = size.map { |d| d.to_mm.abs }.max
       end
       PlankProxy = Struct.new(:dx, :dy, :dz)
+      ScrewProxy = Struct.new(:spec_id, :shaft_length_index, :spec)
 
       def _record_stock_from_spec(stock, decl_set)
         decl_set.components.each do |comp_spec|
-          parts = comp_spec.children.select { |c| c.is_a?(SketchupUtils::Declarations::PartSpec) }
-          next if parts.empty?
+          parts  = comp_spec.children.select { |c| c.is_a?(SketchupUtils::Declarations::PartSpec) }
+          screws = comp_spec.children.select { |c| c.is_a?(SketchupUtils::Declarations::ScrewSpec) }
+          next if parts.empty? && screws.empty?
 
           parts.each do |ps|
             case ps.kind
@@ -139,6 +141,15 @@ module Timmerman
               dx, dy, dz = ps.size
               stock.record_plank(PlankProxy.new(dx, dy, dz))
             end
+          end
+
+          screws.each do |ss|
+            hw_spec = @config.screw_specs[ss.spec_id]
+            unless hw_spec
+              warn "[BedLayout] unknown screw spec_id #{ss.spec_id.inspect} for screw #{ss.id}"
+              next
+            end
+            stock.record_screw(ScrewProxy.new(ss.spec_id, ss.shaft_length_index, hw_spec))
           end
         end
       end

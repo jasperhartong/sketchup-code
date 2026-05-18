@@ -71,9 +71,27 @@ module Timmerman
       # Top-level container returned by SpecBuilder.build.
       DeclarationSet = Struct.new(:prefix, :components, :scenes, keyword_init: true)
 
+      # ── Shared helpers ────────────────────────────────────────────────────────
+
+      # Included by builders that accept an `instance()` call with `transform:/at:`.
+      module TransformResolvable
+        private
+
+        def _resolve_transform(transform, at)
+          if transform
+            raise ArgumentError, 'instance: pass transform: OR at:, not both' if at
+            return transform
+          end
+          raise ArgumentError, 'instance: transform: or at: is required' unless at
+
+          Transform.translation(at)
+        end
+      end
+
       # ── ComponentGroupBuilder ─────────────────────────────────────────────────
 
       class ComponentGroupBuilder
+        include TransformResolvable
         def initialize
           @children = []
         end
@@ -125,23 +143,13 @@ module Timmerman
         end
 
         def _children = @children.freeze
-
-        private
-
-        def _resolve_transform(transform, at)
-          if transform
-            raise ArgumentError, 'instance: pass transform: OR at:, not both' if at
-            return transform
-          end
-          raise ArgumentError, 'instance: transform: or at: is required' unless at
-
-          Transform.translation(at)
-        end
       end
 
       # ── SceneBuilder ──────────────────────────────────────────────────────────
 
       class SceneBuilder
+        include TransformResolvable
+
         def initialize
           @instances = []
         end
@@ -158,18 +166,6 @@ module Timmerman
         end
 
         def _instances = @instances.freeze
-
-        private
-
-        def _resolve_transform(transform, at)
-          if transform
-            raise ArgumentError, 'instance: pass transform: OR at:, not both' if at
-            return transform
-          end
-          raise ArgumentError, 'instance: transform: or at: is required' unless at
-
-          Transform.translation(at)
-        end
       end
 
       # ── SpecBuilder ───────────────────────────────────────────────────────────

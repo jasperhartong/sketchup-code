@@ -21,7 +21,7 @@ module Timmerman
       attr_reader :beam_narrow       # 44 mm
       attr_reader :beam_wide         # 69 mm
       attr_reader :plank_thickness   # 18 mm — non-structural sheet panels
-      attr_reader :pillow_thickness  # 100 mm — foam short edge
+      attr_reader :pillow_thickness  # 120 mm — foam short edge
 
       # XY footprint corner radius before Z push/pull on catalog beams (Beam/Leg/Slat) and pillows.
       attr_reader :beam_box_corner_radius
