@@ -123,7 +123,7 @@ module Timmerman
         all_front_structural_ids = [
           'foot_corner_neg_x', 'foot_corner_pos_x',
           'foot_inset_neg_x',  'foot_inset_pos_x',
-          'foot_cap'
+          'foot_cap', 'extension_stop'
         ] + front_slat_ids
 
         # Construction step hidden-component lists (subtractive from full frame).
@@ -171,15 +171,15 @@ module Timmerman
         # Step 3 (flip, no legs): no foot outer corners + insets.
         step3_front_hide = %w[foot_ledge foot_corner_neg_x foot_corner_pos_x
                                foot_inset_neg_x foot_inset_pos_x]
-        step3_back_hide  = ['head_ledge']
+        step3_back_hide  = ['head_ledge extension_stop']
 
         # Step 4 (flip, no ledges, no extension stop).
         step4_back_hide  = ['head_ledge']
-        step4_front_hide = %w[foot_ledge extension_stop]
+        step4_front_hide = %w[foot_ledge]
 
         # Step 5 (extended, flip, no ledges + extension stop).
         step5_back_hide  = ['head_ledge']
-        step5_front_hide = %w[foot_ledge extension_stop]
+        step5_front_hide = %w[foot_ledge]
 
         # Steps 6–7 same hide lists as 5, just different orientation / foot position.
         step6_back_hide  = step5_back_hide
@@ -270,7 +270,7 @@ module Timmerman
 
             # Back slats (comb teeth)
             back_xs.each_with_index do |x0, i|
-              part(id: "back_slat_#{i + 1}", kind: :beam, comb: true,
+              part(id: "back_slat_#{i + 1}", kind: :beam,
                    at:   [x0, 0, c.z_slat_bottom],
                    size: [c.slat_dx, c.back_slat_part_depth_y, c.slat_dz],
                    note: 'Back (fixed) comb tooth; interlocks with front slats when assembled.')
@@ -475,7 +475,7 @@ module Timmerman
 
             # Front slats (comb teeth)
             front_xs.each_with_index do |x0, i|
-              part(id: "front_slat_#{i + 1}", kind: :beam, comb: true,
+              part(id: "front_slat_#{i + 1}", kind: :beam,
                    at:   [x0, c.front_slat_y0, c.z_slat_bottom],
                    size: [c.slat_dx, c.front_slat_run_y, c.slat_dz],
                    note: 'Front (sliding) comb tooth; foot at local y=0.')
@@ -574,18 +574,20 @@ module Timmerman
 
           component_group(id: 'PillowBig') do
             part(id: 'foam', kind: :pillow,
-                 at:   [0, pillow_y, c.z_slat_top],
-                 size: [c.outer_width, c.pillow_big_length, c.pillow_thickness],
-                 note: 'Big flat pillow; on slats between planks.')
+                 at:       [0, pillow_y, c.z_slat_top],
+                 size:     [c.outer_width, c.pillow_big_length, c.pillow_thickness],
+                 material: [255, 255, 255],
+                 note:     'Big flat pillow; on slats between planks.')
           end
 
           c.small_pillow_count.times do |k|
             n = k + 1  # 1-based
             component_group(id: "PillowSmall#{n}") do
               part(id: 'foam', kind: :pillow,
-                   at:   [0, 0, 0],
-                   size: [c.outer_width, c.pillow_small_length, c.pillow_thickness],
-                   note: "Small pillow #{n}/#{c.small_pillow_count}.")
+                   at:       [0, 0, 0],
+                   size:     [c.outer_width, c.pillow_small_length, c.pillow_thickness],
+                   material: [255, 255, 255],
+                   note:     "Small pillow #{n}/#{c.small_pillow_count}.")
             end
           end
 

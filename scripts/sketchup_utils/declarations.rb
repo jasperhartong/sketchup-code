@@ -44,7 +44,7 @@ module Timmerman
 
       # A single geometry primitive within a component group.
       # kind: :beam | :plank | :pillow
-      PartSpec = Struct.new(:id, :kind, :size, :at, :note, :comb, keyword_init: true)
+      PartSpec = Struct.new(:id, :kind, :size, :at, :note, :material, keyword_init: true)
 
       # A hardware placement within a component group.
       # host_id references the id of a PartSpec in the same component group.
@@ -79,11 +79,11 @@ module Timmerman
         end
 
         # Leaf geometry part. kind: :beam | :plank | :pillow
-        def part(id:, kind:, size:, at:, note: nil, comb: false)
+        def part(id:, kind:, size:, at:, note: nil, material: nil)
           @children << PartSpec.new(
             id: id.to_s, kind: kind,
             size: size, at: at,
-            note: note, comb: comb
+            note: note, material: material
           )
         end
 

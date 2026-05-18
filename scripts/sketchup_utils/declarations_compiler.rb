@@ -159,6 +159,10 @@ module Timmerman
               defn = g.respond_to?(:definition) ? g.definition : g
               @renderer.round_group_box_all_edges(defn, size: ps.size, radius: r)
             end
+            if ps.material && @renderer.respond_to?(:paint_group_force)
+              target = g.respond_to?(:definition) ? g.definition : g
+              @renderer.paint_group_force(target, ps.material)
+            end
             if @attr_dict && ps.note && !ps.note.empty?
               @renderer.set_group_attribute(g, @attr_dict, 'note', ps.note)
             end
