@@ -70,8 +70,8 @@ module Timmerman
         usable_length_extended:  2000.mm,
         usable_length_retracted: 1100.mm,
         beam_narrow:      44.mm,
-        beam_wide:        69.mm,
-        plank_thickness:  18.mm,
+        beam_wide:        70.mm,
+        plank_thickness:  13.mm,
         pillow_thickness: 120.mm,
         beam_box_corner_radius:   5.mm,
         plank_box_corner_radius:  2.mm,
@@ -252,12 +252,11 @@ module Timmerman
       # and behind-mid posts headward (−Y) by the same delta.
       def mid_layout_y_shift = beam_y - beam_wide
 
-      # Mid-tie Y anchor on the back frame: one plank_thickness + beam_wide headward of the
-      # back-slat footward end (retracted_frame_depth_y), shifted +Y by MID_TIE_OUTWARD_SHIFT so
-      # the mid tie sits flush with the outside of the structure. The front extension-stop
-      # plank meets it when foot_world_y == usable_length_extended.
-      MID_TIE_OUTWARD_SHIFT = 11.mm
-      def mid_tie_y0 = retracted_frame_depth_y - plank_thickness - beam_wide + MID_TIE_OUTWARD_SHIFT
+      # Mid-tie Y anchor on the back frame: positioned so the tie's footward face (mid_tie_y0 +
+      # beam_wide) is flush with the mid_leg outside face (mid_leg_y0 + leg_y =
+      # retracted_frame_depth_y - plank_thickness). The front extension-stop plank meets
+      # the tie's headward face when foot_world_y == usable_length_extended.
+      def mid_tie_y0 = retracted_frame_depth_y - plank_thickness - beam_wide
 
       # ── World Y positions for the front frame (sliding half) ──────────────────
 
