@@ -195,13 +195,24 @@ module Timmerman
       def slat_length     = retracted_frame_depth_y - (2 * beam_y)
       def back_slat_run_y = slat_length + beam_y
 
-      # Back slat solids span y ∈ [0, back_slat_part_depth_y); footward face at usable_length_retracted
-      # (front frame y = 0 when translated by retracted_foot_world_y).
-      def back_slat_part_depth_y = usable_length_retracted
+      # Cap band is beam_wide deep; ledge plank is only plank_thickness. Shortening inner back
+      # teeth (foot end) and all front teeth (head end) by this delta keeps comb stock off the
+      # raised cap faces — head cap on BackFrame, foot cap on FrontFrame — so the bed slides easily.
+      def cap_band_clearance_y = beam_wide - plank_thickness
+
+      # Back slat solids: headward face at y = 0 (head ledge); outer teeth run to usable_length_retracted.
+      def back_slat_outer_y0 = 0
+      def back_slat_outer_part_depth_y = usable_length_retracted
+
+      # Inner teeth: same head anchor; footward end pulled back (less friction on head cap when sliding).
+      def back_slat_inner_part_depth_y = usable_length_retracted - cap_band_clearance_y
+
+      # Alias kept for sister-run geometry (outer slat span).
+      def back_slat_part_depth_y = back_slat_outer_part_depth_y
 
       # Back head cap on the fixed frame (matches +BackFrame#y_head+ / head cap placement).
       def back_head_cap_y0 = -plank_thickness
-      def back_head_cap_max_world_y = back_head_cap_y0 + beam_wide
+      def back_head_cap_max_world_y = back_head_cap_y0 + beam_wide  # = cap_band_clearance_y above head ledge (y = 0)
 
       # Extension stop headward limit when retracted: footward of head cap (no cap overlap).
       def front_extension_stop_y0 = back_head_cap_max_world_y - usable_length_retracted
@@ -211,12 +222,12 @@ module Timmerman
         mid_tie_y0 - usable_length_extended - front_extension_stop_y0
       end
 
-      # Retracted: slat bears on head cap but clears head ledge (ledge spans cap y₀…y₀+plank_thickness).
-      def back_head_ledge_max_world_y = back_head_cap_y0 + plank_thickness
+      def back_head_ledge_max_world_y = back_head_cap_y0 + plank_thickness  # y = 0 on BackFrame
 
-      def front_slat_y0_at_retracted_on_head_cap = back_head_ledge_max_world_y - usable_length_retracted
+      # Front teeth: foot stays at y = 0; head end pulled back (less friction on foot cap when sliding).
+      def front_slat_y0_at_retracted_cleared_of_cap = back_head_cap_max_world_y - usable_length_retracted
 
-      def front_slat_y0 = [front_slat_y0_at_retracted_on_head_cap, front_extension_stop_y0].min
+      def front_slat_y0 = [front_slat_y0_at_retracted_cleared_of_cap, front_extension_stop_y0].min
 
       def front_slat_y1 = 0
       def front_slat_run_y = front_slat_y1 - front_slat_y0

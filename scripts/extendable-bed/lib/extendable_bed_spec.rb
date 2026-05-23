@@ -268,12 +268,16 @@ module Timmerman
                  size: [c.outer_width, c.plank_thickness, 2 * c.beam_wide],
                  note: 'On cap and corner legs; full bed width; top 2×BEAM_WIDE above z_slat_bottom.')
 
-            # Back slats (comb teeth)
+            # Back slats: outer teeth full length; inner teeth shortened at foot end (head-cap clearance).
             back_xs.each_with_index do |x0, i|
-              part(id: "back_slat_#{i + 1}", kind: :beam,
-                   at:   [x0, 0, c.z_slat_bottom],
-                   size: [c.slat_dx, c.back_slat_part_depth_y, c.slat_dz],
-                   note: 'Back (fixed) comb tooth; interlocks with front slats when assembled.')
+              n = i + 1
+              outer = n == 1 || n == c.back_slat_count
+              depth_y = outer ? c.back_slat_outer_part_depth_y : c.back_slat_inner_part_depth_y
+              part(id: "back_slat_#{n}", kind: :beam,
+                   at:   [x0, c.back_slat_outer_y0, c.z_slat_bottom],
+                   size: [c.slat_dx, depth_y, c.slat_dz],
+                   note: outer ? 'Outer back comb tooth; full run from head ledge.' :
+                                'Inner back comb tooth; foot end pulled back — clears head cap when sliding.')
             end
 
             # Outer sisters
@@ -473,12 +477,12 @@ module Timmerman
                  size: [c.outer_width, c.plank_thickness, 2 * c.beam_wide],
                  note: 'On cap and corner legs; full bed width; top 2×BEAM_WIDE above z_slat_bottom.')
 
-            # Front slats (comb teeth)
+            # Front slats: all teeth shortened at head end (foot-cap clearance when sliding).
             front_xs.each_with_index do |x0, i|
               part(id: "front_slat_#{i + 1}", kind: :beam,
                    at:   [x0, c.front_slat_y0, c.z_slat_bottom],
                    size: [c.slat_dx, c.front_slat_run_y, c.slat_dz],
-                   note: 'Front (sliding) comb tooth; foot at local y=0.')
+                   note: 'Front comb tooth; foot at y = 0; head end pulled back — clears foot cap when sliding.')
             end
 
             # Extension stop plank (under front slats)
