@@ -485,10 +485,10 @@ module Timmerman
                    note: 'Front comb tooth; foot at y = 0; head end pulled back — clears foot cap when sliding.')
             end
 
-            # Extension stop plank (under front slats)
+            # Extension stop plank (under front slats; washer gap below slat bottoms)
             if span_under > 0
               part(id: 'extension_stop', kind: :plank,
-                   at:   [x_under, c.front_extension_stop_y0, c.z_slat_bottom - c.plank_thickness],
+                   at:   [x_under, c.front_extension_stop_y0, c.extension_stop_z0],
                    size: [span_under, c.extension_stop_plank_width, c.plank_thickness],
                    note: 'Under front slats; footward face meets back mid tie when extended.')
             end
@@ -539,16 +539,30 @@ module Timmerman
               end
             end
 
-            # Extension stop into front slat hearts
+            # Extension stop into front slat hearts (washers fill gap to slat bottoms)
             if span_under > 0
+              gap = c.extension_stop_washer_gap
+              od  = c.flat_washer_outer_diameter
               front_inner_slat_ids.each_with_index do |_, idx|
                 n = idx + 2   # 1-based inner index (2..front_slat_count-1)
                 world_x = front_xs[n - 1] + c.slat_dx / 2.0
+                u = world_x - x_under
+                v = c.extension_stop_plank_width / 2.0
                 screw(id: "extension_stop_screw_#{n}_of_#{c.front_slat_count}_heart",
                       host_id: 'extension_stop', face: :min_z,
-                      u: world_x - x_under,
-                      v: c.extension_stop_plank_width / 2.0,
+                      u: u,
+                      v: v,
                       spec_id: :eb_pocket_4mm)
+                flat_washer(id: "extension_stop_washer_#{n}_of_#{c.front_slat_count}_heart",
+                            host_id: 'extension_stop',
+                            at: [
+                              x_under + u - (od / 2.0),
+                              c.front_extension_stop_y0 + v - (od / 2.0),
+                              c.z_slat_bottom - gap
+                            ],
+                            inner_diameter: c.flat_washer_inner_diameter,
+                            outer_diameter: od,
+                            thickness: gap)
               end
             end
 

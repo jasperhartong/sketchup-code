@@ -126,13 +126,14 @@ module Timmerman
           _compile_group(ng)
         end
 
-        part_specs  = spec.children.select { |c| c.is_a?(PartSpec) }
-        screw_specs = spec.children.select { |c| c.is_a?(ScrewSpec) }
-        inst_refs   = spec.children.select { |c| c.is_a?(InstanceRef) }
+        part_specs        = spec.children.select { |c| c.is_a?(PartSpec) }
+        screw_specs       = spec.children.select { |c| c.is_a?(ScrewSpec) }
+        flat_washer_specs = spec.children.select { |c| c.is_a?(FlatWasherSpec) }
+        inst_refs         = spec.children.select { |c| c.is_a?(InstanceRef) }
 
         full_name = _full_name(spec.id)
 
-        if part_specs.any? || screw_specs.any?
+        if part_specs.any? || screw_specs.any? || flat_washer_specs.any?
           # Build a temporary root group, render parts/screws directly into it,
           # then convert the whole group to a ComponentDefinition.
           root_group = @renderer.create_group(full_name, parent: :root, layer: @layer)
@@ -180,12 +181,20 @@ module Timmerman
             _render_screw(root_group, host_group, host_ps, ss)
           end
 
+          flat_washer_specs.each do |ws|
+            unless part_groups.key?(ws.host_id)
+              warn "[DeclarationsCompiler] flat washer '#{ws.id}': host '#{ws.host_id}' not found in #{spec.id}"
+              next
+            end
+            _render_flat_washer(root_group, ws)
+          end
+
           # Apply preview paint (normal mode) or axis-face debug colors (:sides mode).
           if @preview_rgb
             @renderer.paint_group(root_group, @preview_rgb,
-                                  skip_name_re: /\Ascrew\z/)
+                                  skip_name_re: /screw|washer/i)
           end
-          @renderer.debug_paint_axis_faces(root_group, skip_name_re: /\Ascrew\z/)
+          @renderer.debug_paint_axis_faces(root_group, skip_name_re: /screw|washer/i)
 
           # Place InstanceRef children inside the group.
           inst_refs.each do |ref|
@@ -216,8 +225,9 @@ module Timmerman
 
         hidden_set        = Set.new(hidden_components)
         filtered_children = base_spec.children.reject do |c|
-          (c.is_a?(PartSpec)  && hidden_set.include?(c.id)) ||
-            (c.is_a?(ScrewSpec) && hidden_set.include?(c.host_id))
+          (c.is_a?(PartSpec)        && hidden_set.include?(c.id)) ||
+            (c.is_a?(ScrewSpec)      && hidden_set.include?(c.host_id)) ||
+            (c.is_a?(FlatWasherSpec) && hidden_set.include?(c.host_id))
         end
 
         derived_id   = "#{from_id}__hidden_#{hidden_components.sort.join('_')}"
@@ -266,6 +276,23 @@ module Timmerman
         )
       rescue StandardError => e
         warn "[DeclarationsCompiler] screw '#{ss.id}': #{e.message}"
+      end
+
+      def _render_flat_washer(root, ws)
+        inst = @renderer.add_flat_washer(
+          root,
+          name:             ws.id,
+          at:               ws.at,
+          inner_diameter:   ws.inner_diameter,
+          outer_diameter:   ws.outer_diameter,
+          thickness:        ws.thickness,
+          layer:            @layer
+        )
+        return unless @attr_dict && ws.note && !ws.note.empty? && inst
+
+        @renderer.set_group_attribute(inst, @attr_dict, 'note', ws.note)
+      rescue StandardError => e
+        warn "[DeclarationsCompiler] flat washer '#{ws.id}': #{e.message}"
       end
 
       # Minimal duck-typed object satisfying PartRendering._render_screw's

@@ -32,6 +32,7 @@ module Timmerman
         @debug_color = debug_color.to_sym
         @box_definition_cache = {}
         @screw_definition_cache = {}
+        @flat_washer_definition_cache = {}
         @component_debug_material_cache = {}
         @scene_capture = model ? SketchupUtils::SceneCapture.new(model) : nil
       end
@@ -133,6 +134,21 @@ module Timmerman
         inst.name = name
         inst.layer = layer if layer
         _apply_component_debug_color(inst)
+      end
+
+      def add_flat_washer(parent_group, name:, at:, inner_diameter:, outer_diameter:, thickness:, layer: nil)
+        definition = _flat_washer_definition(inner_diameter, outer_diameter, thickness)
+        od = outer_diameter.to_f
+        transform = Transform.translation([
+                                            at[0].to_f + (od * 0.5),
+                                            at[1].to_f + (od * 0.5),
+                                            at[2].to_f
+                                          ])
+        inst = parent_group.entities.add_instance(definition, _to_geom_transformation(transform))
+        inst.name = name
+        inst.layer = layer if layer
+        _apply_component_debug_color(inst)
+        inst
       end
 
       # geo: hash from PocketGeometry.face_geometry (after apply_pocket_tilt!).
@@ -712,6 +728,52 @@ module Timmerman
         # recolored by prior root paint passes in the current SketchUp model.
         _paint_recursive(defn.entities, _ensure_material(SCREW_RGB))
         @screw_definition_cache[key] = defn
+      end
+
+      def _flat_washer_definition(inner_diameter, outer_diameter, thickness)
+        key = [
+          inner_diameter.to_f.round(6),
+          outer_diameter.to_f.round(6),
+          thickness.to_f.round(6),
+          'fw1'
+        ].join('|')
+
+        cached = @flat_washer_definition_cache[key]
+        return cached if cached&.valid?
+
+        defn_name = "EB::FlatWasher::#{key}"
+        defn = @model.definitions[defn_name] || @model.definitions.add(defn_name)
+        defn.set_attribute(@attr_dict, 'ignore_overlaps', true) if @attr_dict
+        unless defn.entities.any? { |e| e.is_a?(Sketchup::Face) }
+          defn.entities.clear!
+          _build_flat_washer_definition_geometry(defn.entities, inner_diameter, outer_diameter, thickness)
+        end
+        return unless defn.entities.any? { |e| e.is_a?(Sketchup::Face) }
+
+        _paint_recursive(defn.entities, _ensure_material(SCREW_RGB))
+        @flat_washer_definition_cache[key] = defn
+      end
+
+      def _build_flat_washer_definition_geometry(ents, inner_diameter, outer_diameter, thickness)
+        r_outer = outer_diameter.to_f * 0.5
+        r_inner = inner_diameter.to_f * 0.5
+        t       = thickness.to_f
+        segments = 24
+
+        segments.times do |i|
+          j  = (i + 1) % segments
+          a0 = (2.0 * Math::PI * i) / segments
+          a1 = (2.0 * Math::PI * j) / segments
+          o0 = Geom::Point3d.new(r_outer * Math.cos(a0), r_outer * Math.sin(a0), 0)
+          o1 = Geom::Point3d.new(r_outer * Math.cos(a1), r_outer * Math.sin(a1), 0)
+          i1 = Geom::Point3d.new(r_inner * Math.cos(a1), r_inner * Math.sin(a1), 0)
+          i0 = Geom::Point3d.new(r_inner * Math.cos(a0), r_inner * Math.sin(a0), 0)
+          face = ents.add_face(o0, o1, i1, i0)
+          next unless face
+
+          face.reverse! if face.normal.z < 0
+          face.pushpull(t)
+        end
       end
 
       def _build_screw_definition_geometry(ents, spec, shaft_length_index)

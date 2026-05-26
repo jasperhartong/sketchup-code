@@ -131,6 +131,52 @@ module Timmerman
           size.any? { |d| (d.to_mm.abs - t).abs < tol }
         end
       end
+
+      # ── FlatWasher ───────────────────────────────────────────────────────
+      # Flat annular disc in the XY plane; thickness along +Z. The AABB is
+      # outer_diameter × outer_diameter × thickness; the inner hole is
+      # renderer-defined.
+      class FlatWasher < Part
+        DIAMETER_TOL_MM = 0.01
+
+        attr_reader :inner_diameter, :outer_diameter, :thickness
+
+        # @param at              [Array(Length,Length,Length)] origin of the local AABB.
+        # @param inner_diameter  [Length] hole diameter
+        # @param outer_diameter  [Length] outside diameter
+        # @param thickness       [Length] washer height along +Z
+        def initialize(name, at:, inner_diameter:, outer_diameter:, thickness:, note: nil)
+          _validate_diameters!(name, inner_diameter, outer_diameter)
+          if thickness.to_mm.abs <= DIAMETER_TOL_MM
+            raise ArgumentError, "FlatWasher '#{name}': thickness must be > 0"
+          end
+
+          @inner_diameter = inner_diameter
+          @outer_diameter = outer_diameter
+          @thickness      = thickness
+          super(name, at: at, size: [outer_diameter, outer_diameter, thickness], note: note)
+        end
+
+        def to_s
+          format('%s  @[%.1f, %.1f, %.1f]  id=%.1f od=%.1f t=%.1f',
+                 name, x.to_mm, y.to_mm, z.to_mm,
+                 inner_diameter.to_mm, outer_diameter.to_mm, thickness.to_mm)
+        end
+
+        private
+
+        def _validate_diameters!(name, inner, outer)
+          i = inner.to_mm.abs
+          o = outer.to_mm.abs
+          raise ArgumentError, "FlatWasher '#{name}': inner diameter must be > 0" if i <= DIAMETER_TOL_MM
+          raise ArgumentError, "FlatWasher '#{name}': outer diameter must be > 0" if o <= DIAMETER_TOL_MM
+          return if o > i + DIAMETER_TOL_MM
+
+          raise ArgumentError,
+                "FlatWasher '#{name}': outer diameter (#{format('%.2f', o)} mm) must exceed " \
+                "inner diameter (#{format('%.2f', i)} mm)"
+        end
+      end
     end
   end
 end

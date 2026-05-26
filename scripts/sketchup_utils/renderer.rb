@@ -47,6 +47,11 @@ module Timmerman
         raise NotImplementedError
       end
 
+      # Renders a flat washer annulus at +at+ (min corner of the outer AABB).
+      def add_flat_washer(parent_group, name:, at:, inner_diameter:, outer_diameter:, thickness:, layer: nil)
+        raise NotImplementedError
+      end
+
       # Cuts countersink + through-hole on a host part group, following the
       # pre-tilted face geometry from SketchupUtils::PocketGeometry. Optional
       # on backends that don't subtract geometry (they may no-op and rely on

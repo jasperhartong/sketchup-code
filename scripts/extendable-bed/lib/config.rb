@@ -22,6 +22,9 @@ module Timmerman
       attr_reader :beam_wide         # 69 mm
       attr_reader :plank_thickness   # 18 mm — non-structural sheet panels
       attr_reader :pillow_thickness  # 120 mm — foam short edge
+      attr_reader :flat_washer_inner_diameter
+      attr_reader :flat_washer_outer_diameter
+      attr_reader :flat_washer_thickness
 
       # XY footprint corner radius before Z push/pull on catalog beams (Beam/Leg/Slat) and pillows.
       attr_reader :beam_box_corner_radius
@@ -73,6 +76,9 @@ module Timmerman
         beam_wide:        70.mm,
         plank_thickness:  13.mm,
         pillow_thickness: 120.mm,
+        flat_washer_inner_diameter:  4.5.mm,
+        flat_washer_outer_diameter: 10.mm,
+        flat_washer_thickness:       2.mm,
         beam_box_corner_radius:   5.mm,
         plank_box_corner_radius:  2.mm,
         pillow_box_corner_radius: 30.mm,
@@ -109,6 +115,9 @@ module Timmerman
         @beam_wide        = beam_wide
         @plank_thickness  = plank_thickness
         @pillow_thickness = pillow_thickness
+        @flat_washer_inner_diameter  = flat_washer_inner_diameter
+        @flat_washer_outer_diameter  = flat_washer_outer_diameter
+        @flat_washer_thickness       = flat_washer_thickness
         @beam_box_corner_radius   = beam_box_corner_radius
         @plank_box_corner_radius  = plank_box_corner_radius
         @pillow_box_corner_radius = pillow_box_corner_radius
@@ -216,6 +225,12 @@ module Timmerman
 
       # Extension stop headward limit when retracted: footward of head cap (no cap overlap).
       def front_extension_stop_y0 = back_head_cap_max_world_y - usable_length_retracted
+
+      # Gap between extension-stop top and slat bottoms; filled by flat washers at screws.
+      def extension_stop_washer_gap = flat_washer_thickness
+
+      # Extension-stop plank origin +Z (below slats by plank thickness + washer gap).
+      def extension_stop_z0 = z_slat_bottom - plank_thickness - extension_stop_washer_gap
 
       # +Y width = comb overlap left between retracted clearance and extended mid-tie meet.
       def extension_stop_plank_width

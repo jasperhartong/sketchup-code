@@ -55,6 +55,13 @@ module Timmerman
         keyword_init: true
       )
 
+      # Flat washer placed in world space within a component group.
+      # +host_id+ ties the washer to a host part for hidden-component filtering.
+      FlatWasherSpec = Struct.new(
+        :id, :host_id, :at, :inner_diameter, :outer_diameter, :thickness, :note,
+        keyword_init: true
+      )
+
       # A reference to a declared component group, placed at a transform.
       # floor: true → compiler auto-lifts in +Z so bounding-box min.z == 0.
       InstanceRef = Struct.new(
@@ -118,6 +125,16 @@ module Timmerman
             pocket_tilt_from_normal_deg: pocket_tilt_from_normal_deg,
             pocket_tilt_toward: pocket_tilt_toward,
             pocket_away_from_host: pocket_away_from_host
+          )
+        end
+
+        # Flat annular washer in the XY plane; thickness along +Z.
+        def flat_washer(id:, host_id:, at:, inner_diameter:, outer_diameter:, thickness:, note: nil)
+          @children << FlatWasherSpec.new(
+            id: id.to_s, host_id: host_id.to_s,
+            at: at, inner_diameter: inner_diameter,
+            outer_diameter: outer_diameter, thickness: thickness,
+            note: note
           )
         end
 
