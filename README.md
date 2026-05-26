@@ -50,6 +50,7 @@ The `.cursor/` directory includes rules and skills that teach the Cursor agent h
 - **`.cursor/skills/refactor-with-validation/`** — safe refactoring workflow: capture a baseline of all dimensions, refactor, then diff against the baseline to confirm nothing changed.
 - **`.cursor/skills/package-plugin/`** — packaging workflow: bump version, build `.rbz`, update changelog.
 - **`.cursor/rules/sketchup-ruby-api-docs.mdc`** — SketchUp Ruby API quick reference, kept up to date as the agent discovers new methods.
+- **`.cursor/rules/forward-only-no-legacy.mdc`** — forward-only API evolution (no compatibility shims) and mandatory same-change documentation updates for API/config changes.
 
 ---
 

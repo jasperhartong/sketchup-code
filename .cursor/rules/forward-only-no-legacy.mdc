@@ -1,0 +1,18 @@
+# Forward-Only Changes (No Legacy Compatibility)
+
+For this repository, prefer forward-only evolution over compatibility shims.
+
+## Rule
+
+- Do not add backward-compatibility flags, aliases, deprecated code paths, or dual APIs.
+- When replacing an API/config option, remove the old form in the same change.
+- Update call sites to the new API instead of keeping translation layers.
+- If migration is needed, do it directly in-repo (single active path), not via legacy fallbacks.
+- When any public API/config/CLI behavior changes, update all relevant docs in the same change.
+- Relevant docs include (at minimum): inline usage comments near the API, README/bridge docs that show usage, and any skills/rules that reference the old API.
+- A change is not complete until code and docs reflect the same current API.
+
+## Current example
+
+- Use `debug_color: :off | :sides | :components_reuse`.
+- Do not reintroduce `debug_paint_faces` or `debug_component_reuse_colors`.

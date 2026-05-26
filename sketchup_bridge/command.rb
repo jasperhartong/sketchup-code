@@ -1,6 +1,11 @@
-core = File.expand_path('../plugins/timmerman_skeleton_dimensions/core.rb', __dir__)
+core = File.expand_path('../scripts/extendable-bed/extendable-bed.rb', __dir__)
 load core
-Timmerman::SkeletonDimensions.debug_mode = true
-Timmerman::SkeletonDimensions.clear
-Timmerman::SkeletonDimensions.run
+
+config = Timmerman::ExtendableBed::Config.new(
+    debug_color: :off,
+    stock_bar_length: 2400.mm
+)
+bed    = Timmerman::ExtendableBed::BedLayout.new(config)
+bed.clear(Sketchup.active_model)
+bed.create(Sketchup.active_model)
 "OK"

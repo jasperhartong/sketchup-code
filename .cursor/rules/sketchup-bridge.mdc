@@ -28,7 +28,8 @@ When you need to **run code inside SketchUp** and see results (e.g. test `Timmer
 
 3. **Run and wait for result**  
    Execute: `ruby sketchup_bridge/run_and_wait.rb`  
-   The script touches `command.rb` so the listener runs it, then waits for `results/result.txt` written *this* run. It only succeeds when SketchUp actually runs the command (so you never get stale output). If the listener is not running, it times out and fails.
+   The script touches `command.rb` so the listener runs it, then waits for `results/result.txt` written *this* run. It only succeeds when SketchUp actually runs the command (so you never get stale output). If the listener is not running, it times out and fails.  
+   **Extendable bed — capture manual geometry without rebuild:** temporarily set `command.rb` to `load File.expand_path('commands/capture_extendable_bed_target.rb', __dir__)`, run `ruby sketchup_bridge/run_and_wait.rb`, then restore `command.rb` (see `.cursor/skills/extendable-bed-geometry-snapshots/SKILL.md`). A default `clear`/`create` run wipes manual edits — restore promptly after capture.
 
 4. **Use the output**  
    stdout/stderr from the command are in the printed result. Parse it to decide the next edit and repeat.
@@ -74,6 +75,14 @@ After the fix, write another temporary `command.rb` that:
 - Compare computed expected values against what SketchUp actually stored; print PASS/FAIL with a reason.
 - **Never declare success based on the run log alone** — always verify the actual rendered output through the bridge before telling the user it is fixed.
 - Leave the final `command.rb` as the normal run command (`Timmerman::SkeletonDimensions.clear` + `.run`) once validation passes.
+
+### 4. Overlap validation — built-in, always runs
+`BedLayout#create` **always** calls `Validator.new.validate(model, highlight: …)` at the end of every build — no extra call needed in `command.rb`. The validator:
+- Prints `[EB validate] OK` or `[EB validate] FAIL — N overlapping part pair(s):` with each pair named.
+- Draws magenta intersection markers in the model **only** when `debug_color: :overlaps` is set.
+- **Never add allowlists or skip logic** — every reported overlap must be fixed in the spec geometry.
+
+When adding or changing parts in `extendable_bed_spec.rb`, always read the `[EB validate]` line from the bridge output. A FAIL line must be resolved before the work is considered done. Pre-existing FAILs that predate your change must be noted and reported to the user rather than silently ignored.
 
 **`DimensionLinear` audit pattern** (verified working). When auditing dimensions added by the plugin, use the same scope as clear (sublayer + target_entities):
 ```ruby

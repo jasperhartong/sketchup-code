@@ -32,4 +32,30 @@ module SketchupBridgeUtils
     puts "[screenshot] #{path}"
     path
   end
+
+  # Erase every full-circle edge ring at the model root (scope the propose /
+  # delete commands use). Returns the number of rings removed. Silent when
+  # there are none — callers can wrap with their own messaging.
+  def delete_root_proposal_circles(model = Sketchup.active_model)
+    edges = model.entities.grep(Sketchup::Edge).select do |e|
+      curve = e.curve
+      curve.is_a?(Sketchup::ArcCurve) &&
+        ((curve.end_angle - curve.start_angle).abs - 2 * Math::PI).abs < 1e-3
+    end
+    return 0 if edges.empty?
+
+    rings = edges.group_by { |e| e.curve.entityID }
+    model.start_operation('Delete proposal circles', true)
+    begin
+      rings.each_value do |ring|
+        alive = ring.select(&:valid?)
+        model.entities.erase_entities(alive) unless alive.empty?
+      end
+      model.commit_operation
+    rescue StandardError
+      model.abort_operation
+      raise
+    end
+    rings.size
+  end
 end
